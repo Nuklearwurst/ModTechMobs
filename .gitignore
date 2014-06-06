@@ -1,1 +1,14 @@
+## eclipse
+/eclipse
+/.settings
+/.metadata
+/.classpath
+/.project
 /bin
+
+## gradle
+/.gradle
+/build
+
+## ForgeGradle
+/run
