@@ -1,0 +1,16 @@
+[
+{
+  "modid": "techmobs",
+  "name": "Tech Mobs",
+  "description": "Some harder endgame!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/Nuklearwurst/ModTechMobs",
+  "updateUrl": "",
+  "authors": ["nuklearwurst"],
+  "credits": "MinecraftForge and all the OpenSource mods out there.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
