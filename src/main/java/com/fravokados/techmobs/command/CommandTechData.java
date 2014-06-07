@@ -55,15 +55,35 @@ public class CommandTechData extends CommandBase {
 				int value = parseInt(sender, args[1]);
 				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
 					chunk.techLevel = value;					
+					sender.addChatMessage(new ChatComponentText("TechLevel in this Chunk: " + chunk.techLevel));
 				} else if(args[2].equals(commands1[1])) { //scouted techlevel
 					chunk.scoutedTechLevel = value;
+					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 				} else {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 				}
 			} else if(args[0].equals(commands[1])) { //add
-				
+				int value = parseInt(sender, args[1]);
+				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
+					chunk.techLevel += value;	
+					sender.addChatMessage(new ChatComponentText("TechLevel in this Chunk: " + chunk.techLevel));				
+				} else if(args[2].equals(commands1[1])) { //scouted techlevel
+					chunk.scoutedTechLevel += value;
+					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
+				} else {
+					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+				}
 			} else if(args[0].equals(commands[2])) { //remove
-				
+				int value = parseInt(sender, args[1]);
+				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
+					chunk.techLevel -= value;		
+					sender.addChatMessage(new ChatComponentText("TechLevel in this Chunk: " + chunk.techLevel));			
+				} else if(args[2].equals(commands1[1])) { //scouted techlevel
+					chunk.scoutedTechLevel -= value;
+					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
+				} else {
+					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+				}
 			} else if(args[0].equals(commands[3])) { //read
 				if(args.length > 2) {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
@@ -73,7 +93,7 @@ public class CommandTechData extends CommandBase {
 				} else {
 					//TODO better chat messages
 					sender.addChatMessage(new ChatComponentText("TechLevel in this Chunk: " + chunk.techLevel));
-					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));;
+					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 				}
 			} else {
 				throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
@@ -96,6 +116,8 @@ public class CommandTechData extends CommandBase {
 	public List<?> addTabCompletionOptions(ICommandSender sender, String[] args) {
 		if(args.length == 1) {
 			return getListOfStringsMatchingLastWord(args, commands);
+		} else if (args.length == 3 && (args[0].equals(commands[0]) || args[0].equals(commands[1]) || args[0].equals(commands[2]))) {
+			return getListOfStringsMatchingLastWord(args, commands1);
 		}
 		return null;
 	}

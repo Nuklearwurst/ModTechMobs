@@ -32,6 +32,13 @@ public class TDChunk {
 	 */
 	public int scoutedTechLevel = 0;
 	
+	/*
+	 * 	TODO maybe add other techLevel types: 
+	 * 	pollution
+	 * 	mobdeath (griding)
+	 * 		--> falling/fire etc
+	 */
+	
 	/**
 	 * save techdata for this chunk to disk
 	 * @param evt

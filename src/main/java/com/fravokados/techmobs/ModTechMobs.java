@@ -11,6 +11,7 @@ import com.fravokados.techmobs.common.handler.Events;
 import com.fravokados.techmobs.configuration.Config;
 import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.util.LogHelper;
+import com.fravokados.techmobs.techdata.TDEffects;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -65,6 +66,8 @@ public class ModTechMobs {
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
+		//init TD effects
+		TDEffects.init();
 		
 		LogHelper.info(Reference.MOD_NAME + ", version: " + Reference.VERSION +  ", has successfully loaded!");
 	}

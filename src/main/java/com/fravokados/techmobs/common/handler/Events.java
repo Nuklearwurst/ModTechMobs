@@ -1,8 +1,11 @@
 package com.fravokados.techmobs.common.handler;
 
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
+import com.fravokados.techmobs.techdata.TDEffectManager;
 import com.fravokados.techmobs.world.TechDataStorage;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -20,11 +23,10 @@ public class Events {
 		TechDataStorage.onWorldSave(evt);
 	}
 	
-//	@SubscribeEvent
-//	public void onChunkUnload(ChunkEvent.Unload evt) {
-//		//not used we
-//		//has to be tested what works best
-//	}
+	@SubscribeEvent
+	public void onChunkUnload(ChunkEvent.Unload evt) {
+		TechDataStorage.onChunkUnload(evt);
+	}
 	
 	@SubscribeEvent
 	public void onChunkDataSave(ChunkDataEvent.Save evt) {
@@ -44,5 +46,10 @@ public class Events {
 	@SubscribeEvent
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent evt) {
 		TechDataStorage.onPlayerLogout(evt);
+	}
+	
+	@SubscribeEvent
+	public void onEntitySpawn(LivingSpawnEvent.CheckSpawn evt) {
+		TDEffectManager.onLivingSpawn(evt);
 	}
 }

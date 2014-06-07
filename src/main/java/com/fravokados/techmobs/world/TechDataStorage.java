@@ -27,7 +27,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 /**
  * stores Techdata of all worlds and players
- * 
+ * internal
  * 
  * @author Nuklearwurst
  *
@@ -64,6 +64,13 @@ public class TechDataStorage {
 		return worldData.get(dimensionId);
 	}
 	
+	/**
+	 * internal use only
+	 * 
+	 * @param coords
+	 * @param dimensionId
+	 * @return
+	 */
 	public static TDChunk getChunkData(ChunkCoordIntPair coords, int dimensionId) {
 		return getWorldData(dimensionId).getChunk(coords);
 	}
