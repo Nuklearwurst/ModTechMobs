@@ -30,4 +30,25 @@ public class Settings {
 //		public static float TD_EFFECT_MAX_FACTOR = 0;
 	
 	}
+	
+	public static class TechScanning {
+		
+		public static int MAX_SCANS_PER_TICK = 10;
+		
+		public static int MAX_TASKS_SCHEDULED = 100;
+		
+		public static boolean SPLIT_SCANS = false;
+		
+		/**
+		 * 
+		 */
+		public static double[] SPLIT_STEPS_VALUE = new double[] {0.1, 0.2, 0.4, 0.7, 1};
+		
+		/**
+		 * 
+		 */
+		public static double[] SPLIT_STEPS_KEY = new double[] {0.4, 0.8, 1.3, 2.1, 2.7}; 
+		
+		public static int TIME_BETWEEN_SCANS = 0;
+	}
 }

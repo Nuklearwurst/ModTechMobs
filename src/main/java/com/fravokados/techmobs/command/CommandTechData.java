@@ -3,6 +3,9 @@ package com.fravokados.techmobs.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fravokados.techmobs.lib.util.world.ChunkLocation;
+import com.fravokados.techmobs.lib.util.world.WorldHelper;
+import com.fravokados.techmobs.techdata.TDScanManager;
 import com.fravokados.techmobs.world.TechDataStorage;
 import com.fravokados.techmobs.world.techdata.TDChunk;
 
@@ -19,7 +22,7 @@ public class CommandTechData extends CommandBase {
 	private List<String> aliases;
 	
 	private static final String[] commands1 = { "level", "scouted"};
-	private static final String[] commands =  {"set", "add", "remove", "read"};
+	private static final String[] commands =  {"set", "add", "remove", "read", "scan", "info"};
 	
 	public CommandTechData() {
 		this.aliases = new ArrayList<String>();
@@ -95,6 +98,15 @@ public class CommandTechData extends CommandBase {
 					sender.addChatMessage(new ChatComponentText("TechLevel in this Chunk: " + chunk.techLevel));
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 				}
+			} else if(args[0].equals(commands[4])) { //scan
+				if(args.length > 2) {
+					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+				}
+				TDScanManager.scheduleChunkScan(new ChunkLocation(sender.getEntityWorld().provider.dimensionId, WorldHelper.convertToChunkCoord(sender.getPlayerCoordinates())));
+				sender.addChatMessage(new ChatComponentText("Scanning..."));
+				sender.addChatMessage(new ChatComponentText(TDScanManager.getTasksInQuene() + " scans in quene!"));
+			} else if(args[0].equals(commands[5])) { //info
+				sender.addChatMessage(new ChatComponentText(TDScanManager.getTasksInQuene() + " scans in quene!"));				
 			} else {
 				throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 			}

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.values.TDEntryItem;
@@ -59,9 +60,14 @@ public class TDValues {
 			LogHelper.error("Overwriting existing data!");
 		}
 		tileEntityEntries.put(clazz, entry);
+		LogHelper.info("Registered TileEntity: " + clazz + " with entry: " + entry);
 	}
 	
 	public static void registerTileEntityEntry(Class<? extends TileEntity> clazz, int value) {
 		registerTileEntityEntry(clazz, new TDEntrySimpleTileEntity(value));
+	}
+	
+	public static void init() {
+		registerTileEntityEntry(TileEntityFurnace.class, 1000);
 	}
 }

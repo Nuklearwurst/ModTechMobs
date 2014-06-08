@@ -1,6 +1,5 @@
 package com.fravokados.techmobs.techdata.effects;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 
 /**

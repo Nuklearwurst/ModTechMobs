@@ -7,8 +7,7 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
 import com.fravokados.techmobs.configuration.Settings;
-import com.fravokados.techmobs.lib.util.LogHelper;
-import com.fravokados.techmobs.lib.util.WorldHelper;
+import com.fravokados.techmobs.lib.util.world.WorldHelper;
 import com.fravokados.techmobs.techdata.effects.TDMobEffect;
 
 

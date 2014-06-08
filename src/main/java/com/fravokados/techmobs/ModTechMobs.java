@@ -1,17 +1,15 @@
 package com.fravokados.techmobs;
 
-import net.minecraftforge.common.MinecraftForge;
-
 import com.fravokados.techmobs.command.CommandTechData;
 import com.fravokados.techmobs.command.CommandTechMobs;
 import com.fravokados.techmobs.common.CommonProxy;
 import com.fravokados.techmobs.common.ModBlocks;
 import com.fravokados.techmobs.common.ModItems;
-import com.fravokados.techmobs.common.handler.Events;
 import com.fravokados.techmobs.configuration.Config;
 import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.TDEffects;
+import com.fravokados.techmobs.techdata.TDValues;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -56,9 +54,7 @@ public class ModTechMobs {
 		//init rendering
 		
 		//register EventHandlers
-		MinecraftForge.EVENT_BUS.register(new Events());
-		
-		//tickhandler
+		proxy.registerEvents();
 		
 		//load Entities
 		
@@ -68,6 +64,7 @@ public class ModTechMobs {
 	public void postInit(FMLPostInitializationEvent evt) {
 		//init TD effects
 		TDEffects.init();
+		TDValues.init();
 		
 		LogHelper.info(Reference.MOD_NAME + ", version: " + Reference.VERSION +  ", has successfully loaded!");
 	}
