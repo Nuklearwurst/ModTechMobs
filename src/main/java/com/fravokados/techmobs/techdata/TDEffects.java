@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.effects.TDMobEffect;
-import com.fravokados.techmobs.techdata.effects.TDMobEffectArmor;
+import com.fravokados.techmobs.techdata.effects.TDMobEffectEquipment;
 
 /**
  * contains  information of the techdata effects
@@ -21,6 +21,10 @@ public class TDEffects {
 	private static List<TDMobEffect> mobEffects = new ArrayList<TDMobEffect>();
 
 
+	/**
+	 * registers a new Mob effect
+	 * @param effect
+	 */
 	public static void addMobEffect(TDMobEffect effect) {
 		if(mobEffects.contains(effect))
 			return;
@@ -39,11 +43,12 @@ public class TDEffects {
 	}
 
 	public static void init() {
-		addMobEffect(new TDMobEffectArmor(new ItemStack[] {
-				new ItemStack((Item)Item.itemRegistry.getObject("diamond_helmet")),
-				new ItemStack((Item)Item.itemRegistry.getObject("diamond_chestplate")),
-				new ItemStack((Item)Item.itemRegistry.getObject("diamond_leggings")),
-				new ItemStack((Item)Item.itemRegistry.getObject("diamond_boots"))
-		}, false, false, new int[] {10, 30, 20, 10}));
+		addMobEffect(new TDMobEffectEquipment(new ItemStack[] {
+				new ItemStack(Items.diamond_sword),
+				new ItemStack(Items.diamond_helmet),
+				new ItemStack(Items.diamond_chestplate),
+				new ItemStack(Items.diamond_leggings),
+				new ItemStack(Items.diamond_boots)
+		}, false, false, new int[] {30, 10, 30, 20, 10}).setDoNotDrop(false));
 	}
 }

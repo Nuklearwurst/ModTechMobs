@@ -1,4 +1,4 @@
-package com.fravokados.techmobs.common;
+package com.fravokados.techmobs.configuration;
 
 public class ModItems {
 

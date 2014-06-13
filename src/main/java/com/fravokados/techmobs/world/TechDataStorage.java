@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.nbt.CompressedStreamTools;
@@ -16,7 +18,9 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
+import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.lib.util.LogHelper;
+import com.fravokados.techmobs.lib.util.world.ChunkLocation;
 import com.fravokados.techmobs.world.techdata.TDChunk;
 import com.fravokados.techmobs.world.techdata.TDPlayer;
 import com.fravokados.techmobs.world.techdata.TDWorld;
@@ -39,17 +43,43 @@ public class TechDataStorage {
 
 	/** the name of our save file */
 	private static final String FILENAME = "techdata.dat";
+	
+	private static final String NBT_CHUNK_VALUE = "td_highest_chunk_value";
+	private static final String NBT_PLAYER_VALUE = "td_highest_player_value";
 
 	/**
 	 * the world techdata
 	 */
 	private static Map<Integer, TDWorld> worldData = new HashMap<Integer, TDWorld>();
-
+	
 	/**
 	 * the player data WIP
 	 */
 	private static Map<String, TDPlayer> playerData = new HashMap<String, TDPlayer>();
 	
+	/**
+	 * chunks that have a high techvalue
+	 */
+	private static List<ChunkLocation> techChunks = new ArrayList<ChunkLocation>();
+	
+	/**
+	 * techvalue of the highest chunk
+	 */
+	private static int highestChunkValue = 0;
+	
+	/**
+	 * players with high techvalue
+	 */
+	private static List<String> techPlayers = new ArrayList<String>();
+	
+	/**
+	 * techvalue of the best player
+	 */
+	private static int highestPlayerValue = 0;
+	
+	/** 
+	 * save data
+	 */ 
 	private static NBTTagCompound saveData;
 	
 	/**
@@ -73,6 +103,26 @@ public class TechDataStorage {
 	 */
 	public static TDChunk getChunkData(ChunkCoordIntPair coords, int dimensionId) {
 		return getWorldData(dimensionId).getChunk(coords);
+	}
+	
+	public static int getDangerousChunkLevel() {
+		return (int) (highestChunkValue * Settings.TechScanning.DANGER_CHUNK_PERCENTAGE + Settings.TechScanning.DANGER_CHUNK_FLAT);
+	}
+	
+	public static int getDangerousPlayerLevel() {
+		return 0; //TODO
+	}
+	
+	public static void addDangerousChunk(ChunkLocation chunk) {
+		if(!techChunks.contains(chunk)) {
+			techChunks.add(chunk);
+		}
+	}
+	
+	public static void addDangerousPlayer(String player) {
+		if(!techPlayers.contains(player)) {
+			techPlayers.add(player);
+		}
 	}
 
 	/**
@@ -101,6 +151,9 @@ public class TechDataStorage {
 				{
 					//read data
 					saveData = CompressedStreamTools.readCompressed(new FileInputStream(file));
+					
+					highestChunkValue = saveData.getInteger(NBT_CHUNK_VALUE);
+					highestPlayerValue = saveData.getInteger(NBT_PLAYER_VALUE);
 					//TODO finish saving and loading of player techdata
 					//TODO player connect and disconnect saveing?
 				}
@@ -145,6 +198,8 @@ public class TechDataStorage {
             		saveData.setTag(entry.getKey() + "_techdata", tag1);
             	}
 			}
+			saveData.setInteger(NBT_CHUNK_VALUE, highestChunkValue);
+			saveData.setInteger(NBT_PLAYER_VALUE, highestPlayerValue);
 
 			try
 			{
@@ -190,7 +245,7 @@ public class TechDataStorage {
 				//when loading is successful add world data to the list
 				worldData.put(dimId, world);
 			}
-		}	
+		}
 	}
 
 	/**
@@ -238,6 +293,7 @@ public class TechDataStorage {
 				//successfully loaded data
 				playerData.put(username, player);				
 			}
+			//TODO mostwanted list
 		}
 	}
 
@@ -260,7 +316,7 @@ public class TechDataStorage {
 			if(player.save(tag1)) {
 				saveData.setTag(username + "_techdata", tag1);
 			}
-			
+			//TODO mostwanted list unload
 		}
 	}
 

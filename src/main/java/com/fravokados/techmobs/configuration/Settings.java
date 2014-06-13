@@ -49,6 +49,13 @@ public class Settings {
 		 */
 		public static double[] SPLIT_STEPS_KEY = new double[] {0.4, 0.8, 1.3, 2.1, 2.7}; 
 		
-		public static int TIME_BETWEEN_SCANS = 0;
+		public static double DANGER_CHUNK_PERCENTAGE = 0.8;
+		
+		public static int DANGER_CHUNK_FLAT = 1000;
+		
+		public static double DANGER_PLAYER_PERCENTAGE = 0.8;
+		
+		public static int DANGER_PLAYER_FLAT = 1000;
+		
 	}
 }

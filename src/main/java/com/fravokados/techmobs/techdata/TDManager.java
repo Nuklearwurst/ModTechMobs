@@ -2,6 +2,7 @@ package com.fravokados.techmobs.techdata;
 
 import net.minecraft.world.ChunkCoordIntPair;
 
+import com.fravokados.techmobs.lib.util.world.ChunkLocation;
 import com.fravokados.techmobs.world.TechDataStorage;
 import com.fravokados.techmobs.world.techdata.TDChunk;
 
@@ -29,6 +30,10 @@ public class TDManager {
 	
 	public static void setTechLevel(int dimension, ChunkCoordIntPair coord, int value) {
 		getChunkData(dimension, coord).techLevel = value;
+		if(value > TechDataStorage.getDangerousChunkLevel()) {
+			ChunkLocation chunk = new ChunkLocation(dimension, coord);
+			TechDataStorage.addDangerousChunk(chunk);
+		}
 	}
 	
 	

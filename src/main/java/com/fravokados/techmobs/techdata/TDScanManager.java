@@ -28,8 +28,7 @@ public class TDScanManager {
 	
 	private static List<ChunkLocation> scanningTasks;
 	
-	private int tickCounter = 0;
-	
+
 	
 	public TDScanManager() {
 		scanningSteps = new int[Settings.TechScanning.SPLIT_STEPS_KEY.length];
@@ -63,16 +62,13 @@ public class TDScanManager {
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void onServerTick(TickEvent.ServerTickEvent evt) {
-		if(tickCounter < Settings.TechScanning.TIME_BETWEEN_SCANS) {
-			tickCounter++;
-			return;		
-		}
-		//reset tick counter
-		tickCounter = 0;
+		//tick once
+		if(evt.phase != TickEvent.Phase.END) return;
+		
 		//start scanning
 		for(int i = 0; i < getScansToPerform(); i++) {
 			ChunkLocation task = scanningTasks.get(0);
-			World world = DimensionManager.getWorld(task.dimension);			
+			World world = DimensionManager.getWorld(task.dimension);
 			if(world != null) {
 				Chunk chunk = world.getChunkFromChunkCoords(task.x, task.z);
 				if(chunk != null) {
@@ -103,6 +99,7 @@ public class TDScanManager {
 		}
 		scanningTasks.add(loc);
 	}
+	
 	
 	public static int getTasksInQuene() {
 		return scanningTasks.size();

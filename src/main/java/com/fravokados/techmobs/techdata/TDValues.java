@@ -30,6 +30,11 @@ public class TDValues {
 	 */
 	public static Map<Item, TDEntryItem> itemEntries = new HashMap<Item, TDEntryItem>();
 	
+	/**
+	 * registers a new Item Entry
+	 * @param item
+	 * @param entry
+	 */
 	public static void registerItemEntry(Item item, TDEntryItem entry) {
 		//unneeded
 		if(entry == null && itemEntries.containsKey(item)) {
@@ -46,6 +51,11 @@ public class TDValues {
 		itemEntries.put(item, entry);
 	}
 	
+	/**
+	 * registers a new TileEntityEntry
+	 * @param clazz
+	 * @param entry
+	 */
 	public static void registerTileEntityEntry(Class<? extends TileEntity> clazz, TDEntryTileEntity entry) {
 		//unneeded
 		if(entry == null && tileEntityEntries.containsKey(clazz)) {
@@ -63,6 +73,11 @@ public class TDValues {
 		LogHelper.info("Registered TileEntity: " + clazz + " with entry: " + entry);
 	}
 	
+	/**
+	 * registers a new TileEntityEntry with a fixed value
+	 * @param clazz
+	 * @param value
+	 */
 	public static void registerTileEntityEntry(Class<? extends TileEntity> clazz, int value) {
 		registerTileEntityEntry(clazz, new TDEntrySimpleTileEntity(value));
 	}

@@ -3,6 +3,9 @@ package com.fravokados.techmobs.world.techdata;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.ChunkDataEvent;
 
+import com.fravokados.techmobs.lib.util.world.ChunkLocation;
+import com.fravokados.techmobs.world.TechDataStorage;
+
 /**
  * contains TechData of a chunk<br>
  * 
@@ -65,6 +68,12 @@ public class TDChunk {
 		if(data.hasKey(NBT_KEY + "techLevel")) {
 			techLevel = data.getInteger(NBT_KEY + "techLevel");
 			scoutedTechLevel = data.getInteger(NBT_KEY + "scoutedTechLevel");
+			if(scoutedTechLevel > TechDataStorage.getDangerousChunkLevel()) {
+				//TODO check if this would work
+				//it should as ArrayList does only check equality 
+				ChunkLocation chunk = new ChunkLocation(evt.world, evt.getChunk().getChunkCoordIntPair());
+				TechDataStorage.addDangerousChunk(chunk);
+			}
 			return true;
 		}		
 		return false;
