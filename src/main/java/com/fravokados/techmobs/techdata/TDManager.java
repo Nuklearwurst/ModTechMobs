@@ -1,7 +1,10 @@
 package com.fravokados.techmobs.techdata;
 
 import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.chunk.Chunk;
 
+import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
 import com.fravokados.techmobs.world.TechDataStorage;
 import com.fravokados.techmobs.world.techdata.TDChunk;
@@ -36,6 +39,21 @@ public class TDManager {
 		}
 	}
 	
+	public static void updateScoutedTechLevel(int dimension, ChunkCoordIntPair coord) {
+		TDChunk data = getChunkData(dimension, coord);
+		if(data.scoutedTechLevel > data.techLevel) {
+			data.scoutedTechLevel = data.techLevel;
+			return;
+		}
+		int step =  (int) (data.techLevel * Settings.TechScanning.SCOUTING_STEP_FACTOR);
+		int dif = data.techLevel - data.scoutedTechLevel;
+		if(dif < step) {
+			step = dif;
+		}
+		data.scoutedTechLevel += step;
+//		LogHelper.info("Updated Scouted TechLevel by " + step + " to " + data.scoutedTechLevel);
+	}
+	
 	
 	
 	
@@ -48,6 +66,10 @@ public class TDManager {
 	 */
 	public static TDChunk getChunkData(int dimension, ChunkCoordIntPair coord) {
 		return TechDataStorage.getChunkData(coord, dimension);
+	}
+
+	public static void updateScoutedTechLevel(Chunk chunk) {
+		updateScoutedTechLevel(chunk.worldObj.provider.dimensionId, chunk.getChunkCoordIntPair());
 	}
 	
 }

@@ -5,6 +5,7 @@ import com.fravokados.techmobs.command.CommandTechMobs;
 import com.fravokados.techmobs.common.CommonProxy;
 import com.fravokados.techmobs.configuration.Config;
 import com.fravokados.techmobs.configuration.ModBlocks;
+import com.fravokados.techmobs.configuration.ModEntities;
 import com.fravokados.techmobs.configuration.ModItems;
 import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.util.LogHelper;
@@ -57,7 +58,7 @@ public class ModTechMobs {
 		proxy.registerEvents();
 		
 		//load Entities
-		
+		ModEntities.init();
 	}
 	
 	@EventHandler

@@ -100,6 +100,10 @@ public class TDScanManager {
 		scanningTasks.add(loc);
 	}
 	
+	public static void scheduleChunkScan(Chunk chunk) {
+		scheduleChunkScan(new ChunkLocation(chunk));
+	}
+	
 	
 	public static int getTasksInQuene() {
 		return scanningTasks.size();

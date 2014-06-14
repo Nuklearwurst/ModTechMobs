@@ -57,5 +57,7 @@ public class Settings {
 		
 		public static int DANGER_PLAYER_FLAT = 1000;
 		
+		public static double SCOUTING_STEP_FACTOR = 0.1;
+		
 	}
 }

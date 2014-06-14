@@ -2,6 +2,7 @@ package com.fravokados.techmobs.lib.util.world;
 
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 public class ChunkLocation {
 	
@@ -21,6 +22,10 @@ public class ChunkLocation {
 	
 	public ChunkLocation(World world, ChunkCoordIntPair coords) {
 		this(world.provider.dimensionId, coords);
+	}
+	
+	public ChunkLocation(Chunk chunk) {
+		this(chunk.worldObj, chunk.getChunkCoordIntPair());
 	}
 	
 	@Override
