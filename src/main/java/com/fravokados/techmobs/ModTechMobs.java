@@ -9,8 +9,8 @@ import com.fravokados.techmobs.configuration.ModEntities;
 import com.fravokados.techmobs.configuration.ModItems;
 import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.util.LogHelper;
-import com.fravokados.techmobs.techdata.TDEffects;
-import com.fravokados.techmobs.techdata.TDValues;
+import com.fravokados.techmobs.techdata.effects.TDEffects;
+import com.fravokados.techmobs.techdata.values.TDValues;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;

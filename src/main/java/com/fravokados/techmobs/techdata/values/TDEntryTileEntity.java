@@ -1,7 +1,5 @@
 package com.fravokados.techmobs.techdata.values;
 
-import com.fravokados.techmobs.techdata.TDValues;
-
 import net.minecraft.tileentity.TileEntity;
 
 /**

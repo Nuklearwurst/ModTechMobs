@@ -113,16 +113,38 @@ public class TechDataStorage {
 		return 0; //TODO
 	}
 	
-	public static void addDangerousChunk(ChunkLocation chunk) {
+	public static void addDangerousChunk(ChunkLocation chunk, int level) {
 		if(!techChunks.contains(chunk)) {
 			techChunks.add(chunk);
-		}
+			if(level > highestChunkValue) {
+				highestChunkValue = level;
+			}
+		}		
 	}
 	
-	public static void addDangerousPlayer(String player) {
+	public static void addDangerousPlayer(String player, int level) {
 		if(!techPlayers.contains(player)) {
 			techPlayers.add(player);
-		}
+			if(level > highestChunkValue) {
+				highestChunkValue = level;
+			}
+		}		
+	}
+	
+	public static void removeDangerousChunk(ChunkLocation loc) {
+		
+	}
+	
+	public static void removeDangerousPlayer(String player) {
+		
+	}
+	
+	public static void addDangerousChunkIfNeeded(ChunkLocation chunk) {
+		
+	}
+	
+	public static void addDangerousPlayerIfNeeded(String player) {
+		
 	}
 
 	/**

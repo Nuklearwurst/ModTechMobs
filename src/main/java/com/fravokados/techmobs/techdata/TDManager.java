@@ -4,7 +4,6 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.chunk.Chunk;
 
 import com.fravokados.techmobs.configuration.Settings;
-import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
 import com.fravokados.techmobs.world.TechDataStorage;
 import com.fravokados.techmobs.world.techdata.TDChunk;
@@ -35,7 +34,7 @@ public class TDManager {
 		getChunkData(dimension, coord).techLevel = value;
 		if(value > TechDataStorage.getDangerousChunkLevel()) {
 			ChunkLocation chunk = new ChunkLocation(dimension, coord);
-			TechDataStorage.addDangerousChunk(chunk);
+			TechDataStorage.addDangerousChunk(chunk, value);
 		}
 	}
 	

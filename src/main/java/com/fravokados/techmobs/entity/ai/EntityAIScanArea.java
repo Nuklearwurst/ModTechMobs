@@ -5,7 +5,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.Facing;
 
 import com.fravokados.techmobs.techdata.TDManager;
-import com.fravokados.techmobs.techdata.TDScanManager;
+import com.fravokados.techmobs.techdata.TDTickManager;
 
 public class EntityAIScanArea extends EntityAIBase {
 	/** time between two scans */
@@ -32,9 +32,9 @@ public class EntityAIScanArea extends EntityAIBase {
 		super.startExecuting();
 		if(timer == 0) {
 //			LogHelper.info("Scanning chunk!");
-			TDScanManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords( (int) (e.posX), (int) (e.posZ)));
+			TDTickManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords( (int) (e.posX), (int) (e.posZ)));
 			for(int i = 2; i < 6; i++) {
-				TDScanManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords( (int) (e.posX + Facing.offsetsXForSide[i] * 16), (int) (e.posZ + Facing.offsetsZForSide[i] * 16)));
+				TDTickManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords( (int) (e.posX + Facing.offsetsXForSide[i] * 16), (int) (e.posZ + Facing.offsetsZForSide[i] * 16)));
 			}
 			timer = maxTimer;
 		}

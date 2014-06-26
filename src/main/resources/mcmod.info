@@ -2,7 +2,7 @@
 {
   "modid": "techmobs",
   "name": "Tech Mobs",
-  "description": "Some harder endgame!",
+  "description": "It's all about balance!",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "https://github.com/Nuklearwurst/ModTechMobs",

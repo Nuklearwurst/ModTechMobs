@@ -72,7 +72,7 @@ public class TDChunk {
 				//TODO check if this would work
 				//it should as ArrayList does only check equality 
 				ChunkLocation chunk = new ChunkLocation(evt.world, evt.getChunk().getChunkCoordIntPair());
-				TechDataStorage.addDangerousChunk(chunk);
+				TechDataStorage.addDangerousChunk(chunk, techLevel);
 			}
 			return true;
 		}		

@@ -28,6 +28,18 @@ public class Settings {
 //		 * unused
 //		 */
 //		public static float TD_EFFECT_MAX_FACTOR = 0;
+		
+		/**
+		 * 1 out of n<br>
+		 * chance that a td effect is applied to a player
+		 */
+		public static int TD_RANDOM_PLAYER_EVENT_CHANCE = 100;
+		
+		/**
+		 * 1 out of n<br>
+		 * chance that a td effect is applied to a chunk
+		 */
+		public static int TD_RANDOM_WORLD_EVENT_CHANCE = 100;
 	
 	}
 	

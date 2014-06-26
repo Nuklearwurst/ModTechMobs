@@ -5,7 +5,7 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
-import com.fravokados.techmobs.techdata.TDEffectManager;
+import com.fravokados.techmobs.techdata.effects.TDEffectManager;
 import com.fravokados.techmobs.world.TechDataStorage;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

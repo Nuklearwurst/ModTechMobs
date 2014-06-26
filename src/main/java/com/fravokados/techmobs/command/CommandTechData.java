@@ -6,7 +6,7 @@ import java.util.List;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
 import com.fravokados.techmobs.lib.util.world.WorldHelper;
 import com.fravokados.techmobs.techdata.TDManager;
-import com.fravokados.techmobs.techdata.TDScanManager;
+import com.fravokados.techmobs.techdata.TDTickManager;
 import com.fravokados.techmobs.world.TechDataStorage;
 import com.fravokados.techmobs.world.techdata.TDChunk;
 
@@ -104,9 +104,9 @@ public class CommandTechData extends CommandBase {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 				}
 				if(args.length == 1 || args[1].equals(commands1[0])) {
-					TDScanManager.scheduleChunkScan(new ChunkLocation(sender.getEntityWorld().provider.dimensionId, WorldHelper.convertToChunkCoord(sender.getPlayerCoordinates())));
+					TDTickManager.scheduleChunkScan(new ChunkLocation(sender.getEntityWorld().provider.dimensionId, WorldHelper.convertToChunkCoord(sender.getPlayerCoordinates())));
 					sender.addChatMessage(new ChatComponentText("Scanning..."));
-					sender.addChatMessage(new ChatComponentText(TDScanManager.getTasksInQuene() + " scans in quene!"));
+					sender.addChatMessage(new ChatComponentText(TDTickManager.getTasksInQueue() + " scans in quene!"));
 				} else if(args[1].equals(commands1[1])) {
 					TDManager.updateScoutedTechLevel(sender.getEntityWorld().provider.dimensionId, WorldHelper.convertToChunkCoord(sender.getPlayerCoordinates()));
 					sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getScoutedTechLevel(sender.getEntityWorld().provider.dimensionId,  WorldHelper.convertToChunkCoord(sender.getPlayerCoordinates()))));
@@ -114,7 +114,7 @@ public class CommandTechData extends CommandBase {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 				}
 			} else if(args[0].equals(commands[5])) { //info
-				sender.addChatMessage(new ChatComponentText(TDScanManager.getTasksInQuene() + " scans in quene!"));				
+				sender.addChatMessage(new ChatComponentText(TDTickManager.getTasksInQueue() + " scans in quene!"));				
 			} else {
 				throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 			}
