@@ -1,4 +1,4 @@
-package com.fravokados.techmobs.configuration;
+package com.fravokados.techmobs.common;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;

@@ -40,6 +40,12 @@ public class Settings {
 		 * chance that a td effect is applied to a chunk
 		 */
 		public static int TD_RANDOM_WORLD_EVENT_CHANCE = 100;
+		
+		/**
+		 * a techvalue below this value is considered safe (releveant is some special cases) <br>
+		 * settings this to a high number will not protect the players!
+		 */
+		public static int SAFE_TECH_VALUE = 20;
 	
 	}
 	
@@ -61,11 +67,11 @@ public class Settings {
 		 */
 		public static double[] SPLIT_STEPS_KEY = new double[] {0.4, 0.8, 1.3, 2.1, 2.7}; 
 		
-		public static double DANGER_CHUNK_PERCENTAGE = 0.8;
+		public static float DANGER_CHUNK_PERCENTAGE = 0.8F;
 		
 		public static int DANGER_CHUNK_FLAT = 1000;
 		
-		public static double DANGER_PLAYER_PERCENTAGE = 0.8;
+		public static float DANGER_PLAYER_PERCENTAGE = 0.8F;
 		
 		public static int DANGER_PLAYER_FLAT = 1000;
 		
