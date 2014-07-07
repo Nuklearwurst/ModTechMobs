@@ -21,6 +21,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
+import com.fravokados.techmobs.techdata.TDManager;
 import com.fravokados.techmobs.world.techdata.TDChunk;
 import com.fravokados.techmobs.world.techdata.TDPlayer;
 import com.fravokados.techmobs.world.techdata.TDWorld;
@@ -44,6 +45,7 @@ public class TechDataStorage {
 	/** the name of our save file */
 	private static final String FILENAME = "techdata.dat";
 	
+	// nbt keys
 	private static final String NBT_CHUNK_VALUE = "td_highest_chunk_value";
 	private static final String NBT_PLAYER_VALUE = "td_highest_player_value";
 
@@ -63,7 +65,7 @@ public class TechDataStorage {
 	private static List<ChunkLocation> techChunks = new ArrayList<ChunkLocation>();
 	
 	/**
-	 * techvalue of the highest chunk
+	 * techvalue of the highest chunk (not exact)
 	 */
 	private static int highestChunkValue = 0;
 	
@@ -73,7 +75,7 @@ public class TechDataStorage {
 	private static List<String> techPlayers = new ArrayList<String>();
 	
 	/**
-	 * techvalue of the best player
+	 * techvalue of the best player (not exact)
 	 */
 	private static int highestPlayerValue = 0;
 	
@@ -105,12 +107,20 @@ public class TechDataStorage {
 		return getWorldData(dimensionId).getChunk(coords);
 	}
 	
+	public static TDChunk getChunkData(ChunkLocation loc) {
+		return getChunkData(loc.getChunkCoordIntPair(), loc.dimension);
+	}
+	
+	public static TDPlayer getPlayerData(String username) {
+		return playerData.get(username);
+	}
+	
 	public static int getDangerousChunkLevel() {
 		return (int) (highestChunkValue * Settings.TechScanning.DANGER_CHUNK_PERCENTAGE + Settings.TechScanning.DANGER_CHUNK_FLAT);
 	}
 	
 	public static int getDangerousPlayerLevel() {
-		return 0; //TODO
+		return (int) (highestPlayerValue * Settings.TechScanning.DANGER_PLAYER_PERCENTAGE + Settings.TechScanning.DANGER_PLAYER_FLAT);
 	}
 	
 	public static void addDangerousChunk(ChunkLocation chunk, int level) {
@@ -132,19 +142,78 @@ public class TechDataStorage {
 	}
 	
 	public static void removeDangerousChunk(ChunkLocation loc) {
-		
+		int index = techChunks.indexOf(loc);
+		if(index != -1) {
+			//if this was the last element of this list (--> the newest)
+			//it should have a very high techdata value
+			//therefore the highestChunkValue gets updated (--> the updated number might not represent reality)
+			if(techChunks.size() == index + 1) {
+				if(index > 0) {
+					ChunkLocation chunk = techChunks.get(index - 1);
+					highestChunkValue = TDManager.getScoutedTechLevel(chunk.dimension, chunk.getChunkCoordIntPair());
+				} else {
+					highestChunkValue = 0;
+				}
+			}
+			//remove the chunk
+			techChunks.remove(index);
+		}
 	}
 	
 	public static void removeDangerousPlayer(String player) {
-		
+		int index = techPlayers.indexOf(player);
+		if(index != -1) {
+			//if this was the last element of this list (--> the newest)
+			//it should have a very high techdata value
+			//therefore the highestPlayerValue gets updated (--> the updated number might not represent reality)
+			if(techPlayers.size() == index + 1) {
+				if(index > 0) {
+					//insert the player techvalue of the most recent player added to the dangerousPlayer list
+					String name = techPlayers.get(index - 1);
+					highestPlayerValue = TDManager.getPlayerData(name).techData;
+				} else {
+					highestPlayerValue = 0;
+				}
+			}
+			//remove the chunk
+			techPlayers.remove(index);
+		}
 	}
 	
-	public static void addDangerousChunkIfNeeded(ChunkLocation chunk) {
-		
+	public static void updateDangerousChunkList(ChunkLocation loc, int level) {
+		if(techChunks.contains(loc)) {
+			if(level >= getDangerousChunkLevel()) {
+				return;
+			} else {
+				removeDangerousChunk(loc);
+			}
+		} else {
+			addDangerousChunkIfNeeded(loc, level);
+		}
 	}
 	
-	public static void addDangerousPlayerIfNeeded(String player) {
-		
+	public static void updateDangerousPlayerList(String name, int level) {
+		if(techPlayers.contains(name)) {
+			if(level >= getDangerousPlayerLevel()) {
+				return;
+			} else {
+				removeDangerousPlayer(name);
+			}
+		} else {
+			addDangerousPlayerIfNeeded(name, level);
+		}
+	}
+	
+	public static void addDangerousChunkIfNeeded(ChunkLocation chunk, int level) {
+		if(level > getDangerousChunkLevel()) {
+			addDangerousChunk(chunk, level);
+		}
+	}
+	
+	public static void addDangerousPlayerIfNeeded(String player, int level) {
+		if(level > getDangerousPlayerLevel()) {
+			addDangerousPlayer(player, level);
+		}
 	}
 
 	/**

@@ -7,6 +7,7 @@ import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
 import com.fravokados.techmobs.world.TechDataStorage;
 import com.fravokados.techmobs.world.techdata.TDChunk;
+import com.fravokados.techmobs.world.techdata.TDPlayer;
 
 
 /**
@@ -28,14 +29,14 @@ public class TDManager {
 	
 	public static void setScoutedTechLevel(int dimension, ChunkCoordIntPair coord, int value) {
 		getChunkData(dimension, coord).scoutedTechLevel = value;
-	}
-	
-	public static void setTechLevel(int dimension, ChunkCoordIntPair coord, int value) {
-		getChunkData(dimension, coord).techLevel = value;
 		if(value > TechDataStorage.getDangerousChunkLevel()) {
 			ChunkLocation chunk = new ChunkLocation(dimension, coord);
 			TechDataStorage.addDangerousChunk(chunk, value);
 		}
+	}
+	
+	public static void setTechLevel(int dimension, ChunkCoordIntPair coord, int value) {
+		getChunkData(dimension, coord).techLevel = value;
 	}
 	
 	public static void updateScoutedTechLevel(int dimension, ChunkCoordIntPair coord) {
@@ -50,7 +51,6 @@ public class TDManager {
 			step = dif;
 		}
 		data.scoutedTechLevel += step;
-//		LogHelper.info("Updated Scouted TechLevel by " + step + " to " + data.scoutedTechLevel);
 	}
 	
 	
@@ -65,6 +65,19 @@ public class TDManager {
 	 */
 	public static TDChunk getChunkData(int dimension, ChunkCoordIntPair coord) {
 		return TechDataStorage.getChunkData(coord, dimension);
+	}
+	
+	public static TDPlayer getPlayerData(String username) {
+		return TechDataStorage.getPlayerData(username);
+	}
+	
+	public static int getPlayerTechLevel(String username) {
+		TDPlayer player = getPlayerData(username);
+		if(player != null) {
+			return player.techData;
+		} else {
+			return 0;
+		}
 	}
 
 	public static void updateScoutedTechLevel(Chunk chunk) {

@@ -3,15 +3,16 @@ package com.fravokados.techmobs;
 import com.fravokados.techmobs.command.CommandTechData;
 import com.fravokados.techmobs.command.CommandTechMobs;
 import com.fravokados.techmobs.common.CommonProxy;
-import com.fravokados.techmobs.configuration.Config;
-import com.fravokados.techmobs.configuration.ModBlocks;
-import com.fravokados.techmobs.configuration.ModEntities;
-import com.fravokados.techmobs.configuration.ModItems;
+import com.fravokados.techmobs.common.ModBlocks;
+import com.fravokados.techmobs.common.ModEntities;
+import com.fravokados.techmobs.common.ModItems;
+import com.fravokados.techmobs.configuration.ConfigHandler;
 import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.effects.TDEffects;
 import com.fravokados.techmobs.techdata.values.TDValues;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -22,7 +23,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = "com.fravokados.techmobs.configuration.gui.GuiFactoryConfig")
 public class ModTechMobs {
 	
 	@Instance(value = Reference.MOD_ID)
@@ -31,11 +32,13 @@ public class ModTechMobs {
 	@SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_SERVER)
 	public static CommonProxy proxy;
 	
+	public static ConfigHandler config;
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
 		//load config
-		Config.init(evt.getSuggestedConfigurationFile());
+		config = new ConfigHandler(evt.getSuggestedConfigurationFile());
+		config.load(true);
 		//init networking
 		
 		//init keybindings
@@ -43,7 +46,7 @@ public class ModTechMobs {
 		//init items
 		ModItems.init();
 		//init blocks
-		ModBlocks.init();		
+		ModBlocks.init();	
 	}
 	
 	@EventHandler
@@ -51,11 +54,15 @@ public class ModTechMobs {
 		//register gui handler
 		
 		//register TileEntities
+		ModBlocks.registerTileEntities();
 		
 		//init rendering
 		
 		//register EventHandlers
 		proxy.registerEvents();
+		
+		//Config handler
+		FMLCommonHandler.instance().bus().register(config);
 		
 		//load Entities
 		ModEntities.init();

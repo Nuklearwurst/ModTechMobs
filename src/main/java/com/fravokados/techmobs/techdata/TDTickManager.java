@@ -12,11 +12,9 @@ import net.minecraftforge.common.DimensionManager;
 
 import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
-import com.fravokados.techmobs.techdata.effects.TDEffects;
-import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
-import com.fravokados.techmobs.techdata.effects.world.TDWorldEffect;
 import com.fravokados.techmobs.techdata.values.TDEntryTileEntity;
 import com.fravokados.techmobs.techdata.values.TDValues;
+import com.fravokados.techmobs.world.TechDataStorage;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -94,7 +92,7 @@ public class TDTickManager {
 			}
 			scanningTasks.remove(0);
 		}
-
+		//TODO random effects
 		//start special effects
 		if(random.nextInt(Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE) == 0) {
 //			List<TDPlayerEffect> effects = TDEffects.getUsablePlayerEffects();

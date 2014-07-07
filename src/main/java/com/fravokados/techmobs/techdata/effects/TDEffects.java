@@ -69,7 +69,7 @@ public class TDEffects {
 	 * @param entityLiving
 	 * @return
 	 */
-	public static List<TDPlayerEffect> getUsablePlayerEffects() {
+	public static List<TDPlayerEffect> getUsablePlayerEffects(int techvalue) {
 		List<TDPlayerEffect> out = new ArrayList<TDPlayerEffect>();
 		for(TDPlayerEffect eff : playerEffects) {
 			if(eff.isUsable()) {

@@ -1,17 +1,23 @@
 package com.fravokados.techmobs.common.handler;
 
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
+import com.fravokados.techmobs.item.IItemAttackTargetListener;
 import com.fravokados.techmobs.techdata.effects.TDEffectManager;
 import com.fravokados.techmobs.world.TechDataStorage;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 
-public class Events {
+public class TMEventHandler {
 
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load evt) {
@@ -51,5 +57,17 @@ public class Events {
 	@SubscribeEvent
 	public void onEntitySpawn(LivingSpawnEvent.CheckSpawn evt) {
 		TDEffectManager.onLivingSpawn(evt);
+	}
+	
+	@SubscribeEvent
+	public void onEntitySetAttackTarget(LivingSetAttackTargetEvent evt) {
+		if(evt.target instanceof EntityPlayer && (evt.entityLiving instanceof IMob || evt.entityLiving instanceof EntityTameable)) {
+			EntityPlayer player = (EntityPlayer) evt.target;
+			for(ItemStack stack : player.inventory.mainInventory) {
+				if(stack != null && stack.stackSize != 0 && stack.getItem() instanceof IItemAttackTargetListener) {
+					((IItemAttackTargetListener) stack.getItem()).onSetAttackTarget(evt);
+				}
+			}
+		}
 	}
 }

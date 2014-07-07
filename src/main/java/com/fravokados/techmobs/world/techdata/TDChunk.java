@@ -69,8 +69,6 @@ public class TDChunk {
 			techLevel = data.getInteger(NBT_KEY + "techLevel");
 			scoutedTechLevel = data.getInteger(NBT_KEY + "scoutedTechLevel");
 			if(scoutedTechLevel > TechDataStorage.getDangerousChunkLevel()) {
-				//TODO check if this would work
-				//it should as ArrayList does only check equality 
 				ChunkLocation chunk = new ChunkLocation(evt.world, evt.getChunk().getChunkCoordIntPair());
 				TechDataStorage.addDangerousChunk(chunk, techLevel);
 			}

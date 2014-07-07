@@ -8,13 +8,28 @@ import net.minecraft.nbt.NBTTagCompound;
  *
  */
 public class TDPlayer {
+	
+	private static final String NBT_TECH_DATA = "player.techdata";
+	
+	public int techData = 0;
 
 	
 	public boolean save(NBTTagCompound nbt) {
-		return false;
+		//don't save data if it's empty
+		if(!this.hasData())
+			return false;
+		nbt.setInteger(NBT_TECH_DATA, techData);
+		return true;
 	}
 	
 	public boolean load(NBTTagCompound nbt) {
-		return false;
+		if(!nbt.hasKey(NBT_TECH_DATA))
+			return false;
+		techData = nbt.getInteger(NBT_TECH_DATA);
+		return true;
+	}
+	
+	public boolean hasData() {
+		return techData != 0;
 	}
 }

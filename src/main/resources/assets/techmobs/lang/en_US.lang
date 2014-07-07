@@ -1,0 +1,18 @@
+#Creativetab
+itemGroup.techmobs=TechMobs
+
+# Chat
+chat.mobTargetingWarning.exact.1=A
+chat.mobTargetingWarning.exact.2=wants you dead!
+chat.mobTargetingWarning.generic=A mob seems angry!
+chat.mobTargetingWarning.creeper.1=CREEPER!! RUNN!
+chat.mobTargetingWarning.babyZombie.1=B...B...BABY ZOMBIE!!
+
+#Items
+item.techmobs:monsterDetector.name=Monster Detector
+
+#Blocks
+tile.techmobs:gateExtender.name=Gate Extender
+
+#Entities
+entity.cyber_zombie.name=Cyber Zombie
