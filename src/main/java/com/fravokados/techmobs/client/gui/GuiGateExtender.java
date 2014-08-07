@@ -1,5 +1,9 @@
 package com.fravokados.techmobs.client.gui;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.InventoryPlayer;
+
 import org.lwjgl.opengl.GL11;
 
 import com.fravokados.techmobs.inventory.ContainerGateExtender;
@@ -7,19 +11,11 @@ import com.fravokados.techmobs.tileentity.TileEntityGateExtender;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerFurnace;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
 public class GuiGateExtender extends GuiContainer {
 
     private TileEntityGateExtender te;
-    private static final String __OBFID = "CL_00000758";
 
     public GuiGateExtender(InventoryPlayer invPlayer, TileEntityGateExtender tile)
     {

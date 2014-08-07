@@ -78,12 +78,11 @@ public class CommandTechData extends CommandBase {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 				}
 			} else if(args[0].equals(commands[2])) { //remove
-				int value = parseInt(sender, args[1]);
 				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
-					chunk.techLevel -= value;		
+					chunk.techLevel -= parseInt(sender, args[1]);		
 					sender.addChatMessage(new ChatComponentText("TechLevel in this Chunk: " + chunk.techLevel));			
 				} else if(args[2].equals(commands1[1])) { //scouted techlevel
-					chunk.scoutedTechLevel -= value;
+					chunk.scoutedTechLevel -= parseInt(sender, args[1]);
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 				} else {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);

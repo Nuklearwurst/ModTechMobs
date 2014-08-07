@@ -3,11 +3,13 @@ package com.fravokados.techmobs.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.world.World;
 
 public class CommandTechMobs implements ICommand {
 	
@@ -44,9 +46,54 @@ public class CommandTechMobs implements ICommand {
 		if(args.length == 0) {
 			throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 		} else {
+			if(args[0].equals("fill")) {
+				if(args.length < 8) {
+					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+				}
+				int x1 = getCoordFromCommand(sender.getPlayerCoordinates().posX, args[1]);
+				int y1 = getCoordFromCommand(sender.getPlayerCoordinates().posY, args[2]);
+				int z1 = getCoordFromCommand(sender.getPlayerCoordinates().posZ, args[3]);
+				
+				int x2 = getCoordFromCommand(sender.getPlayerCoordinates().posX, args[4]);
+				int y2 = getCoordFromCommand(sender.getPlayerCoordinates().posY, args[5]);
+				int z2 = getCoordFromCommand(sender.getPlayerCoordinates().posZ, args[6]);
+				
+				Block block = Block.getBlockFromName(args[7]);
+				
+				boolean xn = x1 < x2;
+				boolean yn = y1 < y2;
+				boolean zn = z1 < z1;
+				World world = sender.getEntityWorld();
+				if(world != null) {	
+					for(int x = 0; x <= getDifference(x1, x2); x++) {
+						for(int y = 0; y <= getDifference(y1, y2); y++) {
+							for(int z = 0; z <= getDifference(z1, z2); z++) {
+								int xt = xn ? x1 + x : x1 - x;
+								int yt = yn ? y1 + y : y1 - y;
+								int zt = zn ? z1 + z: z1 - z;
+								world.setBlock(xt, yt, zt, block);
+							}
+						}
+					}
+				}
+			}
 			//does not work
 			sender.addChatMessage(new ChatComponentTranslation("WIP", new ChatComponentText("BLABLA")));
 		}		
+	}
+	
+	private int getDifference(int i1, int i2) {
+		return Math.max(i1, i2) - Math.min(i1, i2);
+	}
+	
+	public int getCoordFromCommand(int pos, String arg) {
+		if(arg.startsWith("~")) {
+			if(arg.length() == 1) {
+				return pos;
+			}
+			return pos + Integer.parseInt(arg.substring(1));
+		}
+		return Integer.parseInt(arg);
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -186,6 +187,7 @@ public class TechDataStorage {
 				return;
 			} else {
 				removeDangerousChunk(loc);
+				addDangerousChunkIfNeeded(loc, level);
 			}
 		} else {
 			addDangerousChunkIfNeeded(loc, level);
@@ -198,6 +200,7 @@ public class TechDataStorage {
 				return;
 			} else {
 				removeDangerousPlayer(name);
+				addDangerousPlayerIfNeeded(name, level);
 			}
 		} else {
 			addDangerousPlayerIfNeeded(name, level);
@@ -214,6 +217,17 @@ public class TechDataStorage {
 		if(level > getDangerousPlayerLevel()) {
 			addDangerousPlayer(player, level);
 		}
+	}
+	
+	public static String getRandomDangerousPlayer(Random rand) {
+		if(techPlayers.isEmpty()) {
+			return null;
+		}
+		return techPlayers.get(rand.nextInt(techPlayers.size()));
+	}
+	
+	public static ChunkLocation getRandomDangerousChunk(Random rand) {
+		return techChunks.get(rand.nextInt(techChunks.size()));
 	}
 
 	/**
@@ -382,9 +396,9 @@ public class TechDataStorage {
 			TDPlayer player = new TDPlayer();
 			if(player.load(saveData.getCompoundTag(username + "_techdata"))) {
 				//successfully loaded data
-				playerData.put(username, player);				
+				playerData.put(username, player);	
+				addDangerousPlayerIfNeeded(username, player.scoutedTechData);
 			}
-			//TODO mostwanted list
 		}
 	}
 
@@ -403,11 +417,11 @@ public class TechDataStorage {
 			TDPlayer player = playerData.get(username);
 			//unload the player
 			playerData.remove(username); //maybe not necessary
+			removeDangerousPlayer(username);
 			//save the player data
 			if(player.save(tag1)) {
 				saveData.setTag(username + "_techdata", tag1);
 			}
-			//TODO mostwanted list unload
 		}
 	}
 

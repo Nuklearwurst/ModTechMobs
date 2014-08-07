@@ -12,6 +12,7 @@ import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
 import com.fravokados.techmobs.techdata.effects.mob.TDMobEffectEquipment;
 import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.techmobs.techdata.effects.world.TDWorldEffect;
+import com.fravokados.techmobs.world.techdata.TDPlayer;
 
 /**
  * contains  information of the techdata effects
@@ -65,14 +66,16 @@ public class TDEffects {
 	
 	/**
 	 * used to get a List containing all PlayerEffects that are applicable for the given Player
+	 * @param player 
+	 * @param username 
 	 * @param techData
 	 * @param entityLiving
 	 * @return
 	 */
-	public static List<TDPlayerEffect> getUsablePlayerEffects(int techvalue) {
+	public static List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, String username, TDPlayer player) {
 		List<TDPlayerEffect> out = new ArrayList<TDPlayerEffect>();
 		for(TDPlayerEffect eff : playerEffects) {
-			if(eff.isUsable()) {
+			if(eff.isUsable(techvalue, username, player)) {
 				out.add(eff);
 			}
 		}

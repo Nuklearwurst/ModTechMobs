@@ -30,6 +30,8 @@ public class EntityAIScanArea extends EntityAIBase {
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
+		//Debug code
+//		e.worldObj.createExplosion(e, e.posX, e.posY, e.posZ, 5.0F, true);
 		if(timer == 0) {
 //			LogHelper.info("Scanning chunk!");
 			TDTickManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords( (int) (e.posX), (int) (e.posZ)));

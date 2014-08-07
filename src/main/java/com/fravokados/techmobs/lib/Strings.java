@@ -15,10 +15,14 @@ public class Strings {
 	
 	public static final class Block {
 		public static final String GATE_EXTENDER = "gateExtender";
+		public static final String REPROCESSOR = "reprocessor";
 	}
 	
 	public static final class Item {
 		public static final String MONSTER_DETECTOR = "monsterDetector";
+		public static final String MONSTER_DROP = "monsterDrop";
+		public static final String[] MONSTER_DROP_SUBTYPES = {"common"};
+		public static final String[] MONSTER_DROP_TOOLTIP = {"common"};
 	}
 	
 	public static final class Chat {
@@ -68,6 +72,7 @@ public class Strings {
 			public static final String DANGER_PLAYER_PERCENTAGE = "dangerous_player_factor";
 			public static final String DANGER_PLAYER_FLAT = "dangerous_player_flat";
 			public static final String SCOUTING_STEP_FACTOR = "scouting_step_factor";
+			public static final String INJECT_SCANNING_AI = "inject_scanning_ai";
 		}
 		/**
 		 * tech data

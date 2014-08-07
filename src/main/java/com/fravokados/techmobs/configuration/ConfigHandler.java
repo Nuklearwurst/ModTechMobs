@@ -34,6 +34,9 @@ public class ConfigHandler {
 		//read config
 		Property prop;
 		
+		config.addCustomCategoryComment(Keys.CATEGORY_TECH_DATA, "contains settings for techdata");
+		config.addCustomCategoryComment(Keys.CATEGORY_TECH_SCANNING, "contains settings for techdata scanning");
+		
 		//////////////
 		// TechData //
 		//////////////
@@ -67,6 +70,8 @@ public class ConfigHandler {
 		prop = config.get(Keys.CATEGORY_TECH_SCANNING, Keys.TechScanning.SPLIT_STEPS_VALUE, DefaultSettings.TechScanning.SPLIT_STEPS_VALUE);
 		prop.comment = ""; //TODO comment
 		Settings.TechScanning.SPLIT_STEPS_VALUE = prop.getDoubleList();
+		
+		Settings.TechScanning.INJECT_SCANNING_AI = config.getBoolean(TechScanning.INJECT_SCANNING_AI, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.INJECT_SCANNING_AI, "Inject Scanning AI into vanilla mobs during spawn\nThis is experimental!\nDon't enable this if you don't know what you are doing!");
 		
 		
 		//save config

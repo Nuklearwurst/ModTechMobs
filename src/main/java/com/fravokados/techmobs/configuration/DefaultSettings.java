@@ -30,5 +30,6 @@ public class DefaultSettings {
 		public static final float DANGER_PLAYER_PERCENTAGE = 0.8F;
 		public static final int DANGER_PLAYER_FLAT = 1000;
 		public static final float SCOUTING_STEP_FACTOR = 0.1F;
+		public static final boolean INJECT_SCANNING_AI = false;
 	}
 }

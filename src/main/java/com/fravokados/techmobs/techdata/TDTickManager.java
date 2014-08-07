@@ -5,16 +5,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
 import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
+import com.fravokados.techmobs.techdata.effects.TDEffects;
+import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.techmobs.techdata.values.TDEntryTileEntity;
 import com.fravokados.techmobs.techdata.values.TDValues;
 import com.fravokados.techmobs.world.TechDataStorage;
+import com.fravokados.techmobs.world.techdata.TDPlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -72,6 +77,8 @@ public class TDTickManager {
 
 		//start scanning
 		for(int i = 0; i < getScansToPerform(); i++) {
+			LogHelper.info("################ Scanning start ################");
+			long time = System.nanoTime();
 			ChunkLocation task = scanningTasks.get(0);
 			World world = DimensionManager.getWorld(task.dimension);
 			if(world != null) {
@@ -91,18 +98,30 @@ public class TDTickManager {
 				}
 			}
 			scanningTasks.remove(0);
+			LogHelper.info("################# Scanning end #################");
+			LogHelper.info("Time in ns: " + (System.nanoTime() - time));
 		}
 		//TODO random effects
 		//start special effects
 		if(random.nextInt(Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE) == 0) {
-//			List<TDPlayerEffect> effects = TDEffects.getUsablePlayerEffects();
-			//randomize effect order
-//			level -= effects.get(evt.world.rand.nextInt(effects.size())).applyEffect(level, evt.entityLiving);
+			String username = TechDataStorage.getRandomDangerousPlayer(random);
+			if(username != null) {
+				TDPlayer player = TDManager.getPlayerData(username); 
+				int level = player.scoutedTechData;
+				int i = 0;
+				List<TDPlayerEffect> effects = TDEffects.getUsablePlayerEffects(level, username, player);
+				while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS) {
+					level -= effects.get(random.nextInt(effects.size())).applyEffect(level, username, player, MinecraftServer.getServer().getConfigurationManager().func_152612_a(username));
+					//TODO coding
+					i++;
+					TDEffects.getUsablePlayerEffects(player.scoutedTechData, username, player);
+				}
+			}
 		}
 		if(random.nextInt(Settings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE) == 0) {
-//			List<TDWorldEffect> effects = TDEffects.getUsableWorldEffects();
+			//			List<TDWorldEffect> effects = TDEffects.getUsableWorldEffects();
 			//randomize effect order
-//			level -= effects.get(evt.world.rand.nextInt(effects.size())).applyEffect(level, evt.entityLiving);
+			//			level -= effects.get(evt.world.rand.nextInt(effects.size())).applyEffect(level, evt.entityLiving);
 		}
 	}
 

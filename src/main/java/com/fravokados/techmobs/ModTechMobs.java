@@ -79,6 +79,7 @@ public class ModTechMobs {
 	
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent evt) {
+		//register events
 		evt.registerServerCommand(new CommandTechMobs());
 		evt.registerServerCommand(new CommandTechData());
 	}

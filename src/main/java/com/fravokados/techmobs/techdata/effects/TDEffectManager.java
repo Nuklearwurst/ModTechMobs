@@ -2,11 +2,15 @@ package com.fravokados.techmobs.techdata.effects;
 
 import java.util.List;
 
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
 import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.entity.ai.EntityAIScanArea;
 import com.fravokados.techmobs.lib.util.world.WorldHelper;
 import com.fravokados.techmobs.techdata.TDManager;
 import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
@@ -23,6 +27,20 @@ public class TDEffectManager {
 		if(!(evt.entityLiving instanceof IMob)) {
 			return;
 		}
+		
+		/////////////////////////
+		
+		if(Settings.TechScanning.INJECT_SCANNING_AI) {
+			//WIP
+			if(evt.entityLiving instanceof EntityZombie || evt.entityLiving instanceof EntitySkeleton) {
+				EntityLiving e = ((EntityLiving)evt.entityLiving);
+				e.tasks.addTask(3, new EntityAIScanArea(e));
+			}
+		}
+		
+		////////////////////////
+		
+		
 		//localize and read chunk
 		ChunkCoordIntPair coord = WorldHelper.convertToChunkCoord(evt.x, evt.z);
 		int level = TDManager.getScoutedTechLevel(evt.world.provider.dimensionId, coord);

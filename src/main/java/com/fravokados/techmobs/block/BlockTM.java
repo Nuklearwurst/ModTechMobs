@@ -21,6 +21,16 @@ public class BlockTM extends Block {
 		this.setCreativeTab(CreativeTabTechMobs.TAB_TM);
 	}
 	
+	public BlockTM(String name) {
+		this();
+		this.setBlockName(name);
+	}
+	
+	public BlockTM(Material mat, String name) {
+		this(mat);
+		this.setBlockName(name);
+	}
+	
 	protected String getUnwrappedUnlocalizedName(String unlocalizedName)
     {
         return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);

@@ -10,8 +10,10 @@ import net.minecraft.nbt.NBTTagCompound;
 public class TDPlayer {
 	
 	private static final String NBT_TECH_DATA = "player.techdata";
+	private static final String NBT_SCOUTED_TECH_DATA = "player.scouted.techdata";
 	
 	public int techData = 0;
+	public int scoutedTechData = 0;
 
 	
 	public boolean save(NBTTagCompound nbt) {
@@ -19,6 +21,7 @@ public class TDPlayer {
 		if(!this.hasData())
 			return false;
 		nbt.setInteger(NBT_TECH_DATA, techData);
+		nbt.setInteger(NBT_SCOUTED_TECH_DATA, scoutedTechData);
 		return true;
 	}
 	
@@ -26,6 +29,7 @@ public class TDPlayer {
 		if(!nbt.hasKey(NBT_TECH_DATA))
 			return false;
 		techData = nbt.getInteger(NBT_TECH_DATA);
+		scoutedTechData = nbt.getInteger(NBT_SCOUTED_TECH_DATA);
 		return true;
 	}
 	
