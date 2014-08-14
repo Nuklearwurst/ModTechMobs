@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 
 import com.fravokados.techmobs.ModTechMobs;
+import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.Strings.Keys;
 
 import cpw.mods.fml.client.config.GuiConfig;
@@ -17,7 +18,7 @@ public class GuiModConfigurataion extends GuiConfig {
 	public GuiModConfigurataion(GuiScreen parent) {
 		super(parent,
 				getConfigElements(),
-				"TestMod", false, false, GuiConfig.getAbridgedConfigPath(ModTechMobs.config.config.toString()));
+				Reference.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath(ModTechMobs.config.config.toString()));
 	}
 
 	@SuppressWarnings({ "rawtypes" })

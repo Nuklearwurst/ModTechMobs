@@ -17,6 +17,6 @@ public class TDEntrySimpleTileEntity extends TDEntryTileEntity {
 	
 	@Override
 	public String toString() {
-		return "Simple TileEntityTDEntry." + techValue;
+		return "Simple TileEntityTDEntry:" + techValue;
 	}
 }

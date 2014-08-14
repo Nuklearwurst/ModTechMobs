@@ -4,8 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 
-import com.fravokados.techmobs.world.techdata.TDPlayer;
-
 public class TDPlayerEffectPotion extends TDPlayerEffect {
 	
 	private int value;
@@ -21,17 +19,21 @@ public class TDPlayerEffectPotion extends TDPlayerEffect {
 	}
 
 	@Override
-	public boolean isUsable(int techvalue, String username, TDPlayer player, EntityPlayer entity) {
+	public boolean isUsable(int techvalue, String username, EntityPlayer entity) {
 		return techvalue >= value && !entity.isPotionActive(potionId);
 	}
 
 	@Override
-	public int applyEffect(int techvalue, String username, TDPlayer player,
-			EntityPlayer entity) {
+	public int applyEffect(int techvalue, String username, EntityPlayer entity) {
 		entity.addPotionEffect(new PotionEffect(potionId, duration, multiplier));
 		//DEBUG
 		entity.addChatMessage(new ChatComponentText("Potion"));
 		return value;
+	}
+	
+	@Override
+	public String toString() {
+		return "Potion, id: " + potionId + ", duration: " + duration + ", level:" + multiplier;
 	}
 
 }

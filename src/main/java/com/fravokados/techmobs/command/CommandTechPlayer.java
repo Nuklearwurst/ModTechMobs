@@ -10,13 +10,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 
 import com.fravokados.techmobs.techdata.TDManager;
+import com.fravokados.techmobs.world.TechDataStorage;
 
 public class CommandTechPlayer extends CommandBase {
 	
 	private List<String> aliases;
 	
 	private static final String[] commands1 = { "level", "scouted"};
-	private static final String[] commands =  {"set", "add", "remove", "read", "scan", "info"};
+	private static final String[] commands =  {"set", "add", "remove", "read", "scan", "info", "rnddp"};
 	
 	public CommandTechPlayer() {
 		this.aliases = new ArrayList<String>();
@@ -31,7 +32,7 @@ public class CommandTechPlayer extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "techplayer <command> <params>";
+		return "techplayer <command> <params> [player]";
 	}
 
 	@Override
@@ -47,17 +48,16 @@ public class CommandTechPlayer extends CommandBase {
 			if(args.length > 3) {
 				throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 			}
-//			TDPlayer player = getPlayerData(sender);
-			String username = sender.getCommandSenderName();
-			int scoutedTechLevel = TDManager.getPlayerScoutedTechLevel(username);
-			int techLevel = TDManager.getPlayerTechLevel(username);
+			EntityPlayer entityPlayer = getPlayer(sender);
+			int scoutedTechLevel = TDManager.getPlayerScoutedTechLevel(entityPlayer);
+			int techLevel = TDManager.getPlayerTechLevel(entityPlayer);
 			if(args[0].equals(commands[0])) { //set
 				int value = parseInt(sender, args[1]);
 				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
-					TDManager.setPlayerTechLevel(username, value);					
+					TDManager.setPlayerTechLevel(entityPlayer, value);					
 					sender.addChatMessage(new ChatComponentText("TechLevel of this Player: " + techLevel));
 				} else if(args[2].equals(commands1[1])) { //scouted techlevel
-					TDManager.setPlayerScoutedTechLevel(username, value);
+					TDManager.setPlayerScoutedTechLevel(entityPlayer, value);
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
 				} else {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
@@ -65,20 +65,20 @@ public class CommandTechPlayer extends CommandBase {
 			} else if(args[0].equals(commands[1])) { //add
 				int value = parseInt(sender, args[1]);
 				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
-					TDManager.setPlayerTechLevel(username, techLevel + value);
+					TDManager.setPlayerTechLevel(entityPlayer, techLevel + value);
 					sender.addChatMessage(new ChatComponentText("TechLevel of this Player: " + techLevel));				
 				} else if(args[2].equals(commands1[1])) { //scouted techlevel
-					TDManager.setPlayerScoutedTechLevel(username, scoutedTechLevel + value);
+					TDManager.setPlayerScoutedTechLevel(entityPlayer, scoutedTechLevel + value);
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
 				} else {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 				}
 			} else if(args[0].equals(commands[2])) { //remove
 				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
-					TDManager.setPlayerTechLevel(username, techLevel - parseInt(sender, args[1]));		
+					TDManager.setPlayerTechLevel(entityPlayer, techLevel - parseInt(sender, args[1]));		
 					sender.addChatMessage(new ChatComponentText("TechLevel of this Player: " + techLevel));			
 				} else if(args[2].equals(commands1[1])) { //scouted techlevel
-					TDManager.setPlayerScoutedTechLevel(username, scoutedTechLevel - parseInt(sender, args[1]));
+					TDManager.setPlayerScoutedTechLevel(entityPlayer, scoutedTechLevel - parseInt(sender, args[1]));
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
 				} else {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
@@ -101,14 +101,16 @@ public class CommandTechPlayer extends CommandBase {
 				if(args.length == 1 || args[1].equals(commands1[0])) {
 					TDManager.scanPlayer(getPlayer(sender));
 					sender.addChatMessage(new ChatComponentText("Scanning..."));
-					sender.addChatMessage(new ChatComponentText("Updated TechLevel: " + TDManager.getPlayerTechLevel(sender.getCommandSenderName())));
+					sender.addChatMessage(new ChatComponentText("Updated TechLevel: " + TDManager.getPlayerTechLevel(entityPlayer)));
 				} else if(args[1].equals(commands1[1])) {
-					sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getPlayerScoutedTechLevel(sender.getCommandSenderName())));
+					sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getPlayerScoutedTechLevel(entityPlayer)));
 				} else {
 					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 				}
 			} else if(args[0].equals(commands[5])) { //info
 				sender.addChatMessage(new ChatComponentText("WIP"));				
+			} else if(args[0].equals(commands[6])) { //random tech player
+				sender.addChatMessage(new ChatComponentText("Random Tech Player: " + TechDataStorage.getRandomDangerousPlayer(entityPlayer.getRNG())));
 			} else {
 				throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 			}

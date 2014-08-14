@@ -30,7 +30,7 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 	public void onSetAttackTarget(LivingSetAttackTargetEvent evt) {
 		if(evt.target instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) evt.target;
-			int data = TDManager.getPlayerTechLevel(player.getCommandSenderName());
+			int data = TDManager.getPlayerTechLevel(player);
 			//safe techvalue --> good information
 			if(data <= Settings.TechData.SAFE_TECH_VALUE) {
 				sendExactWarningMessage(player, getSpecialEntityName(evt.entityLiving));			

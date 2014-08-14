@@ -21,8 +21,6 @@ import com.fravokados.techmobs.techdata.effects.world.TDWorldEffect;
 import com.fravokados.techmobs.techdata.values.TDValues;
 import com.fravokados.techmobs.techdata.values.world.TDEntryTileEntity;
 import com.fravokados.techmobs.world.TechDataStorage;
-import com.fravokados.techmobs.world.techdata.TDChunk;
-import com.fravokados.techmobs.world.techdata.TDPlayer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -114,16 +112,15 @@ public class TDTickManager {
 				String username = TechDataStorage.getRandomDangerousPlayer(random);
 				if(username != null) {
 					EntityPlayer entity = PlayerUtils.getPlayerFromName(username);
-					TDPlayer player = TDManager.getPlayerData(username); 
-					int level = player.scoutedTechLevel;
+					int level = TDManager.getPlayerScoutedTechLevel(entity);
 					int i = 0;
-					List<TDPlayerEffect> effects = TDEffects.getUsablePlayerEffects(level, username, player, entity);
+					List<TDPlayerEffect> effects = TDEffects.getUsablePlayerEffects(level, username, entity);
 					while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS_PLAYER) {
-						level -= effects.get(random.nextInt(effects.size())).applyEffect(level, username, player, MinecraftServer.getServer().getConfigurationManager().func_152612_a(username));
+						level -= effects.get(random.nextInt(effects.size())).applyEffect(level, username, MinecraftServer.getServer().getConfigurationManager().func_152612_a(username));
 						i++;
-						effects = TDEffects.getUsablePlayerEffects(level, username, player, entity);
+						effects = TDEffects.getUsablePlayerEffects(level, username,  entity);
 					}
-					TDManager.setPlayerScoutedTechLevel(username, level);
+					TDManager.setPlayerScoutedTechLevel(entity, level);
 				}
 			}
 		} else if(tick == (int)Settings.TechData.TD_RANDOM_TICKS / 2) { //chunk

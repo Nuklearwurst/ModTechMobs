@@ -14,7 +14,6 @@ import com.fravokados.techmobs.techdata.effects.mob.TDMobEffectEquipment;
 import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffectPotion;
 import com.fravokados.techmobs.techdata.effects.world.TDWorldEffect;
-import com.fravokados.techmobs.world.techdata.TDPlayer;
 
 /**
  * contains  information of the techdata effects
@@ -101,10 +100,10 @@ public class TDEffects {
 	 * @param entityLiving
 	 * @return
 	 */
-	public static List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, String username, TDPlayer player, EntityPlayer entity) {
+	public static List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, String username, EntityPlayer entity) {
 		List<TDPlayerEffect> out = new ArrayList<TDPlayerEffect>();
 		for(TDPlayerEffect eff : playerEffects) {
-			if(eff.isUsable(techvalue, username, player, entity)) {
+			if(eff.isUsable(techvalue, username, entity)) {
 				out.add(eff);
 			}
 		}

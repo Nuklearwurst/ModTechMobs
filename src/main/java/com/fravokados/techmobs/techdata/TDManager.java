@@ -2,16 +2,17 @@ package com.fravokados.techmobs.techdata;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.chunk.Chunk;
 
 import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.lib.util.PlayerUtils;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
 import com.fravokados.techmobs.techdata.values.TDValues;
 import com.fravokados.techmobs.techdata.values.player.TDEntryItem;
 import com.fravokados.techmobs.world.TechDataStorage;
 import com.fravokados.techmobs.world.techdata.TDChunk;
-import com.fravokados.techmobs.world.techdata.TDPlayer;
 
 
 /**
@@ -22,6 +23,11 @@ import com.fravokados.techmobs.world.techdata.TDPlayer;
  *
  */
 public class TDManager {
+	
+	//Player NBT tags
+	private static final String NBT_PLAYER_SAVE = "techmobs.save";
+	private static final String NBT_PLAYER_TECHDATA= "techdata";
+	private static final String NBT_PLAYER_TECHDATA_SCOUTED = "scouted.techdata";
 
 	public static int getScoutedTechLevel(int dimension, ChunkCoordIntPair coord) {
 		return getChunkData(dimension, coord).scoutedTechLevel;
@@ -90,33 +96,25 @@ public class TDManager {
 				}
 			}
 		}
-		TDManager.setPlayerTechLevel(player.getCommandSenderName(), value);
+		TDManager.setPlayerTechLevel(player, value);
 	}
 	
 	/**
 	 * updates (increases) the scouted techlevel by a value set in the configs
-	 * @param username
+	 * @param player
 	 * @param data
 	 */
-	public static void updatePlayerScoutedTechLevel(String username, TDPlayer data) {
-		if(data.scoutedTechLevel > data.techLevel) {
-			data.scoutedTechLevel = data.techLevel;
-			return;
-		}
-		int step =  (int) (data.techLevel * Settings.TechScanning.SCOUTING_STEP_FACTOR_PLAYER);
-		int dif = data.techLevel - data.scoutedTechLevel;
+	public static void updatePlayerScoutedTechLevel(EntityPlayer player) {
+		int scouted = getPlayerScoutedTechLevel(player);
+		int level = getPlayerTechLevel(player);
+		//maximum increase
+		int step =  (int) (level * Settings.TechScanning.SCOUTING_STEP_FACTOR_PLAYER);
+		//note: if scouted techlevel is greater than the real level it gets decreased
+		int dif = level - scouted;
 		if(dif < step) {
 			step = dif;
 		}
-		setPlayerScoutedTechLevel(username, data.scoutedTechLevel + step);
-	}
-	
-	/**
-	 * updates (increases) the scouted techlevel by a value set in the configs
-	 * @param username
-	 */
-	public static void updatePlayerScoutedTechLevel(String username) {
-		updatePlayerScoutedTechLevel(username, getPlayerData(username));
+		setPlayerScoutedTechLevel(player, scouted + step);
 	}
 	
 	/**
@@ -125,29 +123,27 @@ public class TDManager {
 	 * @param username
 	 */
 	public static void scanAndUpdatePlayerTD(EntityPlayer player) {
-		TDPlayer data = getPlayerData(player.getCommandSenderName());
-		if(data.scoutedTechLevel >= data.techLevel) {
+		if(getPlayerScoutedTechLevel(player) >= getPlayerTechLevel(player)) {
 			scanPlayer(player);
 		}
-		updatePlayerScoutedTechLevel(player.getCommandSenderName(), data);
-		TechDataStorage.updateDangerousPlayerList(player.getCommandSenderName(), data.scoutedTechLevel);
+		updatePlayerScoutedTechLevel(player);
 	}
 
-	public static void setPlayerTechLevel(String username, int level) {
-		getPlayerData(username).techLevel = level;
+	public static void setPlayerTechLevel(EntityPlayer player, int level) {
+		getPlayerData(player).setInteger(NBT_PLAYER_TECHDATA, level);
 	}
 	
-	public static void setPlayerScoutedTechLevel(String username, int scoutedLevel) {
-		getPlayerData(username).scoutedTechLevel = scoutedLevel;
-		TechDataStorage.updateDangerousPlayerList(username, scoutedLevel);
+	public static void setPlayerScoutedTechLevel(EntityPlayer player, int scoutedLevel) {
+		getPlayerData(player).setInteger(NBT_PLAYER_TECHDATA_SCOUTED, scoutedLevel);
+		TechDataStorage.updateDangerousPlayerList(player.getCommandSenderName(), scoutedLevel);
 	}
 	
-	public static int getPlayerTechLevel(String username) {
-		return getPlayerData(username).techLevel;
+	public static int getPlayerTechLevel(EntityPlayer player) {
+		return getPlayerData(player).getInteger(NBT_PLAYER_TECHDATA);
 	}
 	
-	public static int getPlayerScoutedTechLevel(String username) {
-		return getPlayerData(username).scoutedTechLevel;
+	public static int getPlayerScoutedTechLevel(EntityPlayer player) {
+		return getPlayerData(player).getInteger(NBT_PLAYER_TECHDATA_SCOUTED);
 	}
 
 
@@ -163,8 +159,13 @@ public class TDManager {
 		return TechDataStorage.getChunkData(coord, dimension);
 	}
 
-	@Deprecated
-	public static TDPlayer getPlayerData(String username) {
-		return TechDataStorage.getPlayerData(username);
+	/**
+	 * @param player
+	 * @return
+	 */
+	public static NBTTagCompound getPlayerData(EntityPlayer player) {
+		NBTTagCompound nbt = PlayerUtils.getPersistentNBT(player).getCompoundTag(NBT_PLAYER_SAVE);
+		PlayerUtils.getPersistentNBT(player).setTag(NBT_PLAYER_SAVE, nbt);
+		return nbt;
 	}
 }

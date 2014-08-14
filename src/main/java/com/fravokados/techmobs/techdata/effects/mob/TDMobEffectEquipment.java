@@ -13,6 +13,10 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	protected ItemStack[] equipment;
 	protected boolean asSet;
 	protected int[] values;
+	/**
+	 * do not use this
+	 */
+	@Deprecated
 	protected boolean replaceEquipment;
 	protected boolean doNotRemoveIfSucceddedBefore = false; //not working
 	protected boolean applyAll = true; //not working (settings are always default)
@@ -121,4 +125,8 @@ public class TDMobEffectEquipment extends TDMobEffect {
 		return used;
 	}
 
+	@Override
+	public String toString() {
+		return "MobEquipment: " + values;
+	}
 }
