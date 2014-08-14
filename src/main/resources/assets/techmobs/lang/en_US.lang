@@ -8,6 +8,8 @@ chat.mobTargetingWarning.generic=A mob seems angry!
 chat.mobTargetingWarning.creeper.1=CREEPER!! RUNN!
 chat.mobTargetingWarning.babyZombie.1=B...B...BABY ZOMBIE!!
 
+chat.effect.potion="Something seems diferent"
+
 #Items
 item.techmobs:monsterDetector.name=Monster Detector
 

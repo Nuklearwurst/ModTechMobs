@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
@@ -138,7 +139,7 @@ public class TDEffects {
 				new ItemStack(Items.diamond_boots)
 		}, false, false, new int[] {30, 10, 30, 20, 10}).setDoNotDrop(false));
 		//player effects
-		addPlayerEffect(new TDPlayerEffectPotion(10, 18, 40, 2));
+		addPlayerEffect(new TDPlayerEffectPotion(100, 18, 200, 1, "chat.effect.potion").setMessageColor(EnumChatFormatting.DARK_AQUA));
 		//world effects
 	}
 }
