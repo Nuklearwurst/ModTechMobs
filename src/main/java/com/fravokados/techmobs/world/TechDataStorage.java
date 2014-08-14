@@ -1,8 +1,6 @@
 package com.fravokados.techmobs.world;
 
-import java.io.EOFException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import java.util.Random;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -38,7 +37,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
  * @author Nuklearwurst
  *
  */
-public class TechDataStorage {
+public class TechDataStorage extends WorldSavedData {
 
 	/** the folder, inside the dim folder, where our information gets saved to */
 	private static final String LOCATION = "";
@@ -49,6 +48,8 @@ public class TechDataStorage {
 	// nbt keys
 	private static final String NBT_CHUNK_VALUE = "td_highest_chunk_value";
 	private static final String NBT_PLAYER_VALUE = "td_highest_player_value";
+	
+	private static final String SAVE_DATA_NAME = "TechmobsStorage";
 
 	/**
 	 * the world techdata
@@ -85,6 +86,26 @@ public class TechDataStorage {
 	 */ 
 	private static NBTTagCompound saveData;
 	
+	//SAVING
+	public TechDataStorage(String name) {
+		super(name);
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbt) {
+		nbt.setInteger(NBT_CHUNK_VALUE, highestChunkValue);
+		nbt.setInteger(NBT_PLAYER_VALUE, highestPlayerValue);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		highestChunkValue = nbt.getInteger(NBT_CHUNK_VALUE);
+		highestPlayerValue = nbt.getInteger(NBT_PLAYER_VALUE);
+	}
+	//END SAVING
+	
+	
+	
 	/**
 	 * returns the world data
 	 * @param dimensionId
@@ -113,6 +134,16 @@ public class TechDataStorage {
 	}
 	
 	public static TDPlayer getPlayerData(String username) {
+		if(!playerData.containsKey(username)) {
+			if(saveData != null && saveData.hasKey(username)) {
+				LogHelper.warn("Somthing went wrong when loading player data, but we found our save!");
+				TDPlayer data = new TDPlayer();
+				data.load(saveData.getCompoundTag(username));
+				playerData.put(username, data);
+			} else {
+				playerData.put(username, new TDPlayer());
+			}
+		}
 		return playerData.get(username);
 	}
 	
@@ -171,7 +202,7 @@ public class TechDataStorage {
 				if(index > 0) {
 					//insert the player techvalue of the most recent player added to the dangerousPlayer list
 					String name = techPlayers.get(index - 1);
-					highestPlayerValue = TDManager.getPlayerData(name).techData;
+					highestPlayerValue = TDManager.getPlayerTechLevel(name);
 				} else {
 					highestPlayerValue = 0;
 				}
@@ -227,6 +258,9 @@ public class TechDataStorage {
 	}
 	
 	public static ChunkLocation getRandomDangerousChunk(Random rand) {
+		if(techChunks.isEmpty()) {
+			return null;
+		}
 		return techChunks.get(rand.nextInt(techChunks.size()));
 	}
 
@@ -236,45 +270,68 @@ public class TechDataStorage {
 	 */
 	public static void onWorldLoad(WorldEvent.Load evt) {
 		//only on server side (--> intergrated server) && only on dim = 0 as it stores player data
-		if(FMLCommonHandler.instance().getSide().isServer() && evt.world.provider.dimensionId == 0) {
+		if(FMLCommonHandler.instance().getEffectiveSide().isServer() && evt.world.provider.dimensionId == 0) {
 			WorldServer world = (WorldServer) evt.world;
-			try
-			{
-				//create the file
-				File file = new File(world.getChunkSaveLocation(), LOCATION + FILENAME);
-				if(!file.exists())
-				{
-					//file is missing
-					//init default values
-					saveData = new NBTTagCompound();
-					if(world.getWorldInfo().getWorldTotalTime() > 0)
-					{
-						LogHelper.warn("Save file is missing!");
-					}
-				}
-				else
-				{
-					//read data
-					saveData = CompressedStreamTools.readCompressed(new FileInputStream(file));
-					
-					highestChunkValue = saveData.getInteger(NBT_CHUNK_VALUE);
-					highestPlayerValue = saveData.getInteger(NBT_PLAYER_VALUE);
-					//TODO finish saving and loading of player techdata
-					//TODO player connect and disconnect saveing?
-				}
+			TechDataStorage data = (TechDataStorage) world.perWorldStorage.loadData(TechDataStorage.class, SAVE_DATA_NAME);
+			
+			if(data == null) {
+				data = new TechDataStorage(SAVE_DATA_NAME);
+				world.perWorldStorage.setData(SAVE_DATA_NAME, data);
 			}
-			catch(EOFException e)
-			{
-				LogHelper.error("Mod-Savefile is corrupted!");
-				//we don't have backups
-				saveData = new NBTTagCompound();
-			}
-			catch(IOException e)
-			{
-				LogHelper.error("Error reading Mod-Savefile!");
-				//init default values
-				saveData = new NBTTagCompound();
-			}
+//			try
+//			{
+//				//create the file
+//				File file = new File(world.getChunkSaveLocation(), LOCATION + FILENAME);
+//				if(!file.exists())
+//				{
+//					//file is missing
+//					//init default values
+//					saveData = new NBTTagCompound();
+//					if(world.getWorldInfo().getWorldTotalTime() > 0)
+//					{
+//						LogHelper.warn("Save file is missing!");
+//					}
+//				}
+//				else
+//				{
+//					//read data
+//					saveData = CompressedStreamTools.readCompressed(new FileInputStream(file));
+//					
+//					highestChunkValue = saveData.getInteger(NBT_CHUNK_VALUE);
+//					highestPlayerValue = saveData.getInteger(NBT_PLAYER_VALUE);
+//					//TODO finish saving and loading of player techdata
+//					//TODO player connect and disconnect saveing?
+//					for(EntityPlayer player : (List<EntityPlayer>)MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+//						String username = player.getCommandSenderName();
+//						if(saveData.hasKey(username + "_techdata")) {
+//							if(playerData.containsKey(username + "_techdata")) {
+//								//this shouldn't happen
+//								LogHelper.error("Player Data already loaded! Conflict! Overwriting!");
+//							}
+//							TDPlayer data = new TDPlayer();
+//							if(data.load(saveData.getCompoundTag(username + "_techdata"))) {
+//								//successfully loaded data
+//								playerData.put(username, data);	
+//								addDangerousPlayerIfNeeded(username, data.scoutedTechLevel);
+//							} else {
+//								LogHelper.error("Error loading player save!");
+//							}
+//						}
+//					}
+//				}
+//			}
+//			catch(EOFException e)
+//			{
+//				LogHelper.error("Mod-Savefile is corrupted!");
+//				//we don't have backups
+//				saveData = new NBTTagCompound();
+//			}
+//			catch(IOException e)
+//			{
+//				LogHelper.error("Error reading Mod-Savefile!");
+//				//init default values
+//				saveData = new NBTTagCompound();
+//			}
 		}
 	}
 
@@ -284,43 +341,44 @@ public class TechDataStorage {
 	 * @param evt
 	 */
 	public static void onWorldSave(WorldEvent.Save evt) {
-		if(FMLCommonHandler.instance().getEffectiveSide().isServer() && evt.world.provider.dimensionId == 0)
-		{
-			WorldServer world = (WorldServer)evt.world;
-
-			//write data
-			//init nbttagcompound
-			//keep exsisting data
-			if(saveData == null) {
-				saveData = new NBTTagCompound();
-			}
-			
-			for(Map.Entry<String, TDPlayer> entry : playerData.entrySet()) {
-				NBTTagCompound tag1 = new NBTTagCompound();
-				//save the player techdata to a new nbttag
-            	if(entry.getValue().save(tag1)) {
-	            	//save the nbttag
-            		saveData.setTag(entry.getKey() + "_techdata", tag1);
-            	}
-			}
-			saveData.setInteger(NBT_CHUNK_VALUE, highestChunkValue);
-			saveData.setInteger(NBT_PLAYER_VALUE, highestPlayerValue);
-
-			try
-			{
-				if(world.getChunkSaveLocation().exists())
-				{
-					File file = new File(world.getChunkSaveLocation(), LOCATION + FILENAME);
-					//we don't create backups TODO backup file
-					CompressedStreamTools.writeCompressed(saveData, new FileOutputStream(file));
-				}
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-				throw new RuntimeException("Failed to save techdata");
-			}
-		}
+//		if(FMLCommonHandler.instance().getEffectiveSide().isServer() && evt.world.provider.dimensionId == 0)
+//		{
+//			WorldServer world = (WorldServer)evt.world;
+//
+//			//write data
+//			//init nbttagcompound
+//			//keep exsisting data
+//			if(saveData == null) {
+//				saveData = new NBTTagCompound();
+//			}
+//			
+//			for(Map.Entry<String, TDPlayer> entry : playerData.entrySet()) {
+//				NBTTagCompound tag1 = new NBTTagCompound();
+//				//save the player techdata to a new nbttag
+//            	if(entry.getValue().save(tag1)) {
+//	            	//save the nbttag
+//            		saveData.setTag(entry.getKey() + "_techdata", tag1);
+//            	}
+//			}
+//			saveData.setInteger(NBT_CHUNK_VALUE, highestChunkValue);
+//			saveData.setInteger(NBT_PLAYER_VALUE, highestPlayerValue);
+//
+//			try
+//			{
+//				if(world.getChunkSaveLocation().exists())
+//				{
+//					File file = new File(world.getChunkSaveLocation(), LOCATION + FILENAME);
+//					//we don't create backups TODO backup file
+//					CompressedStreamTools.writeCompressed(saveData, new FileOutputStream(file));
+//					LogHelper.info("Saved data.");
+//				}
+//			}
+//			catch(IOException e)
+//			{
+//				e.printStackTrace();
+//				throw new RuntimeException("Failed to save techdata");
+//			}
+//		}
 	}
 
 	/**
@@ -397,7 +455,9 @@ public class TechDataStorage {
 			if(player.load(saveData.getCompoundTag(username + "_techdata"))) {
 				//successfully loaded data
 				playerData.put(username, player);	
-				addDangerousPlayerIfNeeded(username, player.scoutedTechData);
+				addDangerousPlayerIfNeeded(username, player.scoutedTechLevel);
+			} else {
+				LogHelper.error("Error loading player save!");
 			}
 		}
 	}
@@ -422,6 +482,7 @@ public class TechDataStorage {
 			if(player.save(tag1)) {
 				saveData.setTag(username + "_techdata", tag1);
 			}
+			LogHelper.info("Saving player data.");
 		}
 	}
 

@@ -4,6 +4,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -11,7 +12,8 @@ import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 import com.fravokados.techmobs.item.IItemAttackTargetListener;
-import com.fravokados.techmobs.techdata.effects.TDEffectManager;
+import com.fravokados.techmobs.techdata.TDManager;
+import com.fravokados.techmobs.techdata.effects.TDEffectHandler;
 import com.fravokados.techmobs.world.TechDataStorage;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -56,7 +58,7 @@ public class TMEventHandler {
 	
 	@SubscribeEvent
 	public void onEntitySpawn(LivingSpawnEvent.CheckSpawn evt) {
-		TDEffectManager.onLivingSpawn(evt);
+		TDEffectHandler.onLivingSpawn(evt);
 	}
 	
 	@SubscribeEvent
@@ -67,6 +69,15 @@ public class TMEventHandler {
 				if(stack != null && stack.stackSize != 0 && stack.getItem() instanceof IItemAttackTargetListener) {
 					((IItemAttackTargetListener) stack.getItem()).onSetAttackTarget(evt);
 				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onEntityAttack(LivingAttackEvent evt) {
+		if(evt.entity instanceof EntityPlayer) {
+			if(evt.source.getEntity() instanceof IMob) {
+				TDManager.scanAndUpdatePlayerTD((EntityPlayer) evt.entity);
 			}
 		}
 	}

@@ -10,7 +10,9 @@ public class DefaultSettings {
 		public static final int TD_EFFECT_CHANCE = 100;
 		public static final float TD_EFFECT_MIN_FACTOR = 0;
 		public static final int TD_EFFECT_MIN = 10;
-		public static final int MAX_EFFECTS = 10;
+		public static final int MAX_EFFECTS_MOB = 10;
+		public static final int MAX_EFFECTS_PLAYER = 10;
+		public static final int MAX_EFFECTS_WORLD = 10;
 		public static final int TD_RANDOM_PLAYER_EVENT_CHANCE = 100;
 		public static final int TD_RANDOM_WORLD_EVENT_CHANCE = 100;
 		public static final int SAFE_TECH_VALUE = 20;
@@ -29,7 +31,8 @@ public class DefaultSettings {
 		public static final int DANGER_CHUNK_FLAT = 1000;
 		public static final float DANGER_PLAYER_PERCENTAGE = 0.8F;
 		public static final int DANGER_PLAYER_FLAT = 1000;
-		public static final float SCOUTING_STEP_FACTOR = 0.1F;
+		public static final float SCOUTING_STEP_FACTOR_WORLD = 0.1F;
+		public static final float SCOUTING_STEP_FACTOR_PLAYER = 0.1F;
 		public static final boolean INJECT_SCANNING_AI = false;
 	}
 }

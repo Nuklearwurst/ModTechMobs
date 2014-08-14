@@ -16,6 +16,7 @@ public class ModEntities {
 
 	@SuppressWarnings("unused")
 	public static void init() {
+		//TODO spawns
 		//normal biomes
 		BiomeGenBase[] forest = BiomeDictionary.getBiomesForType(BiomeDictionary.Type.FOREST);
 		BiomeGenBase[] hills = BiomeDictionary.getBiomesForType(BiomeDictionary.Type.HILLS);

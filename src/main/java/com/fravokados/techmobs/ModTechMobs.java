@@ -2,6 +2,7 @@ package com.fravokados.techmobs;
 
 import com.fravokados.techmobs.command.CommandTechData;
 import com.fravokados.techmobs.command.CommandTechMobs;
+import com.fravokados.techmobs.command.CommandTechPlayer;
 import com.fravokados.techmobs.common.CommonProxy;
 import com.fravokados.techmobs.common.ModBlocks;
 import com.fravokados.techmobs.common.ModEntities;
@@ -18,12 +19,13 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLModDisabledEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = "com.fravokados.techmobs.configuration.gui.GuiFactoryConfig")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY, canBeDeactivated=false)
 public class ModTechMobs {
 	
 	@Instance(value = Reference.MOD_ID)
@@ -78,10 +80,16 @@ public class ModTechMobs {
 	}
 	
 	@EventHandler
+	public void disableMod(FMLModDisabledEvent evt) {
+		LogHelper.info("Disabled " + Reference.MOD_NAME + " version: " + Reference.VERSION + "!");
+	}
+	
+	@EventHandler
 	public void serverStarting(FMLServerStartingEvent evt) {
 		//register events
 		evt.registerServerCommand(new CommandTechMobs());
 		evt.registerServerCommand(new CommandTechData());
+		evt.registerServerCommand(new CommandTechPlayer());
 	}
 
 }

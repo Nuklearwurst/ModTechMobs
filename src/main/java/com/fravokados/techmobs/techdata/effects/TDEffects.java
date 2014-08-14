@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -11,6 +12,7 @@ import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
 import com.fravokados.techmobs.techdata.effects.mob.TDMobEffectEquipment;
 import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffectPotion;
 import com.fravokados.techmobs.techdata.effects.world.TDWorldEffect;
 import com.fravokados.techmobs.world.techdata.TDPlayer;
 
@@ -42,12 +44,39 @@ public class TDEffects {
 	 * @param effect
 	 */
 	public static void addMobEffect(TDMobEffect effect) {
-		if(mobEffects.contains(effect))
+		if(mobEffects.contains(effect)) {
+			LogHelper.error("MobEffect " + effect + "already registered!");
 			return;
+		}
 		mobEffects.add(effect);
 		LogHelper.info("Registered MobEffect: " + effect);
 	}
+	
+	/**
+	 * registers a new player effect
+	 * @param effect
+	 */
+	public static void addPlayerEffect(TDPlayerEffect effect) {
+		if(playerEffects.contains(effect)) {
+			LogHelper.error("PlayerEffect " + effect + "already registered!");
+			return;
+		}
+		playerEffects.add(effect);
+		LogHelper.info("Registered PlayerEffect: " + effect);
+	}
 
+	/**
+	 * registers a new world effect
+	 * @param effect
+	 */
+	public static void addWorldEffect(TDWorldEffect effect) {
+		if(worldEffects.contains(effect)) {
+			LogHelper.error("WorldEffect " + effect + "already registered!");
+			return;
+		}
+		worldEffects.add(effect);
+		LogHelper.info("Registered WorldEffect: " + effect);
+	}
 	/**
 	 * used to get a List containing all MobEffects that are applicable for the given Entity
 	 * @param techData
@@ -68,14 +97,14 @@ public class TDEffects {
 	 * used to get a List containing all PlayerEffects that are applicable for the given Player
 	 * @param player 
 	 * @param username 
-	 * @param techData
+	 * @param techLevel
 	 * @param entityLiving
 	 * @return
 	 */
-	public static List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, String username, TDPlayer player) {
+	public static List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, String username, TDPlayer player, EntityPlayer entity) {
 		List<TDPlayerEffect> out = new ArrayList<TDPlayerEffect>();
 		for(TDPlayerEffect eff : playerEffects) {
-			if(eff.isUsable(techvalue, username, player)) {
+			if(eff.isUsable(techvalue, username, player, entity)) {
 				out.add(eff);
 			}
 		}
@@ -83,12 +112,11 @@ public class TDEffects {
 	}
 	
 	/**
-	 * used to get a List containing all WorldEffects that are applicable for the given Chunk
-	 * @param techData
-	 * @param entityLiving
+	 * used to get a List containing all WorldEffects that are applicable for the given Chunk TODO:params
+	 * @param level 
 	 * @return
 	 */
-	public static List<TDWorldEffect> getUsableWorldEffects() {
+	public static List<TDWorldEffect> getUsableWorldEffects(int level) {
 		List<TDWorldEffect> out = new ArrayList<TDWorldEffect>();
 		for(TDWorldEffect eff : worldEffects) {
 			if(eff.isUsable()) {
@@ -102,6 +130,7 @@ public class TDEffects {
 	 * registers mod effects
 	 */
 	public static void init() {
+		//mob effects
 		addMobEffect(new TDMobEffectEquipment(new ItemStack[] {
 				new ItemStack(Items.diamond_sword),
 				new ItemStack(Items.diamond_helmet),
@@ -109,5 +138,8 @@ public class TDEffects {
 				new ItemStack(Items.diamond_leggings),
 				new ItemStack(Items.diamond_boots)
 		}, false, false, new int[] {30, 10, 30, 20, 10}).setDoNotDrop(false));
+		//player effects
+		addPlayerEffect(new TDPlayerEffectPotion(10, 18, 40, 2));
+		//world effects
 	}
 }

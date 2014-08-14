@@ -1,4 +1,4 @@
-package com.fravokados.techmobs.techdata.values;
+package com.fravokados.techmobs.techdata.values.world;
 
 import net.minecraft.tileentity.TileEntity;
 
@@ -15,4 +15,8 @@ public class TDEntrySimpleTileEntity extends TDEntryTileEntity {
 		return techValue;
 	}
 	
+	@Override
+	public String toString() {
+		return "Simple TileEntityTDEntry." + techValue;
+	}
 }

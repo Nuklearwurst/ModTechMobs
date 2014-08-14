@@ -51,7 +51,9 @@ public class Strings {
 			public static final String TD_EFFECT_CHANCE = "td_effect_chance";
 			public static final String TD_EFFECT_MIN_FACTOR = "td_effect_min_factor";
 			public static final String TD_EFFECT_MIN = "td_effect_min";
-			public static final String MAX_EFFECTS = "max_effects";
+			public static final String MAX_EFFECTS_MOB = "max_effects_mob";
+			public static final String MAX_EFFECTS_PLAYER = "max_effects_player";
+			public static final String MAX_EFFECTS_WORLD = "max_effects_world";
 			public static final String TD_RANDOM_PLAYER_EVENT_CHANCE = "td_random_player_event_chance";
 			public static final String TD_RANDOM_WORLD_EVENT_CHANCE = "td_random_world_event_chance";
 			public static final String SAFE_TECH_VALUE = "safe_tech_value";
@@ -71,7 +73,8 @@ public class Strings {
 			public static final String DANGER_CHUNK_FLAT = "dangerous_chunk_flat";
 			public static final String DANGER_PLAYER_PERCENTAGE = "dangerous_player_factor";
 			public static final String DANGER_PLAYER_FLAT = "dangerous_player_flat";
-			public static final String SCOUTING_STEP_FACTOR = "scouting_step_factor";
+			public static final String SCOUTING_STEP_FACTOR_WORLD = "scouting_step_factor_world";
+			public static final String SCOUTING_STEP_FACTOR_PLAYER = "scouting_step_factor_player";
 			public static final String INJECT_SCANNING_AI = "inject_scanning_ai";
 		}
 		/**

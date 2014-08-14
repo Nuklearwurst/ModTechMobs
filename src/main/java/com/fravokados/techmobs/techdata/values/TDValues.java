@@ -3,11 +3,16 @@ package com.fravokados.techmobs.techdata.values;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.fravokados.techmobs.lib.util.LogHelper;
+import com.fravokados.techmobs.techdata.values.player.TDEntryItem;
+import com.fravokados.techmobs.techdata.values.player.TDEntrySimpleItem;
+import com.fravokados.techmobs.techdata.values.world.TDEntrySimpleTileEntity;
+import com.fravokados.techmobs.techdata.values.world.TDEntryTileEntity;
 
 /**
  * contains TDValue lists for blocks and items
@@ -16,6 +21,7 @@ import com.fravokados.techmobs.lib.util.LogHelper;
  *
  */
 public class TDValues {
+	//TODO if needed maybe implement special value handlers that are not bound to one TileEntity class / one item
 
 	/**
 	 * Contains information about Tileentities
@@ -46,6 +52,25 @@ public class TDValues {
 			LogHelper.error("Overwriting existing data!");
 		}
 		itemEntries.put(item, entry);
+		LogHelper.info("Registered item: " + item.getUnlocalizedName() + "with entry: " + entry);
+	}
+	
+	/**
+	 * registers a simple Item entry
+	 * @param item
+	 * @param value
+	 */
+	public static void registerItemEntry(Item item, int value) {
+		registerItemEntry(item, new TDEntrySimpleItem(value));
+	}
+	
+	/**
+	 * registers a simple Item entry
+	 * @param item
+	 * @param value
+	 */
+	public static void registerItemEntry(Item item, int damage, int value) {
+		registerItemEntry(item, new TDEntrySimpleItem(damage, value));
 	}
 	
 	/**
@@ -79,7 +104,12 @@ public class TDValues {
 		registerTileEntityEntry(clazz, new TDEntrySimpleTileEntity(value));
 	}
 	
+	
+	
 	public static void init() {
+		//tileentities
 		registerTileEntityEntry(TileEntityFurnace.class, 1000);
+		//items
+		registerItemEntry(Items.diamond_sword, 1000);
 	}
 }

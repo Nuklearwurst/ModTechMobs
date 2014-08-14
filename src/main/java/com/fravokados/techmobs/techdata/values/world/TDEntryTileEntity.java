@@ -1,4 +1,6 @@
-package com.fravokados.techmobs.techdata.values;
+package com.fravokados.techmobs.techdata.values.world;
+
+import com.fravokados.techmobs.techdata.values.TDValues;
 
 import net.minecraft.tileentity.TileEntity;
 

@@ -21,7 +21,11 @@ public class Settings {
 		 */
 		public static int TD_EFFECT_MIN = 10;
 		
-		public static int MAX_EFFECTS = 10;
+		public static int MAX_EFFECTS_MOB =  10;
+		
+		public static int MAX_EFFECTS_PLAYER = 10;
+
+		public static int MAX_EFFECTS_WORLD = 10;
 		
 //		/**
 //		 * maximum strength modifier scaluing with techdata<br>
@@ -40,6 +44,8 @@ public class Settings {
 		 * chance that a td effect is applied to a chunk
 		 */
 		public static int TD_RANDOM_WORLD_EVENT_CHANCE = 100;
+		
+		public static int TD_RANDOM_TICKS = 100; //TODO
 		
 		/**
 		 * a techvalue below this value is considered safe (releveant is some special cases) <br>
@@ -75,7 +81,9 @@ public class Settings {
 		
 		public static int DANGER_PLAYER_FLAT = 1000;
 		
-		public static double SCOUTING_STEP_FACTOR = 0.1;
+		public static double SCOUTING_STEP_FACTOR_WORLD = 0.1;
+		
+		public static double SCOUTING_STEP_FACTOR_PLAYER = 0.1;
 
 		public static boolean INJECT_SCANNING_AI = false;
 		

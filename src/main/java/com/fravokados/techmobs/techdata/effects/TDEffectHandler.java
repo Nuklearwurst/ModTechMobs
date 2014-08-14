@@ -21,7 +21,7 @@ import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
  * @author Nuklearwurst
  *
  */
-public class TDEffectManager {
+public class TDEffectHandler {
 	
 	public static void onLivingSpawn(LivingSpawnEvent.CheckSpawn evt) {
 		if(!(evt.entityLiving instanceof IMob)) {
@@ -55,7 +55,7 @@ public class TDEffectManager {
 			}
 			int i = 0;
 			List<TDMobEffect> effects = TDEffects.getUsableMobEffects(level, evt.entityLiving);
-			while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS) {
+			while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS_MOB) {
 				//randomize effect order
 				level -= effects.get(evt.world.rand.nextInt(effects.size())).applyEffect(level, evt.entityLiving);
 				i++;

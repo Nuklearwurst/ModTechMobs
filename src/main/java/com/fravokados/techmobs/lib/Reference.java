@@ -8,5 +8,7 @@ public class Reference {
 	
 	public static final String PROXY_CLIENT = "com.fravokados.techmobs.client.ClientProxy";
 	public static final String PROXY_SERVER = "com.fravokados.techmobs.common.CommonProxy";
+	
+	public static final String GUI_FACTORY = "com.fravokados.techmobs.configuration.gui.GuiFactoryConfig";
 
 }

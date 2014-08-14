@@ -41,13 +41,15 @@ public class ConfigHandler {
 		// TechData //
 		//////////////
 		
-		Settings.TechData.MAX_EFFECTS = config.getInt(TechData.MAX_EFFECTS, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.MAX_EFFECTS, 0, Integer.MAX_VALUE, "Maximum number of effects that can be applied to one mob");
+		Settings.TechData.MAX_EFFECTS_MOB = config.getInt(TechData.MAX_EFFECTS_MOB, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.MAX_EFFECTS_MOB, 0, Integer.MAX_VALUE, "Maximum number of effects that can be applied to one mob");
+		Settings.TechData.MAX_EFFECTS_PLAYER = config.getInt(TechData.MAX_EFFECTS_PLAYER, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.MAX_EFFECTS_PLAYER, 0, Integer.MAX_VALUE, "Maximum number of effects that can be applied to one player");
+		Settings.TechData.MAX_EFFECTS_WORLD = config.getInt(TechData.MAX_EFFECTS_WORLD, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.MAX_EFFECTS_WORLD, 0, Integer.MAX_VALUE, "Maximum number of effects that can be applied to one chunk");
 		Settings.TechData.TD_EFFECT_CHANCE = config.getInt(TechData.TD_EFFECT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_EFFECT_CHANCE, 0, Integer.MAX_VALUE,	"chance that an techdata effect gets applied to a mob.\ntechvalue out of n.\nlower value means higher chance");
 		Settings.TechData.TD_EFFECT_MIN = config.getInt(TechData.TD_EFFECT_MIN, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_EFFECT_MIN, 0, Integer.MAX_VALUE, "Minimum strength of the effects");
 		Settings.TechData.TD_EFFECT_MIN_FACTOR = config.getFloat(TechData.TD_EFFECT_MIN_FACTOR, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_EFFECT_MIN_FACTOR, 0, Float.MAX_VALUE, "Minimum strength of the effects scaling with techdata");
 		//TODO check min values
-		Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE = config.getInt(TechData.TD_RANDOM_PLAYER_EVENT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE, 0, Integer.MAX_VALUE, "chance that a techdata effect is applied to a player with high techvalue\n(1 / n)");
-		Settings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE = config.getInt(TechData.TD_RANDOM_WORLD_EVENT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE, 0, Integer.MAX_VALUE, "chance that a random chunk effect gets triggered\n(1 / n)");
+		Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE = config.getInt(TechData.TD_RANDOM_PLAYER_EVENT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE, 0, Integer.MAX_VALUE, "chance that a techdata effect is applied to a player with high techvalue\n(1 / n)\nSetting this to 0 will disable random player effects");
+		Settings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE = config.getInt(TechData.TD_RANDOM_WORLD_EVENT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE, 0, Integer.MAX_VALUE, "chance that a random chunk effect gets triggered\n(1 / n)\nSetting this to 0 will disable random chunk effects");
 		Settings.TechData.SAFE_TECH_VALUE = config.getInt(TechData.SAFE_TECH_VALUE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.SAFE_TECH_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE, "a techvalue below this value is considered safe (releveant is some special cases)\nSettings this to a high number will not protect the players!");
 		
 		//////////////////
@@ -60,8 +62,10 @@ public class ConfigHandler {
 		Settings.TechScanning.DANGER_PLAYER_PERCENTAGE = config.getFloat(TechScanning.DANGER_PLAYER_PERCENTAGE, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.DANGER_PLAYER_PERCENTAGE, 0, 1000, "Factor which works in addition to the flat value");
 		Settings.TechScanning.MAX_SCANS_PER_TICK = config.getInt(TechScanning.MAX_SCANS_PER_TICK, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.MAX_SCANS_PER_TICK, 0, Integer.MAX_VALUE, "Value that controls how many chunks can be scanned in one tick (a high value can have high impact on server tickrate)"); 
 		Settings.TechScanning.MAX_TASKS_SCHEDULED = config.getInt(TechScanning.MAX_TASKS_SCHEDULED, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.MAX_TASKS_SCHEDULED, 0, Integer.MAX_VALUE, "This value states how many scans may be scheduled at the same time (technical setting)");
-		Settings.TechScanning.SCOUTING_STEP_FACTOR = config.getFloat(TechScanning.SCOUTING_STEP_FACTOR, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SCOUTING_STEP_FACTOR, 0, 1, "Defines the speed at which mobs can scout an area");
+		Settings.TechScanning.SCOUTING_STEP_FACTOR_WORLD = config.getFloat(TechScanning.SCOUTING_STEP_FACTOR_WORLD, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SCOUTING_STEP_FACTOR_WORLD, 0, 1, "Defines the speed at which mobs can scout an area");
+		Settings.TechScanning.SCOUTING_STEP_FACTOR_PLAYER = config.getFloat(TechScanning.SCOUTING_STEP_FACTOR_PLAYER, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SCOUTING_STEP_FACTOR_PLAYER, 0, 1, "Defines the speed at which mobs can scout a player");
 		Settings.TechScanning.SPLIT_SCANS = config.getBoolean(TechScanning.SPLIT_SCANS, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SPLIT_SCANS, ""); //TODO comment
+		
 		
 		prop = config.get(Keys.CATEGORY_TECH_SCANNING, Keys.TechScanning.SPLIT_STEPS_KEY, DefaultSettings.TechScanning.SPLIT_STEPS_KEY);
 		prop.comment = ""; //TODO comment
@@ -83,7 +87,7 @@ public class ConfigHandler {
 
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-		if(eventArgs.modID.equals(Reference.MOD_ID))
+		if(eventArgs.modID.equalsIgnoreCase(Reference.MOD_ID))
 			load(false);
 	}
 

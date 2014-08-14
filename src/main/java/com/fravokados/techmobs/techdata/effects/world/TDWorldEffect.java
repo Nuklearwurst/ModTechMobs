@@ -4,5 +4,5 @@ public abstract class TDWorldEffect {
 
 	public abstract boolean isUsable();
 
-	public abstract boolean applyEffect();
+	public abstract int applyEffect(int level);
 }
