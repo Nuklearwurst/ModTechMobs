@@ -14,7 +14,7 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	protected boolean asSet;
 	protected int[] values;
 	protected boolean replaceEquipment;
-	protected boolean doNotRemoveIfSucceddedBefore = false; //not working
+//	protected boolean doNotRemoveIfSucceddedBefore = false; //not working
 	protected boolean applyAll = true; //not working (settings are always default)
 	protected boolean randomStart = true;
 	protected float[] dropChances = new float[] {-1, -1, -1, -1, -1};
@@ -38,7 +38,7 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	}
 
 	/**
-	 * sets this equipmant effect to either drop at the default rate or not drop at all
+	 * sets this equipment effect to either drop at the default rate or not drop at all
 	 * @param drop if set to false the chance to drop is set to zero
 	 */
 	public TDMobEffectEquipment setDoNotDrop(boolean drop) {
@@ -51,11 +51,6 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	@Override
 	public boolean isUsable(int techdata, EntityLivingBase ent) {
 		EntityLiving e = ((EntityLiving)ent);
-		//		//this has unexpected side effects
-		//		if(!e.canPickUpLoot()) {
-		//			//mob can't use Armor??
-		//			return false;
-		//		}
 		if(!((e instanceof EntityZombie) || (e instanceof EntitySkeleton))) {
 			return false;
 		}
