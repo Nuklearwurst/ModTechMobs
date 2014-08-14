@@ -67,7 +67,8 @@ public class TMEventHandler {
 			EntityPlayer player = (EntityPlayer) evt.target;
 			for(ItemStack stack : player.inventory.mainInventory) {
 				if(stack != null && stack.stackSize != 0 && stack.getItem() instanceof IItemAttackTargetListener) {
-					((IItemAttackTargetListener) stack.getItem()).onSetAttackTarget(evt);
+					((IItemAttackTargetListener) stack.getItem()).onSetAttackTarget(evt, stack);
+					break;
 				}
 			}
 		}

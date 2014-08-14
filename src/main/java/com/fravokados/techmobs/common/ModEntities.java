@@ -14,7 +14,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class ModEntities {
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({ "unused", "deprecation" })
 	public static void init() {
 		//TODO spawns
 		//normal biomes
@@ -62,7 +62,7 @@ public class ModEntities {
 	}
 
 	private static int getUniqueEntityId() {
-		int i = 300;
+		int i = 500;
 		do {
 			i++;
 		} while(EntityList.getStringFromID(i) != null);
