@@ -9,6 +9,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import com.fravokados.techmobs.ModTechMobs;
 import com.fravokados.techmobs.entity.EntityCyberZombie;
 import com.fravokados.techmobs.lib.Strings;
+import com.fravokados.techmobs.lib.util.LogHelper;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
 
@@ -35,11 +36,11 @@ public class ModEntities {
 		//other dimensions
 		BiomeGenBase[] end = BiomeDictionary.getBiomesForType(BiomeDictionary.Type.END);
 		BiomeGenBase[] nether = BiomeDictionary.getBiomesForType(BiomeDictionary.Type.NETHER);
-		
+
 		/* CyberZombie */
 		registerCreature(EntityCyberZombie.class, Strings.Entity.CYBER_ZOMBIE, 0x000000, 0x00000);
-		
-		
+
+
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, forest);
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, hills);
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, desert);
@@ -51,7 +52,7 @@ public class ModEntities {
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, frozen);
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, wasteland);
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, beach);
-		
+
 	}
 
 
@@ -62,11 +63,17 @@ public class ModEntities {
 	}
 
 	private static int getUniqueEntityId() {
-		int i = 500;
-		do {
-			i++;
-		} while(EntityList.getStringFromID(i) != null);
-		return i;
+		int id = 400;
+		try {
+			return EntityRegistry.findGlobalUniqueEntityId();
+		} catch(Exception e) {
+			LogHelper.error("Failed finding Global Entity Id!");
+			do {
+				id++;
+			} while(EntityList.getStringFromID(id) != null);
+			return id;
+		}
+
 	}
 
 

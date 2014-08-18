@@ -33,11 +33,6 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
  *
  */
 public class TechDataStorage extends WorldSavedData {
-
-	
-	// nbt keys
-	private static final String NBT_CHUNK_VALUE = "td_highest_chunk_value";
-	private static final String NBT_PLAYER_VALUE = "td_highest_player_value";
 	
 	private static final String SAVE_DATA_NAME = "TechmobsStorage";
 
@@ -45,11 +40,6 @@ public class TechDataStorage extends WorldSavedData {
 	 * the world techdata
 	 */
 	private static Map<Integer, TDWorld> worldData = new HashMap<Integer, TDWorld>();
-	
-	/**
-	 * the player data WIP
-	 */
-//	private static Map<String, TDPlayer> playerData = new HashMap<String, TDPlayer>();
 	
 	/**
 	 * chunks that have a high techvalue
@@ -78,14 +68,14 @@ public class TechDataStorage extends WorldSavedData {
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger(NBT_CHUNK_VALUE, highestChunkValue);
-		nbt.setInteger(NBT_PLAYER_VALUE, highestPlayerValue);
+		//saving highest techValues not really needed
+		//--> chunks/players get removed from list on unload
+		//and readded un load
+		//function kept for future uses
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		highestChunkValue = nbt.getInteger(NBT_CHUNK_VALUE);
-		highestPlayerValue = nbt.getInteger(NBT_PLAYER_VALUE);
 	}
 	//END SAVING
 	
@@ -117,21 +107,6 @@ public class TechDataStorage extends WorldSavedData {
 	public static TDChunk getChunkData(ChunkLocation loc) {
 		return getChunkData(loc.getChunkCoordIntPair(), loc.dimension);
 	}
-	
-//	public static NBTTagCompound getPlayerData(EntityPlayer player) {
-//		NBTTagCompound nbt = PlayerUtils.getPersistentNBT(player);
-//		if(!playerData.containsKey(player)) {
-//			if(saveData != null && saveData.hasKey(player)) {
-//				LogHelper.warn("Somthing went wrong when loading player data, but we found our save!");
-//				TDPlayer data = new TDPlayer();
-//				data.load(saveData.getCompoundTag(player));
-//				playerData.put(player, data);
-//			} else {
-//				playerData.put(player, new TDPlayer());
-//			}
-//		}
-//		return playerData.get(player);
-//	}
 	
 	public static int getDangerousChunkLevel() {
 		return (int) (highestChunkValue * Settings.TechScanning.DANGER_CHUNK_PERCENTAGE + Settings.TechScanning.DANGER_CHUNK_FLAT);
