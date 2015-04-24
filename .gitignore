@@ -7,8 +7,11 @@
 /bin
 
 ## gradle
-/.gradle
-/build
+.gradle
+build
 
 ## ForgeGradle
-/run
+run
+
+## Idea
+.idea
