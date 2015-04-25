@@ -3,6 +3,7 @@ package com.fravokados.techmobs.techdata.effects;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fravokados.techmobs.configuration.Settings;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -130,16 +131,18 @@ public class TDEffects {
 	 * registers mod effects
 	 */
 	public static void init() {
-		//mob effects
-		addMobEffect(new TDMobEffectEquipment(new ItemStack[] {
-				new ItemStack(Items.diamond_sword),
-				new ItemStack(Items.diamond_helmet),
-				new ItemStack(Items.diamond_chestplate),
-				new ItemStack(Items.diamond_leggings),
-				new ItemStack(Items.diamond_boots)
-		}, false, false, new int[] {30, 10, 30, 20, 10}).setDoNotDrop(false));
-		//player effects
-		addPlayerEffect(new TDPlayerEffectPotion(100, 18, 200, 1, "chat.effect.potion").setMessageColor(EnumChatFormatting.DARK_AQUA));
-		//world effects
+		if(Settings.DEBUG) {
+			//mob effects
+			addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
+					new ItemStack(Items.diamond_sword),
+					new ItemStack(Items.diamond_helmet),
+					new ItemStack(Items.diamond_chestplate),
+					new ItemStack(Items.diamond_leggings),
+					new ItemStack(Items.diamond_boots)
+			}, false, false, new int[]{30, 10, 30, 20, 10}).setDoNotDrop(false));
+			//player effects
+			addPlayerEffect(new TDPlayerEffectPotion(100, 18, 200, 1, "chat.effect.potion").setMessageColor(EnumChatFormatting.DARK_AQUA));
+			//world effects
+		}
 	}
 }

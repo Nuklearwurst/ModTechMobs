@@ -77,6 +77,12 @@ public class Strings {
 			public static final String SCOUTING_STEP_FACTOR_PLAYER = "scouting_step_factor_player";
 			public static final String INJECT_SCANNING_AI = "inject_scanning_ai";
 		}
+
+		public static final class Debug {
+			public static final String DEBUG = "debug_deobf";
+			public static final String DEBUG_TESTING = "debug_testing";
+		}
+
 		/**
 		 * tech data
 		 */
