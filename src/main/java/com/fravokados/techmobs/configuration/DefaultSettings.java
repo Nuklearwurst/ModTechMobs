@@ -35,4 +35,12 @@ public class DefaultSettings {
 		public static final float SCOUTING_STEP_FACTOR_PLAYER = 0.1F;
 		public static final boolean INJECT_SCANNING_AI = false;
 	}
+
+	/**
+	 * debug
+	 */
+	public static class Debug {
+		public static final boolean DEBUG = false;
+		public static final boolean DEBUG_TESTING = false;
+	}
 }

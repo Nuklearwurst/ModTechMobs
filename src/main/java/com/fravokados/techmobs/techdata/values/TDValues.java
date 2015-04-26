@@ -3,6 +3,7 @@ package com.fravokados.techmobs.techdata.values;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fravokados.techmobs.configuration.Settings;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -107,9 +108,11 @@ public class TDValues {
 	
 	
 	public static void init() {
-		//tileentities
-		registerTileEntityEntry(TileEntityFurnace.class, 1000);
-		//items
-		registerItemEntry(Items.diamond_sword, 1000);
+		if(Settings.DEBUG) {
+			//tileentities
+			registerTileEntityEntry(TileEntityFurnace.class, 1000);
+			//items
+			registerItemEntry(Items.diamond_sword, 1000);
+		}
 	}
 }

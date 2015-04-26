@@ -76,8 +76,16 @@ public class ConfigHandler {
 		Settings.TechScanning.SPLIT_STEPS_VALUE = prop.getDoubleList();
 		
 		Settings.TechScanning.INJECT_SCANNING_AI = config.getBoolean(TechScanning.INJECT_SCANNING_AI, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.INJECT_SCANNING_AI, "Inject Scanning AI into vanilla mobs during spawn\nThis is experimental!\nDon't enable this if you don't know what you are doing!");
-		
-		
+
+		////////////
+		// DEBUG //
+		///////////
+
+		if(Settings.IS_OBFUSCATED) {
+			Settings.DEBUG = config.getBoolean(Keys.Debug.DEBUG, Configuration.CATEGORY_GENERAL, DefaultSettings.Debug.DEBUG, "Enables dev debug features");
+		}
+		Settings.DEBUG_TESTING = config.getBoolean(Keys.Debug.DEBUG_TESTING, Configuration.CATEGORY_GENERAL, DefaultSettings.Debug.DEBUG_TESTING, "Enables debug testing features");
+
 		//save config
 		if(config.hasChanged()) {
 			config.save();

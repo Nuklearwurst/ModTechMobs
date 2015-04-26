@@ -6,19 +6,11 @@ import com.fravokados.techmobs.lib.Reference;
 
 import cpw.mods.fml.common.FMLLog;
 
-/**
- * 
- * code adapted from pahimar's "Equivalent Exchange 3"
- * <br>
- * <a href=https://github.com/pahimar/Equivalent-Exchange-3>https://github.com/pahimar/Equivalent-Exchange-3</a>
- *
- */
 public class LogHelper
 {
     public static void log(Level logLevel, Object object)
     {
-    	//this part was unneeded as already done by FML
-        FMLLog.log(Reference.MOD_NAME, logLevel, /*"[" + Reference.MOD_ID.toUpperCase() + "] " +*/ String.valueOf(object));
+        FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));
     }
 
     public static void all(Object object)
