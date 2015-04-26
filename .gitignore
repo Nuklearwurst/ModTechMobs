@@ -12,7 +12,10 @@ build
 
 ## ForgeGradle
 run
+*.log
 
 ## Idea
 .idea
 *.iml
+*.ipr
+*.iws
