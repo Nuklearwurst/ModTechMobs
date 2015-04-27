@@ -9,6 +9,7 @@
 ## gradle
 .gradle
 build
+out
 
 ## ForgeGradle
 run
