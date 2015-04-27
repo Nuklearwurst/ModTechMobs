@@ -5,5 +5,5 @@ import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 
 public interface IItemAttackTargetListener {
 
-	public void onSetAttackTarget(LivingSetAttackTargetEvent evt, ItemStack stack);
+	void onSetAttackTarget(LivingSetAttackTargetEvent evt, ItemStack stack);
 }

@@ -86,11 +86,8 @@ public class TDMobEffectEquipment extends TDMobEffect {
 			}
 		}
 		//all slots are full
-		if(counter == 5) {
-			return false;
-		}
+		return counter != 5;
 
-		return true;
 	}
 
 	@Override

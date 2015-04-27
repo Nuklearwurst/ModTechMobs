@@ -49,10 +49,10 @@ public class CommandTechData extends CommandBase {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		if(args.length < 1) {
-			throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+			throw new WrongUsageException(getCommandUsage(sender));
 		} else {
 			if(args.length > 3) {
-				throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+				throw new WrongUsageException(getCommandUsage(sender));
 			}
 			TDChunk chunk = getChunkData(sender);
 			if(args[0].equals(commands[0])) { //set
@@ -64,7 +64,7 @@ public class CommandTechData extends CommandBase {
 					chunk.scoutedTechLevel = value;
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 				} else {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 			} else if(args[0].equals(commands[1])) { //add
 				int value = parseInt(sender, args[1]);
@@ -75,7 +75,7 @@ public class CommandTechData extends CommandBase {
 					chunk.scoutedTechLevel += value;
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 				} else {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 			} else if(args[0].equals(commands[2])) { //remove
 				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
@@ -85,11 +85,11 @@ public class CommandTechData extends CommandBase {
 					chunk.scoutedTechLevel -= parseInt(sender, args[1]);
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 				} else {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 			} else if(args[0].equals(commands[3])) { //read
 				if(args.length > 2) {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 				if(args.length == 2) {
 					
@@ -100,7 +100,7 @@ public class CommandTechData extends CommandBase {
 				}
 			} else if(args[0].equals(commands[4])) { //scan
 				if(args.length > 2) {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 				if(args.length == 1 || args[1].equals(commands1[0])) {
 					TDTickManager.scheduleChunkScan(new ChunkLocation(sender.getEntityWorld().provider.dimensionId, WorldHelper.convertToChunkCoord(sender.getPlayerCoordinates())));
@@ -110,12 +110,12 @@ public class CommandTechData extends CommandBase {
 					TDManager.updateScoutedTechLevel(sender.getEntityWorld().provider.dimensionId, WorldHelper.convertToChunkCoord(sender.getPlayerCoordinates()));
 					sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getScoutedTechLevel(sender.getEntityWorld().provider.dimensionId,  WorldHelper.convertToChunkCoord(sender.getPlayerCoordinates()))));
 				} else {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 			} else if(args[0].equals(commands[5])) { //info
 				sender.addChatMessage(new ChatComponentText(TDTickManager.getTasksInQueue() + " scans in quene!"));				
 			} else {
-				throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+				throw new WrongUsageException(getCommandUsage(sender));
 			}
 		}		
 	}

@@ -44,11 +44,11 @@ public class CommandTechMobs implements ICommand {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		if(args.length == 0) {
-			throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+			throw new WrongUsageException(getCommandUsage(sender));
 		} else {
 			if(args[0].equals("fill")) {
 				if(args.length < 8) {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 				int x1 = getCoordFromCommand(sender.getPlayerCoordinates().posX, args[1]);
 				int y1 = getCoordFromCommand(sender.getPlayerCoordinates().posY, args[2]);

@@ -43,10 +43,10 @@ public class CommandTechPlayer extends CommandBase {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		if(args.length < 1) {
-			throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+			throw new WrongUsageException(getCommandUsage(sender));
 		} else {
 			if(args.length > 3) {
-				throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+				throw new WrongUsageException(getCommandUsage(sender));
 			}
 			EntityPlayer entityPlayer = getPlayer(sender);
 			int scoutedTechLevel = TDManager.getPlayerScoutedTechLevel(entityPlayer);
@@ -60,7 +60,7 @@ public class CommandTechPlayer extends CommandBase {
 					TDManager.setPlayerScoutedTechLevel(entityPlayer, value);
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
 				} else {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 			} else if(args[0].equals(commands[1])) { //add
 				int value = parseInt(sender, args[1]);
@@ -71,7 +71,7 @@ public class CommandTechPlayer extends CommandBase {
 					TDManager.setPlayerScoutedTechLevel(entityPlayer, scoutedTechLevel + value);
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
 				} else {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 			} else if(args[0].equals(commands[2])) { //remove
 				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
@@ -81,11 +81,11 @@ public class CommandTechPlayer extends CommandBase {
 					TDManager.setPlayerScoutedTechLevel(entityPlayer, scoutedTechLevel - parseInt(sender, args[1]));
 					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
 				} else {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 			} else if(args[0].equals(commands[3])) { //read
 				if(args.length > 2) {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 				if(args.length == 2) {
 					
@@ -96,7 +96,7 @@ public class CommandTechPlayer extends CommandBase {
 				}
 			} else if(args[0].equals(commands[4])) { //scan
 				if(args.length > 2) {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 				if(args.length == 1 || args[1].equals(commands1[0])) {
 					TDManager.scanPlayer(getPlayer(sender));
@@ -105,14 +105,14 @@ public class CommandTechPlayer extends CommandBase {
 				} else if(args[1].equals(commands1[1])) {
 					sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getPlayerScoutedTechLevel(entityPlayer)));
 				} else {
-					throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+					throw new WrongUsageException(getCommandUsage(sender));
 				}
 			} else if(args[0].equals(commands[5])) { //info
 				sender.addChatMessage(new ChatComponentText("WIP"));				
 			} else if(args[0].equals(commands[6])) { //random tech player
 				sender.addChatMessage(new ChatComponentText("Random Tech Player: " + TechDataStorage.getRandomDangerousPlayer(entityPlayer.getRNG())));
 			} else {
-				throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
+				throw new WrongUsageException(getCommandUsage(sender));
 			}
 		}		
 	}

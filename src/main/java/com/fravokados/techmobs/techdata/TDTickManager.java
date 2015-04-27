@@ -114,7 +114,7 @@ public class TDTickManager {
 					TDEffectHandler.applyRandomEffectOnPlayer(entity, username, random);
 				}
 			}
-		} else if(tick == (int)Settings.TechData.TD_RANDOM_TICKS / 2) { //chunk
+		} else if(tick == Settings.TechData.TD_RANDOM_TICKS / 2) { //chunk
 			if(Settings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE > 0 && random.nextInt(Settings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE) == 0) {
 				ChunkLocation chunk = TechDataStorage.getRandomDangerousChunk(random);
 				if(chunk != null) {
