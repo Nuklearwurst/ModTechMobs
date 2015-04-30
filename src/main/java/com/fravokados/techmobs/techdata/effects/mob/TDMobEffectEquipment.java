@@ -1,12 +1,13 @@
 package com.fravokados.techmobs.techdata.effects.mob;
 
-import java.security.InvalidParameterException;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.item.ItemStack;
+
+import java.security.InvalidParameterException;
+import java.util.Arrays;
 
 public class TDMobEffectEquipment extends TDMobEffect {
 
@@ -121,6 +122,6 @@ public class TDMobEffectEquipment extends TDMobEffect {
 
 	@Override
 	public String toString() {
-		return "MobEquipment: " + values;
+		return "MobEquipment: " + Arrays.toString(values);
 	}
 }
