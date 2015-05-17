@@ -1,8 +1,5 @@
 package com.fravokados.techmobs.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -11,9 +8,12 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommandTechMobs implements ICommand {
 	
-	private List<String> aliases;
+	private final List<String> aliases;
 	
 	public CommandTechMobs() {
 		this.aliases = new ArrayList<String>();
@@ -62,7 +62,7 @@ public class CommandTechMobs implements ICommand {
 				
 				boolean xn = x1 < x2;
 				boolean yn = y1 < y2;
-				boolean zn = z1 < z1;
+				boolean zn = z1 < z2;
 				World world = sender.getEntityWorld();
 				if(world != null) {	
 					for(int x = 0; x <= getDifference(x1, x2); x++) {
@@ -86,7 +86,7 @@ public class CommandTechMobs implements ICommand {
 		return Math.max(i1, i2) - Math.min(i1, i2);
 	}
 	
-	public int getCoordFromCommand(int pos, String arg) {
+	private int getCoordFromCommand(int pos, String arg) {
 		if(arg.startsWith("~")) {
 			if(arg.length() == 1) {
 				return pos;

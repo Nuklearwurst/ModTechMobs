@@ -102,7 +102,6 @@ public class TDManager {
 	/**
 	 * updates (increases) the scouted techlevel by a value set in the configs
 	 * @param player
-	 * @param data
 	 */
 	public static void updatePlayerScoutedTechLevel(EntityPlayer player) {
 		int scouted = getPlayerScoutedTechLevel(player);
@@ -120,7 +119,7 @@ public class TDManager {
 	/**
 	 * updates player scouted techdata and scans if necessary
 	 * also adds player to the techplayers list if necessary
-	 * @param username
+	 * @param player
 	 */
 	public static void scanAndUpdatePlayerTD(EntityPlayer player) {
 		if(getPlayerScoutedTechLevel(player) >= getPlayerTechLevel(player)) {

@@ -18,7 +18,7 @@ public class TDMobEffectEquipment extends TDMobEffect {
 //	protected boolean doNotRemoveIfSucceddedBefore = false; //not working
 	protected boolean applyAll = true; //not working (settings are always default)
 	protected boolean randomStart = true;
-	protected float[] dropChances = new float[] {-1, -1, -1, -1, -1};
+	protected final float[] dropChances = new float[] {-1, -1, -1, -1, -1};
 
 	public TDMobEffectEquipment(ItemStack[] equipment, boolean asSet, boolean replaceEquipment, int[] values) {
 		if(equipment.length < 5) {

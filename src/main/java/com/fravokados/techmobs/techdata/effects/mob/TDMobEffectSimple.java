@@ -4,7 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 
 public abstract class TDMobEffectSimple extends TDMobEffect {
 	
-	protected int minValue;
+	protected final int minValue;
 	
 	public TDMobEffectSimple(int maxValue) {
 		this.minValue = maxValue;

@@ -15,7 +15,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class ModEntities {
 
-	@SuppressWarnings({ "unused", "deprecation" })
+	@SuppressWarnings({"unused", "deprecation", "UnusedAssignment"})
 	public static void init() {
 		//TODO spawns
 		//normal biomes

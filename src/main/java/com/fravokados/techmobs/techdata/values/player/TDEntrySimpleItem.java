@@ -4,11 +4,10 @@ import net.minecraft.item.ItemStack;
 
 public class TDEntrySimpleItem extends TDEntryItem {
 	
-	private int meta;
-	private int value;
+	private final int meta;
+	private final int value;
 	
 	/**
-	 * @param item
 	 * @param meta when this is negative, the item damage is ignored
 	 * @param value
 	 */
@@ -19,7 +18,6 @@ public class TDEntrySimpleItem extends TDEntryItem {
 	
 	/**
 	 * Constructor for items where item damage should be ignored
-	 * @param item
 	 * @param value
 	 */
 	public TDEntrySimpleItem(int value) {

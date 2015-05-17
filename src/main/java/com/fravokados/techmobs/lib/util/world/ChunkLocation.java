@@ -6,9 +6,9 @@ import net.minecraft.world.chunk.Chunk;
 
 public class ChunkLocation {
 	
-	public int x;
-	public int z;
-	public int dimension;
+	public final int x;
+	public final int z;
+	public final int dimension;
 
 	public ChunkLocation(int dimension, int x, int z) {
 		this.x = x;

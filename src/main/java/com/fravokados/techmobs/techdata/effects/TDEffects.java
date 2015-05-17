@@ -1,21 +1,20 @@
 package com.fravokados.techmobs.techdata.effects;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fravokados.techmobs.configuration.Settings;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
 import com.fravokados.techmobs.techdata.effects.mob.TDMobEffectEquipment;
 import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffectPotion;
 import com.fravokados.techmobs.techdata.effects.world.TDWorldEffect;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * contains  information of the techdata effects
@@ -27,17 +26,17 @@ public class TDEffects {
 	/**
 	 * effects that are applied to mods on spawn
 	 */
-	private static List<TDMobEffect> mobEffects = new ArrayList<TDMobEffect>();
+	private static final List<TDMobEffect> mobEffects = new ArrayList<TDMobEffect>();
 	
 	/**
 	 * effects that are applied randomly to players with high techvalue
 	 */
-	private static List<TDPlayerEffect> playerEffects = new ArrayList<TDPlayerEffect>();
+	private static final List<TDPlayerEffect> playerEffects = new ArrayList<TDPlayerEffect>();
 	
 	/**
 	 * effects that are applied randomly to chunks with high techvalues
 	 */
-	private static List<TDWorldEffect> worldEffects = new ArrayList<TDWorldEffect>();
+	private static final List<TDWorldEffect> worldEffects = new ArrayList<TDWorldEffect>();
 
 
 	/**
@@ -96,10 +95,9 @@ public class TDEffects {
 	
 	/**
 	 * used to get a List containing all PlayerEffects that are applicable for the given Player
-	 * @param player 
 	 * @param username 
-	 * @param techLevel
-	 * @param entityLiving
+	 * @param techvalue
+	 * @param entity
 	 * @return
 	 */
 	public static List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, String username, EntityPlayer entity) {

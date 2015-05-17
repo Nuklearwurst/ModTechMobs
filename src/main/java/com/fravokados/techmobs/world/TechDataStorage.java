@@ -1,11 +1,14 @@
 package com.fravokados.techmobs.world;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
+import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.lib.util.PlayerUtils;
+import com.fravokados.techmobs.lib.util.world.ChunkLocation;
+import com.fravokados.techmobs.techdata.TDManager;
+import com.fravokados.techmobs.world.techdata.TDChunk;
+import com.fravokados.techmobs.world.techdata.TDWorld;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.WorldSavedData;
@@ -14,16 +17,7 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
-import com.fravokados.techmobs.configuration.Settings;
-import com.fravokados.techmobs.lib.util.PlayerUtils;
-import com.fravokados.techmobs.lib.util.world.ChunkLocation;
-import com.fravokados.techmobs.techdata.TDManager;
-import com.fravokados.techmobs.world.techdata.TDChunk;
-import com.fravokados.techmobs.world.techdata.TDWorld;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import java.util.*;
 
 /**
  * stores Techdata of all worlds and players
@@ -39,12 +33,12 @@ public class TechDataStorage extends WorldSavedData {
 	/**
 	 * the world techdata
 	 */
-	private static Map<Integer, TDWorld> worldData = new HashMap<Integer, TDWorld>();
+	private static final Map<Integer, TDWorld> worldData = new HashMap<Integer, TDWorld>();
 	
 	/**
 	 * chunks that have a high techvalue
 	 */
-	private static List<ChunkLocation> techChunks = new ArrayList<ChunkLocation>();
+	private static final List<ChunkLocation> techChunks = new ArrayList<ChunkLocation>();
 	
 	/**
 	 * techvalue of the highest chunk (not exact)
@@ -54,7 +48,7 @@ public class TechDataStorage extends WorldSavedData {
 	/**
 	 * players with high techvalue
 	 */
-	private static List<String> techPlayers = new ArrayList<String>();
+	private static final List<String> techPlayers = new ArrayList<String>();
 	
 	/**
 	 * techvalue of the best player (not exact)
@@ -173,9 +167,7 @@ public class TechDataStorage extends WorldSavedData {
 	
 	public static void updateDangerousChunkList(ChunkLocation loc, int level) {
 		if(techChunks.contains(loc)) {
-			if(level >= getDangerousChunkLevel()) {
-				return;
-			} else {
+			if(level < getDangerousChunkLevel()) {
 				removeDangerousChunk(loc);
 				addDangerousChunkIfNeeded(loc, level);
 			}
@@ -186,9 +178,7 @@ public class TechDataStorage extends WorldSavedData {
 	
 	public static void updateDangerousPlayerList(String name, int level) {
 		if(techPlayers.contains(name)) {
-			if(level >= getDangerousPlayerLevel()) {
-				return;
-			} else {
+			if(level < getDangerousPlayerLevel()) {
 				removeDangerousPlayer(name);
 				addDangerousPlayerIfNeeded(name, level);
 			}
@@ -251,14 +241,6 @@ public class TechDataStorage extends WorldSavedData {
 
 
 	/**
-	 * saves player techData to disk
-	 * @param evt
-	 */
-	public static void onWorldSave(WorldEvent.Save evt) {
-
-	}
-
-	/**
 	 * saves chunk techdata to disk
 	 * @param evt
 	 */
@@ -305,14 +287,6 @@ public class TechDataStorage extends WorldSavedData {
 				worldData.remove(dimId);
 			}
 		}
-	}
-
-	/**
-	 * unused
-	 * @param evt
-	 */
-	public static void onChunkLoad(ChunkEvent.Load evt) {
-
 	}
 
 

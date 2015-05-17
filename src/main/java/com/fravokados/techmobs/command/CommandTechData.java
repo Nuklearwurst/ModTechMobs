@@ -1,15 +1,11 @@
 package com.fravokados.techmobs.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
 import com.fravokados.techmobs.lib.util.world.WorldHelper;
 import com.fravokados.techmobs.techdata.TDManager;
 import com.fravokados.techmobs.techdata.TDTickManager;
 import com.fravokados.techmobs.world.TechDataStorage;
 import com.fravokados.techmobs.world.techdata.TDChunk;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -18,9 +14,12 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommandTechData extends CommandBase {
 	
-	private List<String> aliases;
+	private final List<String> aliases;
 	
 	private static final String[] commands1 = { "level", "scouted"};
 	private static final String[] commands =  {"set", "add", "remove", "read", "scan", "info"};

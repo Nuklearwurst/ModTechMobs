@@ -1,19 +1,18 @@
 package com.fravokados.techmobs.techdata.values;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fravokados.techmobs.configuration.Settings;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
-
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.values.player.TDEntryItem;
 import com.fravokados.techmobs.techdata.values.player.TDEntrySimpleItem;
 import com.fravokados.techmobs.techdata.values.world.TDEntrySimpleTileEntity;
 import com.fravokados.techmobs.techdata.values.world.TDEntryTileEntity;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * contains TDValue lists for blocks and items
@@ -27,12 +26,12 @@ public class TDValues {
 	/**
 	 * Contains information about Tileentities
 	 */
-	public static Map<Class<? extends TileEntity>, TDEntryTileEntity> tileEntityEntries = new HashMap<Class<? extends TileEntity>, TDEntryTileEntity>();
+	public static final Map<Class<? extends TileEntity>, TDEntryTileEntity> tileEntityEntries = new HashMap<Class<? extends TileEntity>, TDEntryTileEntity>();
 	
 	/**
 	 * Contains information about Items
 	 */
-	public static Map<Item, TDEntryItem> itemEntries = new HashMap<Item, TDEntryItem>();
+	public static final Map<Item, TDEntryItem> itemEntries = new HashMap<Item, TDEntryItem>();
 	
 	/**
 	 * registers a new Item Entry

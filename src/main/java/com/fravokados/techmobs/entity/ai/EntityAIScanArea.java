@@ -15,7 +15,7 @@ public class EntityAIScanArea extends EntityAIBase {
 	/** time between two scouts */
 	public static final int scanOffset = 200;
 	private int timer = 0;
-	private EntityLiving e;
+	private final EntityLiving e;
 	
 	public EntityAIScanArea(EntityLiving e) {
 		this.e = e;

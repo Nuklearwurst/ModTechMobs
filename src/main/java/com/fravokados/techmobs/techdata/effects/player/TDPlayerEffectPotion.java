@@ -7,10 +7,10 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class TDPlayerEffectPotion extends TDPlayerEffect {
 
-	private int value;
-	private int potionId;
-	private int duration;
-	private int multiplier;
+	private final int value;
+	private final int potionId;
+	private final int duration;
+	private final int multiplier;
 	private String chatMessage = null;
 	private EnumChatFormatting color = null;
 

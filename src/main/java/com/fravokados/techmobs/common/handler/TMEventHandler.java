@@ -27,11 +27,6 @@ public class TMEventHandler {
 	}
 	
 	@SubscribeEvent
-	public void onWorldSave(WorldEvent.Save evt) {
-		TechDataStorage.onWorldSave(evt);
-	}
-	
-	@SubscribeEvent
 	public void onChunkUnload(ChunkEvent.Unload evt) {
 		TechDataStorage.onChunkUnload(evt);
 	}

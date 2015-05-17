@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiGateExtender extends GuiContainer {
 
-    private TileEntityGateExtender te;
+    private final TileEntityGateExtender te;
 
     public GuiGateExtender(InventoryPlayer invPlayer, TileEntityGateExtender tile)
     {

@@ -4,7 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TDEntrySimpleTileEntity extends TDEntryTileEntity {
 	
-	private int techValue;
+	private final int techValue;
 	
 	public TDEntrySimpleTileEntity(int techValue) {
 		this.techValue = techValue;

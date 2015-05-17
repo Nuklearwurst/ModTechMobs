@@ -1,13 +1,12 @@
 package com.fravokados.techmobs.world.techdata;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.fravokados.techmobs.lib.util.LogHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 
-import com.fravokados.techmobs.lib.util.LogHelper;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * contains chunk techdata
@@ -20,7 +19,7 @@ public class TDWorld {
 	/**
 	 * contains chunk techdata
 	 */
-	public Map<ChunkCoordIntPair, TDChunk> chunkData;
+	public final Map<ChunkCoordIntPair, TDChunk> chunkData;
 	
 	public TDWorld() {
 		chunkData = new HashMap<ChunkCoordIntPair, TDChunk>();

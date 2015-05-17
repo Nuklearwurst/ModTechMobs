@@ -19,6 +19,7 @@ apply plugin: 'forge'
 
 version = "1.0"
 group= "com.fravokados.techmobs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+//noinspection GroovyUnusedAssignment
 archivesBaseName = "TechMobs"
 
 minecraft {

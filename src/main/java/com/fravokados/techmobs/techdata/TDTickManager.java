@@ -1,16 +1,5 @@
 package com.fravokados.techmobs.techdata;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.DimensionManager;
-
 import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.lib.util.PlayerUtils;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
@@ -20,9 +9,18 @@ import com.fravokados.techmobs.techdata.effects.world.TDWorldEffect;
 import com.fravokados.techmobs.techdata.values.TDValues;
 import com.fravokados.techmobs.techdata.values.world.TDEntryTileEntity;
 import com.fravokados.techmobs.world.TechDataStorage;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.DimensionManager;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 /**
  * controls techdata scanning  
@@ -36,7 +34,7 @@ public class TDTickManager {
 
 	private static List<ChunkLocation> scanningTasks;
 
-	private static Random random = new Random();
+	private static final Random random = new Random();
 
 	private int tick = 100;
 
@@ -148,7 +146,7 @@ public class TDTickManager {
 
 	/**
 	 * schedules a scan for a chunk
-	 * @param loc
+	 * @param chunk
 	 */
 	public static void scheduleChunkScan(Chunk chunk) {
 		scheduleChunkScan(new ChunkLocation(chunk));
