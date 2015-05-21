@@ -11,4 +11,5 @@ public class Reference {
 	
 	public static final String GUI_FACTORY = "com.fravokados.techmobs.configuration.gui.GuiFactoryConfig";
 
+	public static final String ASSET_DIR = "techmobs";
 }

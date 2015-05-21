@@ -23,6 +23,7 @@ public class Strings {
 		public static final String MONSTER_DROP = "monsterDrop";
 		public static final String[] MONSTER_DROP_SUBTYPES = {"common"};
 		public static final String[] MONSTER_DROP_TOOLTIP = {"common"};
+		public static final String UPGRADE_TOOL = "upgradeTool";
 	}
 	
 	public static final class Chat {
