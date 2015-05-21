@@ -23,7 +23,7 @@ group= "com.fravokados.techmobs" // http://maven.apache.org/guides/mini/guide-na
 archivesBaseName = "TechMobs"
 
 minecraft {
-    version = "1.7.10-10.13.3.1391-1710ls"
+    version = "1.7.10-10.13.3.1408-1.7.10"
     runDir = "run"
 	
 	replace '@VERSION@', project.version
@@ -34,6 +34,11 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
 	}
+}
+
+configurations{
+    api
+    compile.extendsFrom api
 }
 
 dependencies {
@@ -49,6 +54,7 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    api 'net.industrial-craft:industrialcraft-2:2.2.719-experimental:api'
 
 }
 
@@ -69,6 +75,21 @@ processResources
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+jar {
+    from {
+        configurations.api.collect {
+            it.isDirectory() ? it : zipTree(it).matching {
+                include '**/api/**'
+                exclude '**/buildcraft/**'
+                exclude '**/ic2/api/crops/**'
+                exclude '**/ic2/api/network/**'
+                exclude '**/ic2/api/event/**'
+                exclude '**/ic2/api/reactor/**'
+            }
+        }
     }
 }
 
