@@ -62,6 +62,14 @@ public class UpgradeStatCollection {
 		setFloat(s, getFloat(s, 0) + value);
 	}
 
+	public boolean hasKey(String s) {
+		return upgrades.containsKey(s);
+	}
+
+	public boolean hasKey(UpgradeTypes type) {
+		return hasKey(type.id);
+	}
+
 	public static UpgradeStatCollection getUpgradeStatsFromDefinitions(List<IUpgradeDefinition> upgrades) {
 		UpgradeStatCollection col = new UpgradeStatCollection();
 		for(IUpgradeDefinition upgrade : upgrades) {
