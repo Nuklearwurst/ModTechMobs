@@ -62,6 +62,26 @@ public class UpgradeStatCollection {
 		setFloat(s, getFloat(s, 0) + value);
 	}
 
+	public void setBoolean(String s, boolean b) {
+		setValue(s, b);
+	}
+
+	public void addUpgrade(String s) {
+		setBoolean(s, true);
+	}
+
+	public boolean getBoolean(String s, boolean def) {
+		Object o = getValue(s);
+		if(o == null || !(o instanceof Boolean)) {
+			return def;
+		}
+		return (Boolean) o;
+	}
+
+	public boolean getBoolean(String s) {
+		return getBoolean(s, false);
+	}
+
 	public boolean hasKey(String s) {
 		return upgrades.containsKey(s);
 	}

@@ -11,8 +11,12 @@ public class SimpleNonStackingUpgrade implements IUpgradeDefinition {
 		this.id = id;
 	}
 
+	public SimpleNonStackingUpgrade(UpgradeTypes type) {
+		this(type.id);
+	}
+
 	@Override
 	public void applyTo(UpgradeStatCollection col) {
-		col.setInt(id, 1); //Using int for now
+		col.addUpgrade(id);
 	}
 }
