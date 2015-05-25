@@ -106,7 +106,7 @@ public class TDTickManager {
 			tick = Settings.TechData.TD_RANDOM_TICKS;
 					
 			if(Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE > 0 && random.nextInt(Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE) == 0) {
-				String username = TechDataStorage.getRandomDangerousPlayer(random);
+				String username = TechDataStorage.getInstance().getRandomDangerousPlayer(random);
 				if(username != null) {
 					EntityPlayer entity = PlayerUtils.getPlayerFromName(username);
 					TDEffectHandler.applyRandomEffectOnPlayer(entity, username, random);
@@ -114,7 +114,7 @@ public class TDTickManager {
 			}
 		} else if(tick == Settings.TechData.TD_RANDOM_TICKS / 2) { //chunk
 			if(Settings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE > 0 && random.nextInt(Settings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE) == 0) {
-				ChunkLocation chunk = TechDataStorage.getRandomDangerousChunk(random);
+				ChunkLocation chunk = TechDataStorage.getInstance().getRandomDangerousChunk(random);
 				if(chunk != null) {
 					int level = TDManager.getScoutedTechLevel(chunk.dimension, chunk.getChunkCoordIntPair());
 					int i = 0;

@@ -45,11 +45,11 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 				int rand = itemRand.nextInt(data);
 				if(rand >= 0.8 * data) {
 					//special effects happen
-					if(data > TechDataStorage.getDangerousPlayerLevel()) { //very nasty
+					if(data > TechDataStorage.getInstance().getDangerousPlayerLevel()) { //very nasty
 						TDEffectHandler.applyRandomEffectOnPlayer(player, player.getCommandSenderName(), itemRand);
 						stack.damageItem(20, player);
 						player.worldObj.createExplosion(null, player.posX, player.posY + 1, player.posZ, 0.4F, false);
-					} else if(data > 0.8 * TechDataStorage.getDangerousPlayerLevel()) { //normal effects
+					} else if(data > 0.8 * TechDataStorage.getInstance().getDangerousPlayerLevel()) { //normal effects
 						TDEffectHandler.applyRandomEffectOnPlayer(player, player.getCommandSenderName(), itemRand);
 						stack.damageItem(10, player);
 					} else { //simple effects

@@ -1,6 +1,7 @@
 package com.fravokados.techmobs.world;
 
 import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.lib.util.PlayerUtils;
 import com.fravokados.techmobs.lib.util.world.ChunkLocation;
 import com.fravokados.techmobs.techdata.TDManager;
@@ -22,44 +23,45 @@ import java.util.*;
 /**
  * stores Techdata of all worlds and players
  * internal
- * 
- * @author Nuklearwurst
  *
+ * @author Nuklearwurst
  */
 public class TechDataStorage extends WorldSavedData {
-	
+
+	private static TechDataStorage instance;
+
 	private static final String SAVE_DATA_NAME = "TechmobsStorage";
 
 	/**
 	 * the world techdata
 	 */
-	private static final Map<Integer, TDWorld> worldData = new HashMap<Integer, TDWorld>();
-	
+	private final Map<Integer, TDWorld> worldData = new HashMap<Integer, TDWorld>();
+
 	/**
 	 * chunks that have a high techvalue
 	 */
-	private static final List<ChunkLocation> techChunks = new ArrayList<ChunkLocation>();
-	
+	private final List<ChunkLocation> techChunks = new ArrayList<ChunkLocation>();
+
 	/**
 	 * techvalue of the highest chunk (not exact)
 	 */
-	private static int highestChunkValue = 0;
-	
+	private int highestChunkValue = 0;
+
 	/**
 	 * players with high techvalue
 	 */
-	private static final List<String> techPlayers = new ArrayList<String>();
-	
+	private final List<String> techPlayers = new ArrayList<String>();
+
 	/**
 	 * techvalue of the best player (not exact)
 	 */
-	private static int highestPlayerValue = 0;
-	
+	private int highestPlayerValue = 0;
+
 	//SAVING
 	public TechDataStorage(String name) {
 		super(name);
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		//saving highest techValues not really needed
@@ -67,75 +69,75 @@ public class TechDataStorage extends WorldSavedData {
 		//and readded un load
 		//function kept for future uses
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 	}
 	//END SAVING
-	
-	
-	
+
+
 	/**
 	 * returns the world data
+	 *
 	 * @param dimensionId
 	 * @return
 	 */
-	private static TDWorld getWorldData(int dimensionId)  {
-		if(!worldData.containsKey(dimensionId)) {
+	private TDWorld getWorldData(int dimensionId) {
+		if (!worldData.containsKey(dimensionId)) {
 			worldData.put(dimensionId, new TDWorld());
 		}
 		return worldData.get(dimensionId);
 	}
-	
+
 	/**
 	 * internal use only
-	 * 
+	 *
 	 * @param coords
 	 * @param dimensionId
 	 * @return
 	 */
-	public static TDChunk getChunkData(ChunkCoordIntPair coords, int dimensionId) {
+	public TDChunk getChunkData(ChunkCoordIntPair coords, int dimensionId) {
 		return getWorldData(dimensionId).getChunk(coords);
 	}
-	
-	public static TDChunk getChunkData(ChunkLocation loc) {
+
+	public TDChunk getChunkData(ChunkLocation loc) {
 		return getChunkData(loc.getChunkCoordIntPair(), loc.dimension);
 	}
-	
-	public static int getDangerousChunkLevel() {
+
+	public int getDangerousChunkLevel() {
 		return (int) (highestChunkValue * Settings.TechScanning.DANGER_CHUNK_PERCENTAGE + Settings.TechScanning.DANGER_CHUNK_FLAT);
 	}
-	
-	public static int getDangerousPlayerLevel() {
+
+	public int getDangerousPlayerLevel() {
 		return (int) (highestPlayerValue * Settings.TechScanning.DANGER_PLAYER_PERCENTAGE + Settings.TechScanning.DANGER_PLAYER_FLAT);
 	}
-	
-	public static void addDangerousChunk(ChunkLocation chunk, int level) {
-		if(!techChunks.contains(chunk)) {
+
+	public void addDangerousChunk(ChunkLocation chunk, int level) {
+		if (!techChunks.contains(chunk)) {
 			techChunks.add(chunk);
-			if(level > highestChunkValue) {
+			if (level > highestChunkValue) {
 				highestChunkValue = level;
 			}
-		}		
+		}
 	}
-	
-	public static void addDangerousPlayer(String player, int level) {
-		if(!techPlayers.contains(player)) {
+
+	public void addDangerousPlayer(String player, int level) {
+		if (!techPlayers.contains(player)) {
 			techPlayers.add(player);
-			if(level > highestChunkValue) {
+			if (level > highestChunkValue) {
 				highestChunkValue = level;
 			}
-		}		
+		}
 	}
-	
-	public static void removeDangerousChunk(ChunkLocation loc) {
+
+	public void removeDangerousChunk(ChunkLocation loc) {
 		int index = techChunks.indexOf(loc);
-		if(index != -1) {
+		if (index != -1) {
 			//if this was the last element of this list (--> the newest)
 			//it should have a very high techdata value
 			//therefore the highestChunkValue gets updated (--> the updated number might not represent reality)
-			if(techChunks.size() == index + 1) {
-				if(index > 0) {
+			if (techChunks.size() == index + 1) {
+				if (index > 0) {
 					ChunkLocation chunk = techChunks.get(index - 1);
 					highestChunkValue = TDManager.getScoutedTechLevel(chunk.dimension, chunk.getChunkCoordIntPair());
 				} else {
@@ -146,16 +148,16 @@ public class TechDataStorage extends WorldSavedData {
 			techChunks.remove(index);
 		}
 	}
-	
-	public static void removeDangerousPlayer(String player) {
+
+	public void removeDangerousPlayer(String player) {
 		int index = techPlayers.indexOf(player);
-		if(index != -1) {
+		if (index != -1) {
 			//if this was the last element of this list (--> the newest)
 			//it should have a very high techdata value
 			//therefore the highestPlayerValue gets updated (--> the updated number might not represent reality)
-			if(techPlayers.size() <= 1) {
+			if (techPlayers.size() <= 1) {
 				highestPlayerValue = 0;
-			} else if(techPlayers.size() == index + 1) {
+			} else if (techPlayers.size() == index + 1) {
 				//insert the player techvalue of the most recent player added to the dangerousPlayer list
 				String name = techPlayers.get(index - 1);
 				highestPlayerValue = TDManager.getPlayerTechLevel(PlayerUtils.getPlayerFromName(name));
@@ -164,10 +166,10 @@ public class TechDataStorage extends WorldSavedData {
 			techPlayers.remove(index);
 		}
 	}
-	
-	public static void updateDangerousChunkList(ChunkLocation loc, int level) {
-		if(techChunks.contains(loc)) {
-			if(level < getDangerousChunkLevel()) {
+
+	public void updateDangerousChunkList(ChunkLocation loc, int level) {
+		if (techChunks.contains(loc)) {
+			if (level < getDangerousChunkLevel()) {
 				removeDangerousChunk(loc);
 				addDangerousChunkIfNeeded(loc, level);
 			}
@@ -175,10 +177,10 @@ public class TechDataStorage extends WorldSavedData {
 			addDangerousChunkIfNeeded(loc, level);
 		}
 	}
-	
-	public static void updateDangerousPlayerList(String name, int level) {
-		if(techPlayers.contains(name)) {
-			if(level < getDangerousPlayerLevel()) {
+
+	public void updateDangerousPlayerList(String name, int level) {
+		if (techPlayers.contains(name)) {
+			if (level < getDangerousPlayerLevel()) {
 				removeDangerousPlayer(name);
 				addDangerousPlayerIfNeeded(name, level);
 			}
@@ -186,86 +188,101 @@ public class TechDataStorage extends WorldSavedData {
 			addDangerousPlayerIfNeeded(name, level);
 		}
 	}
-	
-	public static void addDangerousChunkIfNeeded(ChunkLocation chunk, int level) {
-		if(level > getDangerousChunkLevel()) {
+
+	public void addDangerousChunkIfNeeded(ChunkLocation chunk, int level) {
+		if (level > getDangerousChunkLevel()) {
 			addDangerousChunk(chunk, level);
 		}
 	}
-	
-	public static void addDangerousPlayerIfNeeded(String player, int level) {
-		if(level > getDangerousPlayerLevel()) {
+
+	public void addDangerousPlayerIfNeeded(String player, int level) {
+		if (level > getDangerousPlayerLevel()) {
 			addDangerousPlayer(player, level);
 		}
 	}
-	
-	public static String getRandomDangerousPlayer(Random rand) {
-		if(techPlayers.isEmpty()) {
+
+	public String getRandomDangerousPlayer(Random rand) {
+		if (techPlayers.isEmpty()) {
 			return null;
 		}
 		return techPlayers.get(rand.nextInt(techPlayers.size()));
 	}
-	
-	public static ChunkLocation getRandomDangerousChunk(Random rand) {
-		if(techChunks.isEmpty()) {
+
+	public ChunkLocation getRandomDangerousChunk(Random rand) {
+		if (techChunks.isEmpty()) {
 			return null;
 		}
 		return techChunks.get(rand.nextInt(techChunks.size()));
 	}
-	
-	public static boolean isDangerousChunk(ChunkLocation chunk) {
+
+	public boolean isDangerousChunk(ChunkLocation chunk) {
 		return techChunks.contains(chunk);
 	}
-	
-	public static boolean isDangerousPlayer(String username) {
+
+	public boolean isDangerousPlayer(String username) {
 		return techPlayers.contains(username);
 	}
 
 	/**
 	 * loads player techData from disk
+	 *
 	 * @param evt
 	 */
 	public static void onWorldLoad(WorldEvent.Load evt) {
 		//only on server side (--> intergrated server) && only on dim = 0 as it stores player data
-		if(FMLCommonHandler.instance().getEffectiveSide().isServer() && evt.world.provider.dimensionId == 0) {
-			//save general data
+		if (!evt.world.isRemote && evt.world.provider.dimensionId == 0) {
 			WorldServer world = (WorldServer) evt.world;
 			TechDataStorage data = (TechDataStorage) world.perWorldStorage.loadData(TechDataStorage.class, SAVE_DATA_NAME);
-			
-			if(data == null) {
+
+			if (data == null) {
 				data = new TechDataStorage(SAVE_DATA_NAME);
 				world.perWorldStorage.setData(SAVE_DATA_NAME, data);
 			}
+
+			if (instance != null) {
+				throw new IllegalStateException("TechDataStorage already loaded! (This is a programming Error)");
+			}
+			instance = data;
+		}
+	}
+
+
+	public static void onWorldUnload(WorldEvent.Unload evt) {
+		if (FMLCommonHandler.instance().getEffectiveSide().isServer() && evt.world.provider.dimensionId == 0) {
+			LogHelper.info("Unloading TechDataStorage...");
+			instance = null;
 		}
 	}
 
 
 	/**
 	 * saves chunk techdata to disk
+	 *
 	 * @param evt
 	 */
 	public static void onChunkDataSave(ChunkDataEvent.Save evt) {
 		int dimId = evt.world.provider.dimensionId;
-		if(worldData.containsKey(dimId)) {
-			worldData.get(dimId).saveChunkData(evt); //save here
+		if (getInstance().worldData.containsKey(dimId)) {
+			getInstance().worldData.get(dimId).saveChunkData(evt); //save here
 		}
 	}
 
 	/**
 	 * loads chunk techdata from disk
+	 *
 	 * @param evt
 	 */
 	public static void onChunkDataLoad(ChunkDataEvent.Load evt) {
 		int dimId = evt.world.provider.dimensionId;
-		if(worldData.containsKey(dimId)) {
+		if (getInstance().worldData.containsKey(dimId)) {
 			//load from disk and add to already loaded world
-			worldData.get(dimId).loadChunkData(evt); // load data here
+			getInstance().worldData.get(dimId).loadChunkData(evt); // load data here
 		} else {
 			//try to load from disk and add the new World
 			TDWorld world = new TDWorld();
-			if(world.loadChunkData(evt)) {
+			if (world.loadChunkData(evt)) {
 				//when loading is successful add world data to the list
-				worldData.put(dimId, world);
+				getInstance().worldData.put(dimId, world);
 			}
 		}
 	}
@@ -273,18 +290,18 @@ public class TechDataStorage extends WorldSavedData {
 	/**
 	 * removes chunk from storage (--> it got unloaded and is not needed anymore)
 	 * TODO check if data is also saved when the chunk didn't change, but the techdata did
-	 * 
+	 *
 	 * @param evt
 	 */
 	public static void onChunkUnload(ChunkEvent.Unload evt) {
 		//unload chunk if data exists for the given world
 		int dimId = evt.world.provider.dimensionId;
-		if(worldData.containsKey(dimId)) {
-			TDWorld world = worldData.get(dimId);
+		if (getInstance().worldData.containsKey(dimId)) {
+			TDWorld world = getInstance().worldData.get(dimId);
 			world.unloadChunk(evt);
 			//remove world if it contains no information
-			if(!world.hasData()) {
-				worldData.remove(dimId);
+			if (!world.hasData()) {
+				getInstance().worldData.remove(dimId);
 			}
 		}
 	}
@@ -292,11 +309,12 @@ public class TechDataStorage extends WorldSavedData {
 
 	/**
 	 * loads the player techdata
+	 *
 	 * @param evt
 	 */
 	public static void onPlayerLogin(PlayerLoggedInEvent evt) {
 		//add player to techPlayersList if necessary
-		addDangerousPlayerIfNeeded(evt.player.getCommandSenderName(), TDManager.getPlayerScoutedTechLevel(evt.player));
+		getInstance().addDangerousPlayerIfNeeded(evt.player.getCommandSenderName(), TDManager.getPlayerScoutedTechLevel(evt.player));
 //		//load data
 //		String username = evt.player.getCommandSenderName();
 //		if(saveData.hasKey(username + "_techdata")) {
@@ -318,11 +336,12 @@ public class TechDataStorage extends WorldSavedData {
 
 	/**
 	 * unloads and saves the player techdata
+	 *
 	 * @param evt
 	 */
 	public static void onPlayerLogout(PlayerLoggedOutEvent evt) {
 		//remove player from techPlayers list
-		removeDangerousPlayer(evt.player.getCommandSenderName());
+		getInstance().removeDangerousPlayer(evt.player.getCommandSenderName());
 //		//unload data
 //		String username = evt.player.getCommandSenderName();
 //		if(playerData.containsKey(username)) {
@@ -341,4 +360,7 @@ public class TechDataStorage extends WorldSavedData {
 //		}
 	}
 
+	public static TechDataStorage getInstance() {
+		return instance;
+	}
 }

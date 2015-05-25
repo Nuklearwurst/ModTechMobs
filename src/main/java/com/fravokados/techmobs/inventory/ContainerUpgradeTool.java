@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author Nuklearwurst
@@ -47,5 +48,10 @@ public class ContainerUpgradeTool extends Container {
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
 		te.updateUpgradeInformation();
+	}
+
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_) {
+		return null;
 	}
 }

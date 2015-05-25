@@ -109,7 +109,7 @@ public class CommandTechPlayer extends CommandBase {
 			} else if(args[0].equals(commands[5])) { //info
 				sender.addChatMessage(new ChatComponentText("WIP"));				
 			} else if(args[0].equals(commands[6])) { //random tech player
-				sender.addChatMessage(new ChatComponentText("Random Tech Player: " + TechDataStorage.getRandomDangerousPlayer(entityPlayer.getRNG())));
+				sender.addChatMessage(new ChatComponentText("Random Tech Player: " + TechDataStorage.getInstance().getRandomDangerousPlayer(entityPlayer.getRNG())));
 			} else {
 				throw new WrongUsageException(getCommandUsage(sender));
 			}

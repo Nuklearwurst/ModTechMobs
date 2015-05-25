@@ -39,7 +39,7 @@ public class TDManager {
 
 	public static void setScoutedTechLevel(int dimension, ChunkCoordIntPair coord, int value) {
 		getChunkData(dimension, coord).scoutedTechLevel = value;
-		TechDataStorage.updateDangerousChunkList(new ChunkLocation(dimension, coord), value);
+		TechDataStorage.getInstance().updateDangerousChunkList(new ChunkLocation(dimension, coord), value);
 	}
 
 	public static void setTechLevel(int dimension, ChunkCoordIntPair coord, int value) {
@@ -134,7 +134,7 @@ public class TDManager {
 	
 	public static void setPlayerScoutedTechLevel(EntityPlayer player, int scoutedLevel) {
 		getPlayerData(player).setInteger(NBT_PLAYER_TECHDATA_SCOUTED, scoutedLevel);
-		TechDataStorage.updateDangerousPlayerList(player.getCommandSenderName(), scoutedLevel);
+		TechDataStorage.getInstance().updateDangerousPlayerList(player.getCommandSenderName(), scoutedLevel);
 	}
 	
 	public static int getPlayerTechLevel(EntityPlayer player) {
@@ -155,7 +155,7 @@ public class TDManager {
 	 */
 	@Deprecated
 	public static TDChunk getChunkData(int dimension, ChunkCoordIntPair coord) {
-		return TechDataStorage.getChunkData(coord, dimension);
+		return TechDataStorage.getInstance().getChunkData(coord, dimension);
 	}
 
 	/**

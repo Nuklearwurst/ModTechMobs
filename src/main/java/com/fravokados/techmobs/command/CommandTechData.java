@@ -123,7 +123,7 @@ public class CommandTechData extends CommandBase {
 		World world = sender.getEntityWorld();
 		ChunkCoordinates coords = sender.getPlayerCoordinates();
 		ChunkCoordIntPair chunkCoords = new ChunkCoordIntPair(coords.posX >> 4, coords.posZ >> 4);
-		return TechDataStorage.getChunkData(chunkCoords, world.provider.dimensionId);
+		return TechDataStorage.getInstance().getChunkData(chunkCoords, world.provider.dimensionId);
 	}
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender) {
