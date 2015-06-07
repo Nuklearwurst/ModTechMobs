@@ -1,8 +1,11 @@
 package com.fravokados.techmobs.techdata.effects;
 
-import java.util.List;
-import java.util.Random;
-
+import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.entity.ai.EntityAIScanArea;
+import com.fravokados.techmobs.lib.util.world.WorldHelper;
+import com.fravokados.techmobs.techdata.TDManager;
+import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
+import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -12,12 +15,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
-import com.fravokados.techmobs.configuration.Settings;
-import com.fravokados.techmobs.entity.ai.EntityAIScanArea;
-import com.fravokados.techmobs.lib.util.world.WorldHelper;
-import com.fravokados.techmobs.techdata.TDManager;
-import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
-import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
+import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -28,7 +27,7 @@ import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
 public class TDEffectHandler {
 	
 	public static void onLivingSpawn(LivingSpawnEvent.CheckSpawn evt) {
-		if(!(evt.entityLiving instanceof IMob)) {
+		if(evt.entity.worldObj.isRemote || !(evt.entityLiving instanceof IMob)) {
 			return;
 		}
 		

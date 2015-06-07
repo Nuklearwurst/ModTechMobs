@@ -63,7 +63,7 @@ public class TMEventHandler {
 	
 	@SubscribeEvent
 	public void onEntitySetAttackTarget(LivingSetAttackTargetEvent evt) {
-		if(evt.target instanceof EntityPlayer && (evt.entityLiving instanceof IMob || evt.entityLiving instanceof EntityTameable)) {
+		if(!evt.entity.worldObj.isRemote && evt.target instanceof EntityPlayer && (evt.entityLiving instanceof IMob || evt.entityLiving instanceof EntityTameable)) {
 			EntityPlayer player = (EntityPlayer) evt.target;
 			for(ItemStack stack : player.inventory.mainInventory) {
 				if(stack != null && stack.stackSize != 0 && stack.getItem() instanceof IItemAttackTargetListener) {
@@ -76,7 +76,7 @@ public class TMEventHandler {
 	
 	@SubscribeEvent
 	public void onEntityAttack(LivingAttackEvent evt) {
-		if(evt.entity instanceof EntityPlayer) {
+		if(!evt.entity.worldObj.isRemote && evt.entity instanceof EntityPlayer) {
 			if(evt.source.getEntity() instanceof IMob) {
 				TDManager.scanAndUpdatePlayerTD((EntityPlayer) evt.entity);
 			}
