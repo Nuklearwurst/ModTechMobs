@@ -1,5 +1,6 @@
 package com.fravokados.techmobs.item;
 
+import com.fravokados.techmobs.lib.util.GeneralUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityZombie;
@@ -103,12 +104,14 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 	}
 
 	public void sendExactWarningMessage(EntityPlayer player, String name) {
+		//TODO randomly select a line
 		if(name == null) {
 			sendGenericWarningMessage(player);
 		} else if(CREEPER.equals(name)) {
-			player.addChatMessage(new ChatComponentTranslation(Strings.Chat.mobTargetingWarning_creeper_1));
+
+			player.addChatMessage(new ChatComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_creeper, GeneralUtils.random)));
 		} else if(ZOMBIE_BABY.equals(name)) {
-			player.addChatMessage(new ChatComponentTranslation(Strings.Chat.mobTargetingWarning_babyZombie_1));
+			player.addChatMessage(new ChatComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_babyZombie, GeneralUtils.random)));
 		} else {
 			player.addChatMessage(new ChatComponentTranslation(Strings.Chat.mobTargetingWarning_exact_1)
 			.appendSibling(new ChatComponentText(" " + name + " ")

@@ -71,12 +71,20 @@ public class Settings {
 		public static boolean SPLIT_SCANS = false;
 		
 		/**
-		 * 
+		 * used to set the percentage of chunks to scan based upon how many chunks are scheduled<br>
+		 * this will make sure that when there are many chunks to scan more chunks will get scanned to decrease the queue<br>
+		 * on the other hand it spreads the scanning on more ticks if only few scans are scheduled to be scanned<br><br>
+		 *
+		 * This value defines how many chunks get scanned in which step;
 		 */
 		public static double[] SPLIT_STEPS_VALUE = new double[] {0.1, 0.2, 0.4, 0.7, 1};
-		
+
 		/**
-		 * 
+		 * used to set the percentage of chunks to scan based upon how many chunks are scheduled<br>
+		 * this will make sure that when there are many chunks to scan more chunks will get scanned to decrease the queue<br>
+		 * on the other hand it spreads the scanning on more ticks if only few scans are scheduled to be scanned<br><br>
+		 *
+		 * This value defines the steps
 		 */
 		public static double[] SPLIT_STEPS_KEY = new double[] {0.4, 0.8, 1.3, 2.1, 2.7}; 
 		

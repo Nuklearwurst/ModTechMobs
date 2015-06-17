@@ -1,6 +1,8 @@
 package com.fravokados.techmobs.lib;
 
 
+import com.fravokados.techmobs.lib.util.GeneralUtils;
+
 public class Strings {
 	
 	/**
@@ -31,8 +33,8 @@ public class Strings {
 		public static final String mobTargetingWarning_generic = "chat.mobTargetingWarning.generic";
 		public static final String mobTargetingWarning_exact_1 = "chat.mobTargetingWarning.exact.1";
 		public static final String mobTargetingWarning_exact_2 = "chat.mobTargetingWarning.exact.2";
-		public static final String mobTargetingWarning_creeper_1 = "chat.mobTargetingWarning.creeper.1";
-		public static final String mobTargetingWarning_babyZombie_1 = "chat.mobTargetingWarning.babyZombie.1";
+		public static final String mobTargetingWarning_creeper = "chat.mobTargetingWarning.creeper";
+		public static final String mobTargetingWarning_babyZombie = "chat.mobTargetingWarning.babyZombie";
 		
 	}
 	
@@ -58,6 +60,8 @@ public class Strings {
 			public static final String TD_RANDOM_PLAYER_EVENT_CHANCE = "td_random_player_event_chance";
 			public static final String TD_RANDOM_WORLD_EVENT_CHANCE = "td_random_world_event_chance";
 			public static final String SAFE_TECH_VALUE = "safe_tech_value";
+			public static final String CUSTOM_TILE_ENTITY_VALUES = "custom_tile_entity_values";
+			public static final String CUSTOM_ITEM_VALUES = "custom_item_values";
 		}
 		/**
 		 * TechScanning category
@@ -92,5 +96,13 @@ public class Strings {
 		 * tech data scanning
 		 */
 		public static final String CATEGORY_TECH_SCANNING = "tech-scanning";
+	}
+
+	public static String translate(String key) {
+		return GeneralUtils.translate(key);
+	}
+
+	public static String translateWithFormat(String key, Object... values) {
+		return GeneralUtils.translateWithFormat(key, values);
 	}
 }

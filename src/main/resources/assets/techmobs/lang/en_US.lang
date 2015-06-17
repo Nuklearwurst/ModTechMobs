@@ -5,13 +5,26 @@ itemGroup.techmobs=TechMobs
 chat.mobTargetingWarning.exact.1=A
 chat.mobTargetingWarning.exact.2=wants you dead!
 chat.mobTargetingWarning.generic=A mob seems angry!
+
+chat.mobTargetingWarning.creeper.count=6
+chat.mobTargetingWarning.creeper.0=Hisssss...
 chat.mobTargetingWarning.creeper.1=CREEPER!! RUNN!
+chat.mobTargetingWarning.creeper.2=KABOOOM, BABY!
+chat.mobTargetingWarning.creeper.3=I like to give hugssssss!
+chat.mobTargetingWarning.creeper.4=Don't Turn Around!
+chat.mobTargetingWarning.creeper.5=Nuclear Launch detected!
+
+chat.mobTargetingWarning.babyZombie.count=4
+chat.mobTargetingWarning.babyZombie.0=Look down!
 chat.mobTargetingWarning.babyZombie.1=B...B...BABY ZOMBIE!!
+chat.mobTargetingWarning.babyZombie.2=Nasty little things...
+chat.mobTargetingWarning.babyZombie.3=Well, at least it's no giant...
 
 chat.effect.potion="Something seems diferent"
 
 #Items
 item.techmobs:monsterDetector.name=Monster Detector
+item.techmobs:upgradeTool.name=Upgrade Tool
 
 #Blocks
 tile.techmobs:gateExtender.name=Gate Extender

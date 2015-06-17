@@ -1,18 +1,17 @@
 package com.fravokados.techmobs.configuration;
 
-import java.io.File;
-
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-
+import com.fravokados.techmobs.ModTechMobs;
 import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.Strings.Keys;
 import com.fravokados.techmobs.lib.Strings.Keys.TechData;
 import com.fravokados.techmobs.lib.Strings.Keys.TechScanning;
 import com.fravokados.techmobs.lib.util.LogHelper;
-
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+
+import java.io.File;
 
 public class ConfigHandler {
 
@@ -51,7 +50,11 @@ public class ConfigHandler {
 		Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE = config.getInt(TechData.TD_RANDOM_PLAYER_EVENT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE, 0, Integer.MAX_VALUE, "chance that a techdata effect is applied to a player with high techvalue\n(1 / n)\nSetting this to 0 will disable random player effects");
 		Settings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE = config.getInt(TechData.TD_RANDOM_WORLD_EVENT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE, 0, Integer.MAX_VALUE, "chance that a random chunk effect gets triggered\n(1 / n)\nSetting this to 0 will disable random chunk effects");
 		Settings.TechData.SAFE_TECH_VALUE = config.getInt(TechData.SAFE_TECH_VALUE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.SAFE_TECH_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE, "a techvalue below this value is considered safe (releveant is some special cases)\nSettings this to a high number will not protect the players!");
-		
+
+		//note: this doesn't need server client synchronization as techdata only ever gets evaluated on the server side
+		//This gets handled by ModTechMobs.postInit
+		ModTechMobs.cTileValues = config.getStringList(TechData.CUSTOM_TILE_ENTITY_VALUES, Keys.CATEGORY_TECH_DATA, new String[] {}, "Here you can define the fully qualified Names of TileEntity Classes and set custom techdata-values\nThe format is: tileentity:value");
+		ModTechMobs.cItemValues = config.getStringList(TechData.CUSTOM_ITEM_VALUES, Keys.CATEGORY_TECH_DATA, new String[] {}, "Here you can define the ItemIds (Names) and set custom techdata-values\nThe format is: modid:item:value or modid:item:meta:value");
 		//////////////////
 		// TechScanning //
 		//////////////////
@@ -64,15 +67,15 @@ public class ConfigHandler {
 		Settings.TechScanning.MAX_TASKS_SCHEDULED = config.getInt(TechScanning.MAX_TASKS_SCHEDULED, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.MAX_TASKS_SCHEDULED, 0, Integer.MAX_VALUE, "This value states how many scans may be scheduled at the same time (technical setting)");
 		Settings.TechScanning.SCOUTING_STEP_FACTOR_WORLD = config.getFloat(TechScanning.SCOUTING_STEP_FACTOR_WORLD, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SCOUTING_STEP_FACTOR_WORLD, 0, 1, "Defines the speed at which mobs can scout an area");
 		Settings.TechScanning.SCOUTING_STEP_FACTOR_PLAYER = config.getFloat(TechScanning.SCOUTING_STEP_FACTOR_PLAYER, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SCOUTING_STEP_FACTOR_PLAYER, 0, 1, "Defines the speed at which mobs can scout a player");
-		Settings.TechScanning.SPLIT_SCANS = config.getBoolean(TechScanning.SPLIT_SCANS, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SPLIT_SCANS, ""); //TODO comment
+		Settings.TechScanning.SPLIT_SCANS = config.getBoolean(TechScanning.SPLIT_SCANS, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SPLIT_SCANS, "When this is set to true the amount of chunks scanned on tick gets adjusted to the amount of chunks that are queued to be scanned"); //TODO comment
 		
 		
 		prop = config.get(Keys.CATEGORY_TECH_SCANNING, Keys.TechScanning.SPLIT_STEPS_KEY, DefaultSettings.TechScanning.SPLIT_STEPS_KEY);
-		prop.comment = ""; //TODO comment
+		prop.comment = "This defines the steps how chunks are scanned\n(eg. if step one is 0.2 and there are less then 20% of the maximum amount of chunks to be scanned in queue the amount of chunks defined in split_steps_value is scanned)";
 		Settings.TechScanning.SPLIT_STEPS_KEY = prop.getDoubleList();
 		
 		prop = config.get(Keys.CATEGORY_TECH_SCANNING, Keys.TechScanning.SPLIT_STEPS_VALUE, DefaultSettings.TechScanning.SPLIT_STEPS_VALUE);
-		prop.comment = ""; //TODO comment
+		prop.comment = "The percentage of chunks that get scanned for each step (in relation to the maximal amount of chunks that would otherwise be scanned)";
 		Settings.TechScanning.SPLIT_STEPS_VALUE = prop.getDoubleList();
 		
 		Settings.TechScanning.INJECT_SCANNING_AI = config.getBoolean(TechScanning.INJECT_SCANNING_AI, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.INJECT_SCANNING_AI, "Inject Scanning AI into vanilla mobs during spawn\nThis is experimental!\nDon't enable this if you don't know what you are doing!");

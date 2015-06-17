@@ -71,13 +71,13 @@ public class TDTickManager {
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void onServerTick(TickEvent.ServerTickEvent evt) {
+//			LogHelper.info("################ Server tick start ################");
+//			long time = System.nanoTime();
 		//tick once
 		if(evt.phase != TickEvent.Phase.END) return;
 
 		//start scanning
 		for(int i = 0; i < getScansToPerform(); i++) {
-//			LogHelper.info("################ Scanning start ################");
-//			long time = System.nanoTime();
 			ChunkLocation task = scanningTasks.get(0);
 			World world = DimensionManager.getWorld(task.dimension);
 			if(world != null) {
@@ -97,8 +97,6 @@ public class TDTickManager {
 				}
 			}
 			scanningTasks.remove(0);
-//			LogHelper.info("################# Scanning end #################");
-//			LogHelper.info("Time in ns: " + (System.nanoTime() - time));
 		}
 		
 		//start special effects
@@ -129,6 +127,9 @@ public class TDTickManager {
 			}
 		}
 		tick--;
+
+//		LogHelper.info("################# Scanning end #################");
+//		LogHelper.info("Time in ns: " + (System.nanoTime() - time));
 	}
 
 	/**

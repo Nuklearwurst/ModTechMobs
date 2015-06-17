@@ -4,10 +4,12 @@ import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.values.player.TDEntryItem;
 import com.fravokados.techmobs.techdata.values.player.TDEntrySimpleItem;
+import com.fravokados.techmobs.techdata.values.player.TDEntrySimpleMultiItem;
 import com.fravokados.techmobs.techdata.values.world.TDEntrySimpleTileEntity;
 import com.fravokados.techmobs.techdata.values.world.TDEntryTileEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
@@ -62,6 +64,53 @@ public class TDValues {
 	 */
 	public static void registerItemEntry(Item item, int value) {
 		registerItemEntry(item, new TDEntrySimpleItem(value));
+	}
+
+	/**
+	 * registers multiple Item Meta-sensitive with
+	 * @param stack
+	 * @param value
+	 */
+	public static void registerMultiItemEntry(Item item, int[] meta,  int[] values) {
+		TDEntrySimpleMultiItem entry = new TDEntrySimpleMultiItem();
+		if(itemEntries.containsKey(item)) {
+			TDEntryItem old = itemEntries.get(item);
+			if(old instanceof TDEntrySimpleItem) {
+				entry.add((TDEntrySimpleItem)old);
+			} else if(old instanceof TDEntrySimpleMultiItem) {
+				entry = (TDEntrySimpleMultiItem) old;
+			}
+		}
+		entry.add(meta, values);
+		registerItemEntry(item, entry);
+	}
+
+	/**
+	 * registers an Item Meta-sensitive
+	 * @param stack
+	 * @param value
+	 */
+	public static void registerMultiItemEntry(Item item, int meta, int values) {
+		TDEntrySimpleMultiItem entry = new TDEntrySimpleMultiItem();
+		if(itemEntries.containsKey(item)) {
+			TDEntryItem old = itemEntries.get(item);
+			if(old instanceof TDEntrySimpleItem) {
+				entry.add((TDEntrySimpleItem)old);
+			} else if(old instanceof TDEntrySimpleMultiItem) {
+				entry = (TDEntrySimpleMultiItem) old;
+			}
+		}
+		entry.add(meta, values);
+		registerItemEntry(item, entry);
+	}
+
+	/**
+	 * registers an ItemStack Meta-sensitive
+	 * @param stack
+	 * @param value
+	 */
+	public static void registerMultiItemEntry(ItemStack stack, int value) {
+		registerMultiItemEntry(stack.getItem(), stack.getItemDamage(), value);
 	}
 	
 	/**

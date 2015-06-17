@@ -21,6 +21,8 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
 
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY, canBeDeactivated=false)
@@ -33,6 +35,9 @@ public class ModTechMobs {
 	public static CommonProxy proxy;
 	
 	public static ConfigHandler config;
+
+	public static String[] cTileValues;
+	public static String[] cItemValues;
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
@@ -75,6 +80,47 @@ public class ModTechMobs {
 		//init TD effects
 		TDEffects.init();
 		TDValues.init();
+
+		for(String s : cTileValues) {
+			String[] s1 = s.split(":");
+			if(s1.length == 2) {
+				try {
+					Class clazz = Class.forName(s1[0]);
+					int value = Integer.parseInt(s1[1]);
+					TDValues.registerTileEntityEntry(clazz, value);
+				} catch (ClassNotFoundException e) {
+					LogHelper.warn("Custom TileEntity not found! Please check configs! (" + s + ")");
+				} catch (ClassCastException e) {
+					LogHelper.warn("Custom TileEntity Class is no TileEntity! Please check configs! (" + s + ")");
+				} catch (NumberFormatException e) {
+					LogHelper.warn("Invalid custom TE TechValue! Please check configs! (" + s + ")");
+				}
+			} else {
+				LogHelper.warn("Invalid custom TE TechValue! Please check configs! (" + s + ")");
+			}
+		}
+
+		for(String s : cItemValues) {
+			String[] s1 = s.split(":");
+			if(s1.length < 5) {
+				try {
+					Item item = GameRegistry.findItem(s1[0], s1[1]);
+					if(item == null) {
+						LogHelper.warn("Custom Item not found! Please check configs! (" + s + ")");
+						continue;
+					}
+					if(s1.length == 4) {
+						TDValues.registerItemEntry(item, Integer.parseInt(s1[2]), Integer.parseInt(s1[3]));
+					} else {
+						TDValues.registerItemEntry(item, Integer.parseInt(s1[2]));
+					}
+				} catch (NumberFormatException e) {
+					LogHelper.warn("Invalid custom Item TechValue! Please check configs! (" + s + ")");
+				}
+			} else {
+				LogHelper.warn("Invalid custom Item TechValue! Please check configs! (" + s + ")");
+			}
+		}
 		
 		LogHelper.info(Reference.MOD_NAME + ", version: " + Reference.VERSION +  ", has successfully loaded!");
 	}

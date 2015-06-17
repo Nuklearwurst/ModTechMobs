@@ -52,6 +52,8 @@ public class ModEntities {
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, frozen);
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, wasteland);
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, beach);
+		EntityRegistry.removeSpawn(EntityCyberZombie.class, EnumCreatureType.monster, nether);
+		EntityRegistry.removeSpawn(EntityCyberZombie.class, EnumCreatureType.monster, end);
 
 	}
 
