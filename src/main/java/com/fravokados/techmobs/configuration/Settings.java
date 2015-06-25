@@ -103,4 +103,8 @@ public class Settings {
 		public static boolean INJECT_SCANNING_AI = false;
 		
 	}
+
+	public static class  TDPlayerEffects {
+		public static int FAKE_EXPLOSION_VALUE = 500;
+	}
 }

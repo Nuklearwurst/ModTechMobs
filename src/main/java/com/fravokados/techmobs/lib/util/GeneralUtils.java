@@ -69,4 +69,8 @@ public class GeneralUtils {
 			return def;
 		}
 	}
+
+	public static int getDifference(int i1, int i2) {
+		return Math.max(i1, i2) - Math.min(i1, i2);
+	}
 }

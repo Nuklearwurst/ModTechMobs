@@ -5,6 +5,7 @@ import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
 import com.fravokados.techmobs.techdata.effects.mob.TDMobEffectEquipment;
 import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffectFakeExplosion;
 import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffectPotion;
 import com.fravokados.techmobs.techdata.effects.world.TDWorldEffect;
 import net.minecraft.entity.EntityLivingBase;
@@ -142,5 +143,6 @@ public class TDEffects {
 			addPlayerEffect(new TDPlayerEffectPotion(100, 18, 200, 1, "chat.effect.potion").setMessageColor(EnumChatFormatting.DARK_AQUA));
 			//world effects
 		}
+		addPlayerEffect(new TDPlayerEffectFakeExplosion());
 	}
 }
