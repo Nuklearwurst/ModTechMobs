@@ -48,10 +48,10 @@ public class ModTechMobs {
 		
 		//init keybindings
 		
-		//init items
-		ModItems.init();
-		//init blocks
-		ModBlocks.init();	
+		//registerItems items
+		ModItems.registerItems();
+		//registerBlocks blocks
+		ModBlocks.registerBlocks();
 	}
 	
 	@EventHandler

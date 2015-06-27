@@ -1,11 +1,10 @@
 package com.fravokados.techmobs.common;
 
-import net.minecraftforge.common.MinecraftForge;
-
+import com.fravokados.techmobs.common.handler.PlayerTickHandler;
 import com.fravokados.techmobs.common.handler.TMEventHandler;
 import com.fravokados.techmobs.techdata.TDTickManager;
-
 import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 
 public class CommonProxy {
 	
@@ -15,6 +14,9 @@ public class CommonProxy {
 		
 		//tickhandler
 		FMLCommonHandler.instance().bus().register(new TDTickManager());
+
+		//Player Tick Handler
+		FMLCommonHandler.instance().bus().register(new PlayerTickHandler());
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.fravokados.techmobs.common.handler;
 
+import com.fravokados.techmobs.common.SleepingManager;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -54,6 +56,13 @@ public class TMEventHandler {
 	@SubscribeEvent
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent evt) {
 		TechDataStorage.onPlayerLogout(evt);
+		//cleanup
+		SleepingManager.removePlayer(evt.player);
+	}
+
+	@SubscribeEvent
+	public void onPlayerWakeUp(PlayerWakeUpEvent evt) {
+		SleepingManager.onPlayerWakeUp(evt.entityPlayer);
 	}
 	
 	@SubscribeEvent

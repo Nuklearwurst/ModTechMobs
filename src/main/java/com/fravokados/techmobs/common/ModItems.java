@@ -1,9 +1,6 @@
 package com.fravokados.techmobs.common;
 
-import com.fravokados.techmobs.item.ItemMonsterDetector;
-import com.fravokados.techmobs.item.ItemMonsterDrop;
-import com.fravokados.techmobs.item.ItemTM;
-import com.fravokados.techmobs.item.ItemUpgradeTool;
+import com.fravokados.techmobs.item.*;
 import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.Strings;
 
@@ -15,11 +12,13 @@ public class ModItems {
 	public static final ItemTM monsterDetector = new ItemMonsterDetector();
 	public static final ItemTM monsterDrop = new ItemMonsterDrop();
 	public static final ItemTM upgradeTool = new ItemUpgradeTool();
+	public static final ItemTM item_cot = new ItemCot();
 	
 	
-	public static void init() {
+	public static void registerItems() {
 		GameRegistry.registerItem(monsterDetector, Strings.Item.MONSTER_DETECTOR);
 		GameRegistry.registerItem(monsterDrop, Strings.Item.MONSTER_DROP);
 		GameRegistry.registerItem(upgradeTool, Strings.Item.UPGRADE_TOOL);
+		GameRegistry.registerItem(item_cot, Strings.Item.COT);
 	}
 }

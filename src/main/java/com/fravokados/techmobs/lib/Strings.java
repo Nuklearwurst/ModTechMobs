@@ -18,6 +18,7 @@ public class Strings {
 	public static final class Block {
 		public static final String GATE_EXTENDER = "gateExtender";
 		public static final String REPROCESSOR = "reprocessor";
+		public static final String COT = "block_cot";
 	}
 	
 	public static final class Item {
@@ -26,6 +27,7 @@ public class Strings {
 		public static final String[] MONSTER_DROP_SUBTYPES = {"common"};
 		public static final String[] MONSTER_DROP_TOOLTIP = {"common"};
 		public static final String UPGRADE_TOOL = "upgradeTool";
+		public static final String COT = "item_cot";
 	}
 	
 	public static final class Chat {
