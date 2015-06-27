@@ -37,7 +37,7 @@ public class IC2UpgradeIntegration {
 				if(upgradeEjector != null && item.isItemEqual(upgradeEjector)) {
 					//TODO: Ejector Upgrade
 				} else if(upgradeOverclocker != null && item.isItemEqual(upgradeOverclocker)) {
-					//TODO: overclocker upgrade
+					return new UpgradeOverclocker(item.stackSize);
 				} else if(upgradeEnergyTier != null && item.isItemEqual(upgradeEnergyTier)) {
 					return new SimpleIntegerUpgrade(item.stackSize, 1, UpgradeTypes.ENERGY_TIER.id);
 				} else if(upgradeEnergyStorage != null && item.isItemEqual(upgradeEnergyStorage)) {

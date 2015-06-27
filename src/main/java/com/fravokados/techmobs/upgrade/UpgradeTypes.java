@@ -5,7 +5,7 @@ package com.fravokados.techmobs.upgrade;
  */
 public enum UpgradeTypes {
 	ENERGY_STORAGE("EnergyStorage"), ENERGY_TIER("EnergyTier"), OVERCLOCKER("Overclocker"), DISCONNECT_INCOMING("DisconnectIncoming"),
-	REVERSE_DIRECTION("ReverseDirection");
+	REVERSE_DIRECTION("ReverseDirection"), PRODUCTION_SPEED("ProductionSpeed"), ENERGY_USAGE("EnergieUsage");
 
 	public final String id;
 
