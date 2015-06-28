@@ -3,7 +3,7 @@ package com.fravokados.techmobs.item;
 import com.fravokados.techmobs.ModTechMobs;
 import com.fravokados.techmobs.lib.GUIIDs;
 import com.fravokados.techmobs.lib.Strings;
-import com.fravokados.techmobs.upgrade.IUpgradable;
+import com.fravokados.techmobs.api.upgrade.IUpgradable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;

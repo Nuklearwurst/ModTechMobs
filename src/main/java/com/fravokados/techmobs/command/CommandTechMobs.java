@@ -2,7 +2,7 @@ package com.fravokados.techmobs.command;
 
 import com.fravokados.techmobs.lib.util.GeneralUtils;
 import com.fravokados.techmobs.techdata.effects.TDEffects;
-import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.techmobs.api.techdata.effects.player.TDPlayerEffect;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -33,11 +33,6 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 	public void addChildCommand(SubCommand child) {
 		child.setParent(this);
 		children.add(child);
-	}
-
-	@Override
-	public int compareTo(Object o) {
-		return 0;
 	}
 
 	@Override
@@ -88,7 +83,7 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 					if (args[1].equals("player") && sender instanceof EntityPlayer) {
 						try {
 							int i = Integer.parseInt(args[2]);
-							List<TDPlayerEffect> list = TDEffects.getUsablePlayerEffects(i, sender.getCommandSenderName(), (EntityPlayer) sender);
+							List<TDPlayerEffect> list = TDEffects.getInstance().getUsablePlayerEffects(i, sender.getCommandSenderName(), (EntityPlayer) sender);
 							int index = GeneralUtils.random.nextInt(list.size());
 							int result = list.get(index).applyEffect(i, sender.getCommandSenderName(), (EntityPlayer) sender);
 							sender.addChatMessage(new ChatComponentText("Needed TechValue: " + result));

@@ -27,21 +27,14 @@ public class TDWorld {
 	
 	/**
 	 * saves chunkData to world
-	 * @param evt
-	 * @return
 	 */
 	public boolean saveChunkData(ChunkDataEvent.Save evt) {
 		//save existing data
-		if(chunkData.containsKey(evt.getChunk().getChunkCoordIntPair())) {
-			return chunkData.get(evt.getChunk().getChunkCoordIntPair()).save(evt);
-		}
-		return false;
+		return chunkData.containsKey(evt.getChunk().getChunkCoordIntPair()) && chunkData.get(evt.getChunk().getChunkCoordIntPair()).save(evt);
 	}
 	
 	/**
 	 * loads chunkData from disk
-	 * @param evt
-	 * @return
 	 */
 	public boolean loadChunkData(ChunkDataEvent.Load evt) {
 		ChunkCoordIntPair pos = evt.getChunk().getChunkCoordIntPair();
@@ -68,7 +61,6 @@ public class TDWorld {
 
 	/**
 	 * unloads a chunk techdata entry of this world
-	 * @param evt
 	 */
 	public void unloadChunk(ChunkEvent.Unload evt) {
 		chunkData.remove(evt.getChunk().getChunkCoordIntPair());		

@@ -1,8 +1,8 @@
 package com.fravokados.techmobs.plugin.ic2;
 
-import com.fravokados.techmobs.upgrade.IUpgradeDefinition;
-import com.fravokados.techmobs.upgrade.UpgradeStatCollection;
-import com.fravokados.techmobs.upgrade.UpgradeTypes;
+import com.fravokados.techmobs.api.upgrade.IUpgradeDefinition;
+import com.fravokados.techmobs.api.upgrade.UpgradeStatCollection;
+import com.fravokados.techmobs.api.upgrade.UpgradeTypes;
 
 /**
  * @author Nuklearwurst

@@ -1,6 +1,6 @@
 package com.fravokados.techmobs.inventory;
 
-import com.fravokados.techmobs.upgrade.IUpgradable;
+import com.fravokados.techmobs.api.upgrade.IUpgradable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

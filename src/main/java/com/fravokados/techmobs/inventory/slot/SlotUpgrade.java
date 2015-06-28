@@ -1,6 +1,6 @@
 package com.fravokados.techmobs.inventory.slot;
 
-import com.fravokados.techmobs.upgrade.IUpgradable;
+import com.fravokados.techmobs.api.upgrade.IUpgradable;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

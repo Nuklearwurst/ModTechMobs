@@ -1,5 +1,6 @@
 package com.fravokados.techmobs.item;
 
+import com.fravokados.techmobs.api.item.IItemAttackTargetListener;
 import com.fravokados.techmobs.lib.util.GeneralUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -82,8 +83,6 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 	
 	/**
 	 * returns the name of the entity or a special identifier for additional chat messages (eg. creeper)
-	 * @param e
-	 * @return
 	 */
 	private  String getSpecialEntityName(EntityLivingBase e) {
 		String name = e.getCommandSenderName();

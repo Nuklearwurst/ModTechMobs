@@ -105,6 +105,6 @@ public class Settings {
 	}
 
 	public static class  TDPlayerEffects {
-		public static int FAKE_EXPLOSION_VALUE = 500;
+		public static int FAKE_EXPLOSION_VALUE = 100;
 	}
 }

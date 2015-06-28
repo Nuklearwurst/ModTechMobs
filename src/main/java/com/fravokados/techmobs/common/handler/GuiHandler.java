@@ -4,7 +4,7 @@ import com.fravokados.techmobs.client.gui.GuiUpgradeTool;
 import com.fravokados.techmobs.inventory.ContainerUpgradeTool;
 import com.fravokados.techmobs.lib.GUIIDs;
 import com.fravokados.techmobs.lib.util.LogHelper;
-import com.fravokados.techmobs.upgrade.IUpgradable;
+import com.fravokados.techmobs.api.upgrade.IUpgradable;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

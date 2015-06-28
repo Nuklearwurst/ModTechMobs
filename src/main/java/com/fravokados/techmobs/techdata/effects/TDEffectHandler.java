@@ -4,8 +4,8 @@ import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.entity.ai.EntityAIScanArea;
 import com.fravokados.techmobs.lib.util.world.WorldHelper;
 import com.fravokados.techmobs.techdata.TDManager;
-import com.fravokados.techmobs.techdata.effects.mob.TDMobEffect;
-import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.techmobs.api.techdata.effects.mob.TDMobEffect;
+import com.fravokados.techmobs.api.techdata.effects.player.TDPlayerEffect;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -57,13 +57,13 @@ public class TDEffectHandler {
 				level = min + evt.world.rand.nextInt(level - min);				
 			}
 			int i = 0;
-			List<TDMobEffect> effects = TDEffects.getUsableMobEffects(level, evt.entityLiving);
+			List<TDMobEffect> effects = TDEffects.getInstance().getUsableMobEffects(level, evt.entityLiving);
 			while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS_MOB) {
 				//randomize effect order
 				level -= effects.get(evt.world.rand.nextInt(effects.size())).applyEffect(level, evt.entityLiving);
 				i++;
 				//update effectlist
-				effects = TDEffects.getUsableMobEffects(level, evt.entityLiving);
+				effects = TDEffects.getInstance().getUsableMobEffects(level, evt.entityLiving);
 			}
 		}
 	}
@@ -71,11 +71,11 @@ public class TDEffectHandler {
 	public static void applyRandomEffectOnPlayer(EntityPlayer entity, String username, Random rand) {
 		int level = TDManager.getPlayerScoutedTechLevel(entity);
 		int i = 0;
-		List<TDPlayerEffect> effects = TDEffects.getUsablePlayerEffects(level, username, entity);
+		List<TDPlayerEffect> effects = TDEffects.getInstance().getUsablePlayerEffects(level, username, entity);
 		while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS_PLAYER) {
 			level -= effects.get(rand.nextInt(effects.size())).applyEffect(level, username, MinecraftServer.getServer().getConfigurationManager().func_152612_a(username));
 			i++;
-			effects = TDEffects.getUsablePlayerEffects(level, username,  entity);
+			effects = TDEffects.getInstance().getUsablePlayerEffects(level, username, entity);
 		}
 		TDManager.setPlayerScoutedTechLevel(entity, level);
 	}

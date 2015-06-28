@@ -1,7 +1,7 @@
 package com.fravokados.techmobs.inventory;
 
-import com.fravokados.techmobs.upgrade.IUpgradeDefinition;
-import com.fravokados.techmobs.upgrade.IUpgradeInventory;
+import com.fravokados.techmobs.api.upgrade.IUpgradeDefinition;
+import com.fravokados.techmobs.api.upgrade.IUpgradeInventory;
 import com.fravokados.techmobs.upgrade.UpgradeHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

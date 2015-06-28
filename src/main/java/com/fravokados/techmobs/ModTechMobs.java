@@ -1,5 +1,6 @@
 package com.fravokados.techmobs;
 
+import com.fravokados.techmobs.api.DangerousTechnologyAPI;
 import com.fravokados.techmobs.command.CommandTechData;
 import com.fravokados.techmobs.command.CommandTechMobs;
 import com.fravokados.techmobs.command.CommandTechPlayer;
@@ -52,6 +53,8 @@ public class ModTechMobs {
 		ModItems.registerItems();
 		//registerBlocks blocks
 		ModBlocks.registerBlocks();
+		//init API
+		DangerousTechnologyAPI.effectRegistry = new TDEffects();
 	}
 	
 	@EventHandler
@@ -87,7 +90,8 @@ public class ModTechMobs {
 				try {
 					Class clazz = Class.forName(s1[0]);
 					int value = Integer.parseInt(s1[1]);
-					TDValues.registerTileEntityEntry(clazz, value);
+					//noinspection unchecked
+					TDValues.getInstance().registerTileEntityEntry(clazz, value);
 				} catch (ClassNotFoundException e) {
 					LogHelper.warn("Custom TileEntity not found! Please check configs! (" + s + ")");
 				} catch (ClassCastException e) {
@@ -110,9 +114,9 @@ public class ModTechMobs {
 						continue;
 					}
 					if(s1.length == 4) {
-						TDValues.registerItemEntry(item, Integer.parseInt(s1[2]), Integer.parseInt(s1[3]));
+						TDValues.getInstance().registerItemEntry(item, Integer.parseInt(s1[2]), Integer.parseInt(s1[3]));
 					} else {
-						TDValues.registerItemEntry(item, Integer.parseInt(s1[2]));
+						TDValues.getInstance().registerItemEntry(item, Integer.parseInt(s1[2]));
 					}
 				} catch (NumberFormatException e) {
 					LogHelper.warn("Invalid custom Item TechValue! Please check configs! (" + s + ")");

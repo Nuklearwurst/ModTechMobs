@@ -2,7 +2,7 @@ package com.fravokados.techmobs.client.gui;
 
 import com.fravokados.techmobs.inventory.ContainerUpgradeTool;
 import com.fravokados.techmobs.lib.Textures;
-import com.fravokados.techmobs.upgrade.IUpgradable;
+import com.fravokados.techmobs.api.upgrade.IUpgradable;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;

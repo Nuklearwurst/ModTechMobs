@@ -13,7 +13,7 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
-import com.fravokados.techmobs.item.IItemAttackTargetListener;
+import com.fravokados.techmobs.api.item.IItemAttackTargetListener;
 import com.fravokados.techmobs.techdata.TDManager;
 import com.fravokados.techmobs.techdata.effects.TDEffectHandler;
 import com.fravokados.techmobs.world.TechDataStorage;

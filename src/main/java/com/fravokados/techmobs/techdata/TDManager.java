@@ -8,9 +8,9 @@ import net.minecraft.world.chunk.Chunk;
 
 import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.lib.util.PlayerUtils;
-import com.fravokados.techmobs.lib.util.world.ChunkLocation;
+import com.fravokados.techmobs.api.util.ChunkLocation;
 import com.fravokados.techmobs.techdata.values.TDValues;
-import com.fravokados.techmobs.techdata.values.player.TDEntryItem;
+import com.fravokados.techmobs.api.techdata.values.player.TDEntryItem;
 import com.fravokados.techmobs.world.TechDataStorage;
 import com.fravokados.techmobs.world.techdata.TDChunk;
 
@@ -48,8 +48,6 @@ public class TDManager {
 
 	/**
 	 * updates (increases) the scouted techlevel by a value set in the configs
-	 * @param dimension
-	 * @param coord
 	 */
 	public static void updateScoutedTechLevel(int dimension, ChunkCoordIntPair coord) {
 		TDChunk data = getChunkData(dimension, coord);
@@ -67,7 +65,6 @@ public class TDManager {
 	
 	/**
 	 * updates (increases) the scouted techlevel by a value set in the configs
-	 * @param chunk
 	 */
 	public static void updateScoutedTechLevel(Chunk chunk) {
 		updateScoutedTechLevel(chunk.worldObj.provider.dimensionId, chunk.getChunkCoordIntPair());
@@ -76,13 +73,12 @@ public class TDManager {
 
 	/**
 	 * scans a players inventory and sets the techlevel
-	 * @param player
 	 */
 	public static void scanPlayer(EntityPlayer player) {
 		int value = 0;
 		for(ItemStack stack : player.inventory.armorInventory) {
 			if(stack != null) {
-				TDEntryItem item = TDValues.itemEntries.get(stack.getItem());
+				TDEntryItem item = TDValues.getInstance().getEntryItem(stack.getItem());
 				if(item != null) {
 					value += item.getTechLevelForItem(stack);
 				}
@@ -90,7 +86,7 @@ public class TDManager {
 		}
 		for(ItemStack stack : player.inventory.mainInventory) {
 			if(stack != null) {
-				TDEntryItem item = TDValues.itemEntries.get(stack.getItem());
+				TDEntryItem item = TDValues.getInstance().getEntryItem(stack.getItem());
 				if(item != null) {
 					value += item.getTechLevelForItem(stack);
 				}
@@ -101,7 +97,6 @@ public class TDManager {
 	
 	/**
 	 * updates (increases) the scouted techlevel by a value set in the configs
-	 * @param player
 	 */
 	public static void updatePlayerScoutedTechLevel(EntityPlayer player) {
 		int scouted = getPlayerScoutedTechLevel(player);
@@ -119,7 +114,6 @@ public class TDManager {
 	/**
 	 * updates player scouted techdata and scans if necessary
 	 * also adds player to the techplayers list if necessary
-	 * @param player
 	 */
 	public static void scanAndUpdatePlayerTD(EntityPlayer player) {
 		if(getPlayerScoutedTechLevel(player) >= getPlayerTechLevel(player)) {
@@ -149,18 +143,15 @@ public class TDManager {
 
 	/**
 	 * access the chunk data
-	 * @param dimension
-	 * @param coord
-	 * @return
 	 */
-	@Deprecated
-	public static TDChunk getChunkData(int dimension, ChunkCoordIntPair coord) {
+	private static TDChunk getChunkData(int dimension, ChunkCoordIntPair coord) {
 		return TechDataStorage.getInstance().getChunkData(coord, dimension);
 	}
 
 	/**
-	 * @param player
-	 * @return
+	 * gets or creates the player persistent nbt
+	 * @param player the player to retrieve the nbt from
+	 * @return NBT data of the given player
 	 */
 	public static NBTTagCompound getPlayerData(EntityPlayer player) {
 		NBTTagCompound nbt = PlayerUtils.getPersistentNBT(player).getCompoundTag(NBT_PLAYER_SAVE);

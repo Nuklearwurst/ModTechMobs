@@ -3,7 +3,7 @@ package com.fravokados.techmobs.world.techdata;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.ChunkDataEvent;
 
-import com.fravokados.techmobs.lib.util.world.ChunkLocation;
+import com.fravokados.techmobs.api.util.ChunkLocation;
 import com.fravokados.techmobs.world.TechDataStorage;
 
 /**
@@ -44,8 +44,6 @@ public class TDChunk {
 	
 	/**
 	 * save techdata for this chunk to disk
-	 * @param evt
-	 * @return
 	 */
 	public boolean save(ChunkDataEvent.Save evt) {
 		//if its empty we don't need to save
@@ -59,8 +57,6 @@ public class TDChunk {
 	
 	/**
 	 * loads techdata for this chunk from disk
-	 * @param evt
-	 * @return
 	 */
 	public boolean load(ChunkDataEvent.Load evt) {
 		NBTTagCompound data = evt.getData();

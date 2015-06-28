@@ -1,9 +1,9 @@
 package com.fravokados.techmobs.plugin.ic2;
 
 import com.fravokados.techmobs.plugin.PluginManager;
-import com.fravokados.techmobs.upgrade.IUpgradeDefinition;
-import com.fravokados.techmobs.upgrade.SimpleIntegerUpgrade;
-import com.fravokados.techmobs.upgrade.UpgradeTypes;
+import com.fravokados.techmobs.api.upgrade.IUpgradeDefinition;
+import com.fravokados.techmobs.api.upgrade.SimpleIntegerUpgrade;
+import com.fravokados.techmobs.api.upgrade.UpgradeTypes;
 import ic2.api.item.IC2Items;
 import net.minecraft.item.ItemStack;
 

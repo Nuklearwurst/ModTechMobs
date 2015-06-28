@@ -1,5 +1,7 @@
 package com.fravokados.techmobs.upgrade;
 
+import com.fravokados.techmobs.api.upgrade.IUpgrade;
+import com.fravokados.techmobs.api.upgrade.IUpgradeDefinition;
 import com.fravokados.techmobs.plugin.ic2.IC2UpgradeIntegration;
 import net.minecraft.item.ItemStack;
 

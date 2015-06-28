@@ -26,7 +26,7 @@ public class BuildcraftBuildersTechDataIntegration {
 		for (int i = 0; i < tiles.length; i++) {
 			try {
 				@SuppressWarnings("unchecked") Class<? extends TileEntity> clazz = (Class<? extends TileEntity>) Class.forName(tiles[i]);
-				TDValues.registerTileEntityEntry(clazz, values[i]);
+				TDValues.getInstance().registerTileEntityEntry(clazz, values[i]);
 			} catch (ClassNotFoundException e) {
 				LogHelper.warn(e, "Did not find Buildcraft class: " + tiles[i]);
 			} catch (ClassCastException e) {

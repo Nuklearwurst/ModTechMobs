@@ -1,6 +1,6 @@
 package com.fravokados.techmobs.command;
 
-import com.fravokados.techmobs.lib.util.world.ChunkLocation;
+import com.fravokados.techmobs.api.util.ChunkLocation;
 import com.fravokados.techmobs.lib.util.world.WorldHelper;
 import com.fravokados.techmobs.techdata.TDManager;
 import com.fravokados.techmobs.techdata.TDTickManager;

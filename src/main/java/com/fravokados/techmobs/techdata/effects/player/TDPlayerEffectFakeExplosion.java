@@ -1,5 +1,6 @@
 package com.fravokados.techmobs.techdata.effects.player;
 
+import com.fravokados.techmobs.api.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.techmobs.configuration.Settings;
 import net.minecraft.entity.player.EntityPlayer;
 
