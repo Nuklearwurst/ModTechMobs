@@ -5,4 +5,5 @@ package com.fravokados.techmobs.lib;
  */
 public class GUIIDs {
 	public static final int UPGRADE_TOOL = 0;
+	public static final int CREATIVE_TECHNOLOGY = 1;
 }

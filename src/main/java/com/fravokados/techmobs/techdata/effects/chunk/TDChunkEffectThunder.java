@@ -7,18 +7,18 @@ import net.minecraft.world.World;
 /**
  * @author Nuklearwurst
  */
-public class TDChunkEffectWeather extends TDChunkEffect {
+public class TDChunkEffectThunder extends TDChunkEffect {
 
-	private static final int value = 1000;
+	public static final int value = 10000;
 
 	@Override
-	public boolean isUsable(int techvalue, World world) {
-		return techvalue >= value && !world.isRaining();
+	public boolean isUsable(int techdata, World world) {
+		return techdata >= value && !world.isThundering() && world.isRaining();
 	}
 
 	@Override
 	public int applyEffect(int level, ChunkLocation chunkLocation, World world) {
-		world.setRainStrength(1);
+		world.setThunderStrength(1);
 		return value;
 	}
 }

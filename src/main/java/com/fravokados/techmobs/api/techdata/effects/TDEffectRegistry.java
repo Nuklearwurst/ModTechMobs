@@ -17,7 +17,7 @@ public interface TDEffectRegistry {
 
 	void addPlayerEffect(TDPlayerEffect effect);
 
-	void addWorldEffect(TDChunkEffect effect);
+	void addChunkEffect(TDChunkEffect effect);
 
 	List<TDMobEffect> getUsableMobEffects(int techData, EntityLivingBase entityLiving);
 

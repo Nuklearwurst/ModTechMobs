@@ -1,6 +1,6 @@
 package com.fravokados.techmobs.inventory;
 
-import com.fravokados.techmobs.tileentity.TileEntityGateExtender;
+import com.fravokados.techmobs.block.tileentity.TileEntityGateExtender;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

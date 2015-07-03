@@ -1,6 +1,6 @@
 package com.fravokados.techmobs.item;
 
-import com.fravokados.techmobs.creativetab.CreativeTabTechMobs;
+import com.fravokados.techmobs.ModTechMobs;
 import com.fravokados.techmobs.lib.Textures;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -11,7 +11,7 @@ public class ItemTM extends Item {
 
 	public ItemTM() {
 		super();
-		this.setCreativeTab(CreativeTabTechMobs.TAB_TM);
+		this.setCreativeTab(ModTechMobs.TAB_TM);
 	}
 	
 	public ItemTM(String name) {

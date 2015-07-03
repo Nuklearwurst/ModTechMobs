@@ -2,6 +2,8 @@ package com.fravokados.techmobs.techdata.values;
 
 import com.fravokados.techmobs.api.DangerousTechnologyAPI;
 import com.fravokados.techmobs.api.techdata.values.TDValueRegistry;
+import com.fravokados.techmobs.api.techdata.values.player.ITechdataItem;
+import com.fravokados.techmobs.api.techdata.values.world.ITechdataTile;
 import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.api.techdata.values.player.TDEntryItem;
@@ -20,17 +22,16 @@ import java.util.Map;
 
 /**
  * contains TDValue lists for blocks and items
- * 
- * @author Nuklearwurst
  *
+ * @author Nuklearwurst
  */
-	public class TDValues implements TDValueRegistry {
+public class TDValues implements TDValueRegistry {
 
 	/**
 	 * Contains information about Tileentities
 	 */
 	public final Map<Class<? extends TileEntity>, TDEntryTileEntity> tileEntityEntries = new HashMap<Class<? extends TileEntity>, TDEntryTileEntity>();
-	
+
 	/**
 	 * Contains information about Items
 	 */
@@ -42,13 +43,13 @@ import java.util.Map;
 	@Override
 	public void registerItemEntry(Item item, TDEntryItem entry) {
 		//unneeded
-		if(entry == null && itemEntries.containsKey(item)) {
+		if (entry == null && itemEntries.containsKey(item)) {
 			LogHelper.warn("Removing item-techdata mapping!");
 			itemEntries.remove(item);
 			return;
 		}
 		//warning
-		if(itemEntries.containsKey(item)) {
+		if (itemEntries.containsKey(item)) {
 			LogHelper.error("Error registering item-techdata!");
 			LogHelper.error("The item " + item.getUnlocalizedName() + " already has an associated techdata entry!");
 			LogHelper.error("Overwriting existing data!");
@@ -65,17 +66,24 @@ import java.util.Map;
 		registerItemEntry(item, new TDEntrySimpleItem(value));
 	}
 
+	@Override
+	public void registerItemEntry(ItemStack item, int value) {
+		if (item != null) {
+			registerItemEntry(item.getItem(), value);
+		}
+	}
+
 	/**
 	 * registers multiple Item Meta-sensitive with
 	 */
 	@Override
 	public void registerMultiItemEntry(Item item, int[] meta, int[] values) {
 		TDEntrySimpleMultiItem entry = new TDEntrySimpleMultiItem();
-		if(itemEntries.containsKey(item)) {
+		if (itemEntries.containsKey(item)) {
 			TDEntryItem old = itemEntries.get(item);
-			if(old instanceof TDEntrySimpleItem) {
-				entry.add((TDEntrySimpleItem)old);
-			} else if(old instanceof TDEntrySimpleMultiItem) {
+			if (old instanceof TDEntrySimpleItem) {
+				entry.add((TDEntrySimpleItem) old);
+			} else if (old instanceof TDEntrySimpleMultiItem) {
 				entry = (TDEntrySimpleMultiItem) old;
 			}
 		}
@@ -89,11 +97,11 @@ import java.util.Map;
 	@Override
 	public void registerMultiItemEntry(Item item, int meta, int values) {
 		TDEntrySimpleMultiItem entry = new TDEntrySimpleMultiItem();
-		if(itemEntries.containsKey(item)) {
+		if (itemEntries.containsKey(item)) {
 			TDEntryItem old = itemEntries.get(item);
-			if(old instanceof TDEntrySimpleItem) {
-				entry.add((TDEntrySimpleItem)old);
-			} else if(old instanceof TDEntrySimpleMultiItem) {
+			if (old instanceof TDEntrySimpleItem) {
+				entry.add((TDEntrySimpleItem) old);
+			} else if (old instanceof TDEntrySimpleMultiItem) {
 				entry = (TDEntrySimpleMultiItem) old;
 			}
 		}
@@ -108,7 +116,7 @@ import java.util.Map;
 	public void registerMultiItemEntry(ItemStack stack, int value) {
 		registerMultiItemEntry(stack.getItem(), stack.getItemDamage(), value);
 	}
-	
+
 	/**
 	 * registers a simple Item entry
 	 */
@@ -116,20 +124,20 @@ import java.util.Map;
 	public void registerItemEntry(Item item, int damage, int value) {
 		registerItemEntry(item, new TDEntrySimpleItem(damage, value));
 	}
-	
+
 	/**
 	 * registers a new TileEntityEntry
 	 */
 	@Override
 	public void registerTileEntityEntry(Class<? extends TileEntity> clazz, TDEntryTileEntity entry) {
 		//unneeded
-		if(entry == null && tileEntityEntries.containsKey(clazz)) {
+		if (entry == null && tileEntityEntries.containsKey(clazz)) {
 			LogHelper.warn("Removing tileentity-techdata mapping!");
 			tileEntityEntries.remove(clazz);
 			return;
 		}
 		//warning
-		if(tileEntityEntries.containsKey(clazz)) {
+		if (tileEntityEntries.containsKey(clazz)) {
 			LogHelper.error("Error registering tileentity-techdata!");
 			LogHelper.error("The tileentity " + clazz.toString() + " already has an associated techdata entry!");
 			LogHelper.error("Overwriting existing data!");
@@ -137,7 +145,7 @@ import java.util.Map;
 		tileEntityEntries.put(clazz, entry);
 		LogHelper.info("Registered TileEntity: " + clazz + " with entry: " + entry);
 	}
-	
+
 	/**
 	 * registers a new TileEntityEntry with a fixed value
 	 */
@@ -156,9 +164,31 @@ import java.util.Map;
 		return itemEntries.get(item);
 	}
 
+	@Override
+	public int getTechDataForItem(ItemStack stack) {
+		TDEntryItem item = TDValues.getInstance().getEntryItem(stack.getItem());
+		if (item != null) {
+			return item.getTechLevelForItem(stack);
+		} else if (stack.getItem() instanceof ITechdataItem) {
+			return ((ITechdataItem) stack.getItem()).getTechValue(stack);
+		}
+		return 0;
+	}
+
+	@Override
+	public int getTechDataForTileEntity(TileEntity te) {
+		//TODO check if asSubclass is necessary
+		TDEntryTileEntity entry = TDValues.getInstance().getEntryTileEntity(te.getClass().asSubclass(TileEntity.class));
+		if (entry != null) {
+			return entry.getTechValueForTileEntity(te);
+		} else if (te instanceof ITechdataTile) {
+			return ((ITechdataTile) te).getTechData();
+		}
+		return 0;
+	}
 
 	public static void init() {
-		if(Settings.DEBUG) {
+		if (Settings.DEBUG) {
 			//tileentities
 			getInstance().registerTileEntityEntry(TileEntityFurnace.class, 1000);
 			//items

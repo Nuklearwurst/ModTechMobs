@@ -25,7 +25,7 @@ public class ItemCot extends ItemTM {
 			return false;
 		} else {
 			y++;
-			BlockCot blockCot = (BlockCot) ModBlocks.cot;
+			BlockCot blockCot = (BlockCot) ModBlocks.block_cot;
 			int rotation = MathHelper.floor_double((double) (entityPlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			byte offsetX = 0;
 			byte offsetZ = 0;

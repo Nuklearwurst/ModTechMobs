@@ -2,8 +2,7 @@ package com.fravokados.techmobs.api.techdata.effects.player;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 public class TDPlayerEffectPotion extends TDPlayerEffect {
 
@@ -11,8 +10,7 @@ public class TDPlayerEffectPotion extends TDPlayerEffect {
 	private final int potionId;
 	private final int duration;
 	private final int multiplier;
-	private String chatMessage = null;
-	private EnumChatFormatting color = null;
+	private IChatComponent chatMessage = null;
 
 	public TDPlayerEffectPotion(int value, int potionId, int duration, int multiplier) {
 		this.value = value;
@@ -21,24 +19,18 @@ public class TDPlayerEffectPotion extends TDPlayerEffect {
 		this.multiplier = multiplier;
 	}
 
-	public TDPlayerEffectPotion(int value, int potionId, int duration, int multiplier, String msg) {
+	public TDPlayerEffectPotion(int value, int potionId, int duration, int multiplier, IChatComponent msg) {
 		this(value, potionId, duration, multiplier);
 		this.chatMessage = msg;
 	}
 
-	public TDPlayerEffectPotion setMessage(String msg) {
+	public TDPlayerEffectPotion setMessage(IChatComponent msg) {
 		this.chatMessage = msg;
-		return this;
-	}
-
-	public TDPlayerEffectPotion setMessageColor(EnumChatFormatting f) {
-		color = f;
 		return this;
 	}
 	
-	public TDPlayerEffectPotion setMessageAndColor(String msg, EnumChatFormatting f) {
+	public TDPlayerEffectPotion setMessageAndColor(IChatComponent msg) {
 		this.chatMessage = msg;
-		this.color = f;
 		return this;
 	}
 
@@ -52,11 +44,8 @@ public class TDPlayerEffectPotion extends TDPlayerEffect {
 	public int applyEffect(int techvalue, String username, EntityPlayer entity) {
 		entity.addPotionEffect(new PotionEffect(potionId, duration, multiplier));
 		if(chatMessage != null) {
-			ChatComponentTranslation chat = new ChatComponentTranslation(chatMessage);
-			if(color != null) {
-				chat.getChatStyle().setColor(color);
-			}
-			entity.addChatComponentMessage(chat);
+			chatMessage.getChatStyle().setItalic(true);
+			entity.addChatComponentMessage(chatMessage);
 		}
 		return value;
 	}

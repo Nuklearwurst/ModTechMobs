@@ -1,15 +1,15 @@
 package com.fravokados.techmobs.block;
 
+import com.fravokados.techmobs.ModTechMobs;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.fravokados.techmobs.creativetab.CreativeTabTechMobs;
 import com.fravokados.techmobs.lib.Strings;
 import com.fravokados.techmobs.lib.Textures;
-import com.fravokados.techmobs.tileentity.TileEntityGateExtender;
+import com.fravokados.techmobs.block.tileentity.TileEntityGateExtender;
 
 
 /**
@@ -23,7 +23,7 @@ public class BlockGateExtender extends BlockTM implements ITileEntityProvider {
 	public BlockGateExtender() {
 		super(Material.wood);
 		this.setBlockName(Strings.Block.GATE_EXTENDER);
-		this.setCreativeTab(CreativeTabTechMobs.TAB_TM);
+		this.setCreativeTab(ModTechMobs.TAB_TM);
 	}
 
 	@Override

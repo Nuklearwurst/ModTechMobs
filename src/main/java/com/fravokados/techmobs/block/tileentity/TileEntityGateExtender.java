@@ -1,4 +1,4 @@
-package com.fravokados.techmobs.tileentity;
+package com.fravokados.techmobs.block.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;

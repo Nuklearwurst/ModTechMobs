@@ -14,6 +14,8 @@ public interface TDValueRegistry {
 
 	void registerItemEntry(Item item, int value);
 
+	void registerItemEntry(ItemStack item, int value);
+
 	void registerMultiItemEntry(Item item, int[] meta, int[] values);
 
 	void registerMultiItemEntry(Item item, int meta, int values);
@@ -29,4 +31,8 @@ public interface TDValueRegistry {
 	TDEntryTileEntity getEntryTileEntity(Class< ? extends TileEntity> clazz);
 
 	TDEntryItem getEntryItem(Item item);
+
+	int getTechDataForTileEntity(TileEntity te);
+
+	int getTechDataForItem(ItemStack item);
 }

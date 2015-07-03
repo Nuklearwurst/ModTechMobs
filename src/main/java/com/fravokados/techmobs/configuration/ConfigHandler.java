@@ -42,13 +42,13 @@ public class ConfigHandler {
 		
 		Settings.TechData.MAX_EFFECTS_MOB = config.getInt(TechData.MAX_EFFECTS_MOB, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.MAX_EFFECTS_MOB, 0, Integer.MAX_VALUE, "Maximum number of effects that can be applied to one mob");
 		Settings.TechData.MAX_EFFECTS_PLAYER = config.getInt(TechData.MAX_EFFECTS_PLAYER, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.MAX_EFFECTS_PLAYER, 0, Integer.MAX_VALUE, "Maximum number of effects that can be applied to one player");
-		Settings.TechData.MAX_EFFECTS_WORLD = config.getInt(TechData.MAX_EFFECTS_WORLD, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.MAX_EFFECTS_WORLD, 0, Integer.MAX_VALUE, "Maximum number of effects that can be applied to one chunk");
+		Settings.TechData.MAX_EFFECTS_CHUNK = config.getInt(TechData.MAX_EFFECTS_WORLD, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.MAX_EFFECTS_WORLD, 0, Integer.MAX_VALUE, "Maximum number of effects that can be applied to one chunk");
 		Settings.TechData.TD_EFFECT_CHANCE = config.getInt(TechData.TD_EFFECT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_EFFECT_CHANCE, 0, Integer.MAX_VALUE,	"chance that an techdata effect gets applied to a mob.\ntechvalue out of n.\nlower value means higher chance");
 		Settings.TechData.TD_EFFECT_MIN = config.getInt(TechData.TD_EFFECT_MIN, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_EFFECT_MIN, 0, Integer.MAX_VALUE, "Minimum strength of the effects");
 		Settings.TechData.TD_EFFECT_MIN_FACTOR = config.getFloat(TechData.TD_EFFECT_MIN_FACTOR, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_EFFECT_MIN_FACTOR, 0, Float.MAX_VALUE, "Minimum strength of the effects scaling with techdata");
 		//TODO check min values
 		Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE = config.getInt(TechData.TD_RANDOM_PLAYER_EVENT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE, 0, Integer.MAX_VALUE, "chance that a techdata effect is applied to a player with high techvalue\n(1 / n)\nSetting this to 0 will disable random player effects");
-		Settings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE = config.getInt(TechData.TD_RANDOM_WORLD_EVENT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE, 0, Integer.MAX_VALUE, "chance that a random chunk effect gets triggered\n(1 / n)\nSetting this to 0 will disable random chunk effects");
+		Settings.TechData.TD_RANDOM_CHUNK_EVENT_CHANCE = config.getInt(TechData.TD_RANDOM_WORLD_EVENT_CHANCE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.TD_RANDOM_WORLD_EVENT_CHANCE, 0, Integer.MAX_VALUE, "chance that a random chunk effect gets triggered\n(1 / n)\nSetting this to 0 will disable random chunk effects");
 		Settings.TechData.SAFE_TECH_VALUE = config.getInt(TechData.SAFE_TECH_VALUE, Keys.CATEGORY_TECH_DATA, DefaultSettings.TechData.SAFE_TECH_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE, "a techvalue below this value is considered safe (releveant is some special cases)\nSettings this to a high number will not protect the players!");
 
 		//note: this doesn't need server client synchronization as techdata only ever gets evaluated on the server side
@@ -78,13 +78,13 @@ public class ConfigHandler {
 		prop.comment = "The percentage of chunks that get scanned for each step (in relation to the maximal amount of chunks that would otherwise be scanned)";
 		Settings.TechScanning.SPLIT_STEPS_VALUE = prop.getDoubleList();
 		
-		Settings.TechScanning.INJECT_SCANNING_AI = config.getBoolean(TechScanning.INJECT_SCANNING_AI, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.INJECT_SCANNING_AI, "Inject Scanning AI into vanilla mobs during spawn\nThis is experimental!\nDon't enable this if you don't know what you are doing!");
+		Settings.TechScanning.INJECT_SCANNING_AI = config.getInt(TechScanning.INJECT_SCANNING_AI, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.INJECT_SCANNING_AI, 0, Integer.MAX_VALUE, "Inject Scanning AI into vanilla mobs during spawn\nThis is experimental!\nchance (n out of value) that a zombie or skeleton will spawn with scanning ai");
 
 		////////////
 		// DEBUG //
 		///////////
 
-		if(Settings.IS_OBFUSCATED) {
+		if(!Settings.IS_OBFUSCATED) {
 			Settings.DEBUG = config.getBoolean(Keys.Debug.DEBUG, Configuration.CATEGORY_GENERAL, DefaultSettings.Debug.DEBUG, "Enables dev debug features");
 		}
 		Settings.DEBUG_TESTING = config.getBoolean(Keys.Debug.DEBUG_TESTING, Configuration.CATEGORY_GENERAL, DefaultSettings.Debug.DEBUG_TESTING, "Enables debug testing features");

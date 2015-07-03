@@ -13,6 +13,13 @@ import net.minecraft.item.ItemStack;
  */
 public class IC2TechDataIntegration {
 
+	public static ItemStack itemQuantumHelmet;
+	public static ItemStack itemQuantumArmor;
+	public static ItemStack itemQuantumLeggins;
+	public static ItemStack itemQuantumBoots;
+	public static ItemStack itemNanoSaber;
+	public static ItemStack itemChainsaw;
+
 	public static void init() {
 		if (!PluginManager.ic2Activated()) {
 			return;
@@ -22,6 +29,16 @@ public class IC2TechDataIntegration {
 		loadTileEntityValues();
 		loadItemValues();
 		loadEffects();
+	}
+
+	private static void loadItems() {
+		itemNanoSaber = IC2Items.getItem("nanoSaber");
+
+		itemQuantumHelmet = IC2Items.getItem("quantumHelmet");
+		itemQuantumArmor = IC2Items.getItem("quantumBodyarmor");
+		itemQuantumLeggins = IC2Items.getItem("quantumLeggings");
+		itemQuantumBoots = IC2Items.getItem("quantumBoots");
+		itemChainsaw = IC2Items.getItem("chainsaw");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -126,74 +143,73 @@ public class IC2TechDataIntegration {
 		////////////////////
 		// Electric Tools //
 		////////////////////
-
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("miningDrill").getItem(), 15);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("diamondDrill").getItem(), 30);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("iridiumDrill").getItem(), 200);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("chainsaw").getItem(), 10);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("electricWrench").getItem(), 3);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("electricTreetap").getItem(), 4);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("miningLaser").getItem(), 100);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("ecMeter").getItem(), 8);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("odScanner").getItem(), 20);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("ovScanner").getItem(), 35);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("obscurator").getItem(), 30);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("frequencyTransmitter").getItem(), 30);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoSaber").getItem(), 100);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("enabledNanoSaber").getItem(), 120);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("toolbox").getItem(), 5);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("miningDrill"), 15);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("diamondDrill"), 30);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("iridiumDrill"), 200);
+		TDValues.getInstance().registerItemEntry(itemChainsaw, 10);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("electricWrench"), 3);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("electricTreetap"), 4);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("miningLaser"), 100);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("ecMeter"), 8);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("odScanner"), 20);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("ovScanner"), 35);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("obscurator"), 30);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("frequencyTransmitter"), 30);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoSaber"), 100);
+		TDValues.getInstance().registerItemEntry(itemNanoSaber, 120);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("toolbox"), 5);
 
 		///////////
 		// Armor //
 		///////////
 
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("hazmatHelmet").getItem(), 30);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("hazmatChestplate").getItem(), 40);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("hazmatLeggings").getItem(), 30);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("hazmatBoots").getItem(), 25);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("hazmatHelmet"), 30);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("hazmatChestplate"), 40);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("hazmatLeggings"), 30);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("hazmatBoots"), 25);
 
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("compositeArmor").getItem(), 40);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("compositeArmor"), 40);
 
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoHelmet").getItem(), 100);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoBodyarmor").getItem(), 300);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoLeggings").getItem(), 150);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoBoots").getItem(), 100);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoHelmet"), 100);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoBodyarmor"), 300);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoLeggings"), 150);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nanoBoots"), 100);
 
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("quantumHelmet").getItem(), 300);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("quantumBodyarmor").getItem(), 600);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("quantumLeggings").getItem(), 400);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("quantumBoots").getItem(), 300);
+		TDValues.getInstance().registerItemEntry(itemQuantumHelmet, 300);
+		TDValues.getInstance().registerItemEntry(itemQuantumArmor, 600);
+		TDValues.getInstance().registerItemEntry(itemQuantumLeggins, 400);
+		TDValues.getInstance().registerItemEntry(itemQuantumBoots, 300);
 
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("jetpack").getItem(), 40);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("electricJetpack").getItem(), 60);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("jetpack"), 40);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("electricJetpack"), 60);
 
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("batPack").getItem(), 20);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("advbatPack").getItem(), 40);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("lapPack").getItem(), 70);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("energyPack").getItem(), 120);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("batPack"), 20);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("advbatPack"), 40);
+//		TDValues.getInstance().registerItemEntry(IC2Items.getItem("lapPack"), 70); legacy
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("energyPack"), 100);
 
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("cfPack").getItem(), 16);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("solarHelmet").getItem(), 30);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("staticBoots").getItem(), 20);
-		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nightvisionGoggles").getItem(), 50);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("cfPack"), 16);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("solarHelmet"), 30);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("staticBoots"), 20);
+		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nightvisionGoggles"), 50);
 	}
 
 	private static void loadEffects() {
 		DangerousTechnologyAPI.effectRegistry.addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
-				IC2Items.getItem("enabledNanoSaber"),
-				IC2Items.getItem("quantumHelmet"),
-				IC2Items.getItem("quantumBodyarmor"),
-				IC2Items.getItem("quantumLeggings"),
-				IC2Items.getItem("quantumBoots")
-		}, false, false, new int[]{4000, 1000, 4000, 2000, 2000}).setDoesArmorDrop(false));
+				itemNanoSaber,
+				itemQuantumHelmet,
+				itemQuantumArmor,
+				itemQuantumLeggins,
+				itemQuantumBoots
+		}, false, false, new int[]{4000, 1000, 4000, 2000, 2000}).setDoesArmorDrop(false).checkContents());
 
 
 		DangerousTechnologyAPI.effectRegistry.addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
-				IC2Items.getItem("chainsaw"),
+				itemChainsaw,
 				IC2Items.getItem("nanoHelmet"),
 				IC2Items.getItem("nanoBodyarmor"),
 				IC2Items.getItem("nanoLeggings"),
 				IC2Items.getItem("nanoBoots")
-		}, false, false, new int[]{2000, 500, 2000, 1000, 1000}).setDoesArmorDrop(false));
+		}, false, false, new int[]{2000, 500, 2000, 1000, 1000}).setDoesArmorDrop(false).checkContents());
 	}
 }

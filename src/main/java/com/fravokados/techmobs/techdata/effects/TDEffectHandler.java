@@ -1,17 +1,12 @@
 package com.fravokados.techmobs.techdata.effects;
 
-import com.fravokados.techmobs.configuration.Settings;
-import com.fravokados.techmobs.entity.ai.EntityAIScanArea;
-import com.fravokados.techmobs.lib.util.world.WorldHelper;
-import com.fravokados.techmobs.techdata.TDManager;
 import com.fravokados.techmobs.api.techdata.effects.mob.TDMobEffect;
 import com.fravokados.techmobs.api.techdata.effects.player.TDPlayerEffect;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityZombie;
+import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.lib.util.WorldUtils;
+import com.fravokados.techmobs.techdata.TDManager;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
@@ -26,26 +21,13 @@ import java.util.Random;
  */
 public class TDEffectHandler {
 	
-	public static void onLivingSpawn(LivingSpawnEvent.CheckSpawn evt) {
+	public static void onLivingSpawn(LivingSpawnEvent evt) {
 		if(evt.entity.worldObj.isRemote || !(evt.entityLiving instanceof IMob)) {
 			return;
 		}
 		
-		/////////////////////////
-		
-		if(Settings.TechScanning.INJECT_SCANNING_AI) {
-			//WIP
-			if(evt.entityLiving instanceof EntityZombie || evt.entityLiving instanceof EntitySkeleton) {
-				EntityLiving e = ((EntityLiving)evt.entityLiving);
-				e.tasks.addTask(3, new EntityAIScanArea(e));
-			}
-		}
-		
-		////////////////////////
-		
-		
 		//localize and read chunk
-		ChunkCoordIntPair coord = WorldHelper.convertToChunkCoord(evt.x, evt.z);
+		ChunkCoordIntPair coord = WorldUtils.convertToChunkCoord(evt.x, evt.z);
 		int level = TDManager.getScoutedTechLevel(evt.world.provider.dimensionId, coord);
 		if(level <= 0) {
 			return;
@@ -73,9 +55,9 @@ public class TDEffectHandler {
 		int i = 0;
 		List<TDPlayerEffect> effects = TDEffects.getInstance().getUsablePlayerEffects(level, username, entity);
 		while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS_PLAYER) {
-			level -= effects.get(rand.nextInt(effects.size())).applyEffect(level, username, MinecraftServer.getServer().getConfigurationManager().func_152612_a(username));
-			i++;
+			level -= effects.get(rand.nextInt(effects.size())).applyEffect(level, username, entity);
 			effects = TDEffects.getInstance().getUsablePlayerEffects(level, username, entity);
+			i++;
 		}
 		TDManager.setPlayerScoutedTechLevel(entity, level);
 	}

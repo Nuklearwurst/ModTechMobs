@@ -4,14 +4,13 @@ import com.fravokados.techmobs.api.DangerousTechnologyAPI;
 import com.fravokados.techmobs.command.CommandTechData;
 import com.fravokados.techmobs.command.CommandTechMobs;
 import com.fravokados.techmobs.command.CommandTechPlayer;
-import com.fravokados.techmobs.common.CommonProxy;
-import com.fravokados.techmobs.common.ModBlocks;
-import com.fravokados.techmobs.common.ModEntities;
-import com.fravokados.techmobs.common.ModItems;
+import com.fravokados.techmobs.common.*;
 import com.fravokados.techmobs.common.handler.GuiHandler;
 import com.fravokados.techmobs.configuration.ConfigHandler;
 import com.fravokados.techmobs.lib.Reference;
+import com.fravokados.techmobs.lib.Strings;
 import com.fravokados.techmobs.lib.util.LogHelper;
+import com.fravokados.techmobs.network.ModNetworkManager;
 import com.fravokados.techmobs.plugin.PluginManager;
 import com.fravokados.techmobs.techdata.effects.TDEffects;
 import com.fravokados.techmobs.techdata.values.TDValues;
@@ -23,46 +22,60 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY, canBeDeactivated=false)
 public class ModTechMobs {
-	
+
 	@Instance(value = Reference.MOD_ID)
 	public static ModTechMobs instance;
 	
 	@SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_SERVER)
 	public static CommonProxy proxy;
+
+	public static final CreativeTabs TAB_TM = new CreativeTabs(Strings.CREATIVE_TAB) {
+		@Override
+		public Item getTabIconItem() {
+			//TODO proper creative tab item icon
+			return Items.rotten_flesh;
+		}
+	};
 	
 	public static ConfigHandler config;
 
 	public static String[] cTileValues;
 	public static String[] cItemValues;
-	
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
 		//load config
 		config = new ConfigHandler(evt.getSuggestedConfigurationFile());
 		config.load(true);
 		//init networking
-		
+
 		//init keybindings
-		
+
 		//registerItems items
 		ModItems.registerItems();
 		//registerBlocks blocks
 		ModBlocks.registerBlocks();
 		//init API
 		DangerousTechnologyAPI.effectRegistry = new TDEffects();
+		DangerousTechnologyAPI.valueRegistry = new TDValues();
+		DangerousTechnologyAPI.creativeTab = TAB_TM;
 	}
-	
+
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
 		//init modintegration
 		PluginManager.init();
+
 		//register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+
 		//register TileEntities
 		ModBlocks.registerTileEntities();
 		
@@ -76,6 +89,12 @@ public class ModTechMobs {
 		
 		//load Entities
 		ModEntities.init();
+
+		//load recipes
+		ModRecipes.init();
+
+		//init networking
+		ModNetworkManager.init();
 	}
 	
 	@EventHandler

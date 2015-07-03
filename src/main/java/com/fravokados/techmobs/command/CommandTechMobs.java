@@ -1,12 +1,11 @@
 package com.fravokados.techmobs.command;
 
+import com.fravokados.techmobs.api.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.techmobs.lib.util.GeneralUtils;
 import com.fravokados.techmobs.techdata.effects.TDEffects;
-import com.fravokados.techmobs.api.techdata.effects.player.TDPlayerEffect;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
@@ -28,6 +27,8 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		this.aliases = new ArrayList<String>();
 		this.aliases.add("techmobs");
 		this.aliases.add("tmobs");
+		addChildCommand(new CommandFill());
+		addChildCommand(new Effect());
 	}
 
 	public void addChildCommand(SubCommand child) {
@@ -57,7 +58,7 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 
 	@Override
 	public int getPermissionLevel() {
-		return 0;
+		return SubCommand.PermLevel.ADMIN.permLevel;
 	}
 
 	@Override
@@ -73,34 +74,11 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
-			if (args.length == 0) {
-				CommandHelpers.throwWrongUsage(sender, this);
-			} else {
-				if (args[0].equals("effect")) {
-					if (args.length < 3) {
-						throw new WrongUsageException(getCommandUsage(sender));
-					}
-					if (args[1].equals("player") && sender instanceof EntityPlayer) {
-						try {
-							int i = Integer.parseInt(args[2]);
-							List<TDPlayerEffect> list = TDEffects.getInstance().getUsablePlayerEffects(i, sender.getCommandSenderName(), (EntityPlayer) sender);
-							int index = GeneralUtils.random.nextInt(list.size());
-							int result = list.get(index).applyEffect(i, sender.getCommandSenderName(), (EntityPlayer) sender);
-							sender.addChatMessage(new ChatComponentText("Needed TechValue: " + result));
-						} catch (NumberFormatException e) {
-							CommandHelpers.throwWrongUsage(sender, this);
-						}
-					} else {
-						CommandHelpers.throwWrongUsage(sender, this);
-					}
-				} else {
-					CommandHelpers.throwWrongUsage(sender, this);
-				}
-			}
+			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}
 
-	public class CommandFill extends SubCommand {
+	public static class CommandFill extends SubCommand {
 
 		public CommandFill() {
 			super("fill");
@@ -141,12 +119,46 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		}
 
 		@Override
-		public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] args) {
-			if(args.length == 7) {
+		public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+			if (args.length == 7) {
 				return getListOfStringsFromIterableMatchingLastWord(args, Block.blockRegistry.getKeys());
 			}
-			return super.addTabCompletionOptions(p_71516_1_, args);
+			return null;
 		}
+	}
+
+	public static class Effect extends SubCommand {
+
+		public Effect() {
+			super("effect");
+			addChildCommand(new Player());
+		}
+
+		public static class Player extends SubCommand {
+
+			public Player() {
+				super("player");
+			}
+
+			@Override
+			public void processSubCommand(ICommandSender sender, String[] args) {
+				if (sender instanceof EntityPlayer && args.length == 1) {
+					int effectStrength = CommandBase.parseInt(sender, args[0]);
+					List<TDPlayerEffect> list = TDEffects.getInstance().getUsablePlayerEffects(effectStrength, sender.getCommandSenderName(), (EntityPlayer) sender);
+					int index = GeneralUtils.random.nextInt(list.size());
+					int result = list.get(index).applyEffect(effectStrength, sender.getCommandSenderName(), (EntityPlayer) sender);
+					sender.addChatMessage(new ChatComponentText("Needed TechValue: " + result));
+				} else {
+					CommandHelpers.throwWrongUsage(sender, this);
+				}
+			}
+		}
+	}
+
+
+	@Override
+	public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args);
 	}
 
 }

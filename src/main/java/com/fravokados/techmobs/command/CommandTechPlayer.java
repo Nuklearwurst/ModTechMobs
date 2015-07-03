@@ -1,27 +1,37 @@
 package com.fravokados.techmobs.command;
 
-import com.fravokados.techmobs.techdata.TDManager;
-import com.fravokados.techmobs.world.TechDataStorage;
+import com.fravokados.techmobs.command.playerdata.*;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class CommandTechPlayer extends CommandBase {
+public class CommandTechPlayer extends CommandBase implements IModCommand {
 	
 	private final List<String> aliases;
 	
-	private static final String[] commands1 = { "level", "scouted"};
-	private static final String[] commands =  {"set", "add", "remove", "read", "scan", "info", "rnddp"};
-	
+	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(new Comparator<SubCommand>() {
+		@Override
+		public int compare(SubCommand o1, SubCommand o2) {
+			return o1.compareTo(o2);
+		}
+	});
+
 	public CommandTechPlayer() {
 		this.aliases = new ArrayList<String>();
 		this.aliases.add("techplayer");
 		this.aliases.add("tdp");
+		addChildCommand(new CommandPlayerDataRead());
+		addChildCommand(new CommandPlayerDataSet());
+		addChildCommand(new CommandPlayerDataRemove());
+		addChildCommand(new CommandPlayerDataAdd());
+		addChildCommand(new CommandPlayerDataScan());
+	}
+
+	public void addChildCommand(SubCommand child) {
+		child.setParent(this);
+		children.add(child);
 	}
 
 	@Override
@@ -31,7 +41,12 @@ public class CommandTechPlayer extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "techplayer <command> <params> [player]";
+		return "/" + this.getCommandName() + " help";
+	}
+
+	@Override
+	public String getFullCommandString() {
+		return getCommandName();
 	}
 
 	@Override
@@ -40,80 +55,25 @@ public class CommandTechPlayer extends CommandBase {
 	}
 
 	@Override
+	public int getPermissionLevel() {
+		return SubCommand.PermLevel.ADMIN.permLevel;
+	}
+
+	@Override
+	public SortedSet<SubCommand> getChildren() {
+		return children;
+	}
+
+	@Override
+	public void printHelp(ICommandSender sender) {
+		CommandHelpers.printHelp(sender, this);
+	}
+
+	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
-		if(args.length < 1) {
-			throw new WrongUsageException(getCommandUsage(sender));
-		} else {
-			if(args.length > 3) {
-				throw new WrongUsageException(getCommandUsage(sender));
-			}
-			EntityPlayer entityPlayer = getPlayer(sender);
-			int scoutedTechLevel = TDManager.getPlayerScoutedTechLevel(entityPlayer);
-			int techLevel = TDManager.getPlayerTechLevel(entityPlayer);
-			if(args[0].equals(commands[0])) { //set
-				int value = parseInt(sender, args[1]);
-				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
-					TDManager.setPlayerTechLevel(entityPlayer, value);					
-					sender.addChatMessage(new ChatComponentText("TechLevel of this Player: " + techLevel));
-				} else if(args[2].equals(commands1[1])) { //scouted techlevel
-					TDManager.setPlayerScoutedTechLevel(entityPlayer, value);
-					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
-				} else {
-					throw new WrongUsageException(getCommandUsage(sender));
-				}
-			} else if(args[0].equals(commands[1])) { //add
-				int value = parseInt(sender, args[1]);
-				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
-					TDManager.setPlayerTechLevel(entityPlayer, techLevel + value);
-					sender.addChatMessage(new ChatComponentText("TechLevel of this Player: " + techLevel));				
-				} else if(args[2].equals(commands1[1])) { //scouted techlevel
-					TDManager.setPlayerScoutedTechLevel(entityPlayer, scoutedTechLevel + value);
-					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
-				} else {
-					throw new WrongUsageException(getCommandUsage(sender));
-				}
-			} else if(args[0].equals(commands[2])) { //remove
-				if(args.length != 3 || args[2].equals(commands1[0])) { //default techlevel
-					TDManager.setPlayerTechLevel(entityPlayer, techLevel - parseInt(sender, args[1]));		
-					sender.addChatMessage(new ChatComponentText("TechLevel of this Player: " + techLevel));			
-				} else if(args[2].equals(commands1[1])) { //scouted techlevel
-					TDManager.setPlayerScoutedTechLevel(entityPlayer, scoutedTechLevel - parseInt(sender, args[1]));
-					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
-				} else {
-					throw new WrongUsageException(getCommandUsage(sender));
-				}
-			} else if(args[0].equals(commands[3])) { //read
-				if(args.length > 2) {
-					throw new WrongUsageException(getCommandUsage(sender));
-				}
-				if(args.length == 2) {
-					
-				} else {
-					//TODO better chat messages
-					sender.addChatMessage(new ChatComponentText("TechLevel of this Player: " + techLevel));
-					sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
-				}
-			} else if(args[0].equals(commands[4])) { //scan
-				if(args.length > 2) {
-					throw new WrongUsageException(getCommandUsage(sender));
-				}
-				if(args.length == 1 || args[1].equals(commands1[0])) {
-					TDManager.scanPlayer(getPlayer(sender));
-					sender.addChatMessage(new ChatComponentText("Scanning..."));
-					sender.addChatMessage(new ChatComponentText("Updated TechLevel: " + TDManager.getPlayerTechLevel(entityPlayer)));
-				} else if(args[1].equals(commands1[1])) {
-					sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getPlayerScoutedTechLevel(entityPlayer)));
-				} else {
-					throw new WrongUsageException(getCommandUsage(sender));
-				}
-			} else if(args[0].equals(commands[5])) { //info
-				sender.addChatMessage(new ChatComponentText("WIP"));				
-			} else if(args[0].equals(commands[6])) { //random tech player
-				sender.addChatMessage(new ChatComponentText("Random Tech Player: " + TechDataStorage.getInstance().getRandomDangerousPlayer(entityPlayer.getRNG())));
-			} else {
-				throw new WrongUsageException(getCommandUsage(sender));
-			}
-		}		
+		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
+			CommandHelpers.throwWrongUsage(sender, this);
+		}
 	}
 	
 	private EntityPlayer getPlayer(ICommandSender sender) {
@@ -122,25 +82,22 @@ public class CommandTechPlayer extends CommandBase {
 		}
 		return null;
 	}
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
 
 	@Override
 	public List<?> addTabCompletionOptions(ICommandSender sender, String[] args) {
-		if(args.length == 1) {
-			return getListOfStringsMatchingLastWord(args, commands);
-		} else if (args.length == 3 && (args[0].equals(commands[0]) || args[0].equals(commands[1]) || args[0].equals(commands[2]))) {
-			return getListOfStringsMatchingLastWord(args, commands1);
-		} else if (args.length == 2 && args[0].equals(commands[4])) {
-			return getListOfStringsMatchingLastWord(args, commands1);
-		}
-		return null;
+		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args);
 	}
 
 	@Override
-	public boolean isUsernameIndex(String[] var1, int index) {
+	public boolean isUsernameIndex(String[] args, int index) {
+		if(index == 0) {
+			return false;
+		}
+		for (SubCommand sub : children) {
+			if(sub.getCommandName().toLowerCase().equals(args[0].toLowerCase())) {
+				return sub.isUsernameIndex(Arrays.copyOfRange(args, 1, args.length), index - 1);
+			}
+		}
 		return false;
 	}
 

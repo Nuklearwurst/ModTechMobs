@@ -1,18 +1,16 @@
 package com.fravokados.techmobs.techdata;
 
+import com.fravokados.techmobs.api.util.ChunkLocation;
+import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.lib.util.PlayerUtils;
+import com.fravokados.techmobs.techdata.values.TDValues;
+import com.fravokados.techmobs.world.TechDataStorage;
+import com.fravokados.techmobs.world.techdata.TDChunk;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.chunk.Chunk;
-
-import com.fravokados.techmobs.configuration.Settings;
-import com.fravokados.techmobs.lib.util.PlayerUtils;
-import com.fravokados.techmobs.api.util.ChunkLocation;
-import com.fravokados.techmobs.techdata.values.TDValues;
-import com.fravokados.techmobs.api.techdata.values.player.TDEntryItem;
-import com.fravokados.techmobs.world.TechDataStorage;
-import com.fravokados.techmobs.world.techdata.TDChunk;
 
 
 /**
@@ -78,18 +76,12 @@ public class TDManager {
 		int value = 0;
 		for(ItemStack stack : player.inventory.armorInventory) {
 			if(stack != null) {
-				TDEntryItem item = TDValues.getInstance().getEntryItem(stack.getItem());
-				if(item != null) {
-					value += item.getTechLevelForItem(stack);
-				}
+				value += TDValues.getInstance().getTechDataForItem(stack);
 			}
 		}
 		for(ItemStack stack : player.inventory.mainInventory) {
 			if(stack != null) {
-				TDEntryItem item = TDValues.getInstance().getEntryItem(stack.getItem());
-				if(item != null) {
-					value += item.getTechLevelForItem(stack);
-				}
+				value += TDValues.getInstance().getTechDataForItem(stack);
 			}
 		}
 		TDManager.setPlayerTechLevel(player, value);

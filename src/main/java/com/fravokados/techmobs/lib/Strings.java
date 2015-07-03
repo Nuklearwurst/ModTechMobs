@@ -19,6 +19,7 @@ public class Strings {
 		public static final String GATE_EXTENDER = "gateExtender";
 		public static final String REPROCESSOR = "reprocessor";
 		public static final String COT = "block_cot";
+		public static final String CREATIVE_TECHNOLOGY = "creativeTechnology";
 	}
 	
 	public static final class Item {
@@ -28,6 +29,10 @@ public class Strings {
 		public static final String[] MONSTER_DROP_TOOLTIP = {"common"};
 		public static final String UPGRADE_TOOL = "upgradeTool";
 		public static final String COT = "item_cot";
+		public static final String TD_DEBUGGER = "tdDebugger";
+		public static final String TD_ANALYZER = "tdAnalyzer";
+		public static final String TD_ANALYZER_MODE_PREFIX = "item.tdAnalyzer.mode.";
+		public static final String[] TD_ANALYZER_MODES = new String[] {"block", "item", "player", "chunk"};
 	}
 	
 	public static final class Chat {
@@ -37,7 +42,29 @@ public class Strings {
 		public static final String mobTargetingWarning_exact_2 = "chat.mobTargetingWarning.exact.2";
 		public static final String mobTargetingWarning_creeper = "chat.mobTargetingWarning.creeper";
 		public static final String mobTargetingWarning_babyZombie = "chat.mobTargetingWarning.babyZombie";
-		
+
+		public static final String effectNausea = "chat.effect.nausea";
+		public static final String effectBlindness = "chat.effect.blindness";
+		public static final String effectWeakness = "chat.effect.weakness";
+		public static final String effectHunger = "chat.effect.hunger";
+		public static final String effectMiningFatigue = "chat.effect.miningFatigue";
+		public static final String effectSlowness = "chat.effect.slow";
+		public static final String effectSlowness_2 = "chat.effect.slow_2";
+
+		public static final String debuggerTileEntity = "chat.debugger.tileentity";
+		public static final String debuggerTileEntityNotFound = "chat.debugger.tileentity.no_tile";
+		public static final String debuggerPlayerTechLevel = "chat.debugger.player.techlevel";
+		public static final String debuggerPlayerScouted = "chat.debugger.player.scouted";
+
+		public static final String analyzerTileEntity = "chat.analyzer.tileentity";
+		public static final String analyzerTileEntityNotFound = "chat.analyzer.tileentity.no_tile";
+		public static final String analyzerPlayer = "chat.analyzer.player";
+		public static final String analyzerPlayerNoPlayer = "chat.analyzer.player.no_player";
+		public static final String analyzerChunk = "chat.analyzer.chunk";
+		public static final String analyzerItem = "chat.analyzer.item";
+
+		public static final String commandAnalyzeItem = "chat.command.analyze.item";
+		public static final String commandAnalyzeItemNoItem = "chat.command.analyze.item.noitem";
 	}
 	
 	/**

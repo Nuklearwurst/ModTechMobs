@@ -11,6 +11,10 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * adapted from Railcraft <http://www.railcraft.info/>
  */
@@ -57,9 +61,6 @@ public class CommandHelpers {
 	 * which has no localization information.
 	 * StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage().
 	 * Messages will not be localized properly if you use StringUtil.localize().
-	 *
-	 * @param sender
-	 * @param message
 	 */
 	public static void sendChatMessage(ICommandSender sender, String message) {
 		sender.addChatMessage(new ChatComponentText(message));
@@ -94,6 +95,13 @@ public class CommandHelpers {
 		}
 	}
 
+	public static boolean processDefaultStandartCommands(ICommandSender sender, IModCommand command, String[] oldArgs, String newArg) {
+		String[] newargs = new String[oldArgs.length + 1];
+		newargs[0] = newArg;
+		System.arraycopy(oldArgs, 0, newargs, 1, oldArgs.length);
+		return CommandHelpers.processStandardCommands(sender, command, newargs);
+	}
+
 	public static boolean processStandardCommands(ICommandSender sender, IModCommand command, String[] args) {
 		if (args.length >= 1) {
 			if (args[0].equals("help")) {
@@ -121,7 +129,7 @@ public class CommandHelpers {
 		return false;
 	}
 
-	static int getCoordFromCommand(int pos, String arg) {
+	public static int getCoordFromCommand(int pos, String arg) {
 		if(arg.startsWith("~")) {
 			if(arg.length() == 1) {
 				return pos;
@@ -129,5 +137,24 @@ public class CommandHelpers {
 			return pos + Integer.parseInt(arg.substring(1));
 		}
 		return Integer.parseInt(arg);
+	}
+
+	public static List<?> addTabCompletionOptionsForSubCommands(IModCommand command, ICommandSender sender, String[] args) {
+		if(args.length == 1) {
+			List<String> list = new ArrayList<String>();
+			for (SubCommand sub : command.getChildren()) {
+				if(sub.getCommandName().toLowerCase().startsWith(args[0].toLowerCase())) {
+					list.add(sub.getCommandName());
+				}
+			}
+			return list.isEmpty() ? null : list;
+		} else {
+			for (SubCommand child : command.getChildren()) {
+				if (matches(args[0], child)) {
+					return child.addTabCompletionOptions(sender, Arrays.copyOfRange(args, 1, args.length));
+				}
+			}
+		}
+		return null;
 	}
 }

@@ -1,10 +1,10 @@
 package com.fravokados.techmobs.block;
 
+import com.fravokados.techmobs.ModTechMobs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
-import com.fravokados.techmobs.creativetab.CreativeTabTechMobs;
 import com.fravokados.techmobs.lib.Textures;
 
 import cpw.mods.fml.relauncher.Side;
@@ -18,7 +18,7 @@ public class BlockTM extends Block {
 	
 	public BlockTM(Material material) {
 		super(material);
-		this.setCreativeTab(CreativeTabTechMobs.TAB_TM);
+		this.setCreativeTab(ModTechMobs.TAB_TM);
 	}
 	
 	public BlockTM(String name) {

@@ -2,22 +2,26 @@ package com.fravokados.techmobs.techdata.effects;
 
 import com.fravokados.techmobs.api.DangerousTechnologyAPI;
 import com.fravokados.techmobs.api.techdata.effects.TDEffectRegistry;
-import com.fravokados.techmobs.configuration.Settings;
-import com.fravokados.techmobs.lib.util.LogHelper;
+import com.fravokados.techmobs.api.techdata.effects.chunk.TDChunkEffect;
 import com.fravokados.techmobs.api.techdata.effects.mob.TDMobEffect;
-import com.fravokados.techmobs.techdata.effects.mob.TDMobEffectChargedCreeper;
 import com.fravokados.techmobs.api.techdata.effects.mob.TDMobEffectEquipment;
 import com.fravokados.techmobs.api.techdata.effects.mob.TDMobEffectPotion;
 import com.fravokados.techmobs.api.techdata.effects.player.TDPlayerEffect;
-import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffectFakeExplosion;
 import com.fravokados.techmobs.api.techdata.effects.player.TDPlayerEffectPotion;
+import com.fravokados.techmobs.lib.Strings;
+import com.fravokados.techmobs.lib.util.ChatUtils;
+import com.fravokados.techmobs.lib.util.LogHelper;
+import com.fravokados.techmobs.techdata.effects.chunk.TDChunkEffectRain;
+import com.fravokados.techmobs.techdata.effects.chunk.TDChunkEffectThunder;
+import com.fravokados.techmobs.techdata.effects.mob.TDMobEffectChargedCreeper;
+import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffectFakeExplosion;
+import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffectLightning;
 import com.fravokados.techmobs.techdata.effects.player.TDPlayerEffectWeather;
-import com.fravokados.techmobs.api.techdata.effects.chunk.TDChunkEffect;
-import com.fravokados.techmobs.techdata.effects.chunk.TDChunkEffectWeather;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
@@ -77,7 +81,7 @@ public class TDEffects implements TDEffectRegistry {
 	 * registers a new world effect
 	 */
 	@Override
-	public void addWorldEffect(TDChunkEffect effect) {
+	public void addChunkEffect(TDChunkEffect effect) {
 		if(worldEffects.contains(effect)) {
 			LogHelper.error("WorldEffect " + effect + "already registered!");
 			return;
@@ -130,19 +134,6 @@ public class TDEffects implements TDEffectRegistry {
 	 * registers mod effects
 	 */
 	public static void init() {
-		if(Settings.DEBUG) {
-			//mob effects
-			getInstance().addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
-					new ItemStack(Items.diamond_sword),
-					new ItemStack(Items.diamond_helmet),
-					new ItemStack(Items.diamond_chestplate),
-					new ItemStack(Items.diamond_leggings),
-					new ItemStack(Items.diamond_boots)
-			}, false, false, new int[]{30, 10, 30, 20, 10}).setDoesArmorDrop(false));
-			//player effects
-			getInstance().addPlayerEffect(new TDPlayerEffectPotion(100, 18, 200, 1, "chat.effect.potion").setMessageColor(EnumChatFormatting.DARK_AQUA));
-			//world effects
-		}
 		getInstance().addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
 				new ItemStack(Items.diamond_sword),
 				new ItemStack(Items.diamond_helmet),
@@ -161,9 +152,17 @@ public class TDEffects implements TDEffectRegistry {
 
 		getInstance().addPlayerEffect(new TDPlayerEffectFakeExplosion());
 		getInstance().addPlayerEffect(new TDPlayerEffectWeather());
-		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 8, 200, 1));
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 9, 400, 3, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectNausea, EnumChatFormatting.DARK_PURPLE))); //Nausea IV
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(800, 15, 200, 0, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectBlindness, EnumChatFormatting.RED))); //Blindness
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 18, 200, 2, new ChatComponentTranslation(Strings.Chat.effectWeakness))); //Weakness II
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 17, 100, 1, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectHunger, EnumChatFormatting.GOLD))); //Hunger II
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(300, 4, 100, 1, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectMiningFatigue, EnumChatFormatting.DARK_RED))); //Mining Fatigue II
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(300, 2, 100, 1, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectSlowness, EnumChatFormatting.BLUE))); //Slowness II
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(3000, 2, 100, 3, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectSlowness_2, EnumChatFormatting.DARK_PURPLE))); //Slowness IV
+		getInstance().addPlayerEffect(new TDPlayerEffectLightning());
 
-		getInstance().addWorldEffect(new TDChunkEffectWeather());
+		getInstance().addChunkEffect(new TDChunkEffectRain());
+		getInstance().addChunkEffect(new TDChunkEffectThunder());
 	}
 
 	public static TDEffectRegistry getInstance() {

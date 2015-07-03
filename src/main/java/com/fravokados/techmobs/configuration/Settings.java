@@ -24,35 +24,33 @@ public class Settings {
 		public static float TD_EFFECT_MIN_FACTOR = 0;
 		
 		/**
-		 * minimum strenth of the effect
+		 * minimum strenth of the effect that gets applied
 		 */
 		public static int TD_EFFECT_MIN = 10;
 		
-		public static int MAX_EFFECTS_MOB =  10;
+		public static int MAX_EFFECTS_MOB =  3;
 		
-		public static int MAX_EFFECTS_PLAYER = 10;
+		public static int MAX_EFFECTS_PLAYER = 3;
 
-		public static int MAX_EFFECTS_WORLD = 10;
-		
-//		/**
-//		 * maximum strength modifier scaluing with techdata<br>
-//		 * unused
-//		 */
-//		public static float TD_EFFECT_MAX_FACTOR = 0;
+		public static int MAX_EFFECTS_CHUNK = 3;
+
 		
 		/**
 		 * 1 out of n<br>
-		 * chance that a td effect is applied to a player
+		 * chance that a td effect is applied to a player (checked every {@link com.fravokados.techmobs.configuration.Settings.TechData#TD_RANDOM_TICKS} (1200) ticks)
 		 */
-		public static int TD_RANDOM_PLAYER_EVENT_CHANCE = 100;
+		public static int TD_RANDOM_PLAYER_EVENT_CHANCE = 10;
 		
 		/**
 		 * 1 out of n<br>
-		 * chance that a td effect is applied to a chunk
+		 * chance that a td effect is applied to a chunk (checked every {@link com.fravokados.techmobs.configuration.Settings.TechData#TD_RANDOM_TICKS} (1200) ticks)
 		 */
-		public static int TD_RANDOM_WORLD_EVENT_CHANCE = 100;
-		
-		public static int TD_RANDOM_TICKS = 100; //TODO
+		public static int TD_RANDOM_CHUNK_EVENT_CHANCE = 10;
+
+		/**
+		 * Defines how often Random effects are applied (ticks between checks)
+		 */
+		public static int TD_RANDOM_TICKS = 1200;
 		
 		/**
 		 * a techvalue below this value is considered safe (releveant is some special cases) <br>
@@ -63,12 +61,18 @@ public class Settings {
 	}
 	
 	public static class TechScanning {
-		
+
+		/**
+		 * how many chunks can be scanned in one tick
+		 */
 		public static int MAX_SCANS_PER_TICK = 10;
-		
+
+		/**
+		 * how many scans are allowed to be scheduled until scans get skipped
+		 */
 		public static int MAX_TASKS_SCHEDULED = 100;
 		
-		public static boolean SPLIT_SCANS = false;
+		public static boolean SPLIT_SCANS = true;
 		
 		/**
 		 * used to set the percentage of chunks to scan based upon how many chunks are scheduled<br>
@@ -100,7 +104,10 @@ public class Settings {
 		
 		public static double SCOUTING_STEP_FACTOR_PLAYER = 0.1;
 
-		public static boolean INJECT_SCANNING_AI = false;
+		/**
+		 * chance (n out of value) that a zombie or skeleton will spawn with scanning ai
+		 */
+		public static int INJECT_SCANNING_AI = 1;
 		
 	}
 

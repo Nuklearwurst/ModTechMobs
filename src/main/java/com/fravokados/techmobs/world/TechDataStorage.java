@@ -29,7 +29,7 @@ public class TechDataStorage extends WorldSavedData {
 
 	private static TechDataStorage instance;
 
-	private static final String SAVE_DATA_NAME = "TechmobsStorage";
+	private static final String SAVE_DATA_NAME = "DangerousTechnologyStorage";
 
 	/**
 	 * the world techdata
@@ -281,7 +281,6 @@ public class TechDataStorage extends WorldSavedData {
 
 	/**
 	 * removes chunk from storage (--> it got unloaded and is not needed anymore)
-	 * TODO check if data is also saved when the chunk didn't change, but the techdata did
 	 */
 	public static void onChunkUnload(ChunkEvent.Unload evt) {
 		if(!evt.world.isRemote) {
@@ -307,22 +306,6 @@ public class TechDataStorage extends WorldSavedData {
 		if(!evt.player.worldObj.isRemote) {
 			getInstance().addDangerousPlayerIfNeeded(evt.player.getCommandSenderName(), TDManager.getPlayerScoutedTechLevel(evt.player));
 		}
-//		//load data
-//		String username = evt.player.getCommandSenderName();
-//		if(saveData.hasKey(username + "_techdata")) {
-//			if(playerData.containsKey(username + "_techdata")) {
-//				//this shouldn't happen
-//				LogHelper.error("Player Data already loaded! Conflict! Overwriting!");
-//			}
-//			TDPlayer player = new TDPlayer();
-//			if(player.load(saveData.getCompoundTag(username + "_techdata"))) {
-//				//successfully loaded data
-//				playerData.put(username, player);	
-//				addDangerousPlayerIfNeeded(username, player.scoutedTechLevel);
-//			} else {
-//				LogHelper.error("Error loading player save!");
-//			}
-//		}
 	}
 
 
@@ -334,22 +317,6 @@ public class TechDataStorage extends WorldSavedData {
 		if(!evt.player.worldObj.isRemote) {
 			getInstance().removeDangerousPlayer(evt.player.getCommandSenderName());
 		}
-//		//unload data
-//		String username = evt.player.getCommandSenderName();
-//		if(playerData.containsKey(username)) {
-//			//tag to save data
-//			NBTTagCompound tag1 = new NBTTagCompound();
-//			//get the player data
-//			TDPlayer player = playerData.get(username);
-//			//unload the player
-//			playerData.remove(username); //maybe not necessary
-//			removeDangerousPlayer(username);
-//			//save the player data
-//			if(player.save(tag1)) {
-//				saveData.setTag(username + "_techdata", tag1);
-//			}
-//			LogHelper.info("Saving player data.");
-//		}
 	}
 
 	public static TechDataStorage getInstance() {

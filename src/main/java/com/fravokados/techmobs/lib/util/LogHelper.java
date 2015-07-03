@@ -1,10 +1,9 @@
 package com.fravokados.techmobs.lib.util;
 
-import org.apache.logging.log4j.Level;
-
+import com.fravokados.techmobs.configuration.Settings;
 import com.fravokados.techmobs.lib.Reference;
-
 import cpw.mods.fml.common.FMLLog;
+import org.apache.logging.log4j.Level;
 
 public class LogHelper {
 
@@ -67,5 +66,23 @@ public class LogHelper {
 	}
 	public static void warn(Throwable t, Object object) {
 		log(Level.WARN, t, object);
+	}
+
+	/**
+	 * logs info message only when in dev environment and DEBUG features are enabled
+	 */
+	public static void logDev(Object object) {
+		if (Settings.DEBUG) {
+			info(object);
+		}
+	}
+
+	/**
+	 * logs info message only when DEBUG_TESTING features are enabled
+	 */
+	public static void logTest(Object object) {
+		if (Settings.DEBUG_TESTING) {
+			info(object);
+		}
 	}
 }

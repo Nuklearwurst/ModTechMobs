@@ -7,7 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
 import com.fravokados.techmobs.inventory.ContainerGateExtender;
-import com.fravokados.techmobs.tileentity.TileEntityGateExtender;
+import com.fravokados.techmobs.block.tileentity.TileEntityGateExtender;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

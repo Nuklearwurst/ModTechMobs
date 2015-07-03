@@ -1,9 +1,9 @@
-package com.fravokados.techmobs.lib.util.world;
+package com.fravokados.techmobs.lib.util;
 
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkCoordIntPair;
 
-public class WorldHelper {
+public class WorldUtils {
 
 	
 	public static ChunkCoordIntPair convertToChunkCoord(int x, int z) {

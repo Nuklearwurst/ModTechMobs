@@ -104,6 +104,9 @@ public class TDMobEffectEquipment extends TDMobEffect {
 		int used = 0;
 		for(int i = 0; i < 5; i++) {
 			int j = (start + i) % 5;
+			if(equipment[j] == null) {
+				continue;
+			}
 			if(values[j] > (techdata - used)) {
 				continue;
 			}
@@ -117,6 +120,18 @@ public class TDMobEffectEquipment extends TDMobEffect {
 			used += values[j];
 		}
 		return used;
+	}
+
+	/**
+	 * checks contents and resets costs for equipment that is not available
+	 */
+	public TDMobEffectEquipment checkContents() {
+		for(int i = 0; i < 5; i++) {
+			if(equipment[i] == null) {
+				values[i] = 0;
+			}
+		}
+		return this;
 	}
 
 	@Override

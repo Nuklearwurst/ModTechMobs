@@ -1,10 +1,23 @@
 package com.fravokados.techmobs.common.handler;
 
+import com.fravokados.techmobs.api.item.IItemAttackTargetListener;
 import com.fravokados.techmobs.common.SleepingManager;
+import com.fravokados.techmobs.configuration.Settings;
+import com.fravokados.techmobs.entity.ai.EntityAIScanArea;
+import com.fravokados.techmobs.lib.util.EntityUtils;
+import com.fravokados.techmobs.techdata.TDManager;
+import com.fravokados.techmobs.techdata.effects.TDEffectHandler;
+import com.fravokados.techmobs.world.TechDataStorage;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -12,14 +25,6 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
-
-import com.fravokados.techmobs.api.item.IItemAttackTargetListener;
-import com.fravokados.techmobs.techdata.TDManager;
-import com.fravokados.techmobs.techdata.effects.TDEffectHandler;
-import com.fravokados.techmobs.world.TechDataStorage;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 
 public class TMEventHandler {
 
@@ -69,6 +74,20 @@ public class TMEventHandler {
 	public void onEntitySpawn(LivingSpawnEvent.CheckSpawn evt) {
 		TDEffectHandler.onLivingSpawn(evt);
 	}
+
+	@SubscribeEvent
+	public void onEntityJoinWorld(EntityJoinWorldEvent evt) {
+		if(evt.world.isRemote) {
+			return;
+		}
+		if(Settings.TechScanning.INJECT_SCANNING_AI > 0 && (Settings.TechScanning.INJECT_SCANNING_AI == 1 || evt.world.rand.nextInt(Settings.TechScanning.INJECT_SCANNING_AI) == 0)) {
+			if(evt.entity instanceof EntityZombie || evt.entity instanceof EntitySkeleton) {
+				EntityLiving e = ((EntityLiving)evt.entity);
+				EntityUtils.addAITask(e, 3, new EntityAIScanArea(e));
+			}
+		}
+	}
+
 	
 	@SubscribeEvent
 	public void onEntitySetAttackTarget(LivingSetAttackTargetEvent evt) {

@@ -66,8 +66,8 @@ public abstract class SubCommand implements IModCommand {
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_) {
-		return null;
+	public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args);
 	}
 
 	@Override
@@ -97,6 +97,14 @@ public abstract class SubCommand implements IModCommand {
 
 	@Override
 	public boolean isUsernameIndex(String[] args, int index) {
+		if(index == 0) {
+			return false;
+		}
+		for (SubCommand sub : children) {
+			if(sub.getCommandName().toLowerCase().equals(args[0].toLowerCase())) {
+				return sub.isUsernameIndex(Arrays.copyOfRange(args, 1, args.length), index - 1);
+			}
+		}
 		return false;
 	}
 

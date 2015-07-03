@@ -20,11 +20,45 @@ chat.mobTargetingWarning.babyZombie.1=B...B...BABY ZOMBIE!!
 chat.mobTargetingWarning.babyZombie.2=Nasty little things...
 chat.mobTargetingWarning.babyZombie.3=Well, at least it's no giant...
 
-chat.effect.potion="Something seems diferent"
+chat.effect.nausea=Suddenly the world shifts...
+chat.effect.blindness=What... What happened?
+chat.effect.weakness=Somehow you think that a fight is not a good idea right now...
+chat.effect.hunger=Maybe you should eat something...
+chat.effect.miningFatigue=Why does it take so long?
+chat.effect.slow=You feel like you are waking against the current
+chat.effect.slow_2=Probably better to wait some time...
+
+chat.debugger.tileentity=TechValue of this Block is: %s
+chat.debugger.tileentity.no_tile=This is not a TileEntity and has not TechValue!
+chat.debugger.player.techlevel=Your TechLevel is: %s
+chat.debugger.player.scouted=Your scouted TechLevel is: %s
+
+chat.analyzer.tileentity=TechValue of this Block is: %s
+chat.analyzer.tileentity.no_tile=This is not a TileEntity and has not TechValue!
+chat.analyzer.player=The TechLevel of %s is: %s
+chat.analyzer.player.no_player=You can only use this Tool on Players!
+chat.analyzer.chunk=The current TechLevel of this Chunk is: %s
+chat.analyzer.item=This Item has a potential TechValue of: %s
+
+chat.command.analyze.item=The TechLevel of this item is: %s
+chat.command.analyze.item.noitem=You have to hold the item you want to analyze!
+
+#Command Help
+command.techmobs.aliases=Aliases: %s
+command.techmobs.permlevel=Permission Level: %s
+command.techmobs.list=Available Subcommands:
+command.techmobs.help=Command Usage: %s
 
 #Items
 item.techmobs:monsterDetector.name=Monster Detector
 item.techmobs:upgradeTool.name=Upgrade Tool
+item.techmobs:tdAnalyzer.name=TechData Analyzer
+
+#Analyzer Modes
+item.tdAnalyzer.mode.block=Block
+item.tdAnalyzer.mode.item=Item
+item.tdAnalyzer.mode.player=Player
+item.tdAnalyzer.mode.chunk=Area
 
 #Blocks
 tile.techmobs:gateExtender.name=Gate Extender
