@@ -2,12 +2,10 @@ package com.fravokados.techmobs.command.techdata;
 
 import com.fravokados.techmobs.api.util.ChunkLocation;
 import com.fravokados.techmobs.command.CommandHelpers;
-import com.fravokados.techmobs.command.CommandTechData;
 import com.fravokados.techmobs.command.SubCommand;
 import com.fravokados.techmobs.lib.util.WorldUtils;
 import com.fravokados.techmobs.techdata.TDManager;
 import com.fravokados.techmobs.techdata.TDTickManager;
-import com.fravokados.techmobs.world.techdata.TDChunk;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
@@ -40,7 +38,6 @@ public class CommandTechDataScan extends SubCommand {
 			if (args.length != 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
-				TDChunk chunk = CommandTechData.getChunkData(sender);
 				TDTickManager.scheduleChunkScan(new ChunkLocation(sender.getEntityWorld().provider.dimensionId, WorldUtils.convertToChunkCoord(sender.getPlayerCoordinates())));
 				sender.addChatMessage(new ChatComponentText("Scanning..."));
 				sender.addChatMessage(new ChatComponentText(TDTickManager.getTasksInQueue() + " scans in quene!"));
@@ -59,7 +56,6 @@ public class CommandTechDataScan extends SubCommand {
 			if (args.length != 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
-				TDChunk chunk = CommandTechData.getChunkData(sender);
 				TDManager.updateScoutedTechLevel(sender.getEntityWorld().provider.dimensionId, WorldUtils.convertToChunkCoord(sender.getPlayerCoordinates()));
 				sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getScoutedTechLevel(sender.getEntityWorld().provider.dimensionId, WorldUtils.convertToChunkCoord(sender.getPlayerCoordinates()))));
 			}

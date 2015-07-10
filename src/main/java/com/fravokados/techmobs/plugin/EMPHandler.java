@@ -20,7 +20,7 @@ public class EMPHandler {
 		double deltaX = tileX - x;
 		double deltaY = tileY - y;
 		double deltaZ = tileZ - z;
-		float factor = (float) (1 / Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ));
+		float factor = (float) (1 / Math.max(1, Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ)));
 		if (te != null) {
 			if (te instanceof IEmpHandler) {
 				((IEmpHandler) te).handleEMP(world, x, y, z, strength, radius, factor);
@@ -31,7 +31,7 @@ public class EMPHandler {
 	}
 
 	public static void applyEMPOnEntity(Entity entity, double x, double y, double z, float strength, int radius) {
-		float factor = (float) (1 / entity.getDistance(x, y, z));
+		float factor = (float) (1 / Math.max(1, entity.getDistance(x, y, z)));
 		if (entity instanceof IEmpHandler) {
 			((IEmpHandler) entity).handleEMP(entity.worldObj, x, y, z, strength, radius, factor);
 		} else if(entity instanceof EntityPlayer) {
@@ -41,8 +41,9 @@ public class EMPHandler {
 			for(ItemStack stack : ((EntityPlayer) entity).inventory.mainInventory) {
 				handleItemEMP(stack, entity, x, y, z, strength, radius, factor);
 			}
+			entity.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, factor * strength * 4);
 		} else if (entity instanceof EntityLiving) {
-			entity.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, factor * strength);
+			entity.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, factor * strength * 4);
 		}
 	}
 

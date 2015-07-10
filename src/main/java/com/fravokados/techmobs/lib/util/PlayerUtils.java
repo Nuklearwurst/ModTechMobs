@@ -18,9 +18,6 @@ public class PlayerUtils {
 	/**
 	 * adapted from IChunUtils <br>
 	 * <a href="https://github.com/iChun/iChunUtil/blob/master/src/main/java/ichun/common/core/EntityHelperBase.java">github:EntityHelperBase.java</a>
-	 * 
-	 * @param player
-	 * @return
 	 */
 	public static NBTTagCompound getPersistentNBT(EntityPlayer player) {
 		NBTTagCompound nbt = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);

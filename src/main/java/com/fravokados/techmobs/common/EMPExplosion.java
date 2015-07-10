@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class EMPExplosion {
 
+	private Entity exploder;
 	private World world;
 	private double x;
 	private double y;
@@ -23,13 +24,18 @@ public class EMPExplosion {
 	private float strength;
 	private int radius;
 
-	public EMPExplosion(World world, double x, double y, double z, float strength, int radius) {
+	public EMPExplosion(Entity exploder, World world, double x, double y, double z, float strength, int radius) {
+		this.exploder = exploder;
 		this.world = world;
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.strength = strength;
 		this.radius = radius;
+	}
+
+	public EMPExplosion(World world, double x, double y, double z, float strength, int radius) {
+		this(null, world, x, y, z, strength, radius);
 	}
 
 	public void writeMessage(MessageEMP msg) {
@@ -58,10 +64,11 @@ public class EMPExplosion {
 	public void doEffects() {
 		double rad = Math.PI / 32;
 		for (int i = 0; i < 64; i++) {
-			world.spawnParticle("explode", x, y, z, Math.sin(i * rad) * strength * 2, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 2);
-			world.spawnParticle("portal", x, y, z, Math.sin(i * rad) * strength * 2, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 2);
+			//TODO better particle effects
+			world.spawnParticle("explode", x, y, z, Math.sin(i * rad) * strength * 0.2, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 0.2);
+			world.spawnParticle("portal", x, y, z, Math.sin(i * rad) * strength * 0.3, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 0.3);
 		}
-		world.playSoundEffect(x, y, z, Textures.TEXTURE_PREFIX + "emp", strength, 1);
+		world.playSoundEffect(x, y, z, Textures.MOD_ASSET_DOMAIN + "emp", strength, 1);
 	}
 
 	public void doExplosionWithEffects() {
@@ -85,5 +92,25 @@ public class EMPExplosion {
 		if (deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ <= radius * radius) {
 			EMPHandler.applyEMP(world, x, y, z, this.x, this.y, this.z, strength, radius);
 		}
+	}
+
+	public static void createExplosion(World world, double x, double y, double z, float strength, int radius) {
+		new EMPExplosion(world, x, y, z, strength, radius).doExplosionWithEffects();
+	}
+
+	public static void createExplosion(Entity exploder, double x, double y, double z, float strength, int radius) {
+		new EMPExplosion(exploder, exploder.worldObj, x, y, z, strength, radius).doExplosionWithEffects();
+	}
+
+	public static void createExplosion(Entity exploder, float strength, int radius) {
+		createExplosion(exploder, exploder.posX, exploder.posY + exploder.yOffset, exploder.posZ, strength, radius);
+	}
+
+	public static void createExplosion(Entity exploder, int radius) {
+		createExplosion(exploder, radius, radius);
+	}
+
+	public static void createExplosionWithYOffset(Entity exploder, float offset, int radius) {
+		createExplosion(exploder, exploder.posX, exploder.posY + offset, exploder.posZ, radius, radius);
 	}
 }

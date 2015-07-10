@@ -1,6 +1,5 @@
 package com.fravokados.techmobs.item;
 
-import com.fravokados.techmobs.block.BlockCot;
 import com.fravokados.techmobs.common.init.ModBlocks;
 import com.fravokados.techmobs.lib.Strings;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +24,6 @@ public class ItemCot extends ItemTM {
 			return false;
 		} else {
 			y++;
-			BlockCot blockCot = (BlockCot) ModBlocks.block_cot;
 			int rotation = MathHelper.floor_double((double) (entityPlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			byte offsetX = 0;
 			byte offsetZ = 0;
@@ -47,10 +45,10 @@ public class ItemCot extends ItemTM {
 
 			if (entityPlayer.canPlayerEdit(x, y, z, side, itemStack) && entityPlayer.canPlayerEdit(x + offsetX, y, z + offsetZ, side, itemStack)) {
 				if (world.isAirBlock(x, y, z) && world.isAirBlock(x + offsetX, y, z + offsetZ) && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) && World.doesBlockHaveSolidTopSurface(world, x + offsetX, y - 1, z + offsetZ)) {
-					world.setBlock(x, y, z, blockCot, rotation, 3);
+					world.setBlock(x, y, z, ModBlocks.block_cot, rotation, 3);
 
-					if (world.getBlock(x, y, z) == blockCot) {
-						world.setBlock(x + offsetX, y, z + offsetZ, blockCot, rotation + 8, 3);
+					if (world.getBlock(x, y, z) == ModBlocks.block_cot) {
+						world.setBlock(x + offsetX, y, z + offsetZ, ModBlocks.block_cot, rotation + 8, 3);
 					}
 
 					itemStack.stackSize--;

@@ -38,7 +38,7 @@ public class ItemMonsterDrop extends ItemTM {
 
 		for (int i = 0; i < Strings.Item.MONSTER_DROP_SUBTYPES.length; i++)
 		{
-			icons[i] = reg.registerIcon(Textures.TEXTURE_PREFIX + Strings.Item.MONSTER_DROP + "_" + Strings.Item.MONSTER_DROP_SUBTYPES[i]);
+			icons[i] = reg.registerIcon(Textures.MOD_ASSET_DOMAIN + Strings.Item.MONSTER_DROP + "_" + Strings.Item.MONSTER_DROP_SUBTYPES[i]);
 		}
 	}
 
@@ -49,7 +49,7 @@ public class ItemMonsterDrop extends ItemTM {
 
 	@Override
 	public String getUnlocalizedName(ItemStack s) {
-		return String.format("item.%s%s_%s", Textures.TEXTURE_PREFIX, Strings.Item.MONSTER_DROP, Strings.Item.MONSTER_DROP_SUBTYPES[MathHelper.clamp_int(s.getItemDamage(), 0, Strings.Item.MONSTER_DROP_SUBTYPES.length - 1)]);
+		return String.format("item.%s%s_%s", Textures.MOD_ASSET_DOMAIN, Strings.Item.MONSTER_DROP, Strings.Item.MONSTER_DROP_SUBTYPES[MathHelper.clamp_int(s.getItemDamage(), 0, Strings.Item.MONSTER_DROP_SUBTYPES.length - 1)]);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -1,6 +1,7 @@
 package com.fravokados.techmobs.common.init;
 
 import com.fravokados.techmobs.entity.EntityConservationUnit;
+import com.fravokados.techmobs.entity.EntityEMPCreeper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
@@ -42,7 +43,9 @@ public class ModEntities {
 
 		/* CyberZombie */
 		registerCreature(EntityCyberZombie.class, Strings.Entity.CYBER_ZOMBIE, 0x000000, 0x00000);
-		registerEntity(EntityConservationUnit.class, "con_unit");
+		/* EMPCreeper */
+		registerCreature(EntityEMPCreeper.class, Strings.Entity.EMP_CREEPER, 0x123456, 0x421337);
+		registerEntity(EntityConservationUnit.class, Strings.Entity.CON_UNIT);
 
 
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, forest);

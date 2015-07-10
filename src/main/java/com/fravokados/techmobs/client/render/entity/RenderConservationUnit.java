@@ -1,5 +1,6 @@
-package com.fravokados.techmobs.client.render;
+package com.fravokados.techmobs.client.render.entity;
 
+import com.fravokados.techmobs.client.model.ModelConservationUnit;
 import com.fravokados.techmobs.entity.EntityConservationUnit;
 import com.fravokados.techmobs.lib.Textures;
 import cpw.mods.fml.relauncher.Side;

@@ -21,7 +21,7 @@ public class ModBlocks {
 	////////////////////
 	// General Blocks //
 	////////////////////
-	public static final BlockCot block_cot = new BlockCot();
+	public static final BlockTM block_cot = new BlockCot();
 
 	//////////////////
 	// Debug Blocks //

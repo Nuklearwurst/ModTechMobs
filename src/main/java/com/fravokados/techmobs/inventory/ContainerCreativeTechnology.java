@@ -34,7 +34,6 @@ public class ContainerCreativeTechnology extends Container implements IContainer
 		super.detectAndSendChanges();
 		if(oldValue != te.getTechData()) {
 			for (Object crafter : this.crafters) {
-				ICrafting icrafting = (ICrafting) crafter;
 				if (crafter instanceof EntityPlayerMP) {
 					ModNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdateClient((byte) 0, te.getTechData()), (EntityPlayerMP) crafter);
 				}

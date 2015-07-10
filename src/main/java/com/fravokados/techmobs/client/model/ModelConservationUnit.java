@@ -1,4 +1,4 @@
-package com.fravokados.techmobs.client.render;
+package com.fravokados.techmobs.client.model;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

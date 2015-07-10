@@ -33,7 +33,7 @@ public class BlockGateExtender extends BlockTM implements ITileEntityProvider {
 	
 	@Override
 	public void registerBlockIcons(IIconRegister reg) {
-		blockIcon = reg.registerIcon(Textures.TEXTURE_PREFIX + Strings.Block.GATE_EXTENDER);
+		blockIcon = reg.registerIcon(Textures.MOD_ASSET_DOMAIN + Strings.Block.GATE_EXTENDER);
 	}
 	
 	

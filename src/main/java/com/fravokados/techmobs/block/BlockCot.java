@@ -41,7 +41,7 @@ public class BlockCot extends BlockTM {
 
 	public BlockCot() {
 		super(Material.cloth, Strings.Block.COT);
-		this.setBlockTextureName(Textures.TEXTURE_PREFIX + Strings.Block.COT);
+		this.setBlockTextureName(Textures.MOD_ASSET_DOMAIN + Strings.Block.COT);
 		setBlockBounds();
 	}
 

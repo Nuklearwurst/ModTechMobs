@@ -39,7 +39,7 @@ public class BlockTM extends Block {
 	@Override
     public String getUnlocalizedName()
     {
-        return String.format("tile.%s%s", Textures.TEXTURE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("tile.%s%s", Textures.MOD_ASSET_DOMAIN, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 	
 	@Override

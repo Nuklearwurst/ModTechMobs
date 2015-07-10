@@ -15,6 +15,8 @@ public class Strings {
 
 	public static final class Entity {
 		public static final String CYBER_ZOMBIE = "cyber_zombie";
+		public static final String EMP_CREEPER = "emp_creeper";
+		public static final String CON_UNIT = "con_unit";
 	}
 	
 	public static final class Block {

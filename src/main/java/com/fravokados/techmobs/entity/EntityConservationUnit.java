@@ -295,6 +295,6 @@ public class EntityConservationUnit extends Entity implements IEmpHandler {
 	@Override
 	public void handleEMP(World world, double x, double y, double z, float strength, int radius, float factor) {
 		this.empCounter = (int) (factor  * 20 * strength);
-		this.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, (float) (factor * 20 * strength));
+		this.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, factor * 20 * strength);
 	}
 }
