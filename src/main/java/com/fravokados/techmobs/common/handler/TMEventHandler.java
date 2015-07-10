@@ -124,7 +124,6 @@ public class TMEventHandler {
 		if (!world.isRemote && !world.getGameRules().getGameRuleBooleanValue("keepInventory")) {
 			for (EntityItem entityItem : evt.drops) {
 				if (entityItem != null && entityItem.getEntityItem()  != null && entityItem.getEntityItem().stackSize != 0 && entityItem.getEntityItem().getItem() == ModItems.conservationUnit) {
-					//TODO energy Requirements
 					int x = (int) evt.entityPlayer.posX;
 					int y = (int) evt.entityPlayer.posY;
 					int z = (int) evt.entityPlayer.posZ;

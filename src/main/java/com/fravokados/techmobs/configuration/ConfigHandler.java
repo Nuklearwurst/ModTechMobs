@@ -67,7 +67,7 @@ public class ConfigHandler {
 		Settings.TechScanning.MAX_TASKS_SCHEDULED = config.getInt(TechScanning.MAX_TASKS_SCHEDULED, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.MAX_TASKS_SCHEDULED, 0, Integer.MAX_VALUE, "This value states how many scans may be scheduled at the same time (technical setting)");
 		Settings.TechScanning.SCOUTING_STEP_FACTOR_WORLD = config.getFloat(TechScanning.SCOUTING_STEP_FACTOR_WORLD, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SCOUTING_STEP_FACTOR_WORLD, 0, 1, "Defines the speed at which mobs can scout an area");
 		Settings.TechScanning.SCOUTING_STEP_FACTOR_PLAYER = config.getFloat(TechScanning.SCOUTING_STEP_FACTOR_PLAYER, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SCOUTING_STEP_FACTOR_PLAYER, 0, 1, "Defines the speed at which mobs can scout a player");
-		Settings.TechScanning.SPLIT_SCANS = config.getBoolean(TechScanning.SPLIT_SCANS, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SPLIT_SCANS, "When this is set to true the amount of chunks scanned on tick gets adjusted to the amount of chunks that are queued to be scanned"); //TODO comment
+		Settings.TechScanning.SPLIT_SCANS = config.getBoolean(TechScanning.SPLIT_SCANS, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.SPLIT_SCANS, "When this is set to true the amount of chunks scanned on tick gets adjusted to the amount of chunks that are queued to be scanned");
 		
 		
 		prop = config.get(Keys.CATEGORY_TECH_SCANNING, Keys.TechScanning.SPLIT_STEPS_KEY, DefaultSettings.TechScanning.SPLIT_STEPS_KEY);

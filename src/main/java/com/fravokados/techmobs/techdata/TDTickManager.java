@@ -81,7 +81,6 @@ public class TDTickManager {
 				Chunk chunk = world.getChunkFromChunkCoords(task.x, task.z);
 				if (chunk != null) {
 					Collection<TileEntity> col = chunk.chunkTileEntityMap.values();
-					//TODO scanning of blocks without interfering (probably not possible --> other effects?)
 					int value = 0;
 					for (TileEntity te : col) {
 						value += TDValues.getInstance().getTechDataForTileEntity(te);

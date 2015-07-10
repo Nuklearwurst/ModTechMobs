@@ -177,7 +177,6 @@ public class TDValues implements TDValueRegistry {
 
 	@Override
 	public int getTechDataForTileEntity(TileEntity te) {
-		//TODO check if asSubclass is necessary
 		TDEntryTileEntity entry = TDValues.getInstance().getEntryTileEntity(te.getClass().asSubclass(TileEntity.class));
 		if (entry != null) {
 			return entry.getTechValueForTileEntity(te);

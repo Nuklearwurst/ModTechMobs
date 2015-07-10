@@ -11,8 +11,6 @@ import com.fravokados.techmobs.world.TechDataStorage;
  * 
  * the way these values are stored might change for more in depth information<br><br>
  * 
- * TODO rework techdata storage concept
- * 
  * @author Nuklearwurst
  *
  */
@@ -34,13 +32,6 @@ public class TDChunk {
 	 * 
 	 */
 	public int scoutedTechLevel = 0;
-	
-	/*
-	 * 	TODO maybe add other techLevel types: 
-	 * 	pollution
-	 * 	mobdeath (griding)
-	 * 		--> falling/fire etc
-	 */
 	
 	/**
 	 * save techdata for this chunk to disk
