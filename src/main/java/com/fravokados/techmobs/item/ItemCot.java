@@ -1,7 +1,7 @@
 package com.fravokados.techmobs.item;
 
 import com.fravokados.techmobs.block.BlockCot;
-import com.fravokados.techmobs.common.ModBlocks;
+import com.fravokados.techmobs.common.init.ModBlocks;
 import com.fravokados.techmobs.lib.Strings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

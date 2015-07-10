@@ -1,6 +1,7 @@
 package com.fravokados.techmobs.command;
 
 import com.fravokados.techmobs.api.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.techmobs.common.EMPExplosion;
 import com.fravokados.techmobs.lib.util.GeneralUtils;
 import com.fravokados.techmobs.techdata.effects.TDEffects;
 import net.minecraft.block.Block;
@@ -29,6 +30,7 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		this.aliases.add("tmobs");
 		addChildCommand(new CommandFill());
 		addChildCommand(new Effect());
+		addChildCommand(new EMP());
 	}
 
 	public void addChildCommand(SubCommand child) {
@@ -76,6 +78,11 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
+	}
+
+	@Override
+	public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args);
 	}
 
 	public static class CommandFill extends SubCommand {
@@ -155,10 +162,22 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		}
 	}
 
+	private static class EMP extends SubCommand {
 
-	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args) {
-		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args);
+		public EMP() {
+			super("emp");
+		}
+
+		@Override
+		public void processSubCommand(ICommandSender sender, String[] args) {
+			World world = sender.getEntityWorld();
+			if((world == null) || (!(sender instanceof EntityPlayer))) {
+				CommandHelpers.throwWrongUsage(sender, this);
+			}
+			EMPExplosion emp = new EMPExplosion(world, ((EntityPlayer)sender).posX, ((EntityPlayer) sender).posY + 1, ((EntityPlayer) sender).posZ, 1, 4);
+			emp.doExplosionWithEffects();
+//			ModNetworkManager.INSTANCE.sendToAll(new MessageEMP(emp));
+		}
 	}
 
 }

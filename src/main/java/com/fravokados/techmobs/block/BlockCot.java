@@ -1,6 +1,6 @@
 package com.fravokados.techmobs.block;
 
-import com.fravokados.techmobs.common.ModItems;
+import com.fravokados.techmobs.common.init.ModItems;
 import com.fravokados.techmobs.common.SleepingManager;
 import com.fravokados.techmobs.lib.Strings;
 import com.fravokados.techmobs.lib.Textures;

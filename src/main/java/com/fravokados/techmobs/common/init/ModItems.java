@@ -1,9 +1,8 @@
-package com.fravokados.techmobs.common;
+package com.fravokados.techmobs.common.init;
 
 import com.fravokados.techmobs.item.*;
 import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.Strings;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(value = Reference.MOD_ID)
@@ -20,6 +19,9 @@ public class ModItems {
 	////////////////////
 	public static final ItemTM monsterDetector = new ItemMonsterDetector();
 	public static final ItemTM tdAnalyzer = new ItemTDAnalyzer();
+	public static final ItemTM conservationUnit = new ItemConservationUnit();
+	//Weapons
+	public static final ItemTMSword quantumSword = new ItemQuantumSword();
 
 	///////////////
 	// Resources //
@@ -44,6 +46,9 @@ public class ModItems {
 		////////////////////
 		GameRegistry.registerItem(monsterDetector, Strings.Item.MONSTER_DETECTOR);
 		GameRegistry.registerItem(tdAnalyzer, Strings.Item.TD_ANALYZER);
+		GameRegistry.registerItem(conservationUnit, Strings.Item.CONSERVATION_UNIT);
+		//Weapons
+		GameRegistry.registerItem(quantumSword, Strings.Item.QUANTUM_SWORD);
 
 		///////////////
 		// Resources //

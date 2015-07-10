@@ -1,5 +1,6 @@
-package com.fravokados.techmobs.common;
+package com.fravokados.techmobs.common.init;
 
+import com.fravokados.techmobs.entity.EntityConservationUnit;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
@@ -14,6 +15,8 @@ import com.fravokados.techmobs.lib.util.LogHelper;
 import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class ModEntities {
+
+	public static int INTERNAL_IDS = 0;
 
 	@SuppressWarnings({"unused", "deprecation", "UnusedAssignment"})
 	public static void init() {
@@ -39,6 +42,7 @@ public class ModEntities {
 
 		/* CyberZombie */
 		registerCreature(EntityCyberZombie.class, Strings.Entity.CYBER_ZOMBIE, 0x000000, 0x00000);
+		registerEntity(EntityConservationUnit.class, "con_unit");
 
 
 		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, forest);
@@ -59,12 +63,16 @@ public class ModEntities {
 
 
 	private static void registerCreature(Class<? extends Entity> entity, String name, int back, int fore) {
-		int id = getUniqueEntityId();
+		int id = getUniqueGlobalEntityId();
 		EntityRegistry.registerGlobalEntityID(entity, name, id, back, fore);
-		EntityRegistry.registerModEntity(entity, name, id, ModTechMobs.instance, 80, 3, true);
+		EntityRegistry.registerModEntity(entity, name, getNextLocalId(), ModTechMobs.instance, 80, 3, true);
 	}
 
-	private static int getUniqueEntityId() {
+	private static void registerEntity(Class<? extends Entity> entity, String name) {
+		EntityRegistry.registerModEntity(entity, name, getNextLocalId(), ModTechMobs.instance, 80, 3, true);
+	}
+
+	private static int getUniqueGlobalEntityId() {
 		int id = 400;
 		try {
 			return EntityRegistry.findGlobalUniqueEntityId();
@@ -75,7 +83,10 @@ public class ModEntities {
 			} while(EntityList.getStringFromID(id) != null);
 			return id;
 		}
+	}
 
+	private static int getNextLocalId() {
+		return INTERNAL_IDS++;
 	}
 
 

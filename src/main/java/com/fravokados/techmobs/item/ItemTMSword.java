@@ -2,20 +2,22 @@ package com.fravokados.techmobs.item;
 
 import com.fravokados.techmobs.ModTechMobs;
 import com.fravokados.techmobs.lib.Textures;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 
-public class ItemTM extends Item {
+/**
+ * @author Nuklearwurst
+ */
+public class ItemTMSword extends ItemSword {
 
-	public ItemTM() {
-		super();
+	public ItemTMSword(ToolMaterial material) {
+		super(material);
 		this.setCreativeTab(ModTechMobs.TAB_TM);
 	}
 
-	public ItemTM(String name) {
-		this();
+	public ItemTMSword(ToolMaterial material, String name) {
+		this(material);
 		this.setUnlocalizedName(name);
 	}
 

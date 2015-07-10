@@ -4,8 +4,12 @@ import com.fravokados.techmobs.api.DangerousTechnologyAPI;
 import com.fravokados.techmobs.command.CommandTechData;
 import com.fravokados.techmobs.command.CommandTechMobs;
 import com.fravokados.techmobs.command.CommandTechPlayer;
-import com.fravokados.techmobs.common.*;
+import com.fravokados.techmobs.common.CommonProxy;
 import com.fravokados.techmobs.common.handler.GuiHandler;
+import com.fravokados.techmobs.common.init.ModBlocks;
+import com.fravokados.techmobs.common.init.ModEntities;
+import com.fravokados.techmobs.common.init.ModItems;
+import com.fravokados.techmobs.common.init.ModRecipes;
 import com.fravokados.techmobs.configuration.ConfigHandler;
 import com.fravokados.techmobs.lib.Reference;
 import com.fravokados.techmobs.lib.Strings;
@@ -25,6 +29,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.util.DamageSource;
 
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY, canBeDeactivated=false)
@@ -58,14 +63,16 @@ public class ModTechMobs {
 
 		//init keybindings
 
-		//registerItems items
-		ModItems.registerItems();
-		//registerBlocks blocks
-		ModBlocks.registerBlocks();
 		//init API
 		DangerousTechnologyAPI.effectRegistry = new TDEffects();
 		DangerousTechnologyAPI.valueRegistry = new TDValues();
 		DangerousTechnologyAPI.creativeTab = TAB_TM;
+		DangerousTechnologyAPI.damageSourceEMP = new DamageSource(Strings.DAMAGE_SOURCE_EMP).setDamageBypassesArmor();
+
+		//registerItems items
+		ModItems.registerItems();
+		//registerBlocks blocks
+		ModBlocks.registerBlocks();
 	}
 
 	@EventHandler
@@ -80,6 +87,7 @@ public class ModTechMobs {
 		ModBlocks.registerTileEntities();
 		
 		//init rendering
+		proxy.registerRenderer();
 		
 		//register EventHandlers
 		proxy.registerEvents();

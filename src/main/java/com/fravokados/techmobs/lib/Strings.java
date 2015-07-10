@@ -9,7 +9,9 @@ public class Strings {
 	 * creative tab name
 	 */
 	public static final String CREATIVE_TAB = "techmobs";
-	
+	public static final String DAMAGE_SOURCE_EMP = "damage.emp";
+	public static final String MATERIAL_QUANTUM_SWORD = "material.quantumSword";
+
 
 	public static final class Entity {
 		public static final String CYBER_ZOMBIE = "cyber_zombie";
@@ -33,6 +35,8 @@ public class Strings {
 		public static final String TD_ANALYZER = "tdAnalyzer";
 		public static final String TD_ANALYZER_MODE_PREFIX = "item.tdAnalyzer.mode.";
 		public static final String[] TD_ANALYZER_MODES = new String[] {"block", "item", "player", "chunk"};
+		public static final String CONSERVATION_UNIT = "conservationUnit";
+		public static final String QUANTUM_SWORD = "quantumSword";
 	}
 	
 	public static final class Chat {
@@ -65,6 +69,7 @@ public class Strings {
 
 		public static final String commandAnalyzeItem = "chat.command.analyze.item";
 		public static final String commandAnalyzeItemNoItem = "chat.command.analyze.item.noitem";
+		public static final String quantumSword = "chat.quantumSword";
 	}
 	
 	/**

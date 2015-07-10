@@ -4,6 +4,7 @@ import com.fravokados.techmobs.api.techdata.effects.TDEffectRegistry;
 import com.fravokados.techmobs.api.techdata.values.TDValueRegistry;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.DamageSource;
 
 /**
  * @author Nuklearwurst
@@ -22,4 +23,6 @@ public class DangerousTechnologyAPI {
 	public static TDValueRegistry valueRegistry;
 
 	public static CreativeTabs creativeTab;
+
+	public static DamageSource damageSourceEMP;
 }

@@ -43,6 +43,8 @@ chat.analyzer.item=This Item has a potential TechValue of: %s
 chat.command.analyze.item=The TechLevel of this item is: %s
 chat.command.analyze.item.noitem=You have to hold the item you want to analyze!
 
+chat.quantumSword=You notice that your sword is getting quite rusty
+
 #Command Help
 command.techmobs.aliases=Aliases: %s
 command.techmobs.permlevel=Permission Level: %s
@@ -53,6 +55,7 @@ command.techmobs.help=Command Usage: %s
 item.techmobs:monsterDetector.name=Monster Detector
 item.techmobs:upgradeTool.name=Upgrade Tool
 item.techmobs:tdAnalyzer.name=TechData Analyzer
+item.techmobs:quantumSword.name=Quantum Sword
 
 #Analyzer Modes
 item.tdAnalyzer.mode.block=Block

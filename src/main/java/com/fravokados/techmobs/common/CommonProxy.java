@@ -19,4 +19,6 @@ public class CommonProxy {
 		FMLCommonHandler.instance().bus().register(new PlayerTickHandler());
 	}
 
+	public void registerRenderer() {}
+
 }

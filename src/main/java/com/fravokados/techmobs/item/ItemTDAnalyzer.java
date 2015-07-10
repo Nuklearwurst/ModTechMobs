@@ -47,7 +47,7 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if(!world.isRemote && player.isSneaking()) {
+		if (!world.isRemote && player.isSneaking()) {
 			int mode = getItemModeInt(stack);
 			mode = (mode + 1) % Mode.values().length;
 			setMode(stack, mode);
@@ -60,7 +60,7 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 					ItemStack itemStack = ((EntityItem) entity).getEntityItem();
 					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerItem, TDValues.getInstance().getTechDataForItem(itemStack)));
 				}
-			} else if(!world.isRemote && getItemMode(stack) == Mode.PLAYER) {
+			} else if (!world.isRemote && getItemMode(stack) == Mode.PLAYER) {
 				player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayer, player.getCommandSenderName(), TDManager.getPlayerScoutedTechLevel(player)));
 			}
 		}
@@ -69,9 +69,9 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity) {
-		if(getItemMode(stack) == Mode.PLAYER) {
+		if (getItemMode(stack) == Mode.PLAYER) {
 			if (!player.getEntityWorld().isRemote) {
-				if(entity instanceof EntityPlayer) {
+				if (entity instanceof EntityPlayer) {
 					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayer, entity.getCommandSenderName(), TDManager.getPlayerScoutedTechLevel((EntityPlayer) entity)));
 				} else {
 					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayerNoPlayer));

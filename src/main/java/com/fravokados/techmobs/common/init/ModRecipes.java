@@ -1,4 +1,4 @@
-package com.fravokados.techmobs.common;
+package com.fravokados.techmobs.common.init;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;

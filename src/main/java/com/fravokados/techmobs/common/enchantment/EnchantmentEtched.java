@@ -1,4 +1,4 @@
-package com.fravokados.techmobs.enchantment;
+package com.fravokados.techmobs.common.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
