@@ -4,35 +4,56 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ModRecipes {
 	
 	
 	@SuppressWarnings("UnnecessaryBoxing")
 	public static void init() {
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.monsterDetector),
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.monsterDetector),
 				"IGI",
 				" G ",
 				"RIR",
-				Character.valueOf('I'), new ItemStack(Items.iron_ingot),
-				Character.valueOf('G'), new ItemStack(Items.gold_ingot),
-				Character.valueOf('R'), new ItemStack(Items.rotten_flesh));
+				Character.valueOf('I'), "ingotIron",
+				Character.valueOf('G'), "ingotGold",
+				Character.valueOf('R'), new ItemStack(Items.rotten_flesh)));
 
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.item_cot),
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.item_cot),
 				"WWW",
 				"CCC",
 				Character.valueOf('W'), new ItemStack(Blocks.wool),
-				Character.valueOf('C'), new ItemStack(Blocks.carpet));
+				Character.valueOf('C'), new ItemStack(Blocks.carpet)));
 
 
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.upgradeTool),
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.upgradeTool),
 				"WGW",
 				"WGW",
 				"SIS",
-				Character.valueOf('I'), new ItemStack(Items.iron_ingot),
-				Character.valueOf('G'), new ItemStack(Items.gold_ingot),
-				Character.valueOf('W'), new ItemStack(Blocks.planks),
-				Character.valueOf('S'), new ItemStack(Blocks.stone));
+				Character.valueOf('I'), "ingotIron",
+				Character.valueOf('G'), "ingotGold",
+				Character.valueOf('W'), "plankWood",
+				Character.valueOf('S'), "stone"));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.quantumSword),
+				"SIS",
+				" D ",
+				" T ",
+				Character.valueOf('S'), new ItemStack(Items.shears),
+				Character.valueOf('I'), "ingotIron",
+				Character.valueOf('D'), "gemDiamond",
+				Character.valueOf('T'), "stickWood"));
+
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.tdAnalyzer),
+				"GEG",
+				"GDG",
+				" S ",
+				Character.valueOf('S'), new ItemStack(Items.sign),
+				Character.valueOf('E'), Items.ender_pearl,
+				Character.valueOf('D'), "gemDiamond",
+				Character.valueOf('G'), "dustGlowstone"));
+
+
 	}
 
 }

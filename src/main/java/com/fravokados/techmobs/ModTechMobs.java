@@ -16,6 +16,7 @@ import com.fravokados.techmobs.lib.Strings;
 import com.fravokados.techmobs.lib.util.LogHelper;
 import com.fravokados.techmobs.network.ModNetworkManager;
 import com.fravokados.techmobs.plugin.PluginManager;
+import com.fravokados.techmobs.plugin.ic2.IC2RecipeIntegration;
 import com.fravokados.techmobs.techdata.effects.TDEffects;
 import com.fravokados.techmobs.techdata.values.TDValues;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -99,6 +100,11 @@ public class ModTechMobs {
 		ModEntities.init();
 
 		//load recipes
+		try {
+			IC2RecipeIntegration.init();
+		} catch (Exception e) {
+			LogHelper.error(e, "Critical error loading ic2 recipes!");
+		}
 		ModRecipes.init();
 
 		//init networking
