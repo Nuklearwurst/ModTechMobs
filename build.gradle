@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "alpha-1.3"
+version = "alpha-1.4"
 group= "com.fravokados.techmobs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 //noinspection GroovyUnusedAssignment
 archivesBaseName = "TechMobs"
@@ -91,6 +91,57 @@ jar {
             }
         }
     }
+}
+
+task mindimJar(type: Jar, dependsOn: reobf) {
+    from(zipTree(jar.archivePath)) {
+        include '**/mindim/**'
+
+        include 'mcmod.info'
+        include '**/assets/mindim/**'
+
+        include 'ic2/**'
+    }
+    classifier = 'mindim'
+}
+
+task techmobsJar(type: Jar, dependsOn: reobf) {
+    from(zipTree(jar.archivePath)) {
+        include '**/techmobs/**'
+
+        include 'mcmod.info'
+        include '**/assets/techmobs/**'
+
+        include 'ic2/**'
+    }
+    classifier = 'techmobs'
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+task apiJar(type: Jar) {
+    from(sourceSets.main.allSource) {
+        include "**/mindim/api/**"
+        include "**/techmobs/api/**"
+    }
+    classifier = 'api'
+}
+
+artifacts {
+    archives mindimJar
+    archives techmobsJar
+
+    archives sourceJar
+    archives deobfJar
+    archives apiJar
 }
 
 idea {
