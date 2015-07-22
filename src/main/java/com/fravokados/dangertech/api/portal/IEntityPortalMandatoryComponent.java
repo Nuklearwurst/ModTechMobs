@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.mindim.block.tileentity;
+package com.fravokados.dangertech.api.portal;
 
 /**
  * @author Nuklearwurst

@@ -1,9 +1,15 @@
 package com.fravokados.dangertech.mindim.block.tileentity;
 
+import com.fravokados.dangertech.api.block.IBlockPlacedListener;
+import com.fravokados.dangertech.api.block.IFacingSix;
+import com.fravokados.dangertech.api.portal.IEntityPortalController;
+import com.fravokados.dangertech.api.upgrade.IUpgradable;
+import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
+import com.fravokados.dangertech.api.upgrade.UpgradeStatCollection;
+import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
+import com.fravokados.dangertech.core.inventory.InventoryUpgrade;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
-import com.fravokados.dangertech.mindim.block.IBlockPlacedListener;
-import com.fravokados.dangertech.mindim.block.IFacingSix;
 import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.mindim.block.tileentity.energy.EnergyStorage;
 import com.fravokados.dangertech.mindim.client.ClientPortalInfo;
@@ -20,11 +26,6 @@ import com.fravokados.dangertech.mindim.portal.PortalMetrics;
 import com.fravokados.dangertech.mindim.util.BlockUtils;
 import com.fravokados.dangertech.mindim.util.ItemUtils;
 import com.fravokados.dangertech.mindim.util.LogHelper;
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
-import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
-import com.fravokados.dangertech.api.upgrade.UpgradeStatCollection;
-import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
-import com.fravokados.dangertech.core.inventory.InventoryUpgrade;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -52,7 +53,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * @author Nuklearwurst
  */
-public class TileEntityPortalControllerEntity extends TileEntity implements ISidedInventory, IBlockPlacedListener, IEntityPortalOptionalComponent, IFacingSix, IEnergySink, IWrenchable, IUpgradable {
+public class TileEntityPortalControllerEntity extends TileEntity implements ISidedInventory, IBlockPlacedListener, IEntityPortalController, IFacingSix, IEnergySink, IWrenchable, IUpgradable {
 
 	/**
 	 * possible states of the controller
@@ -263,6 +264,10 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		return energyType;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	/**
 	 * reads the destination card
 	 *
@@ -309,11 +314,15 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 
 	/**
 	 * called on Block#onBlockPostPlaced()
-	 * registeres portal
+	 * registers portal
 	 */
 	@Override
 	public void onBlockPostPlaced(World world, int x, int y, int z, int meta) {
-		id = ModMiningDimension.instance.portalManager.registerNewEntityPortal(new BlockPositionDim(this));
+		if(id >= 0) {
+			PortalManager.getInstance().registerEntityPortal(id, new BlockPositionDim(this));
+		} else {
+			id = ModMiningDimension.instance.portalManager.registerNewEntityPortal(new BlockPositionDim(this));
+		}
 		PortalConstructor.createPortalMultiBlock(world, x, y, z);
 	}
 
@@ -351,7 +360,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			if (inventory[2].getItem() instanceof ItemDestinationCard && inventory[2].getItemDamage() != ItemDestinationCard.META_MIN_DIM) {
 				inventory[3] = inventory[2];
 				inventory[2] = null;
-				ItemDestinationCard.writeDestination(inventory[3], id);
+				ItemDestinationCard.writeDestination(inventory[3], id, getInventoryName());
 				markDirty();
 			}
 		}
@@ -401,8 +410,8 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 							if (energy.useEnergy(Settings.ENERGY_USAGE_CREATE_PORTAL)) {
 								portalDestination = PortalManager.getInstance().createPortal(id, metrics, this);
 								if (portalDestination >= 0) {
-									//create destination card
-									inventory[0] = ItemDestinationCard.fromDestination(portalDestination);
+									//create destination card, TODO: localization
+									inventory[0] = ItemDestinationCard.fromDestination(portalDestination, "Unknown");
 								} else {
 									resetOnError(Error.INVALID_DESTINATION);
 								}
@@ -572,7 +581,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 
 	@Override
 	public String getInventoryName() {
-		return hasCustomInventoryName() ? name : "Portal Controller";
+		return hasCustomInventoryName() ? name : "Unnamed";
 	}
 
 	@Override
@@ -783,6 +792,11 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	public ItemStack getWrenchDrop(EntityPlayer entityPlayer) {
 		ItemStack out = new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_CONTROLLER_ENTITY);
 		ItemUtils.writeUpgradesToItemStack(getUpgradeInventory(), out);
+		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(out);
+		nbt.setInteger("portalControllerId", id);
+		if(hasCustomInventoryName()) {
+			nbt.setString("portalControllerName", getInventoryName());
+		}
 		upgrades = null; //Hack to prevent droping of upgrades when removing using a wrench
 //		BlockUtils.dropUpgrades(worldObj, xCoord, yCoord, zCoord);
 		return out;

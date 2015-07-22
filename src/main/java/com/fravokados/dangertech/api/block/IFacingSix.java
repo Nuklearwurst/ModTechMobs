@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.mindim.block;
+package com.fravokados.dangertech.api.block;
 
 /**
  * helper interface for TileEntities that can face six directions

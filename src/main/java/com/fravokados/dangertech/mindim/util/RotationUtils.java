@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.mindim.util;
 
-import com.fravokados.dangertech.mindim.block.IFacingSix;
+import com.fravokados.dangertech.api.block.IFacingSix;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;

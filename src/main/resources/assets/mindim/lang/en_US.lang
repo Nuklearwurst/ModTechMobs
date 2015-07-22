@@ -18,7 +18,7 @@ chat.mindim.cancelBlockPlacing=Mmh, that didn't work...
 
 #Gui
 gui.mindim.destinationCard.portalBlocksStored=%d Portal Frame Blocks stored.
-gui.mindim.controller.id=ID: %s
+gui.mindim.controller.id=Name:
 gui.mindim.controller.destination=Destination: %s
 gui.mindim.controller.destination.unknown=Unknown
 gui.mindim.controller.destination.mindim=Mining Dimension

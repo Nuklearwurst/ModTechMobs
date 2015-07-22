@@ -53,10 +53,10 @@ public class ItemDestinationCard extends ItemMDMultiType {
 	public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean b) {
 		super.addInformation(stack, player, info, b);
 		if(stack.getItemDamage() != META_MIN_DIM) {
-				if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("destinationPortalType") && stack.stackTagCompound.hasKey("destinationPortal")) {
+				if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("destinationPortalType") && stack.stackTagCompound.hasKey("destinationPortalName")) {
 					int type = stack.stackTagCompound.getInteger("destinationPortalType");
-					int dest = stack.stackTagCompound.getInteger("destinationPortal");
-					info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_TYPE, PortalMetrics.Type.getType(type)));
+					String dest = stack.stackTagCompound.getString("destinationPortalName");
+					info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_TYPE, PortalMetrics.Type.getLocalizedName(type)));
 					info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_DESTINATION, dest));
 				} else {
 					info.add(EnumChatFormatting.ITALIC + Strings.translate(Strings.Tooltip.ITEM_DESTINATION_CARD_EMPTY) + EnumChatFormatting.RESET);
@@ -88,14 +88,17 @@ public class ItemDestinationCard extends ItemMDMultiType {
 		return stack.getItemDamage() == META_MIN_DIM ? 1 : 64;
 	}
 
-	public static ItemStack fromDestination(int id) {
-		return writeDestination(new ItemStack(ModItems.itemDestinationCard, 1, 0), id);
+	public static ItemStack fromDestination(int id, String name) {
+		return writeDestination(new ItemStack(ModItems.itemDestinationCard, 1, 0), id, name);
 	}
 
-	public static ItemStack writeDestination(ItemStack stack, int id) {
+	public static ItemStack writeDestination(ItemStack stack, int id, String name) {
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
 		nbt.setInteger("destinationPortalType", PortalMetrics.Type.ENTITY_PORTAL.ordinal());
 		nbt.setInteger("destinationPortal", id);
+		if(name != null) {
+			nbt.setString("destinationPortalName", name);
+		}
 		return stack;
 	}
 

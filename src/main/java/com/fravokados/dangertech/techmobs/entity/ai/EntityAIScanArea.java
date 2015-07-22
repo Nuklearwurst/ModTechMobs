@@ -30,7 +30,7 @@ public class EntityAIScanArea extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		return timer == 0;
+		return e.ticksExisted > 100 && timer == 0;
 	}
 
 	@Override

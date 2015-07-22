@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.mindim.block;
+package com.fravokados.dangertech.api.block;
 
 import net.minecraft.world.World;
 

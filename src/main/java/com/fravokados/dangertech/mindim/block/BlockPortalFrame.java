@@ -1,5 +1,7 @@
 package com.fravokados.dangertech.mindim.block;
 
+import com.fravokados.dangertech.api.block.IBlockPlacedListener;
+import com.fravokados.dangertech.api.block.IFacingSix;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalFrame;

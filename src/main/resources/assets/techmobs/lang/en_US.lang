@@ -51,11 +51,17 @@ command.techmobs.permlevel=Permission Level: %s
 command.techmobs.list=Available Subcommands:
 command.techmobs.help=Command Usage: %s
 
+#Entity
+entity.con_unit.name=Flying Coffin
+entity.emp_creeper.name=EMP Creeper
+entity.cyber_zombie.name=Cyber Zombie
+
 #Items
 item.techmobs:monsterDetector.name=Monster Detector
 item.techmobs:upgradeTool.name=Upgrade Tool
 item.techmobs:tdAnalyzer.name=TechData Analyzer
 item.techmobs:quantumSword.name=Quantum Sword
+item.techmobs:itemConservationUnit.name=Conservation Unit
 
 #Analyzer Modes
 item.tdAnalyzer.mode.block=Block

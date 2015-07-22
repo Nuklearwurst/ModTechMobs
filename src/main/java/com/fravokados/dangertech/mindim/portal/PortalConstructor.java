@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.mindim.portal;
 
-import com.fravokados.dangertech.mindim.block.tileentity.IEntityPortalComponent;
-import com.fravokados.dangertech.mindim.block.tileentity.IEntityPortalMandatoryComponent;
+import com.fravokados.dangertech.api.portal.IEntityPortalComponent;
+import com.fravokados.dangertech.api.portal.IEntityPortalMandatoryComponent;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.util.LogHelper;

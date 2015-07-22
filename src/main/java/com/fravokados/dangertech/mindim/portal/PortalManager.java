@@ -2,7 +2,7 @@ package com.fravokados.dangertech.mindim.portal;
 
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
-import com.fravokados.dangertech.mindim.block.IFacingSix;
+import com.fravokados.dangertech.api.block.IFacingSix;
 import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.configuration.Settings;
@@ -270,7 +270,7 @@ public class PortalManager extends WorldSavedData {
 		TileEntity te = worldServer.getTileEntity(pos.x, pos.y + yOffset, pos.z);
 		if (te != null && te instanceof TileEntityPortalControllerEntity) {
 			if (Settings.PORTAL_SPAWN_WITH_CARD) {
-				((TileEntityPortalControllerEntity) te).setInventorySlotContents(0, ItemDestinationCard.fromDestination(parent));
+				((TileEntityPortalControllerEntity) te).setInventorySlotContents(0, ItemDestinationCard.fromDestination(parent, ((TileEntityPortalControllerEntity) te).getInventoryName()));
 			}
 			((TileEntityPortalControllerEntity) te).onBlockPostPlaced(te.getWorldObj(), pos.x, pos.y + yOffset, pos.z, worldServer.getBlockMetadata(pos.x, pos.y + yOffset, pos.z));
 			if (parentTile instanceof IFacingSix) {
