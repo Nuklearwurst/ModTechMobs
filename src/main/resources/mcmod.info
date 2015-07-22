@@ -1,5 +1,19 @@
 [
 {
+  "modid": "nwcore",
+  "name": "NwCore",
+  "description": "Shared Code for mods",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Nuklearwurst"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+},
+{
   "modid": "techmobs",
   "name": "Tech Mobs",
   "description": "It's all about balance!",
@@ -11,7 +25,7 @@
   "credits": "MinecraftForge and all the OpenSource mods out there.",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "dependencies": ["nwcore"]
 },
 {
   "modid": "MiningDimension",
@@ -25,6 +39,6 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "dependencies": ["nwcore"]
 }
 ]

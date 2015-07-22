@@ -18,9 +18,9 @@ buildscript {
 apply plugin: 'forge'
 
 version = "alpha-1.4"
-group= "com.fravokados.techmobs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "com.fravokados.dangertech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 //noinspection GroovyUnusedAssignment
-archivesBaseName = "TechMobs"
+archivesBaseName = "DangerousTechnology"
 
 minecraft {
     version = "1.7.10-10.13.3.1408-1.7.10"
@@ -95,7 +95,7 @@ jar {
 
 task mindimJar(type: Jar, dependsOn: reobf) {
     from(zipTree(jar.archivePath)) {
-        include '**/mindim/**'
+        include '**/dangertech/mindim/**'
 
         include 'mcmod.info'
         include '**/assets/mindim/**'
@@ -107,7 +107,7 @@ task mindimJar(type: Jar, dependsOn: reobf) {
 
 task techmobsJar(type: Jar, dependsOn: reobf) {
     from(zipTree(jar.archivePath)) {
-        include '**/techmobs/**'
+        include '**/dangertech/techmobs/**'
 
         include 'mcmod.info'
         include '**/assets/techmobs/**'
@@ -115,6 +115,18 @@ task techmobsJar(type: Jar, dependsOn: reobf) {
         include 'ic2/**'
     }
     classifier = 'techmobs'
+}
+
+task nwcoreJar(type: Jar, dependsOn: reobf) {
+    from(zipTree(jar.archivePath)) {
+        include '**/dangertech/nwcore/**'
+
+        include 'mcmod.info'
+        include '**/assets/nwcore/**'
+
+        include 'ic2/**'
+    }
+    classifier = 'nwcore'
 }
 
 task sourceJar(type: Jar) {
@@ -129,8 +141,7 @@ task deobfJar(type: Jar) {
 
 task apiJar(type: Jar) {
     from(sourceSets.main.allSource) {
-        include "**/mindim/api/**"
-        include "**/techmobs/api/**"
+        include "**/dangertech/api/**"
     }
     classifier = 'api'
 }
@@ -138,6 +149,7 @@ task apiJar(type: Jar) {
 artifacts {
     archives mindimJar
     archives techmobsJar
+    archives nwcoreJar
 
     archives sourceJar
     archives deobfJar

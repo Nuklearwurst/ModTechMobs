@@ -1,0 +1,22 @@
+package com.fravokados.dangertech.core.common.init;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+
+public class ModRecipes {
+	
+	
+	@SuppressWarnings("UnnecessaryBoxing")
+	public static void init() {
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.upgradeTool),
+				"WGW",
+				"WGW",
+				"SIS",
+				Character.valueOf('I'), "ingotIron",
+				Character.valueOf('G'), "ingotGold",
+				Character.valueOf('W'), "plankWood",
+				Character.valueOf('S'), "stone"));
+	}
+
+}
