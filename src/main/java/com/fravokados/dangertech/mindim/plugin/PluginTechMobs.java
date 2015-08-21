@@ -1,9 +1,9 @@
 package com.fravokados.dangertech.mindim.plugin;
 
+import com.fravokados.dangertech.api.DangerousTechnologyAPI;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalFrame;
 import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
-import com.fravokados.dangertech.techmobs.techdata.values.TDValues;
 import cpw.mods.fml.common.Loader;
 
 public class PluginTechMobs {
@@ -18,7 +18,7 @@ public class PluginTechMobs {
 			return;
 		}
 		LogHelperMD.debug("Loading Dangerous Technology Integration");
-		TDValues.getInstance().registerTileEntityEntry(TileEntityPortalControllerEntity.class, 100);
-		TDValues.getInstance().registerTileEntityEntry(TileEntityPortalFrame.class, 2);
+		DangerousTechnologyAPI.valueRegistry.registerTileEntityEntry(TileEntityPortalControllerEntity.class, 100);
+		DangerousTechnologyAPI.valueRegistry.registerTileEntityEntry(TileEntityPortalFrame.class, 2);
 	}
 }

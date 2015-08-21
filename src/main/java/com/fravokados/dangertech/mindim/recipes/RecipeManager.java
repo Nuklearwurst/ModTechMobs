@@ -42,7 +42,7 @@ public class RecipeManager {
 		/**
 		 * Portal Frame (+rotated)
 		 */
-		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_FRAME_ENTITY),
+		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 4, BlockPortalFrame.META_FRAME_ENTITY),
 				"oco",
 				"wmw",
 				"oco",
@@ -51,7 +51,7 @@ public class RecipeManager {
 				Character.valueOf('w'), copperWire,
 				Character.valueOf('c'), coil
 		);
-		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_FRAME_ENTITY),
+		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 4, BlockPortalFrame.META_FRAME_ENTITY),
 				"owo",
 				"cmc",
 				"owo",

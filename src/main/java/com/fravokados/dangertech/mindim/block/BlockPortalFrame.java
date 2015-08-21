@@ -58,7 +58,7 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 	public BlockPortalFrame() {
 		super(Material.iron);
 		setHardness(2.0F);
-		setResistance(4.0F);
+		setResistance(10.0F);
 	}
 
 	@Override
