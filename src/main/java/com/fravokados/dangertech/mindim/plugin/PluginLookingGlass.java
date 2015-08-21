@@ -21,10 +21,6 @@ public class PluginLookingGlass {
 		return apiLoaded;
 	}
 
-	public static void init() {
-
-	}
-
 	public static void register(APIInstanceProvider provider) {
 		try {
 			Object apiinst = provider.getAPIInstance("view-2");
