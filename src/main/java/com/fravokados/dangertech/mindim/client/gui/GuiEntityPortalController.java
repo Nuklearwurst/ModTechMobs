@@ -2,6 +2,7 @@ package com.fravokados.dangertech.mindim.client.gui;
 
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.inventory.ContainerEntityPortalController;
+import com.fravokados.dangertech.mindim.lib.NBTKeys;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.mindim.lib.Textures;
 import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
@@ -63,7 +64,7 @@ public class GuiEntityPortalController extends GuiContainer {
 		btnEdit = new GuiImageButton(BUTTON_ID_EDIT, guiLeft + 179, guiTop + 18, true, Textures.GUI_BUTTON_EDIT);
 		this.buttonList.add(btnEdit);
 
-		txtName = new GuiTextField(this.fontRendererObj, 58 + fontRendererObj.getStringWidth(Strings.translate(Strings.Gui.CONTROLLER_ID) + " "), 18, 90, 20);
+		txtName = new GuiTextField(this.fontRendererObj, 58 + fontRendererObj.getStringWidth(Strings.translate(Strings.Gui.CONTROLLER_NAME) + " "), 18, 90, 20);
 		txtName.setTextColor(0x00FF00);
 		txtName.setText(te.getInventoryName());
 		txtName.setEnableBackgroundDrawing(false);
@@ -81,11 +82,11 @@ public class GuiEntityPortalController extends GuiContainer {
 				ModMDNetworkManager.INSTANCE.sendToServer(new MessageGuiElementClicked(ContainerEntityPortalController.NETWORK_ID_STOP, 0));
 				return;
 			case BUTTON_ID_EDIT:
-				if(txtName.isFocused()) {
+				if (txtName.isFocused()) {
 					updateNameText();
 					txtName.setFocused(false);
 				} else {
-					if(!te.hasCustomInventoryName()) {
+					if (!te.hasCustomInventoryName()) {
 						txtName.setText("");
 					}
 					txtName.setFocused(true);
@@ -125,11 +126,10 @@ public class GuiEntityPortalController extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_) {
 		super.drawGuiContainerForegroundLayer(p_146979_1_, p_146979_2_);
-		//TODO hide/prettify destination and portal id
-		drawString(this.fontRendererObj, Strings.translate(Strings.Gui.CONTROLLER_ID), 58, 18, 0xa2cc42);
+		drawString(this.fontRendererObj, Strings.translate(Strings.Gui.CONTROLLER_NAME), 58, 18, 0xa2cc42);
 		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_DESTINATION, getDestinationString(te.getDestination(), te.getStackInSlot(0))), 58, 30, 0xa2cc42);
 		//TODO translate State
-		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_STATE, te.getState()), 58, 40, 0xa2cc42);
+		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_STATE, te.getState().getTranslationShort()), 58, 40, 0xa2cc42);
 		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_ERROR, te.getLastError() == TileEntityPortalControllerEntity.Error.NO_ERROR ? te.getLastError().getTranslationShort() : (EnumChatFormatting.RED + te.getLastError().getTranslationShort() + EnumChatFormatting.RESET)), 58, 50, 0xa2cc42);
 
 		txtName.drawTextBox();
@@ -142,19 +142,22 @@ public class GuiEntityPortalController extends GuiContainer {
 	 * @param y mouse position y
 	 */
 	private void drawTooltips(int x, int y) {
-		if(GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 199, guiLeft + 199 + 16, guiTop + 15, guiTop + 15 + 55)) {
+		if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 199, guiLeft + 199 + 16, guiTop + 15, guiTop + 15 + 55)) {
 			List<String> list = new ArrayList<String>();
 			//TODO support multiple energy types
 			list.add(EnumChatFormatting.GRAY + "" + (int) te.getEnergyStored() + " EU / " + te.getMaxEnergyStored() + " EU" + EnumChatFormatting.RESET);
 			drawHoveringText(list, x, y, fontRendererObj);
-		} else if(GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 55, guiLeft + 190, guiTop + 50, guiTop + 60)) {
+		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 55, guiLeft + 190, guiTop + 40, guiTop + 50)) {
+			List<String> list = new ArrayList<String>();
+			list.add(Strings.translate(te.getState().getTranslationDetail()));
+			drawHoveringText(list, x, y, fontRendererObj);
+		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 55, guiLeft + 190, guiTop + 50, guiTop + 60)) {
 			List<String> list = new ArrayList<String>();
 			list.add((te.getLastError() == TileEntityPortalControllerEntity.Error.NO_ERROR ? EnumChatFormatting.GREEN : EnumChatFormatting.RED) + te.getLastError().getTranslationDetail() + EnumChatFormatting.RESET);
 			drawHoveringText(list, x, y, fontRendererObj);
-		} else if(GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 179, guiLeft + 187, guiTop + 18, guiTop + 26)) {
+		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 179, guiLeft + 187, guiTop + 18, guiTop + 26)) {
 			List<String> list = new ArrayList<String>();
-			//TODO localization
-			list.add("Edit name");
+			list.add(Strings.translate(Strings.Gui.CONTROLLER_EDIT_NAME_HOVER));
 			drawHoveringText(list, x, y, fontRendererObj);
 		}
 	}
@@ -172,13 +175,13 @@ public class GuiEntityPortalController extends GuiContainer {
 			case PortalManager.PORTAL_NOT_CONNECTED:
 				return Strings.translate(Strings.Gui.CONTROLLER_DESTINATION_NONE);
 		}
-		if(dest < 0) {
+		if (dest < 0) {
 			return Strings.translate(Strings.Gui.CONTROLLER_DESTINATION_ERROR);// + " (" + dest + ")";
 		}
-		if(stack != null) {
+		if (stack != null) {
 			NBTTagCompound tag = ItemUtils.getNBTTagCompound(stack);
-			if(tag.hasKey("destinationPortalName")) {
-				return tag.getString("destinationPortalName");
+			if (tag.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_NAME)) {
+				return tag.getString(NBTKeys.DESTINATION_CARD_PORTAL_NAME);
 			}
 		}
 		return Strings.translate(Strings.Gui.CONTROLLER_DESTINATION_UNKNOWN);// + " (" + dest + ")";
@@ -186,7 +189,7 @@ public class GuiEntityPortalController extends GuiContainer {
 
 	@Override
 	protected void keyTyped(char c, int keyCode) {
-		if(txtName.isFocused()) {
+		if (txtName.isFocused()) {
 			switch (keyCode) {
 				case 28:
 				case 156:
@@ -207,7 +210,7 @@ public class GuiEntityPortalController extends GuiContainer {
 	@Override
 	protected void mouseClicked(int x, int y, int btn) {
 		super.mouseClicked(x, y, btn);
-		if(txtName.isFocused()) {
+		if (txtName.isFocused()) {
 			txtName.mouseClicked(x, y, btn);
 		}
 	}
@@ -215,7 +218,7 @@ public class GuiEntityPortalController extends GuiContainer {
 	private void updateNameText() {
 		String text = txtName.getText();
 		ModMDNetworkManager.INSTANCE.sendToServer(new MessageGuiTextUpdate("controllerName", txtName.getText()));
-		if(text.isEmpty()) {
+		if (text.isEmpty()) {
 			te.setName(null);
 		} else {
 			te.setName(text);

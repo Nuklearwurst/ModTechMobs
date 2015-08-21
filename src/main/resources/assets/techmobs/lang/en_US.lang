@@ -61,7 +61,7 @@ item.techmobs:monsterDetector.name=Monster Detector
 item.techmobs:upgradeTool.name=Upgrade Tool
 item.techmobs:tdAnalyzer.name=TechData Analyzer
 item.techmobs:quantumSword.name=Quantum Sword
-item.techmobs:itemConservationUnit.name=Conservation Unit
+item.techmobs:conservationUnit.name=Conservation Unit
 
 #Analyzer Modes
 item.tdAnalyzer.mode.block=Block

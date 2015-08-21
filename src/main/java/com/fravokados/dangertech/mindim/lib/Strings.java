@@ -40,10 +40,11 @@ public class Strings {
 	public static final class Gui {
 		public static final String DESTINATION_CARD_PORTAL_BLOCKS_STORED = "gui.mindim.destinationCard.portalBlocksStored";
 
-		public static final String CONTROLLER_ID = "gui.mindim.controller.id";
+		public static final String CONTROLLER_NAME = "gui.mindim.controller.name";
 		public static final String CONTROLLER_DESTINATION = "gui.mindim.controller.destination";
 		public static final String CONTROLLER_STATE = "gui.mindim.controller.state";
 		public static final String CONTROLLER_ERROR = "gui.mindim.controller.error";
+		public static final String CONTROLLER_EDIT_NAME_HOVER = "gui.mindim.controller.edit.name";
 
 		public static final String CONTROLLER_DESTINATION_UNKNOWN = "gui.mindim.controller.destination.unknown";
 		public static final String CONTROLLER_DESTINATION_MINDIM = "gui.mindim.controller.destination.mindim";
@@ -57,6 +58,9 @@ public class Strings {
 		public static final String CONTROLLER_ERROR_MSG_SHORT_BASE = "gui.error.short.";
 		public static final String CONTROLLER_ERROR_MSG_DETAIL_BASE = "gui.error.detail.";
 		public static final String[] CONTROLLER_ERROR_MSG = new String[] {"noError", "invalidDestination", "invalidStructure", "connectionInterrupted", "powerFailure", "destinationChanged", "missingResources", "unknown"};
+		public static final String CONTROLLER_STATE_MSG_SHORT_BASE = "gui.controller.state.short.";
+		public static final String CONTROLLER_STATE_MSG_DETAIL_BASE = "gui.controller.state.detail.";
+		public static final String[] CONTROLLER_STATE_MSG = {"noMultiBlock", "ready", "connecting", "outgoingPortal", "incomingConnection", "incomingPortal"};
 	}
 
 	public static final class Tooltip {

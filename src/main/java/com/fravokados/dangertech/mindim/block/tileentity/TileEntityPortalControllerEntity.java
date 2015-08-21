@@ -18,6 +18,7 @@ import com.fravokados.dangertech.mindim.client.ClientPortalInfo;
 import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.inventory.ContainerEntityPortalController;
 import com.fravokados.dangertech.mindim.item.ItemDestinationCard;
+import com.fravokados.dangertech.mindim.lib.NBTKeys;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
@@ -60,7 +61,15 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	 * possible states of the controller
 	 */
 	public enum State {
-		NO_MULTIBLOCK, READY, CONNECTING, OUTGOING_PORTAL, INCOMING_CONNECTION, INCOMING_PORTAL
+		NO_MULTIBLOCK, READY, CONNECTING, OUTGOING_PORTAL, INCOMING_CONNECTION, INCOMING_PORTAL;
+
+		public String getTranslationShort() {
+			return Strings.translate(Strings.Gui.CONTROLLER_STATE_MSG_SHORT_BASE + Strings.Gui.CONTROLLER_STATE_MSG[this.ordinal()]);
+		}
+
+		public String getTranslationDetail() {
+			return Strings.translate(Strings.Gui.CONTROLLER_STATE_MSG_DETAIL_BASE + Strings.Gui.CONTROLLER_STATE_MSG[this.ordinal()]);
+		}
 	}
 
 	/**
@@ -105,7 +114,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	/**
 	 * Controller name
 	 */
-	private String name = null; //TODO: Controller naming
+	private String name = null;
 
 	/**
 	 * Controller main inventory
@@ -299,9 +308,9 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		if (inventory[0].getItem() instanceof ItemDestinationCard) {
 			if (inventory[0].getItemDamage() == ItemDestinationCard.META_MIN_DIM) {
 				return PortalManager.PORTAL_MINING_DIMENSION;
-			} else if (inventory[0].stackTagCompound != null && inventory[0].stackTagCompound.hasKey("destinationPortalType") && inventory[0].stackTagCompound.hasKey("destinationPortal")) {
-				if (inventory[0].stackTagCompound.getInteger("destinationPortalType") == PortalMetrics.Type.ENTITY_PORTAL.ordinal()) {
-					return inventory[0].stackTagCompound.getInteger("destinationPortal");
+			} else if (inventory[0].stackTagCompound != null && inventory[0].stackTagCompound.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) && inventory[0].stackTagCompound.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_ID)) {
+				if (inventory[0].stackTagCompound.getInteger(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) == PortalMetrics.Type.ENTITY_PORTAL.ordinal()) {
+					return inventory[0].stackTagCompound.getInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID);
 				} else {
 					return PortalManager.PORTAL_WRONG_TYPE;
 				}

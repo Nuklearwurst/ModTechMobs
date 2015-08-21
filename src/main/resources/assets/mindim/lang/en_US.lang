@@ -18,7 +18,8 @@ chat.mindim.cancelBlockPlacing=Mmh, that didn't work...
 
 #Gui
 gui.mindim.destinationCard.portalBlocksStored=%d Portal Frame Blocks stored.
-gui.mindim.controller.id=Name:
+gui.mindim.controller.name=Name:
+gui.mindim.controller.edit.name=Edit Name
 gui.mindim.controller.destination=Destination: %s
 gui.mindim.controller.destination.unknown=Unknown
 gui.mindim.controller.destination.mindim=Mining Dimension
@@ -47,6 +48,20 @@ gui.error.short.missingResources=Resources
 gui.error.detail.missingResources=Not enough minerals! (You need more Portal Frames)
 gui.error.short.unknown=Unknown
 gui.error.detail.unknown=An unknown error has occurred!
+
+#Gui Controller - States
+gui.controller.state.short.noMultiBlock=No Portal
+gui.controller.state.detail.noMultiBlock=Could not form valid Portal structure!
+gui.controller.state.short.ready=Ready
+gui.controller.state.detail.ready=Portal Controller is ready!
+gui.controller.state.short.connecting=Connecting
+gui.controller.state.detail.connecting=Opening a connection...
+gui.controller.state.short.outgoingPortal=Portal (O)
+gui.controller.state.detail.outgoingPortal=There is an open outgoing Portal.
+gui.controller.state.short.incomingConnection=Connection found
+gui.controller.state.detail.incomingConnection=Incoming connection, awaiting Portal activation.
+gui.controller.state.short.incomingPortal=Portal (I)
+gui.controller.state.detail.incomingPortal=There is an open incoming Portal.
 
 #CreativeTab
 itemGroup.mindim=Mining Dimension
