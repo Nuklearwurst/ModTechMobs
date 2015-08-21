@@ -7,9 +7,9 @@ import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.item.ItemDestinationCard;
-import com.fravokados.dangertech.mindim.util.LogHelper;
-import com.fravokados.dangertech.mindim.util.RotationUtils;
-import com.fravokados.dangertech.mindim.util.TeleportUtils;
+import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
+import com.fravokados.dangertech.mindim.lib.util.RotationUtils;
+import com.fravokados.dangertech.mindim.lib.util.TeleportUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -278,7 +278,7 @@ public class PortalManager extends WorldSavedData {
 			}
 			return ((TileEntityPortalControllerEntity) te).getId();
 		}
-		LogHelper.warn("Error creating Portal Controller!");
+		LogHelperMD.warn("Error creating Portal Controller!");
 		return PORTAL_NOT_CONNECTED;
 	}
 

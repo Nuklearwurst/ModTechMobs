@@ -6,7 +6,7 @@ import com.fravokados.dangertech.techmobs.common.SleepingManager;
 import com.fravokados.dangertech.techmobs.configuration.Settings;
 import com.fravokados.dangertech.techmobs.entity.EntityConservationUnit;
 import com.fravokados.dangertech.techmobs.entity.ai.EntityAIScanArea;
-import com.fravokados.dangertech.techmobs.lib.util.BlockUtils;
+import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.techmobs.lib.util.EntityUtils;
 import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import com.fravokados.dangertech.techmobs.techdata.effects.TDEffectHandler;

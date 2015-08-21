@@ -2,6 +2,7 @@ package com.fravokados.dangertech.mindim.block;
 
 import com.fravokados.dangertech.api.block.IBlockPlacedListener;
 import com.fravokados.dangertech.api.block.IFacingSix;
+import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalFrame;
@@ -9,8 +10,7 @@ import com.fravokados.dangertech.mindim.lib.GUIIDs;
 import com.fravokados.dangertech.mindim.lib.Textures;
 import com.fravokados.dangertech.mindim.plugin.PluginIC2;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
-import com.fravokados.dangertech.mindim.util.BlockUtils;
-import com.fravokados.dangertech.mindim.util.RotationUtils;
+import com.fravokados.dangertech.mindim.lib.util.RotationUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -242,5 +242,10 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 		BlockUtils.dropInventory(world, x, y, z);
 		BlockUtils.dropUpgrades(world, x, y, z);
 		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
 	}
 }

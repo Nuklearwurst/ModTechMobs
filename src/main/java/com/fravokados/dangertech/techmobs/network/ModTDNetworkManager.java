@@ -11,7 +11,7 @@ import cpw.mods.fml.relauncher.Side;
 /**
  * @author Nuklearwurst
  */
-public class ModNetworkManager {
+public class ModTDNetworkManager {
 
 	public static SimpleNetworkWrapper INSTANCE;
 

@@ -1,8 +1,8 @@
 package com.fravokados.dangertech.techmobs.command;
 
 import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.dangertech.core.lib.util.GeneralUtils;
 import com.fravokados.dangertech.techmobs.common.EMPExplosion;
-import com.fravokados.dangertech.techmobs.lib.util.GeneralUtils;
 import com.fravokados.dangertech.techmobs.techdata.effects.TDEffects;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;

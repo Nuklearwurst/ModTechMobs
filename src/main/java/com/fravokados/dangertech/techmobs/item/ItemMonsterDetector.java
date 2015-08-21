@@ -1,7 +1,12 @@
 package com.fravokados.dangertech.techmobs.item;
 
 import com.fravokados.dangertech.api.item.IItemAttackTargetListener;
-import com.fravokados.dangertech.techmobs.lib.util.GeneralUtils;
+import com.fravokados.dangertech.core.lib.util.GeneralUtils;
+import com.fravokados.dangertech.techmobs.configuration.Settings;
+import com.fravokados.dangertech.techmobs.lib.Strings;
+import com.fravokados.dangertech.techmobs.techdata.TDManager;
+import com.fravokados.dangertech.techmobs.techdata.effects.TDEffectHandler;
+import com.fravokados.dangertech.techmobs.world.TechDataStorage;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityZombie;
@@ -12,12 +17,6 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-
-import com.fravokados.dangertech.techmobs.configuration.Settings;
-import com.fravokados.dangertech.techmobs.lib.Strings;
-import com.fravokados.dangertech.techmobs.techdata.TDManager;
-import com.fravokados.dangertech.techmobs.techdata.effects.TDEffectHandler;
-import com.fravokados.dangertech.techmobs.world.TechDataStorage;
 
 public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetListener {
 

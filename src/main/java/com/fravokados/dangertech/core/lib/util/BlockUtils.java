@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.mindim.util;
+package com.fravokados.dangertech.core.lib.util;
 
 import com.fravokados.dangertech.api.upgrade.IUpgradable;
 import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;

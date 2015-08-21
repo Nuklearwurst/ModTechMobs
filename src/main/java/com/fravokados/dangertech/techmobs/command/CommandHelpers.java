@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.techmobs.command;
 
-import com.fravokados.dangertech.techmobs.lib.util.GeneralUtils;
+import com.fravokados.dangertech.core.lib.util.GeneralUtils;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;

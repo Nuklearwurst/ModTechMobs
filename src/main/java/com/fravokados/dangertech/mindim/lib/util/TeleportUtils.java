@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.mindim.util;
+package com.fravokados.dangertech.mindim.lib.util;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.Entity;

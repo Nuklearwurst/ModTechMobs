@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.mindim.util;
+package com.fravokados.dangertech.mindim.lib.util;
 
 import com.fravokados.dangertech.api.block.IFacingSix;
 import net.minecraft.entity.EntityLivingBase;
@@ -67,7 +67,7 @@ public class RotationUtils {
 	}
 
 	public static int getTransformationDirection(int a1, int a2) {
-		int[][] matrix = {
+		final int[][] matrix = {
 				{1, 0, 3, 2, 5, 4},
 				{0, 1, 2, 3, 4, 5},
 				{1, 0, 3, 2, 5, 4},

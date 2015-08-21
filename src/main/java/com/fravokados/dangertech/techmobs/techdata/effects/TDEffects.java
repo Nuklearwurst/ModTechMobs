@@ -9,7 +9,7 @@ import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffectPotion;
 import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffectPotion;
 import com.fravokados.dangertech.techmobs.lib.Strings;
-import com.fravokados.dangertech.techmobs.lib.util.ChatUtils;
+import com.fravokados.dangertech.core.lib.util.ChatUtils;
 import com.fravokados.dangertech.techmobs.lib.util.LogHelperTM;
 import com.fravokados.dangertech.techmobs.techdata.effects.chunk.TDChunkEffectRain;
 import com.fravokados.dangertech.techmobs.techdata.effects.chunk.TDChunkEffectThunder;

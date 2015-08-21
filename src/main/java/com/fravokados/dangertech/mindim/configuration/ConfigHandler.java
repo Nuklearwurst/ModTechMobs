@@ -2,7 +2,7 @@ package com.fravokados.dangertech.mindim.configuration;
 
 import com.fravokados.dangertech.mindim.lib.Reference;
 import com.fravokados.dangertech.mindim.lib.Strings.Keys;
-import com.fravokados.dangertech.mindim.util.LogHelper;
+import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
@@ -28,7 +28,7 @@ public class ConfigHandler {
 			try {
 				config.load();
 			} catch(Exception e) {
-				LogHelper.error(Reference.MOD_NAME + " has had a problem loading its configuration!");
+				LogHelperMD.error(Reference.MOD_NAME + " has had a problem loading its configuration!");
 			}
 		}
 		//read config
@@ -38,6 +38,7 @@ public class ConfigHandler {
 		/////////////
 
 		Settings.PORTAL_SPAWN_WITH_CARD = config.getBoolean(Keys.General.PORTAL_SPAWN_WITH_CARD, Configuration.CATEGORY_GENERAL, DefaultSettings.General.PORTAL_SPAWN_WITH_CARD, "Should a portal to the Mining Dimension also spawn a Destination Card leading to the Origin-Portal?");
+		Settings.MAX_PORTAL_CONNECTION_LENGTH = config.getInt(Keys.General.PORTAL_MAX_CONNECTION_LENGTH, Configuration.CATEGORY_GENERAL, DefaultSettings.General.PORTAL_MAX_CONNECTION_LENGTH, 0, 20 * 60 * 20, "Maximum duration of a connection");
 
 		////////////
 		// DEBUG //
@@ -59,7 +60,7 @@ public class ConfigHandler {
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
 		if(eventArgs.modID.equalsIgnoreCase(Reference.MOD_ID)) {
 			load(false);
-			LogHelper.info("Reloading config!");
+			LogHelperMD.info("Reloading config!");
 		}
 	}
 

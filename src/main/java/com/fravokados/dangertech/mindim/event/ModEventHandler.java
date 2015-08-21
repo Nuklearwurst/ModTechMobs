@@ -4,7 +4,7 @@ import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
-import com.fravokados.dangertech.mindim.util.LogHelper;
+import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.util.ChatComponentTranslation;
@@ -51,7 +51,7 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public void unloadWorld(WorldEvent.Unload evt) {
 		if (!evt.world.isRemote && evt.world.provider.dimensionId == 0) {
-			LogHelper.trace("Unloading PortalManager...");
+			LogHelperMD.trace("Unloading PortalManager...");
 			ModMiningDimension.instance.portalManager = null;
 		}
 	}

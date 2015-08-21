@@ -2,7 +2,7 @@ package com.fravokados.dangertech.mindim.block;
 
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortal;
 import com.fravokados.dangertech.mindim.lib.Strings;
-import com.fravokados.dangertech.mindim.util.LogHelper;
+import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -77,7 +77,7 @@ public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 			if (te != null && te instanceof TileEntityPortal) {
 				((TileEntityPortal) te).onEntityEnterPortal(entity);
 			} else {
-				LogHelper.error("Invalid Portal!");
+				LogHelperMD.error("Invalid Portal!");
 				removePortalAndSurroundingPortals(world, x, y, z);
 			}
 		}

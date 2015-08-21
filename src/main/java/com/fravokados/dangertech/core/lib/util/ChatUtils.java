@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.techmobs.lib.util;
+package com.fravokados.dangertech.core.lib.util;
 
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;

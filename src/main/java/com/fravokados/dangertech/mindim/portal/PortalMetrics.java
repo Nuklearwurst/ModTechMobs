@@ -1,13 +1,13 @@
 package com.fravokados.dangertech.mindim.portal;
 
-import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
-import com.fravokados.dangertech.mindim.block.BlockPortalMinDim;
 import com.fravokados.dangertech.api.block.IFacingSix;
-import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.api.portal.IEntityPortalComponent;
 import com.fravokados.dangertech.api.portal.IEntityPortalMandatoryComponent;
+import com.fravokados.dangertech.core.lib.util.BlockUtils;
+import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
+import com.fravokados.dangertech.mindim.block.BlockPortalMinDim;
+import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.mindim.lib.Strings;
-import com.fravokados.dangertech.mindim.util.BlockUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -236,7 +236,9 @@ public class PortalMetrics {
 				for(int z = minZ; z <= maxZ; z++) {
 					flagZ = z == minZ || z == maxZ;
 					if(!(flagX == flagY ? flagX : flagZ)) {
-						if(!world.isAirBlock(x, y, z)) {
+						if(!world.isAirBlock(x, y, z) && world.getBlock(x, y, z) != ModBlocks.blockPortalBlock) {
+							//skip portal block when searching for empty frame to allow client to update metrics when a portal is already opened
+							//see ClientPortalInfo for more information
 							return false;
 						}
 					}

@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.techmobs.lib;
 
 
-import com.fravokados.dangertech.techmobs.lib.util.GeneralUtils;
+import com.fravokados.dangertech.core.lib.util.GeneralUtils;
 
 public class Strings {
 	

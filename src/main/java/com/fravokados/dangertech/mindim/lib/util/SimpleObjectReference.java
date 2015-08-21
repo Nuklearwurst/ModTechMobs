@@ -1,6 +1,7 @@
-package com.fravokados.dangertech.mindim.util;
+package com.fravokados.dangertech.mindim.lib.util;
 
 /**
+ * simple object holder
  * @author Nuklearwurst
  */
 public class SimpleObjectReference<T> {

@@ -11,17 +11,14 @@ import com.fravokados.dangertech.mindim.event.ModEventHandler;
 import com.fravokados.dangertech.mindim.item.ModItems;
 import com.fravokados.dangertech.mindim.lib.Reference;
 import com.fravokados.dangertech.mindim.lib.Strings;
-import com.fravokados.dangertech.mindim.network.ModNetworkManager;
+import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
+import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
 import com.fravokados.dangertech.mindim.plugin.PluginTechMobs;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
 import com.fravokados.dangertech.mindim.recipes.RecipeManager;
-import com.fravokados.dangertech.mindim.util.LogHelper;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -78,9 +75,12 @@ public class ModMiningDimension {
         DimensionManager.registerDimension(Settings.dimensionId, Settings.dimensionId);
 
 	    //initalize NetworkHandler
-	    ModNetworkManager.init();
+	    ModMDNetworkManager.init();
 
 	    PluginTechMobs.init();
+        FMLInterModComms.sendMessage("LookingGlass", "API", "com.fravokados.dangertech.mindim.plugin.PluginLookingGlass.register");
+
+	    proxy.initRendering();
 
 		//register recipes
         RecipeManager.initRecipes();
@@ -88,7 +88,7 @@ public class ModMiningDimension {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent evt) {
-        LogHelper.info("Mod " + Reference.MOD_NAME + " version: " + Reference.MOD_VERSION + " has successfully loaded.");
+        LogHelperMD.info("Mod " + Reference.MOD_NAME + " version: " + Reference.MOD_VERSION + " has successfully loaded.");
     }
 
     @Mod.EventHandler

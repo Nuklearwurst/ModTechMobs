@@ -1,11 +1,11 @@
-package com.fravokados.dangertech.mindim.util;
+package com.fravokados.dangertech.mindim.lib.util;
 
 import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.lib.Reference;
 import cpw.mods.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
-public class LogHelper {
+public class LogHelperMD {
 	public static void log(Level logLevel, Object object) {
 		FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));
 	}

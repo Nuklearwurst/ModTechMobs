@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.techmobs.item;
 
 import com.fravokados.dangertech.api.techdata.values.player.ITechdataItem;
-import com.fravokados.dangertech.techmobs.lib.ItemUtils;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.techmobs.lib.Strings;
 import com.fravokados.dangertech.techmobs.lib.util.EntityUtils;
 import com.fravokados.dangertech.techmobs.lib.util.WorldUtils;

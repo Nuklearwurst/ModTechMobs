@@ -4,8 +4,8 @@ import com.fravokados.dangertech.api.portal.IEntityPortalComponent;
 import com.fravokados.dangertech.api.portal.IEntityPortalMandatoryComponent;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.configuration.Settings;
-import com.fravokados.dangertech.mindim.util.LogHelper;
-import com.fravokados.dangertech.mindim.util.SimpleObjectReference;
+import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
+import com.fravokados.dangertech.mindim.lib.util.SimpleObjectReference;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -31,7 +31,7 @@ public class PortalConstructor {
 	}
 
 	public static Result createPortalMultiBlock(World world, int x, int y, int z, List<IEntityPortalMandatoryComponent> frames) {
-		LogHelper.logDev("Searching for Portal MultiBlock");
+		LogHelperMD.logDev("Searching for Portal MultiBlock");
 		//settings up
 		SimpleObjectReference<TileEntityPortalControllerEntity> controller = new SimpleObjectReference<TileEntityPortalControllerEntity>();
 		PortalMetrics metrics = new PortalMetrics();
@@ -39,23 +39,23 @@ public class PortalConstructor {
 		Result result = createPortalMultiBlock(world, x, y, z, frames, controller, metrics);
 		//Checking structure
 		if (result != Result.SUCCESS) {
-			LogHelper.logDev("MultiBlock forming failed: " + result);
+			LogHelperMD.logDev("MultiBlock forming failed: " + result);
 			return result;
 		}
 		if (controller.isNull()) {
-			LogHelper.logDev("MultiBlock is missing a controller!");
+			LogHelperMD.logDev("MultiBlock is missing a controller!");
 			return Result.ERROR_MISSING_CONTOLLER;
 		}
 		if(!metrics.isFrameComplete(world)) {
-			LogHelper.logDev("MultiBlock Frame incomplete!");
+			LogHelperMD.logDev("MultiBlock Frame incomplete!");
 			return Result.ERROR_PORTAL_FRAME_INCOMPLETE;
 		}
 		if(!metrics.isFrameEmpty(world)) {
-			LogHelper.logDev("MultiBlock Frame is not empty!");
+			LogHelperMD.logDev("MultiBlock Frame is not empty!");
 			return Result.ERROR_PORTAL_NOT_EMPTY;
 		}
 		if (metrics.smallestDimension() <= Settings.MIN_PORTAL_SIZE) {
-			LogHelper.logDev("MultiBlock to small!");
+			LogHelperMD.logDev("MultiBlock to small!");
 			return Result.ERROR_TO_SMALL;
 		}
 		//update frames
@@ -67,7 +67,7 @@ public class PortalConstructor {
 		//update controller
 		controller.get().setMetrics(metrics);
 
-		LogHelper.logDev("Successfully formed multiblock");
+		LogHelperMD.logDev("Successfully formed multiblock");
 		return Result.SUCCESS;
 	}
 

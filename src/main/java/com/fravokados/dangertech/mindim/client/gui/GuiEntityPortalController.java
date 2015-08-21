@@ -4,12 +4,14 @@ import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControl
 import com.fravokados.dangertech.mindim.inventory.ContainerEntityPortalController;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.mindim.lib.Textures;
-import com.fravokados.dangertech.mindim.network.ModNetworkManager;
+import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
 import com.fravokados.dangertech.mindim.network.message.MessageGuiElementClicked;
 import com.fravokados.dangertech.mindim.network.message.MessageGuiTextUpdate;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
-import com.fravokados.dangertech.mindim.util.GeneralUtils;
-import com.fravokados.dangertech.mindim.util.ItemUtils;
+import com.fravokados.dangertech.core.lib.util.GeneralUtils;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -25,6 +27,7 @@ import java.util.List;
 /**
  * @author Nuklearwurst
  */
+@SideOnly(Side.CLIENT)
 public class GuiEntityPortalController extends GuiContainer {
 
 	private static final int BUTTON_ID_START = 0;
@@ -72,10 +75,10 @@ public class GuiEntityPortalController extends GuiContainer {
 	protected void actionPerformed(GuiButton btn) {
 		switch (btn.id) {
 			case BUTTON_ID_START:
-				ModNetworkManager.INSTANCE.sendToServer(new MessageGuiElementClicked(ContainerEntityPortalController.NETWORK_ID_START, 0));
+				ModMDNetworkManager.INSTANCE.sendToServer(new MessageGuiElementClicked(ContainerEntityPortalController.NETWORK_ID_START, 0));
 				return;
 			case BUTTON_ID_STOP:
-				ModNetworkManager.INSTANCE.sendToServer(new MessageGuiElementClicked(ContainerEntityPortalController.NETWORK_ID_STOP, 0));
+				ModMDNetworkManager.INSTANCE.sendToServer(new MessageGuiElementClicked(ContainerEntityPortalController.NETWORK_ID_STOP, 0));
 				return;
 			case BUTTON_ID_EDIT:
 				if(txtName.isFocused()) {
@@ -211,7 +214,7 @@ public class GuiEntityPortalController extends GuiContainer {
 
 	private void updateNameText() {
 		String text = txtName.getText();
-		ModNetworkManager.INSTANCE.sendToServer(new MessageGuiTextUpdate("controllerName", txtName.getText()));
+		ModMDNetworkManager.INSTANCE.sendToServer(new MessageGuiTextUpdate("controllerName", txtName.getText()));
 		if(text.isEmpty()) {
 			te.setName(null);
 		} else {

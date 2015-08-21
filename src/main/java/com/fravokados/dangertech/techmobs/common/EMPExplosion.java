@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.techmobs.common;
 
 import com.fravokados.dangertech.techmobs.lib.Textures;
-import com.fravokados.dangertech.techmobs.network.ModNetworkManager;
+import com.fravokados.dangertech.techmobs.network.ModTDNetworkManager;
 import com.fravokados.dangertech.techmobs.network.message.MessageEMP;
 import com.fravokados.dangertech.techmobs.plugin.EMPHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -77,7 +77,7 @@ public class EMPExplosion {
 	}
 
 	public void doEffectsOnClientsAround() {
-		ModNetworkManager.INSTANCE.sendToAllAround(new MessageEMP(this), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 100));
+		ModTDNetworkManager.INSTANCE.sendToAllAround(new MessageEMP(this), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 100));
 	}
 
 	public void doEffectsOnClientAndServer() {

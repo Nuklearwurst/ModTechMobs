@@ -12,5 +12,6 @@ public class DefaultSettings {
 
 	public static final class General {
 		public static final boolean PORTAL_SPAWN_WITH_CARD = false;
+		public static final int PORTAL_MAX_CONNECTION_LENGTH = 20 * 20;
 	}
 }

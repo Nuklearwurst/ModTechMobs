@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.mindim.block.tileentity;
 
 import com.fravokados.dangertech.mindim.block.BlockPortalMinDim;
-import com.fravokados.dangertech.mindim.util.LogHelper;
+import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 
@@ -40,7 +40,7 @@ public class TileEntityPortal extends TileEntity {
 	public TileEntityPortalControllerEntity getController() {
 		TileEntity controller = this.worldObj.getTileEntity(coreX, coreY, coreZ);
 		if(controller == null || !(controller instanceof TileEntityPortalControllerEntity)) {
-			LogHelper.warn("Invalid Controller Found! portal: [" + xCoord + "; " + yCoord + "; " + zCoord + "], controller: [" + coreX + "; " + coreY + "; " + coreZ + "]");
+			LogHelperMD.warn("Invalid Controller Found! portal: [" + xCoord + "; " + yCoord + "; " + zCoord + "], controller: [" + coreX + "; " + coreY + "; " + coreZ + "]");
 			((BlockPortalMinDim)blockType).removePortalAndSurroundingPortals(worldObj, xCoord, yCoord, zCoord);
 			return null;
 		}

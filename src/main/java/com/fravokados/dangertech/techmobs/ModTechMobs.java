@@ -14,7 +14,7 @@ import com.fravokados.dangertech.techmobs.configuration.ConfigHandler;
 import com.fravokados.dangertech.techmobs.lib.Reference;
 import com.fravokados.dangertech.techmobs.lib.Strings;
 import com.fravokados.dangertech.techmobs.lib.util.LogHelperTM;
-import com.fravokados.dangertech.techmobs.network.ModNetworkManager;
+import com.fravokados.dangertech.techmobs.network.ModTDNetworkManager;
 import com.fravokados.dangertech.techmobs.plugin.PluginManager;
 import com.fravokados.dangertech.techmobs.plugin.ic2.IC2RecipeIntegration;
 import com.fravokados.dangertech.techmobs.techdata.effects.TDEffects;
@@ -108,7 +108,7 @@ public class ModTechMobs {
 		ModRecipes.init();
 
 		//init networking
-		ModNetworkManager.init();
+		ModTDNetworkManager.init();
 	}
 	
 	@EventHandler

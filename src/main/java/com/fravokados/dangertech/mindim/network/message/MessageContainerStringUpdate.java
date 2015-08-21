@@ -4,6 +4,8 @@ import com.fravokados.dangertech.mindim.network.IGuiTextUpdateHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,6 +43,7 @@ public class MessageContainerStringUpdate implements IMessage, IMessageHandler<M
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IMessage onMessage(MessageContainerStringUpdate message, MessageContext ctx) {
 		EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
 

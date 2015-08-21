@@ -34,6 +34,10 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
 	}
+    maven {
+        name "xcompwiz"
+        url "http://maven.xcompwiz.com"
+    }
 }
 
 configurations{
@@ -55,6 +59,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     api 'net.industrial-craft:industrialcraft-2:2.2.719-experimental:api'
+    compile "com.xcompwiz.lookingglass:lookingglass:0.2.0.00:dev"
 
 }
 

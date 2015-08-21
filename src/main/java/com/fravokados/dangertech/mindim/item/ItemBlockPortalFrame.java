@@ -3,7 +3,7 @@ package com.fravokados.dangertech.mindim.item;
 import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.lib.Strings;
-import com.fravokados.dangertech.mindim.util.ItemUtils;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.api.upgrade.IUpgradable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

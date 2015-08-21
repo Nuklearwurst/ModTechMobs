@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.mindim.command;
 
 import com.fravokados.dangertech.mindim.configuration.Settings;
-import com.fravokados.dangertech.mindim.util.TeleportUtils;
+import com.fravokados.dangertech.mindim.lib.util.TeleportUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;

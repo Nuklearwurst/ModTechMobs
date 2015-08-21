@@ -3,8 +3,10 @@ package com.fravokados.dangertech.techmobs.client.gui;
 import com.fravokados.dangertech.techmobs.block.tileentity.TileEntityCreativeTechnology;
 import com.fravokados.dangertech.techmobs.inventory.ContainerCreativeTechnology;
 import com.fravokados.dangertech.techmobs.lib.Textures;
-import com.fravokados.dangertech.techmobs.network.ModNetworkManager;
+import com.fravokados.dangertech.techmobs.network.ModTDNetworkManager;
 import com.fravokados.dangertech.techmobs.network.message.MessageContainerIntegerUpdateServer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -15,6 +17,7 @@ import java.awt.event.KeyEvent;
 /**
  * @author Nuklearwurst
  */
+@SideOnly(Side.CLIENT)
 public class GuiCreativeTechnology extends GuiContainer {
 
 	private TileEntityCreativeTechnology te;
@@ -57,7 +60,7 @@ public class GuiCreativeTechnology extends GuiContainer {
 	protected void actionPerformed(GuiButton btn) {
 		if(btn.id == 0) {
 			try {
-				ModNetworkManager.INSTANCE.sendToServer(new MessageContainerIntegerUpdateServer((byte) 0, Integer.parseInt(txtValue.getText())));
+				ModTDNetworkManager.INSTANCE.sendToServer(new MessageContainerIntegerUpdateServer((byte) 0, Integer.parseInt(txtValue.getText())));
 				this.mc.thePlayer.closeScreen();
 			} catch (NumberFormatException e) {
 				txtValue.setText(String.valueOf(te.getTechData()));

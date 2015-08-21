@@ -5,7 +5,7 @@ import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.inventory.slot.SlotDestinationCardMinDim;
 import com.fravokados.dangertech.mindim.item.ItemBlockPortalFrame;
 import com.fravokados.dangertech.mindim.network.IElementButtonHandler;
-import com.fravokados.dangertech.mindim.util.ItemUtils;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

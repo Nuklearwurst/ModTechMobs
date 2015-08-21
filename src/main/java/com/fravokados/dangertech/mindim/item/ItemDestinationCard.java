@@ -5,7 +5,7 @@ import com.fravokados.dangertech.mindim.lib.GUIIDs;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.mindim.lib.Textures;
 import com.fravokados.dangertech.mindim.portal.PortalMetrics;
-import com.fravokados.dangertech.mindim.util.ItemUtils;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;

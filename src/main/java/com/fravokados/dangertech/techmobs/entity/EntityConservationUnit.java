@@ -1,12 +1,15 @@
 package com.fravokados.dangertech.techmobs.entity;
 
 import com.fravokados.dangertech.api.DangerousTechnologyAPI;
+import com.fravokados.dangertech.techmobs.ModTechMobs;
 import com.fravokados.dangertech.techmobs.common.EMPExplosion;
 import com.fravokados.dangertech.techmobs.common.IEmpHandler;
 import com.fravokados.dangertech.techmobs.common.init.ModItems;
+import com.fravokados.dangertech.techmobs.lib.GUIIDs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -20,7 +23,7 @@ import java.util.List;
 /**
  * @author Nuklearwurst
  */
-public class EntityConservationUnit extends Entity implements IEmpHandler {
+public class EntityConservationUnit extends Entity implements IEmpHandler, IInventory {
 
 	private static final int DATA_WATCHER_DAMAGE = 17;
 	public final float hoverStart = (float) (Math.random() * Math.PI * 2.0D);
@@ -269,8 +272,96 @@ public class EntityConservationUnit extends Entity implements IEmpHandler {
 		return this.entityName != null ? this.entityName : super.getCommandSenderName();
 	}
 
+	@Override
+	public int getSizeInventory() {
+		return mainInventory.size();
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int slot) {
+		return slot < mainInventory.size() ? mainInventory.get(slot) : null;
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slot, int amount) {
+		if (getStackInSlot(slot) != null) {
+			ItemStack itemstack;
+
+			if (getStackInSlot(slot).stackSize <= amount) {
+				itemstack = getStackInSlot(slot);
+				setInventorySlotContents(slot, null);
+				return itemstack;
+			} else {
+				itemstack = getStackInSlot(slot).splitStack(amount);
+
+				if (getStackInSlot(slot).stackSize == 0) {
+					setInventorySlotContents(slot, null);
+				}
+
+				return itemstack;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		if (getStackInSlot(slot) != null) {
+			ItemStack itemstack = getStackInSlot(slot);
+			setInventorySlotContents(slot, null);
+			return itemstack;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public void setInventorySlotContents(int slot, ItemStack stack) {
+		while(slot <= mainInventory.size()) {
+			mainInventory.add(null);
+		}
+		mainInventory.set(slot, stack);
+	}
+
+	@Override
+	public String getInventoryName() {
+		return getEntityName();
+	}
+
+	@Override
 	public boolean hasCustomInventoryName() {
 		return this.entityName != null;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 64;
+	}
+
+	@Override
+	public void markDirty() {
+
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return true;
+	}
+
+	@Override
+	public void openInventory() {
+
+	}
+
+	@Override
+	public void closeInventory() {
+
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+		return true;
 	}
 
 	public String getEntityName() {
@@ -296,5 +387,11 @@ public class EntityConservationUnit extends Entity implements IEmpHandler {
 	public void handleEMP(World world, double x, double y, double z, float strength, int radius, float factor) {
 		this.empCounter = (int) (factor  * 20 * strength);
 		this.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, factor * 20 * strength);
+	}
+
+	@Override
+	public boolean interactFirst(EntityPlayer player) {
+		player.openGui(ModTechMobs.instance, GUIIDs.CONSERVATION_UNIT, worldObj, (int) posX, (int) posY, (int) posZ);
+		return true;
 	}
 }

@@ -8,7 +8,7 @@ import com.fravokados.dangertech.mindim.item.ItemDestinationCard;
 import com.fravokados.dangertech.mindim.network.IContainerIntegerListener;
 import com.fravokados.dangertech.mindim.network.IElementButtonHandler;
 import com.fravokados.dangertech.mindim.network.IGuiTextUpdateHandler;
-import com.fravokados.dangertech.mindim.network.ModNetworkManager;
+import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
 import com.fravokados.dangertech.mindim.network.message.MessageContainerIntegerUpdate;
 import com.fravokados.dangertech.mindim.network.message.MessageContainerStringUpdate;
 import com.fravokados.dangertech.mindim.plugin.EnergyManager;
@@ -67,9 +67,9 @@ public class ContainerEntityPortalController extends Container implements IEleme
 		crafter.sendProgressBarUpdate(this, 1, te.getState().ordinal());
 		crafter.sendProgressBarUpdate(this, 2, te.getLastError().ordinal());
 		if (crafter instanceof EntityPlayerMP) {
-			ModNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) crafter);
-			ModNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 1, te.getMaxEnergyStored()), (EntityPlayerMP) crafter);
-			ModNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomInventoryName() ? te.getInventoryName() : ""), (EntityPlayerMP) crafter);
+			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) crafter);
+			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 1, te.getMaxEnergyStored()), (EntityPlayerMP) crafter);
+			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomInventoryName() ? te.getInventoryName() : ""), (EntityPlayerMP) crafter);
 		}
 		crafter.sendProgressBarUpdate(this, 3, te.getUpgradeTrackerFlags());
 	}
@@ -87,19 +87,19 @@ public class ContainerEntityPortalController extends Container implements IEleme
 			}
 			if (this.lastEnergyStored != (int) te.getEnergyStored()) {
 				if (icrafting instanceof EntityPlayerMP) {
-					ModNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) icrafting);
+					ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) icrafting);
 				}
 			}
 			if (this.lastMaxEnergyStored != te.getMaxEnergyStored()) {
 				if (icrafting instanceof EntityPlayerMP) {
-					ModNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 1, te.getMaxEnergyStored()), (EntityPlayerMP) icrafting);
+					ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 1, te.getMaxEnergyStored()), (EntityPlayerMP) icrafting);
 				}
 			}
 			if (this.lastFlags != te.getUpgradeTrackerFlags()) {
 				icrafting.sendProgressBarUpdate(this, 3, te.getUpgradeTrackerFlags());
 			}
 			if (nameChanged && icrafting instanceof EntityPlayerMP) {
-				ModNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomInventoryName() ? te.getInventoryName() : ""), (EntityPlayerMP) icrafting);
+				ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomInventoryName() ? te.getInventoryName() : ""), (EntityPlayerMP) icrafting);
 			}
 		}
 		this.lastState = te.getState();

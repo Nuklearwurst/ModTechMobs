@@ -1,5 +1,7 @@
 package com.fravokados.dangertech.mindim.client.gui;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
@@ -9,6 +11,7 @@ import org.lwjgl.opengl.GL11;
  * Image-Button, loosely based on <a href="https://github.com/AppliedEnergistics/Applied-Energistics-2">AppliedEnergistics 2</a>
  * @author Nuklearwurst
  */
+@SideOnly(Side.CLIENT)
 public class GuiImageButton extends GuiButton {
 
 	private boolean half;

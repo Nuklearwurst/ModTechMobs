@@ -3,8 +3,10 @@ package com.fravokados.dangertech.mindim.client.gui;
 import com.fravokados.dangertech.mindim.inventory.ContainerDestinationCardMinDim;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.mindim.lib.Textures;
-import com.fravokados.dangertech.mindim.network.ModNetworkManager;
+import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
 import com.fravokados.dangertech.mindim.network.message.MessageGuiElementClicked;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -14,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author Nuklearwurst
  */
+@SideOnly(Side.CLIENT)
 public class GuiDestinationCardMinDim extends GuiContainer {
 
 	public static final int BUTTON_ID_ADD = 0;
@@ -53,7 +56,7 @@ public class GuiDestinationCardMinDim extends GuiContainer {
 	protected void actionPerformed(GuiButton btn) {
 		switch (btn.id) {
 			case BUTTON_ID_ADD:
-				ModNetworkManager.INSTANCE.sendToServer(new MessageGuiElementClicked(ContainerDestinationCardMinDim.NETWORK_ID_ADD, 0));
+				ModMDNetworkManager.INSTANCE.sendToServer(new MessageGuiElementClicked(ContainerDestinationCardMinDim.NETWORK_ID_ADD, 0));
 				return;
 		}
 		super.actionPerformed(btn);

@@ -8,6 +8,8 @@ import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
 import com.fravokados.dangertech.api.upgrade.UpgradeStatCollection;
 import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
 import com.fravokados.dangertech.core.inventory.InventoryUpgrade;
+import com.fravokados.dangertech.core.lib.util.BlockUtils;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
 import com.fravokados.dangertech.mindim.block.ModBlocks;
@@ -19,13 +21,12 @@ import com.fravokados.dangertech.mindim.item.ItemDestinationCard;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.mindim.plugin.EnergyManager;
 import com.fravokados.dangertech.mindim.plugin.EnergyTypes;
+import com.fravokados.dangertech.mindim.plugin.PluginLookingGlass;
 import com.fravokados.dangertech.mindim.portal.BlockPositionDim;
 import com.fravokados.dangertech.mindim.portal.PortalConstructor;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
 import com.fravokados.dangertech.mindim.portal.PortalMetrics;
-import com.fravokados.dangertech.mindim.util.BlockUtils;
-import com.fravokados.dangertech.mindim.util.ItemUtils;
-import com.fravokados.dangertech.mindim.util.LogHelper;
+import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -241,6 +242,24 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	}
 
 	public void setState(State state) {
+		if(worldObj.isRemote && PluginLookingGlass.isAvailable()) {
+			if(state == State.OUTGOING_PORTAL || state == State.INCOMING_PORTAL) {
+				if(state != this.state) {
+					if(renderInfo != null) {
+						if(metrics == null) {
+							updateMetrics();
+						}
+						if(metrics != null) {
+							renderInfo.createLookingGlass(metrics, this.worldObj);
+						}
+					}
+				}
+			} else if(this.state == State.OUTGOING_PORTAL || this.state == State.INCOMING_PORTAL) {
+				if(renderInfo != null) {
+					renderInfo.destroyLookingGlass();
+				}
+			}
+		}
 		this.state = state;
 		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		if (metrics != null) {
@@ -308,7 +327,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			//invalid state, close portal and continue as usual
 			closePortal(true);
 			resetOnError(Error.CONNECTION_INTERRUPTED);
-			LogHelper.warn("Invalid portal found, destroying... (" + id + ", dest.:" + portalDestination + ")");
+			LogHelperMD.warn("Invalid portal found, destroying... (" + id + ", dest.:" + portalDestination + ")");
 		}
 	}
 
@@ -386,7 +405,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 							//inform target of our connection
 							((TileEntityPortalControllerEntity) te).setState(State.INCOMING_CONNECTION);
 						} else { //invalid controller
-							LogHelper.warn("Could not find registered controller with id: " + portalDestination);
+							LogHelperMD.warn("Could not find registered controller with id: " + portalDestination);
 							resetOnError(Error.CONNECTION_INTERRUPTED);
 						}
 					}
@@ -457,7 +476,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 										resetOnError(Error.CONNECTION_INTERRUPTED);
 									}
 								} else { //invalid portal (Invalid TE)
-									LogHelper.warn("Error opening portal to: " + portalDestination);
+									LogHelperMD.warn("Error opening portal to: " + portalDestination);
 									closePortal(true);
 									resetOnError(Error.CONNECTION_INTERRUPTED);
 								}
@@ -478,7 +497,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			}
 		} else if (state == State.OUTGOING_PORTAL) {
 			//Outgoing portal opened --> update max length
-			if (tick >= connectionLength) {
+			if (connectionLength > 0 && tick >= connectionLength) {
 				closePortal(true);
 				tick = 0;
 			} else {
@@ -689,8 +708,8 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		tick = 0;
 		//register portal and log warning
 		if (id == PortalManager.PORTAL_NOT_CONNECTED) {
-			LogHelper.warn("Invalid Controller found!");
-			LogHelper.warn((hasCustomInventoryName() ? "Unnamed Controller" : ("Controller " + name)) + " @dim: " + worldObj.provider.dimensionId + ", pos: " + xCoord + "; " + yCoord + "; " + zCoord + " has no valid id. Registering...");
+			LogHelperMD.warn("Invalid Controller found!");
+			LogHelperMD.warn((hasCustomInventoryName() ? "Unnamed Controller" : ("Controller " + name)) + " @dim: " + worldObj.provider.dimensionId + ", pos: " + xCoord + "; " + yCoord + "; " + zCoord + " has no valid id. Registering...");
 			id = ModMiningDimension.instance.portalManager.registerNewEntityPortal(new BlockPositionDim(this));
 		}
 	}
@@ -809,9 +828,10 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		nbt.setInteger("state", state.ordinal());
 		if(metrics != null) {
 			nbt.setByte("portalFacing", (byte) metrics.front.ordinal());
-			if(isActive()) {
+			if(PluginLookingGlass.isAvailable() && isActive()) {
 				PortalMetrics target = PortalManager.getInstance().getPortalMetricsForId(portalDestination);
 				if(target != null) {
+					nbt.setInteger("targetDimension", PortalManager.getInstance().getEntityPortalForId(portalDestination).dimension);
 					nbt.setByte("targetFacing", (byte) target.front.ordinal());
 					nbt.setDouble("targetX", target.originX);
 					nbt.setDouble("targetY", target.originY);
@@ -826,24 +846,27 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.func_148857_g();
 		if (nbt != null) {
-			renderInfo = null;
-			if (nbt.hasKey("facing")) {
-				int oldFacing = facing;
-				facing = nbt.getShort("facing");
-				State oldState = state;
-				state = State.values()[nbt.getInteger("state")];
-				if (oldFacing != facing || oldState != state) {
-					this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-				}
-			}
 			if(nbt.hasKey("portalFacing")) {
 				renderInfo = new ClientPortalInfo();
 				renderInfo.originDirection = ForgeDirection.getOrientation(nbt.getByte("portalFacing"));
 				if(nbt.hasKey("targetFacing")) {
+					renderInfo.targetDimension = nbt.getInteger("targetDimension");
 					renderInfo.targetDirection = ForgeDirection.getOrientation(nbt.getByte("targetFacing"));
 					renderInfo.targetX = nbt.getInteger("targetX");
 					renderInfo.targetY = nbt.getInteger("targetY");
 					renderInfo.targetZ = nbt.getInteger("targetZ");
+				}
+			} else {
+				renderInfo = null;
+			}
+
+			if (nbt.hasKey("facing")) {
+				int oldFacing = facing;
+				facing = nbt.getShort("facing");
+				State oldState = state;
+				setState(State.values()[nbt.getInteger("state")]);
+				if (oldFacing != facing || oldState != state) {
+					this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				}
 			}
 		}

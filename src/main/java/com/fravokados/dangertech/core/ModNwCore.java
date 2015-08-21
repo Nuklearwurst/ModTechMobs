@@ -10,6 +10,7 @@ import com.fravokados.dangertech.core.configuration.ConfigHandler;
 import com.fravokados.dangertech.core.lib.Reference;
 import com.fravokados.dangertech.core.lib.Strings;
 import com.fravokados.dangertech.core.lib.util.LogHelperCore;
+import com.fravokados.dangertech.core.network.ModNetworkManager;
 import com.fravokados.dangertech.core.plugin.PluginManager;
 import com.fravokados.dangertech.core.plugin.ic2.IC2RecipeIntegrationCore;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -55,7 +56,7 @@ public class ModNwCore {
 		config = new ConfigHandler(evt.getSuggestedConfigurationFile());
 		config.load(true);
 		//init networking
-
+		ModNetworkManager.init();
 		//init keybindings
 
 		//init API
