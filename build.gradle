@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "alpha-1.4"
+version = "alpha-1.5"
 group= "com.fravokados.dangertech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 //noinspection GroovyUnusedAssignment
 archivesBaseName = "DangerousTechnology"
@@ -104,8 +104,6 @@ task mindimJar(type: Jar, dependsOn: reobf) {
 
         include 'mcmod.info'
         include '**/assets/mindim/**'
-
-        include 'ic2/**'
     }
     classifier = 'mindim'
 }
@@ -116,8 +114,6 @@ task techmobsJar(type: Jar, dependsOn: reobf) {
 
         include 'mcmod.info'
         include '**/assets/techmobs/**'
-
-        include 'ic2/**'
     }
     classifier = 'techmobs'
 }
@@ -125,6 +121,7 @@ task techmobsJar(type: Jar, dependsOn: reobf) {
 task nwcoreJar(type: Jar, dependsOn: reobf) {
     from(zipTree(jar.archivePath)) {
         include '**/dangertech/nwcore/**'
+        include '**/dangertech/api/**'
 
         include 'mcmod.info'
         include '**/assets/nwcore/**'
