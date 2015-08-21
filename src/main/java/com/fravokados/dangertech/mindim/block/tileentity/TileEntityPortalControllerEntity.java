@@ -609,7 +609,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 
 	@Override
 	public String getInventoryName() {
-		return hasCustomInventoryName() ? name : "Unnamed";
+		return hasCustomInventoryName() ? name : Strings.translate(Strings.Gui.CONTROLLER_NAME_UNNAMED);
 	}
 
 	@Override
@@ -821,12 +821,11 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		ItemStack out = new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_CONTROLLER_ENTITY);
 		ItemUtils.writeUpgradesToItemStack(getUpgradeInventory(), out);
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(out);
-		nbt.setInteger("portalControllerId", id);
+		nbt.setInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID, id);
 		if(hasCustomInventoryName()) {
-			nbt.setString("portalControllerName", getInventoryName());
+			nbt.setString(NBTKeys.DESTINATION_CARD_PORTAL_NAME, getInventoryName());
 		}
 		upgrades = null; //Hack to prevent droping of upgrades when removing using a wrench
-//		BlockUtils.dropUpgrades(worldObj, xCoord, yCoord, zCoord);
 		return out;
 	}
 

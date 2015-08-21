@@ -19,6 +19,7 @@ chat.mindim.cancelBlockPlacing=Mmh, that didn't work...
 #Gui
 gui.mindim.destinationCard.portalBlocksStored=%d Portal Frame Blocks stored.
 gui.mindim.controller.name=Name:
+gui.mindim.controller.name.unnamed=Unnamed
 gui.mindim.controller.edit.name=Edit Name
 gui.mindim.controller.destination=Destination: %s
 gui.mindim.controller.destination.unknown=Unknown
@@ -72,6 +73,9 @@ tooltip.item.destinationCard.destination=Portal Destination: %s
 tooltip.item.destinationCard.empty=<empty>
 tooltip.item.destinationCard.mindim=Contains %s Portal Frames
 tooltip.item.destinationCard.mindim.info_1=Sneak and Rightclick to open GUI!
+
+tooltip.name=Name:
+tooltip.controller.upgrades.installed=%s Upgrades installed.
 
 #Portal
 portal.entity=Entity Portal

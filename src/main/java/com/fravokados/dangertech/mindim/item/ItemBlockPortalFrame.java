@@ -2,6 +2,7 @@ package com.fravokados.dangertech.mindim.item;
 
 import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
+import com.fravokados.dangertech.mindim.lib.NBTKeys;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.api.upgrade.IUpgradable;
@@ -40,10 +41,10 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b) {
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
-		if(nbt.hasKey("portalControllerName")) {
-			list.add("Name: " + nbt.getString("portalControllerName"));
-		} else if(nbt.hasKey("portalControllerId")) {
-			list.add("Name: Unknown");
+		if(nbt.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_NAME)) {
+			list.add(Strings.translate(Strings.Tooltip.NAME) + " " + nbt.getString(NBTKeys.DESTINATION_CARD_PORTAL_NAME));
+		} else if(nbt.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_ID)) {
+			list.add(Strings.translate(Strings.Tooltip.NAME + " " + Strings.Gui.CONTROLLER_NAME_UNNAMED));
 		}
 		if(nbt.hasKey("Upgrades")) {
 			NBTTagList nbttaglist = nbt.getTagList("Upgrades", 10); //10 is compound type
@@ -59,7 +60,7 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 			for(ItemStack item : inv) {
 				upgradeCount += item.stackSize;
 			}
-			list.add(upgradeCount + " Upgrades installed.");
+			list.add(Strings.translateWithFormat(Strings.Tooltip.CONTROLLER_UPGRADES_INSTALLED, upgradeCount));
 		}
 	}
 
@@ -73,11 +74,11 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 				}
 				if(te instanceof TileEntityPortalControllerEntity) {
 					NBTTagCompound tag = ItemUtils.getNBTTagCompound(stack);
-					if(tag.hasKey("portalControllerId")) {
-						((TileEntityPortalControllerEntity) te).setId(tag.getInteger("portalControllerId"));
+					if(tag.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_ID)) {
+						((TileEntityPortalControllerEntity) te).setId(tag.getInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID));
 					}
-					if(tag.hasKey("portalControllerName")) {
-						((TileEntityPortalControllerEntity) te).setName(tag.getString("portalControllerName"));
+					if(tag.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_NAME)) {
+						((TileEntityPortalControllerEntity) te).setName(tag.getString(NBTKeys.DESTINATION_CARD_PORTAL_NAME));
 					}
 				}
 			}

@@ -41,6 +41,7 @@ public class Strings {
 		public static final String DESTINATION_CARD_PORTAL_BLOCKS_STORED = "gui.mindim.destinationCard.portalBlocksStored";
 
 		public static final String CONTROLLER_NAME = "gui.mindim.controller.name";
+		public static final String CONTROLLER_NAME_UNNAMED = "gui.mindim.controller.name.unnamed";
 		public static final String CONTROLLER_DESTINATION = "gui.mindim.controller.destination";
 		public static final String CONTROLLER_STATE = "gui.mindim.controller.state";
 		public static final String CONTROLLER_ERROR = "gui.mindim.controller.error";
@@ -69,6 +70,9 @@ public class Strings {
 		public static final String ITEM_DESTINATION_CARD_EMPTY = "tooltip.item.destinationCard.empty";
 		public static final String ITEM_DESTINATION_CARD_MINDIM = "tooltip.item.destinationCard.mindim";
 		public static final String ITEM_DESTINATION_CARD_MINDIM_INFO_1 = "tooltip.item.destinationCard.mindim.info_1";
+
+		public static final String NAME = "tooltip.name";
+		public static final String CONTROLLER_UPGRADES_INSTALLED = "tooltip.controller.upgrades.installed";
 	}
 
 	public static final class Sounds {
