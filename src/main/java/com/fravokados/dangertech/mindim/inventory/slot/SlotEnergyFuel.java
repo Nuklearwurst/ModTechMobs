@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.mindim.inventory.slot;
 
-import com.fravokados.dangertech.mindim.plugin.EnergyManager;
-import com.fravokados.dangertech.mindim.plugin.EnergyTypes;
+import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
+import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

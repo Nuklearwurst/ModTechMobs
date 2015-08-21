@@ -11,7 +11,7 @@ import com.fravokados.dangertech.mindim.network.IGuiTextUpdateHandler;
 import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
 import com.fravokados.dangertech.mindim.network.message.MessageContainerIntegerUpdate;
 import com.fravokados.dangertech.mindim.network.message.MessageContainerStringUpdate;
-import com.fravokados.dangertech.mindim.plugin.EnergyManager;
+import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;

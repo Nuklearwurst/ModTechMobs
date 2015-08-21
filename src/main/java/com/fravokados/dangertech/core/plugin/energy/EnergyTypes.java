@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.mindim.plugin;
+package com.fravokados.dangertech.core.plugin.energy;
 
 import net.minecraft.nbt.NBTTagCompound;
 

@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.mindim.plugin;
+package com.fravokados.dangertech.core.plugin.energy;
 
 import ic2.api.item.IElectricItem;
 import net.minecraft.item.ItemStack;
