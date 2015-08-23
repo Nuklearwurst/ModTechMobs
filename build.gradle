@@ -59,7 +59,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     api 'net.industrial-craft:industrialcraft-2:2.2.719-experimental:api'
-    compile "com.xcompwiz.lookingglass:lookingglass:0.2.0.00:dev"
+    api "com.xcompwiz.lookingglass:lookingglass:0.2.0.00:dev"
 
 }
 
@@ -71,15 +71,16 @@ processResources
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
+        include '*.info'
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
         
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+//        exclude 'mcmod.info'
+        include 'assets/**/*.*'
     }
 }
 
@@ -93,17 +94,30 @@ jar {
                 exclude '**/ic2/api/network/**'
                 exclude '**/ic2/api/event/**'
                 exclude '**/ic2/api/reactor/**'
+                exclude '**/lookingglass/api/animator/**'
+                exclude '**/lookingglass/api/event/**'
+                exclude '**/lookingglass/api/hook/**'
+                exclude '**/lookingglass/api/impl/**'
+                exclude '**/lookingglass/api/view/**'
             }
         }
     }
+    //exclude unneded mcmod.info files
+    exclude 'nwcore.info'
+    exclude 'techmobs.info'
+    exclude 'mindim.info'
 }
+
+//These tasks build standalone jars
 
 task mindimJar(type: Jar, dependsOn: reobf) {
     from(zipTree(jar.archivePath)) {
         include '**/dangertech/mindim/**'
-
-        include 'mcmod.info'
         include '**/assets/mindim/**'
+    }
+    from(sourceSets.main.output.resourcesDir) {
+        include 'mindim.info'
+        rename('mindim.info', 'mcmod.info')
     }
     classifier = 'mindim'
 }
@@ -112,21 +126,27 @@ task techmobsJar(type: Jar, dependsOn: reobf) {
     from(zipTree(jar.archivePath)) {
         include '**/dangertech/techmobs/**'
 
-        include 'mcmod.info'
         include '**/assets/techmobs/**'
+    }
+    from(sourceSets.main.output.resourcesDir) {
+        include 'techmobs.info'
+        rename('techmobs.info', 'mcmod.info')
     }
     classifier = 'techmobs'
 }
 
 task nwcoreJar(type: Jar, dependsOn: reobf) {
     from(zipTree(jar.archivePath)) {
-        include '**/dangertech/nwcore/**'
+        include '**/dangertech/core/**'
         include '**/dangertech/api/**'
-
-        include 'mcmod.info'
         include '**/assets/nwcore/**'
 
         include 'ic2/**'
+        include 'com/xcompwiz/lookingglass/**'
+    }
+    from(sourceSets.main.output.resourcesDir) {
+        include 'nwcore.info'
+        rename('nwcore.info', 'mcmod.info')
     }
     classifier = 'nwcore'
 }

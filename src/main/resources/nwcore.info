@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "nwcore",
+    "name": "NwCore",
+    "description": "Shared Code for mods",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Nuklearwurst"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

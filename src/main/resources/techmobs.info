@@ -1,0 +1,16 @@
+[
+{
+  "modid": "techmobs",
+  "name": "Tech Mobs",
+  "description": "It's all about balance!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/Nuklearwurst/ModTechMobs",
+  "updateUrl": "",
+  "authorList": ["nuklearwurst"],
+  "credits": "MinecraftForge and all the OpenSource mods out there.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["nwcore"]
+}
+]
