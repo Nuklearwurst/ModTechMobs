@@ -10,6 +10,8 @@ import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
 import com.fravokados.dangertech.core.inventory.InventoryUpgrade;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
+import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
+import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
 import com.fravokados.dangertech.mindim.block.ModBlocks;
@@ -20,14 +22,13 @@ import com.fravokados.dangertech.mindim.inventory.ContainerEntityPortalControlle
 import com.fravokados.dangertech.mindim.item.ItemDestinationCard;
 import com.fravokados.dangertech.mindim.lib.NBTKeys;
 import com.fravokados.dangertech.mindim.lib.Strings;
-import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
-import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
+import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import com.fravokados.dangertech.mindim.plugin.PluginLookingGlass;
 import com.fravokados.dangertech.mindim.portal.BlockPositionDim;
 import com.fravokados.dangertech.mindim.portal.PortalConstructor;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
 import com.fravokados.dangertech.mindim.portal.PortalMetrics;
-import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
+import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -47,8 +48,10 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -170,6 +173,11 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	 * used to determine wich upgrades are installed
 	 */
 	private int upgradeTrackerFlags = 0;
+
+	/**
+	 * Currently used ticket for chunkloading
+	 */
+	private ForgeChunkManager.Ticket chunkLoaderTicket;
 
 	/**
 	 * Time the portal needs to open a connection
@@ -468,6 +476,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 										resetOnError(Error.CONNECTION_INTERRUPTED);
 									} else if (te.updateMetrics() && te.placePortalBlocks()) {
 										if (energy.useEnergy(baseEnergyUseInit)) { //use initial energy
+											loadChunk(pos);
 											//update controller states
 											te.setState(State.INCOMING_PORTAL);
 											te.portalDestination = id;
@@ -527,6 +536,17 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 					energy.receiveEnergy(ElectricItem.manager.discharge(inventory[1], getDemandedEnergy(), getSinkTier(), false, true, false), false);
 				}
 			}
+		}
+	}
+
+	private void loadChunk(BlockPositionDim pos) {
+		ForgeChunkManager.releaseTicket(chunkLoaderTicket);
+		chunkLoaderTicket = ForgeChunkManager.requestTicket(ModMiningDimension.instance, pos.getWorldServer(), ForgeChunkManager.Type.NORMAL);
+		if(chunkLoaderTicket == null) {
+			LogHelperMD.warn("Chunkloading Ticket limit reached!");
+		} else {
+			ChunkCoordIntPair chunkToLoad = WorldUtils.convertToChunkCoord(pos.x, pos.z);
+			ForgeChunkManager.forceChunk(chunkLoaderTicket, chunkToLoad);
 		}
 	}
 
@@ -767,6 +787,8 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	 * @param closeRemote should remote also be closed?
 	 */
 	public void closePortal(boolean closeRemote) {
+		//release loaded chunks
+		ForgeChunkManager.releaseTicket(chunkLoaderTicket);
 		//close remote portal if needed
 		if (closeRemote) {
 			BlockPositionDim pos = PortalManager.getInstance().getEntityPortalForId(portalDestination);

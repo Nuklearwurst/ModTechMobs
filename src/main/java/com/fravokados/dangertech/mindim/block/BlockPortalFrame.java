@@ -246,6 +246,6 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 
 	@Override
 	public boolean renderAsNormalBlock() {
-		return false;
+		return true;
 	}
 }

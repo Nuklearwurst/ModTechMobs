@@ -3,7 +3,7 @@ package com.fravokados.dangertech.techmobs.command.techdata;
 import com.fravokados.dangertech.api.util.ChunkLocation;
 import com.fravokados.dangertech.techmobs.command.CommandHelpers;
 import com.fravokados.dangertech.techmobs.command.SubCommand;
-import com.fravokados.dangertech.techmobs.lib.util.WorldUtils;
+import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import com.fravokados.dangertech.techmobs.techdata.TDTickManager;
 import net.minecraft.command.ICommandSender;

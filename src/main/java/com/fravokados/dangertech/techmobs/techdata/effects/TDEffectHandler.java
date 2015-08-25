@@ -3,7 +3,7 @@ package com.fravokados.dangertech.techmobs.techdata.effects;
 import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffect;
 import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.dangertech.techmobs.configuration.Settings;
-import com.fravokados.dangertech.techmobs.lib.util.WorldUtils;
+import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;

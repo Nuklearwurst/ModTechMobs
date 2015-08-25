@@ -2,6 +2,7 @@ package com.fravokados.dangertech.mindim;
 
 import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.mindim.command.CommandEnterDimension;
+import com.fravokados.dangertech.mindim.common.ChunkLoaderCallback;
 import com.fravokados.dangertech.mindim.common.CommonProxy;
 import com.fravokados.dangertech.mindim.common.GuiHandler;
 import com.fravokados.dangertech.mindim.configuration.ConfigHandler;
@@ -24,6 +25,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
 
@@ -80,6 +82,9 @@ public class ModMiningDimension {
 	    PluginTechMobs.init();
         //Disable LookingGlass integration for now
 //        FMLInterModComms.sendMessage("LookingGlass", "API", "com.fravokados.dangertech.mindim.plugin.PluginLookingGlass.register");
+
+        //Chunkloading
+	    ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoaderCallback());
 
 	    proxy.initRendering();
 

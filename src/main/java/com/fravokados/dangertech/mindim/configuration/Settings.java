@@ -43,4 +43,7 @@ public class Settings {
 
 	/** true if portal spawn location should start at sea level (mindim portal creation) */
 	public static boolean START_SPAWN_SEARCH_FROM_BOTTOM = true;
+
+	/** true if portals should load chunks, otherwise portals will close very fast when the chunk unloads, only loads destination */
+	public static boolean LOAD_CHUNKS = true;
 }

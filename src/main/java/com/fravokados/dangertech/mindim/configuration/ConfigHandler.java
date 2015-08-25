@@ -39,6 +39,7 @@ public class ConfigHandler {
 
 		Settings.PORTAL_SPAWN_WITH_CARD = config.getBoolean(Keys.General.PORTAL_SPAWN_WITH_CARD, Configuration.CATEGORY_GENERAL, DefaultSettings.General.PORTAL_SPAWN_WITH_CARD, "Should a portal to the Mining Dimension also spawn a Destination Card leading to the Origin-Portal?");
 		Settings.MAX_PORTAL_CONNECTION_LENGTH = config.getInt(Keys.General.PORTAL_MAX_CONNECTION_LENGTH, Configuration.CATEGORY_GENERAL, DefaultSettings.General.PORTAL_MAX_CONNECTION_LENGTH, 0, 20 * 60 * 20, "Maximum duration of a connection");
+		Settings.LOAD_CHUNKS = config.getBoolean(Keys.General.PORTAL_LOAD_CHUNKS, Configuration.CATEGORY_GENERAL, DefaultSettings.General.LOAD_CHUNKS, "Set this to false if you don't want the destination to be chunkloaeded. Portals will close if the destination chunk unloads");
 
 		////////////
 		// DEBUG //

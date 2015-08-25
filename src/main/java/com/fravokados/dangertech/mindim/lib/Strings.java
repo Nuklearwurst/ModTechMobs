@@ -92,6 +92,7 @@ public class Strings {
 		public static final class General {
 			public static final String PORTAL_SPAWN_WITH_CARD = "portal_spawns_with_card";
 			public static final String PORTAL_MAX_CONNECTION_LENGTH = "portal_max_connection_length";
+			public static final String PORTAL_LOAD_CHUNKS = "portal_loads_destination_chunk";
 		}
 	}
 

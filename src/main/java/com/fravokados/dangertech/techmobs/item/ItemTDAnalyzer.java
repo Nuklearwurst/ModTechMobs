@@ -4,7 +4,7 @@ import com.fravokados.dangertech.api.techdata.values.player.ITechdataItem;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.techmobs.lib.Strings;
 import com.fravokados.dangertech.techmobs.lib.util.EntityUtils;
-import com.fravokados.dangertech.techmobs.lib.util.WorldUtils;
+import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import com.fravokados.dangertech.techmobs.techdata.values.TDValues;
 import net.minecraft.entity.Entity;
