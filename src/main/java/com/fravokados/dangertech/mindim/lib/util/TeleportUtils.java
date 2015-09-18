@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S07PacketRespawn;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
@@ -51,10 +52,11 @@ public class TeleportUtils {
 		server.getConfigurationManager().updateTimeAndWeatherForPlayer(entityPlayerMP, worldServerDestination);
 		server.getConfigurationManager().syncPlayerInventory(entityPlayerMP);
 		//update potion effects
-
 		for (PotionEffect potioneffect : (Collection<PotionEffect>)entityPlayerMP.getActivePotionEffects()) {
 			entityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(entityPlayerMP.getEntityId(), potioneffect));
 		}
+		//update Experience level
+		entityPlayerMP.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(entityPlayerMP.experience, entityPlayerMP.experienceTotal, entityPlayerMP.experienceLevel));
 		//fire event
 		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(entityPlayerMP, originDimension, targetDimension);
 	}
