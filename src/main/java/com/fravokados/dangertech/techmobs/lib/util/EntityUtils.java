@@ -38,17 +38,17 @@ public class EntityUtils {
 	@SuppressWarnings("unchecked")
 	public static Entity rayTraceEntity(EntityPlayer player) {
 		float reach = 5F;
-		Vec3 vecPos = player.getPosition(1);
+		Vec3 vecPos = player.getPositionVector();
 		Vec3 vecLook = player.getLook(1);
 		Vec3 vecEnd = vecPos.addVector(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach);
 		Entity pointedEntity = null;
 		final float expand = 1.0F;
-		List list = player.getEntityWorld().getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.addCoord(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach).expand((double) expand, (double) expand, (double) expand));
+		List list = player.getEntityWorld().getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach).expand((double) expand, (double) expand, (double) expand));
 		double lastDistance = reach;
 
 		for (Entity entity : (List<Entity>)list) {
 			float collisionBorderSize = entity.getCollisionBorderSize();
-			AxisAlignedBB bounds = entity.boundingBox.expand((double) collisionBorderSize, (double) collisionBorderSize, (double) collisionBorderSize);
+			AxisAlignedBB bounds = entity.getEntityBoundingBox().expand((double) collisionBorderSize, (double) collisionBorderSize, (double) collisionBorderSize);
 			MovingObjectPosition movingobjectposition = bounds.calculateIntercept(vecPos, vecEnd);
 
 			if (bounds.isVecInside(vecPos)) {

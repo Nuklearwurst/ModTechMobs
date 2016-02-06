@@ -1,30 +1,28 @@
 package com.fravokados.dangertech.mindim.plugin.lookingglass;
 
 import com.fravokados.dangertech.mindim.client.ClientPortalInfo;
-import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import com.fravokados.dangertech.mindim.portal.PortalMetrics;
-import com.xcompwiz.lookingglass.api.hook.WorldViewAPI2;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
-import org.lwjgl.opengl.GL11;
 
 /**
  * @author Nuklearwurst
  */
 public class PluginLookingGlassImpl {
-	public static WorldViewAPI2 lookingGlassAPI;
+//	public static WorldViewAPI2 lookingGlassAPI;
 
 	public static boolean load(Object api) {
-		if (api == null || !(api instanceof WorldViewAPI2)) {
-			LogHelperMD.error("Error loading LookingGlass Integration!");
-			return false;
-		} else {
-			lookingGlassAPI = (WorldViewAPI2) api;
-			return true;
-		}
+//		if (api == null || !(api instanceof WorldViewAPI2)) {
+//			LogHelperMD.error("Error loading LookingGlass Integration!");
+//			return false;
+//		} else {
+//			lookingGlassAPI = (WorldViewAPI2) api;
+//			return true;
+//		}
+		return false;
 	}
 
 	public static void renderPortalEntity(TileEntity tileEntity, double x, double y, double z, float delta, PortalMetrics pos, ClientPortalInfo renderInfo) {
+		/*
 		if (renderInfo.lookingGlass != null && renderInfo.lookingGlass.isValid()) {
 			int texture = renderInfo.lookingGlass.worldView.getTexture();
 			if (texture != 0) {
@@ -75,5 +73,6 @@ public class PluginLookingGlassImpl {
 				GL11.glEnable(GL11.GL_ALPHA_TEST);
 			}
 		}
+		*/
 	}
 }

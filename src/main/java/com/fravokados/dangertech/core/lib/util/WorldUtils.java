@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.core.lib.util;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 
 public class WorldUtils {
@@ -14,7 +14,7 @@ public class WorldUtils {
 		return convertToChunkCoord((int)x, (int)z);
 	}
 	
-	public static ChunkCoordIntPair convertToChunkCoord(ChunkCoordinates coords) {
-		return convertToChunkCoord(coords.posX, coords.posZ);
+	public static ChunkCoordIntPair convertToChunkCoord(BlockPos coords) {
+		return convertToChunkCoord(coords.getX(), coords.getZ());
 	}
 }

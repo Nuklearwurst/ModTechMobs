@@ -1,11 +1,13 @@
 package com.fravokados.dangertech.techmobs.command;
 
+import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.techmobs.command.techdata.*;
 import com.fravokados.dangertech.techmobs.world.TechDataStorage;
 import com.fravokados.dangertech.techmobs.world.techdata.TDChunk;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 
@@ -77,7 +79,7 @@ public class CommandTechData extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
@@ -85,14 +87,14 @@ public class CommandTechData extends CommandBase implements IModCommand {
 
 	public static TDChunk getChunkData(ICommandSender sender) {
 		World world = sender.getEntityWorld();
-		ChunkCoordinates coords = sender.getPlayerCoordinates();
-		ChunkCoordIntPair chunkCoords = new ChunkCoordIntPair(coords.posX >> 4, coords.posZ >> 4);
-		return TechDataStorage.getInstance().getChunkData(chunkCoords, world.provider.dimensionId);
+		BlockPos coords = sender.getPosition();
+		ChunkCoordIntPair chunkCoords = WorldUtils.convertToChunkCoord(coords);
+		return TechDataStorage.getInstance().getChunkData(chunkCoords, world.provider.getDimensionId());
 	}
 
 	@Override
-	public List<?> addTabCompletionOptions(ICommandSender sender, String[] args) {
-		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args);
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args, pos);
 	}
 
 	@Override

@@ -1,14 +1,13 @@
 package com.fravokados.dangertech.mindim.recipes;
 
-import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
 import com.fravokados.dangertech.mindim.block.ModBlocks;
+import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.item.ItemDestinationCard;
 import com.fravokados.dangertech.mindim.item.ModItems;
-import cpw.mods.fml.common.registry.GameRegistry;
-import ic2.api.item.IC2Items;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Recipes
@@ -18,15 +17,24 @@ import net.minecraft.item.ItemStack;
 public class RecipeManager {
 
 	public static void initRecipes() {
-		ItemStack electronicCircuit = IC2Items.getItem("electronicCircuit");
-		ItemStack copperWire = IC2Items.getItem("copperCableItem");
-		ItemStack machineCase = IC2Items.getItem("machine");
-		ItemStack mfe = IC2Items.getItem("mfeUnit");
-		ItemStack cesu = IC2Items.getItem("cesuUnit");
-		ItemStack evTransformer = IC2Items.getItem("evTransformer");
-		ItemStack advancedCircuit = IC2Items.getItem("advancedCircuit");
-		ItemStack coil = IC2Items.getItem("coil");
+//		ItemStack electronicCircuit = IC2Items.getItem("electronicCircuit");
+//		ItemStack copperWire = IC2Items.getItem("copperCableItem");
+//		ItemStack machineCase = IC2Items.getItem("machine");
+//		ItemStack mfe = IC2Items.getItem("mfeUnit");
+//		ItemStack cesu = IC2Items.getItem("cesuUnit");
+//		ItemStack evTransformer = IC2Items.getItem("evTransformer");
+//		ItemStack advancedCircuit = IC2Items.getItem("advancedCircuit");
+//		ItemStack coil = IC2Items.getItem("coil");
 
+		//FIXME ic2 integration
+		ItemStack electronicCircuit = new ItemStack(Items.apple);
+		ItemStack copperWire = electronicCircuit;
+		ItemStack machineCase = electronicCircuit;
+		ItemStack mfe = electronicCircuit;
+		ItemStack cesu = electronicCircuit;
+		ItemStack evTransformer = electronicCircuit;
+		ItemStack advancedCircuit = electronicCircuit;
+		ItemStack coil = electronicCircuit;
 		/**
 		 * Destination Card (normal)
 		 */
@@ -42,7 +50,7 @@ public class RecipeManager {
 		/**
 		 * Portal Frame (+rotated)
 		 */
-		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 4, BlockPortalFrame.META_FRAME_ENTITY),
+		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 4, PortalFrameType.BASIC_FRAME.ordinal()),
 				"oco",
 				"wmw",
 				"oco",
@@ -51,7 +59,7 @@ public class RecipeManager {
 				Character.valueOf('w'), copperWire,
 				Character.valueOf('c'), coil
 		);
-		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 4, BlockPortalFrame.META_FRAME_ENTITY),
+		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 4, PortalFrameType.BASIC_FRAME.ordinal()),
 				"owo",
 				"cmc",
 				"owo",
@@ -65,29 +73,17 @@ public class RecipeManager {
 		/**
 		 * PortalController
 		 */
-		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_CONTROLLER_ENTITY),
+		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_CONTROLLER.ordinal()),
 				"ded",
 				"afa",
 				"tct",
-				Character.valueOf('f'), new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_FRAME_ENTITY),
+				Character.valueOf('f'), new ItemStack(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_FRAME.ordinal()),
 				Character.valueOf('a'), advancedCircuit,
 				Character.valueOf('d'), Items.diamond,
 				Character.valueOf('e'), Items.ender_eye,
 				Character.valueOf('t'), evTransformer,
 				Character.valueOf('c'), cesu
 		);
-		//OLD Recipe
-//		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_CONTROLLER_ENTITY),
-//				"ded",
-//				"ama",
-//				"sfs",
-//				Character.valueOf('f'), new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_FRAME_ENTITY),
-//				Character.valueOf('m'), mfe,
-//				Character.valueOf('a'), advancedCircuit,
-//				Character.valueOf('d'), Items.diamond,
-//				Character.valueOf('e'), Items.ender_eye,
-//				Character.valueOf('s'), Blocks.stone
-//		);
 
 		/**
 		 * DestinationCard - Mining Dimension
@@ -96,7 +92,7 @@ public class RecipeManager {
 				"ede",
 				"oco",
 				"ege",
-				Character.valueOf('c'), new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_CONTROLLER_ENTITY),
+				Character.valueOf('c'), new ItemStack(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_CONTROLLER.ordinal()),
 				Character.valueOf('d'), new ItemStack(ModItems.itemDestinationCard, 1, ItemDestinationCard.META_NORMAL),
 				Character.valueOf('e'), Items.ender_eye,
 				Character.valueOf('o'), Blocks.obsidian,

@@ -5,6 +5,8 @@ import com.fravokados.dangertech.techmobs.entity.EntityConservationUnit;
 import com.fravokados.dangertech.techmobs.lib.Strings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
@@ -17,11 +19,11 @@ public class ItemConservationUnit extends ItemTM {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if(Settings.DEBUG) {
 			if (!world.isRemote) {
 				EntityConservationUnit entity = new EntityConservationUnit(world);
-				entity.setLocationAndAngles(x + 0.5, y + 1.5, z + 0.5, 0, 0);
+				entity.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 0, 0);
 				world.spawnEntityInWorld(entity);
 			}
 			return true;

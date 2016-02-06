@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.core.network;
 
 import com.fravokados.dangertech.core.lib.Reference;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 /**
  * @author Nuklearwurst

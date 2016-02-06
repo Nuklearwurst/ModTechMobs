@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -16,7 +17,8 @@ import net.minecraft.world.World;
 public class EMPHandler {
 
 	public static void applyEMP(World world, int tileX, int tileY, int tileZ, double x, double y, double z, float strength, int radius) {
-		TileEntity te = world.getTileEntity(tileX, tileY, tileZ);
+		BlockPos pos = new BlockPos(tileX, tileY, tileZ);
+		TileEntity te = world.getTileEntity(pos);
 		double deltaX = tileX - x;
 		double deltaY = tileY - y;
 		double deltaZ = tileZ - z;

@@ -3,18 +3,23 @@ package com.fravokados.dangertech.mindim.block;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortal;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -24,10 +29,13 @@ import java.util.Random;
  */
 public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 
+	public static final PropertyEnum<EnumFacing.Axis> AXIS_PROPERTY = PropertyEnum.create("axis", EnumFacing.Axis.class);
+
 
 	public BlockPortalMinDim() {
 		super(Material.portal, Strings.Block.portal);
 		this.setCreativeTab(null);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(AXIS_PROPERTY, EnumFacing.Axis.X));
 	}
 
 	@Override
@@ -36,59 +44,61 @@ public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
 		return null;
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		switch (world.getBlockMetadata(x, y, z)) {
-			case 1: //X axis
+	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
+		switch (world.getBlockState(pos).getValue(AXIS_PROPERTY)) {
+			case X: //X axis
 				setBlockBounds(0.2F, 0, 0, 0.8F, 1, 1);
 				break;
-			case 2: //Y axis
+			case Y: //Y axis
 				setBlockBounds(0, 0.2F, 0, 1, 0.8F, 1);
 				break;
-			case 3: //Z axis
+			case Z: //Z axis
 				setBlockBounds(0, 0, 0.2F, 1, 1, 0.8F);
-				break;
-			default:
-				setBlockBounds(0, 0, 0, 1, 1, 1);
 				break;
 		}
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public int getRenderBlockPass()
-	{
-		return 1;
+	protected BlockState createBlockState() {
+		return new BlockState(this, AXIS_PROPERTY);
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		super.onEntityCollidedWithBlock(world, x, y, z, entity);
+	public boolean isFullCube() {
+		return false;
+	}
+
+	@Override
+	public boolean isFullBlock() {
+		return false;
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+		super.onEntityCollidedWithBlock(world, pos, state, entity);
 		if(!world.isRemote) {
-			TileEntity te = world.getTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(pos);
 			if (te != null && te instanceof TileEntityPortal) {
 				((TileEntityPortal) te).onEntityEnterPortal(entity);
 			} else {
 				LogHelperMD.error("Invalid Portal!");
-				removePortalAndSurroundingPortals(world, x, y, z);
+				removePortalAndSurroundingPortals(world, pos);
 			}
 		}
 	}
 
-	public void removePortalAndSurroundingPortals(World world, int x, int y, int z) {
-		world.setBlockToAir(x, y, z);
-		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-			Block b = world.getBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+	public void removePortalAndSurroundingPortals(World world, BlockPos pos) {
+		world.setBlockToAir(pos);
+		for(EnumFacing dir : EnumFacing.VALUES) {
+			BlockPos newPos = pos.offset(dir);
+			Block b = world.getBlockState(newPos).getBlock();
 			if(b != null && b instanceof BlockPortalMinDim) {
-				((BlockPortalMinDim) b).removePortalAndSurroundingPortals(world, x, y, z);
+				this.removePortalAndSurroundingPortals(world, newPos);
 			}
 		}
 	}
@@ -96,7 +106,7 @@ public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 
 
 	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityPortal();
 	}
 
@@ -106,14 +116,36 @@ public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 	}
 
 	@Override
-	public Item getItem(World world, int x, int y, int z) {
-		return Item.getItemById(0);
+	public Item getItem(World worldIn, BlockPos pos) {
+		return null;
 	}
 
-	public static void placePortalInWorld(World world, int x, int y, int z, int cx, int cy, int cz, int meta) {
-		world.setBlock(x, y, z, ModBlocks.blockPortalBlock, meta, 3);
-		TileEntityPortal te = (TileEntityPortal) world.getTileEntity(x, y, z);
-		te.setPortalController(cx, cy, cz);
+
+	@SideOnly(Side.CLIENT)
+	public EnumWorldBlockLayer getBlockLayer()
+	{
+		return EnumWorldBlockLayer.TRANSLUCENT;
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		if(meta > EnumFacing.Axis.values().length) {
+			meta = 0;
+		}
+		return getDefaultState().withProperty(AXIS_PROPERTY, EnumFacing.Axis.values()[meta]);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		return state.getValue(AXIS_PROPERTY).ordinal();
+	}
+
+
+	public static void placePortalInWorld(World world, BlockPos pos, BlockPos controllerPos, EnumFacing.Axis axis) {
+		world.setBlockState(pos, ModBlocks.blockPortalBlock.getDefaultState().withProperty(AXIS_PROPERTY, axis));
+		TileEntityPortal te = (TileEntityPortal) world.getTileEntity(pos);
+		te.setPortalController(controllerPos);
 	}
 
 	public static int convertFacingToMeta(int facing) {

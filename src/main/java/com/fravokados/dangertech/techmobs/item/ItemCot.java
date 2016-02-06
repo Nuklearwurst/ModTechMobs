@@ -1,11 +1,6 @@
 package com.fravokados.dangertech.techmobs.item;
 
-import com.fravokados.dangertech.techmobs.common.init.ModBlocks;
 import com.fravokados.dangertech.techmobs.lib.Strings;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 
 /**
  * @author Nuklearwurst
@@ -16,15 +11,16 @@ public class ItemCot extends ItemTM {
 		super(Strings.Item.COT);
 	}
 
+	/*
 	@Override
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer entityPlayer, World world, int x, int y, int z, int side, float p_77648_8_, float p_77648_9_, float p_77648_10_) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (world.isRemote) {
 			return true;
-		} else if (side != 1) {
+		} else if (side != EnumFacing.UP) {
 			return false;
 		} else {
 			y++;
-			int rotation = MathHelper.floor_double((double) (entityPlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			int rotation = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			byte offsetX = 0;
 			byte offsetZ = 0;
 
@@ -43,15 +39,15 @@ public class ItemCot extends ItemTM {
 					break;
 			}
 
-			if (entityPlayer.canPlayerEdit(x, y, z, side, itemStack) && entityPlayer.canPlayerEdit(x + offsetX, y, z + offsetZ, side, itemStack)) {
-				if (world.isAirBlock(x, y, z) && world.isAirBlock(x + offsetX, y, z + offsetZ) && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) && World.doesBlockHaveSolidTopSurface(world, x + offsetX, y - 1, z + offsetZ)) {
-					world.setBlock(x, y, z, ModBlocks.block_cot, rotation, 3);
+			if (player.canPlayerEdit(pos, side, stack) && player.canPlayerEdit(x + offsetX, y, z + offsetZ, side, stack)) {
+				if (world.isAirBlock(pos) && world.isAirBlock(x + offsetX, y, z + offsetZ) && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) && World.doesBlockHaveSolidTopSurface(world, x + offsetX, y - 1, z + offsetZ)) {
+					world.setBlockState(pos, ModBlocks.block_cot, rotation, 3);
 
-					if (world.getBlock(x, y, z) == ModBlocks.block_cot) {
-						world.setBlock(x + offsetX, y, z + offsetZ, ModBlocks.block_cot, rotation + 8, 3);
+					if (world.getBlockState(pos).getBlock() == ModBlocks.block_cot) {
+						world.setBlockState(x + offsetX, y, z + offsetZ, ModBlocks.block_cot, rotation + 8, 3);
 					}
 
-					itemStack.stackSize--;
+					stack.stackSize--;
 					return true;
 				} else {
 					return false;
@@ -61,4 +57,5 @@ public class ItemCot extends ItemTM {
 			}
 		}
 	}
+	*/
 }

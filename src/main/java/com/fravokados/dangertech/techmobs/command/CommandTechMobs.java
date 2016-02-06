@@ -6,8 +6,10 @@ import com.fravokados.dangertech.techmobs.common.EMPExplosion;
 import com.fravokados.dangertech.techmobs.techdata.effects.TDEffects;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
@@ -74,15 +76,15 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args) {
-		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args);
+	public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args, pos);
 	}
 
 	public static class CommandFill extends SubCommand {
@@ -92,17 +94,18 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			if (args.length < 7) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
-				int x1 = CommandHelpers.getCoordFromCommand(sender.getPlayerCoordinates().posX, args[0]);
-				int y1 = CommandHelpers.getCoordFromCommand(sender.getPlayerCoordinates().posY, args[1]);
-				int z1 = CommandHelpers.getCoordFromCommand(sender.getPlayerCoordinates().posZ, args[2]);
+				BlockPos pos = sender.getPosition();
+				int x1 = CommandHelpers.getCoordFromCommand(pos.getX(), args[0]);
+				int y1 = CommandHelpers.getCoordFromCommand(pos.getY(), args[1]);
+				int z1 = CommandHelpers.getCoordFromCommand(pos.getZ(), args[2]);
 
-				int x2 = CommandHelpers.getCoordFromCommand(sender.getPlayerCoordinates().posX, args[3]);
-				int y2 = CommandHelpers.getCoordFromCommand(sender.getPlayerCoordinates().posY, args[4]);
-				int z2 = CommandHelpers.getCoordFromCommand(sender.getPlayerCoordinates().posZ, args[5]);
+				int x2 = CommandHelpers.getCoordFromCommand(pos.getX(), args[3]);
+				int y2 = CommandHelpers.getCoordFromCommand(pos.getY(), args[4]);
+				int z2 = CommandHelpers.getCoordFromCommand(pos.getZ(), args[5]);
 
 				Block block = Block.getBlockFromName(args[6]);
 
@@ -117,7 +120,7 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 								int xt = xn ? x1 + x : x1 - x;
 								int yt = yn ? y1 + y : y1 - y;
 								int zt = zn ? z1 + z : z1 - z;
-								world.setBlock(xt, yt, zt, block);
+								world.setBlockState(new BlockPos(xt, yt, zt), block.getDefaultState());
 							}
 						}
 					}
@@ -126,9 +129,9 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		}
 
 		@Override
-		public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+		public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 			if (args.length == 7) {
-				return getListOfStringsFromIterableMatchingLastWord(args, Block.blockRegistry.getKeys());
+				return getListOfStringsMatchingLastWord(args, Block.blockRegistry.getKeys());
 			}
 			return null;
 		}
@@ -148,12 +151,12 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 			}
 
 			@Override
-			public void processSubCommand(ICommandSender sender, String[] args) {
+			public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 				if (sender instanceof EntityPlayer && args.length == 1) {
-					int effectStrength = CommandBase.parseInt(sender, args[0]);
-					List<TDPlayerEffect> list = TDEffects.getInstance().getUsablePlayerEffects(effectStrength, sender.getCommandSenderName(), (EntityPlayer) sender);
+					int effectStrength = CommandBase.parseInt(args[0]);
+					List<TDPlayerEffect> list = TDEffects.getInstance().getUsablePlayerEffects(effectStrength, sender.getName(), (EntityPlayer) sender);
 					int index = GeneralUtils.random.nextInt(list.size());
-					int result = list.get(index).applyEffect(effectStrength, sender.getCommandSenderName(), (EntityPlayer) sender);
+					int result = list.get(index).applyEffect(effectStrength, sender.getName(), (EntityPlayer) sender);
 					sender.addChatMessage(new ChatComponentText("Needed TechValue: " + result));
 				} else {
 					CommandHelpers.throwWrongUsage(sender, this);
@@ -169,7 +172,7 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			World world = sender.getEntityWorld();
 			if((world == null) || (!(sender instanceof EntityPlayer))) {
 				CommandHelpers.throwWrongUsage(sender, this);

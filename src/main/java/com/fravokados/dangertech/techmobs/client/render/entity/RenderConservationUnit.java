@@ -3,12 +3,13 @@ package com.fravokados.dangertech.techmobs.client.render.entity;
 import com.fravokados.dangertech.techmobs.client.model.ModelConservationUnit;
 import com.fravokados.dangertech.techmobs.entity.EntityConservationUnit;
 import com.fravokados.dangertech.techmobs.lib.Textures;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -20,7 +21,8 @@ public class RenderConservationUnit extends Render {
 
 	protected ModelConservationUnit modelConservationUnit;
 
-	public RenderConservationUnit() {
+	public RenderConservationUnit(RenderManager renderManager) {
+		super(renderManager);
 		this.modelConservationUnit = new ModelConservationUnit();
 		this.shadowSize = 0.5F;
 	}

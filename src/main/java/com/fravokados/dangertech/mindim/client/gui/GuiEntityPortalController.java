@@ -1,5 +1,7 @@
 package com.fravokados.dangertech.mindim.client.gui;
 
+import com.fravokados.dangertech.core.lib.util.GeneralUtils;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.inventory.ContainerEntityPortalController;
 import com.fravokados.dangertech.mindim.lib.NBTKeys;
@@ -9,10 +11,6 @@ import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
 import com.fravokados.dangertech.mindim.network.message.MessageGuiElementClicked;
 import com.fravokados.dangertech.mindim.network.message.MessageGuiTextUpdate;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
-import com.fravokados.dangertech.core.lib.util.GeneralUtils;
-import com.fravokados.dangertech.core.lib.util.ItemUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -20,8 +18,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class GuiEntityPortalController extends GuiContainer {
 	private static final int BUTTON_ID_START = 0;
 	private static final int BUTTON_ID_STOP = 1;
 	private static final int BUTTON_ID_EDIT = 2;
+	private static final int BUTTON_ID_TEXT_FIELD = 2;
 
 	private final TileEntityPortalControllerEntity te;
 
@@ -64,16 +66,16 @@ public class GuiEntityPortalController extends GuiContainer {
 		btnEdit = new GuiImageButton(BUTTON_ID_EDIT, guiLeft + 179, guiTop + 18, true, Textures.GUI_BUTTON_EDIT);
 		this.buttonList.add(btnEdit);
 
-		txtName = new GuiTextField(this.fontRendererObj, 58 + fontRendererObj.getStringWidth(Strings.translate(Strings.Gui.CONTROLLER_NAME) + " "), 18, 90, 20);
+		txtName = new GuiTextField(BUTTON_ID_TEXT_FIELD, this.fontRendererObj, 58 + fontRendererObj.getStringWidth(Strings.translate(Strings.Gui.CONTROLLER_NAME) + " "), 18, 90, 20);
 		txtName.setTextColor(0x00FF00);
-		txtName.setText(te.getInventoryName());
+		txtName.setText(te.getDisplayName().getFormattedText());
 		txtName.setEnableBackgroundDrawing(false);
 		txtName.setCanLoseFocus(false);
 	}
 
 
 	@Override
-	protected void actionPerformed(GuiButton btn) {
+	protected void actionPerformed(GuiButton btn)  throws IOException {
 		switch (btn.id) {
 			case BUTTON_ID_START:
 				ModMDNetworkManager.INSTANCE.sendToServer(new MessageGuiElementClicked(ContainerEntityPortalController.NETWORK_ID_START, 0));
@@ -86,7 +88,7 @@ public class GuiEntityPortalController extends GuiContainer {
 					updateNameText();
 					txtName.setFocused(false);
 				} else {
-					if (!te.hasCustomInventoryName()) {
+					if (!te.hasCustomName()) {
 						txtName.setText("");
 					}
 					txtName.setFocused(true);
@@ -106,8 +108,8 @@ public class GuiEntityPortalController extends GuiContainer {
 				|| (te.getState() == TileEntityPortalControllerEntity.State.INCOMING_PORTAL && (te.getUpgradeTrackerFlags() & TileEntityPortalControllerEntity.FLAG_CAN_DISCONNECT_INCOMING) == TileEntityPortalControllerEntity.FLAG_CAN_DISCONNECT_INCOMING);
 		super.drawScreen(x, y, f);
 		drawTooltips(x, y);
-		if (!txtName.isFocused() && !te.getInventoryName().equals(txtName.getText())) {
-			txtName.setText(te.getInventoryName());
+		if (!txtName.isFocused() && !te.getDisplayName().getFormattedText().equals(txtName.getText())) {
+			txtName.setText(te.getDisplayName().getFormattedText());
 		}
 	}
 
@@ -128,7 +130,6 @@ public class GuiEntityPortalController extends GuiContainer {
 		super.drawGuiContainerForegroundLayer(p_146979_1_, p_146979_2_);
 		drawString(this.fontRendererObj, Strings.translate(Strings.Gui.CONTROLLER_NAME), 58, 18, 0xa2cc42);
 		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_DESTINATION, getDestinationString(te.getDestination(), te.getStackInSlot(0))), 58, 30, 0xa2cc42);
-		//TODO translate State
 		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_STATE, te.getState().getTranslationShort()), 58, 40, 0xa2cc42);
 		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_ERROR, te.getLastError() == TileEntityPortalControllerEntity.Error.NO_ERROR ? te.getLastError().getTranslationShort() : (EnumChatFormatting.RED + te.getLastError().getTranslationShort() + EnumChatFormatting.RESET)), 58, 50, 0xa2cc42);
 
@@ -188,7 +189,7 @@ public class GuiEntityPortalController extends GuiContainer {
 	}
 
 	@Override
-	protected void keyTyped(char c, int keyCode) {
+	protected void keyTyped(char c, int keyCode) throws IOException {
 		if (txtName.isFocused()) {
 			switch (keyCode) {
 				case 28:
@@ -198,7 +199,7 @@ public class GuiEntityPortalController extends GuiContainer {
 					return;
 				case 1:
 					txtName.setFocused(false);
-					txtName.setText(te.getInventoryName());
+					txtName.setText(te.getDisplayName().getFormattedText());
 					return;
 			}
 			txtName.textboxKeyTyped(c, keyCode);
@@ -208,7 +209,7 @@ public class GuiEntityPortalController extends GuiContainer {
 	}
 
 	@Override
-	protected void mouseClicked(int x, int y, int btn) {
+	protected void mouseClicked(int x, int y, int btn) throws IOException {
 		super.mouseClicked(x, y, btn);
 		if (txtName.isFocused()) {
 			txtName.mouseClicked(x, y, btn);
@@ -223,6 +224,6 @@ public class GuiEntityPortalController extends GuiContainer {
 		} else {
 			te.setName(text);
 		}
-		txtName.setText(te.getInventoryName());
+		txtName.setText(te.getDisplayName().getFormattedText());
 	}
 }

@@ -1,14 +1,12 @@
 package com.fravokados.dangertech.techmobs.command;
 
 import com.fravokados.dangertech.core.lib.util.GeneralUtils;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.List;
  */
 public class CommandHelpers {
 
-	public static World getWorld(ICommandSender sender, IModCommand command, String[] args, int worldArgIndex) {
+	public static World getWorld(ICommandSender sender, IModCommand command, String[] args, int worldArgIndex) throws CommandException {
 		// Handle passed in world argument
 		if (worldArgIndex < args.length)
 			try {
@@ -56,21 +54,11 @@ public class CommandHelpers {
 		sender.addChatMessage(chat);
 	}
 
-	/**
-	 * Avoid using this function if at all possible. Commands are processed on the server,
-	 * which has no localization information.
-	 * StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage().
-	 * Messages will not be localized properly if you use StringUtil.localize().
-	 */
-	public static void sendChatMessage(ICommandSender sender, String message) {
-		sender.addChatMessage(new ChatComponentText(message));
-	}
-
 	public static void throwWrongUsage(ICommandSender sender, IModCommand command) throws WrongUsageException {
 		throw new WrongUsageException((GeneralUtils.translateWithFormat("command.techmobs.help", command.getCommandUsage(sender))));
 	}
 
-	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) {
+	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) throws CommandException {
 		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString()))
 			throw new WrongUsageException(GeneralUtils.translate("command.techmobs.noperms"));
 		String[] newargs = new String[args.length - 1];
@@ -95,14 +83,14 @@ public class CommandHelpers {
 		}
 	}
 
-	public static boolean processDefaultStandartCommands(ICommandSender sender, IModCommand command, String[] oldArgs, String newArg) {
+	public static boolean processDefaultStandartCommands(ICommandSender sender, IModCommand command, String[] oldArgs, String newArg) throws CommandException {
 		String[] newargs = new String[oldArgs.length + 1];
 		newargs[0] = newArg;
 		System.arraycopy(oldArgs, 0, newargs, 1, oldArgs.length);
 		return CommandHelpers.processStandardCommands(sender, command, newargs);
 	}
 
-	public static boolean processStandardCommands(ICommandSender sender, IModCommand command, String[] args) {
+	public static boolean processStandardCommands(ICommandSender sender, IModCommand command, String[] args) throws CommandException {
 		if (args.length >= 1) {
 			if (args[0].equals("help")) {
 				command.printHelp(sender);
@@ -139,7 +127,7 @@ public class CommandHelpers {
 		return Integer.parseInt(arg);
 	}
 
-	public static List<?> addTabCompletionOptionsForSubCommands(IModCommand command, ICommandSender sender, String[] args) {
+	public static List<String> addTabCompletionOptionsForSubCommands(IModCommand command, ICommandSender sender, String[] args, BlockPos pos) {
 		if(args.length == 1) {
 			List<String> list = new ArrayList<String>();
 			for (SubCommand sub : command.getChildren()) {
@@ -151,7 +139,7 @@ public class CommandHelpers {
 		} else {
 			for (SubCommand child : command.getChildren()) {
 				if (matches(args[0], child)) {
-					return child.addTabCompletionOptions(sender, Arrays.copyOfRange(args, 1, args.length));
+					return child.addTabCompletionOptions(sender, Arrays.copyOfRange(args, 1, args.length), pos);
 				}
 			}
 		}

@@ -1,12 +1,12 @@
 package com.fravokados.dangertech.techmobs.common.init;
 
-import com.fravokados.dangertech.techmobs.block.BlockCot;
+import com.fravokados.dangertech.core.ModNwCore;
 import com.fravokados.dangertech.techmobs.block.BlockCreativeTechnology;
 import com.fravokados.dangertech.techmobs.block.BlockTM;
 import com.fravokados.dangertech.techmobs.block.tileentity.TileEntityCreativeTechnology;
 import com.fravokados.dangertech.techmobs.lib.Reference;
 import com.fravokados.dangertech.techmobs.lib.Strings;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(value = Reference.MOD_ID)
 public class ModBlocks {
@@ -18,12 +18,12 @@ public class ModBlocks {
 	////////////////////
 	// General Blocks //
 	////////////////////
-	public static final BlockTM block_cot = new BlockCot();
+	public static final BlockTM block_cot = null;
 
 	//////////////////
 	// Debug Blocks //
 	//////////////////
-	public static final BlockCreativeTechnology creativeTechnology = new BlockCreativeTechnology();
+	public static final BlockCreativeTechnology creativeTechnology = null;
 	
 	public static void registerBlocks() {
 
@@ -34,12 +34,12 @@ public class ModBlocks {
 		////////////////////
 		// General Blocks //
 		////////////////////
-		GameRegistry.registerBlock(block_cot, Strings.Block.COT);
+//		GameRegistry.registerBlock(new BlockCot());
 
 		//////////////////
 		// Debug Blocks //
 		//////////////////
-		GameRegistry.registerBlock(creativeTechnology, Strings.Block.CREATIVE_TECHNOLOGY);
+		ModNwCore.proxy.registerBlock(new BlockCreativeTechnology());
 	}
 	
 	public static void registerTileEntities() {

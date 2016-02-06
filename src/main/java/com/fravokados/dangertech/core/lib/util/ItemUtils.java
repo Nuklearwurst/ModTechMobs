@@ -1,6 +1,7 @@
 package com.fravokados.dangertech.core.lib.util;
 
 import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -17,10 +18,10 @@ public class ItemUtils {
 	 * @return the NBTTagCompound of the ItemStack
 	 */
 	public static NBTTagCompound getNBTTagCompound(ItemStack stack) {
-		if (stack.stackTagCompound == null) {
-			stack.stackTagCompound = new NBTTagCompound();
+		if (!stack.hasTagCompound()) {
+			stack.setTagCompound(new NBTTagCompound());
 		}
-		return stack.stackTagCompound;
+		return stack.getTagCompound();
 	}
 
 	/**
@@ -36,14 +37,7 @@ public class ItemUtils {
 		NBTTagCompound nbt = getNBTTagCompound(stack);
 
 		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < inventory.getSizeInventory(); ++i) {
-			if (inventory.getStackInSlot(i) != null) {
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setByte("Slot", (byte) i);
-				inventory.getStackInSlot(i).writeToNBT(tag);
-				nbttaglist.appendTag(tag);
-			}
-		}
+		writeInventoryContentsToNBT(inventory, nbttaglist);
 		nbt.setTag("Upgrades", nbttaglist);
 	}
 
@@ -60,13 +54,60 @@ public class ItemUtils {
 		NBTTagCompound nbt = getNBTTagCompound(stack);
 		if (nbt.hasKey("Upgrades")) {
 			NBTTagList nbttaglist = nbt.getTagList("Upgrades", 10); //10 is compound type
-			for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-				NBTTagCompound tag = nbttaglist.getCompoundTagAt(i);
-				byte slot = tag.getByte("Slot");
-				if (slot >= 0 && slot < inventory.getSizeInventory()) {
-					inventory.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(tag));
-				}
+			readInventoryContentsFromNBT(inventory, nbttaglist);
+		}
+	}
+
+	/**
+	 * reads the content of an inventory from the given NBTTagList
+	 * @param inventory the inventory the items should get added to
+	 * @param nbtTagList the Taglist containing the saved itemstacks
+	 */
+	public static void readInventoryContentsFromNBT(IInventory inventory, NBTTagList nbtTagList) {
+		for (int i = 0; i < nbtTagList.tagCount(); ++i) {
+			NBTTagCompound tag = nbtTagList.getCompoundTagAt(i);
+			byte slot = tag.getByte("Slot");
+			if (slot >= 0 && slot < inventory.getSizeInventory()) {
+				inventory.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(tag));
 			}
+		}
+	}
+
+	/**
+	 * saves the content of an inventory to the given NBTTagList
+	 * @param inventory the inventory to be saved
+	 * @param nbtTagList the taglist the itemstacks get saved to
+	 */
+	public static void writeInventoryContentsToNBT(IInventory inventory, NBTTagList nbtTagList) {
+		for (int i = 0; i < inventory.getSizeInventory(); ++i) {
+			if (inventory.getStackInSlot(i) != null) {
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setByte("Slot", (byte) i);
+				inventory.getStackInSlot(i).writeToNBT(tag);
+				nbtTagList.appendTag(tag);
+			}
+		}
+	}
+
+	/**
+	 * a default implementation for decrStackSize of IInventory
+	 */
+	public static ItemStack decrStackSize(IInventory inventory, int slot, int amount) {
+		if (inventory.getStackInSlot(slot) != null) {
+			ItemStack itemstack;
+			if (inventory.getStackInSlot(slot).stackSize <= amount) {
+				itemstack = inventory.getStackInSlot(slot);
+				inventory.setInventorySlotContents(slot, null);
+				return itemstack;
+			} else {
+				itemstack = inventory.getStackInSlot(slot).splitStack(amount);
+				if (inventory.getStackInSlot(slot).stackSize == 0) {
+					inventory.setInventorySlotContents(slot, null);
+				}
+				return itemstack;
+			}
+		} else {
+			return null;
 		}
 	}
 }

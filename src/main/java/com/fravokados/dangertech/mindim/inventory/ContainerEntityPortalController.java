@@ -1,5 +1,6 @@
 package com.fravokados.dangertech.mindim.inventory;
 
+import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.inventory.slot.SlotControllerDestinationCard;
 import com.fravokados.dangertech.mindim.inventory.slot.SlotEnergyFuel;
@@ -11,7 +12,6 @@ import com.fravokados.dangertech.mindim.network.IGuiTextUpdateHandler;
 import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
 import com.fravokados.dangertech.mindim.network.message.MessageContainerIntegerUpdate;
 import com.fravokados.dangertech.mindim.network.message.MessageContainerStringUpdate;
-import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -61,15 +61,15 @@ public class ContainerEntityPortalController extends Container implements IEleme
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting crafter) {
-		super.addCraftingToCrafters(crafter);
+	public void onCraftGuiOpened(ICrafting crafter) {
+		super.onCraftGuiOpened(crafter);
 		crafter.sendProgressBarUpdate(this, 0, te.getId());
 		crafter.sendProgressBarUpdate(this, 1, te.getState().ordinal());
 		crafter.sendProgressBarUpdate(this, 2, te.getLastError().ordinal());
 		if (crafter instanceof EntityPlayerMP) {
 			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) crafter);
 			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 1, te.getMaxEnergyStored()), (EntityPlayerMP) crafter);
-			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomInventoryName() ? te.getInventoryName() : ""), (EntityPlayerMP) crafter);
+			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomName() ? te.getDisplayName().getFormattedText() : ""), (EntityPlayerMP) crafter);
 		}
 		crafter.sendProgressBarUpdate(this, 3, te.getUpgradeTrackerFlags());
 	}
@@ -99,7 +99,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 				icrafting.sendProgressBarUpdate(this, 3, te.getUpgradeTrackerFlags());
 			}
 			if (nameChanged && icrafting instanceof EntityPlayerMP) {
-				ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomInventoryName() ? te.getInventoryName() : ""), (EntityPlayerMP) icrafting);
+				ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomName() ? te.getDisplayName().getFormattedText() : ""), (EntityPlayerMP) icrafting);
 			}
 		}
 		this.lastState = te.getState();

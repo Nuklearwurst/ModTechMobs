@@ -65,7 +65,7 @@ public class TDManager {
 	 * updates (increases) the scouted techlevel by a value set in the configs
 	 */
 	public static void updateScoutedTechLevel(Chunk chunk) {
-		updateScoutedTechLevel(chunk.worldObj.provider.dimensionId, chunk.getChunkCoordIntPair());
+		updateScoutedTechLevel(chunk.getWorld().provider.getDimensionId(), chunk.getChunkCoordIntPair());
 	}
 
 
@@ -120,7 +120,7 @@ public class TDManager {
 	
 	public static void setPlayerScoutedTechLevel(EntityPlayer player, int scoutedLevel) {
 		getPlayerData(player).setInteger(NBT_PLAYER_TECHDATA_SCOUTED, scoutedLevel);
-		TechDataStorage.getInstance().updateDangerousPlayerList(player.getCommandSenderName(), scoutedLevel);
+		TechDataStorage.getInstance().updateDangerousPlayerList(player.getName(), scoutedLevel);
 	}
 	
 	public static int getPlayerTechLevel(EntityPlayer player) {

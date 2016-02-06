@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.mindim.inventory.slot;
 
-import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
+import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.item.ItemBlockPortalFrame;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -17,6 +17,6 @@ public class SlotDestinationCardMinDim extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		return stack.getItem() instanceof ItemBlockPortalFrame && stack.getItemDamage() == BlockPortalFrame.META_FRAME_ENTITY;
+		return stack.getItem() instanceof ItemBlockPortalFrame && stack.getItemDamage() == PortalFrameType.BASIC_FRAME.ordinal();
 	}
 }

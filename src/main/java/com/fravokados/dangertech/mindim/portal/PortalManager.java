@@ -1,25 +1,26 @@
 package com.fravokados.dangertech.mindim.portal;
 
+import com.fravokados.dangertech.api.block.IFacingSix;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
-import com.fravokados.dangertech.api.block.IFacingSix;
 import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
+import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.item.ItemDestinationCard;
 import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import com.fravokados.dangertech.mindim.lib.util.RotationUtils;
 import com.fravokados.dangertech.mindim.lib.util.TeleportUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -115,12 +116,12 @@ public class PortalManager extends WorldSavedData {
 
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		WorldServer worldServer = server.worldServerForDimension(pos.dimension);
-		TileEntity te = worldServer.getTileEntity(pos.x, pos.y, pos.z);
+		TileEntity te = worldServer.getTileEntity(pos.getPosition());
 		if (te != null && te instanceof TileEntityPortalControllerEntity) {
 			PortalMetrics targetMetrics = ((TileEntityPortalControllerEntity) te).getMetrics();
 			if (targetMetrics != null) {
-				ForgeDirection sideAxisOrigin = originMetrics.top.getRotation(originMetrics.front);
-				ForgeDirection sideAxisTarget = targetMetrics.top.getRotation(targetMetrics.front);
+				EnumFacing sideAxisOrigin = originMetrics.top.rotateAround(originMetrics.front.getAxis());
+				EnumFacing sideAxisTarget = targetMetrics.top.rotateAround(targetMetrics.front.getAxis());
 
 				double posX = entity.posX - originMetrics.originX;
 				double posY = entity.posY - originMetrics.originY;
@@ -130,9 +131,9 @@ public class PortalManager extends WorldSavedData {
 				//  position  //
 				////////////////
 				//relative coordinate system
-				double posTop = posX * originMetrics.top.offsetX + posY * originMetrics.top.offsetY + posZ * originMetrics.top.offsetZ;
+				double posTop = posX * originMetrics.top.getFrontOffsetX() + posY * originMetrics.top.getFrontOffsetY() + posZ * originMetrics.top.getFrontOffsetZ();
 				//invert side in order to make player come out of the front of the portal
-				double posSide = (posX * sideAxisOrigin.offsetX + posY * sideAxisOrigin.offsetY + posZ * sideAxisOrigin.offsetZ) * -1;
+				double posSide = (posX * sideAxisOrigin.getFrontOffsetX() + posY * sideAxisOrigin.getFrontOffsetY() + posZ * sideAxisOrigin.getFrontOffsetZ()) * -1;
 
 				//make sure player spawns inside portal
 				double maxUp = targetMetrics.getMaxUp();
@@ -154,11 +155,11 @@ public class PortalManager extends WorldSavedData {
 				posSide = MathHelper.clamp_double(posSide, minSide, maxSide); //"Side" Axis
 
 				//target coordinate system
-				double x = targetMetrics.originX + targetMetrics.top.offsetX * posTop + sideAxisTarget.offsetX * posSide;
-				double y = targetMetrics.originY + targetMetrics.top.offsetY * posTop + sideAxisTarget.offsetY * posSide;
-				double z = targetMetrics.originZ + targetMetrics.top.offsetZ * posTop + sideAxisTarget.offsetZ * posSide;
+				double x = targetMetrics.originX + targetMetrics.top.getFrontOffsetX() * posTop + sideAxisTarget.getFrontOffsetX() * posSide;
+				double y = targetMetrics.originY + targetMetrics.top.getFrontOffsetY() * posTop + sideAxisTarget.getFrontOffsetY() * posSide;
+				double z = targetMetrics.originZ + targetMetrics.top.getFrontOffsetZ() * posTop + sideAxisTarget.getFrontOffsetZ() * posSide;
 
-				if (targetMetrics.front == ForgeDirection.DOWN) {
+				if (targetMetrics.front == EnumFacing.DOWN) {
 					//spawn slighly lower to compensate entity/player height on down facing portals
 					y -= entity.height;
 				}
@@ -168,14 +169,14 @@ public class PortalManager extends WorldSavedData {
 				////////////////
 
 				//relative coordinate system
-				double speed_rel_x = entity.motionX * originMetrics.front.offsetX + entity.motionY * originMetrics.front.offsetY + entity.motionZ * originMetrics.front.offsetZ;
-				double speed_rel_y = entity.motionX * originMetrics.top.offsetX + entity.motionY * originMetrics.top.offsetY + entity.motionZ * originMetrics.top.offsetZ;
-				double speed_rel_z = entity.motionX * sideAxisOrigin.offsetX + entity.motionY * sideAxisOrigin.offsetY + entity.motionZ * sideAxisOrigin.offsetZ;
+				double speed_rel_x = entity.motionX * originMetrics.front.getFrontOffsetX() + entity.motionY * originMetrics.front.getFrontOffsetY() + entity.motionZ * originMetrics.front.getFrontOffsetZ();
+				double speed_rel_y = entity.motionX * originMetrics.top.getFrontOffsetX() + entity.motionY * originMetrics.top.getFrontOffsetY() + entity.motionZ * originMetrics.top.getFrontOffsetZ();
+				double speed_rel_z = entity.motionX * sideAxisOrigin.getFrontOffsetX() + entity.motionY * sideAxisOrigin.getFrontOffsetY() + entity.motionZ * sideAxisOrigin.getFrontOffsetZ();
 
 				//target coordinate system
-				double speed_x = targetMetrics.front.offsetX * (-1) * speed_rel_x + targetMetrics.top.offsetX * speed_rel_y + sideAxisTarget.offsetX * speed_rel_z;
-				double speed_y = targetMetrics.front.offsetY * (-1) * speed_rel_x + targetMetrics.top.offsetY * speed_rel_y + sideAxisTarget.offsetY * speed_rel_z;
-				double speed_z = targetMetrics.front.offsetZ * (-1) * speed_rel_x + targetMetrics.top.offsetZ * speed_rel_y + sideAxisTarget.offsetZ * speed_rel_z;
+				double speed_x = targetMetrics.front.getFrontOffsetX() * (-1) * speed_rel_x + targetMetrics.top.getFrontOffsetX() * speed_rel_y + sideAxisTarget.getFrontOffsetX() * speed_rel_z;
+				double speed_y = targetMetrics.front.getFrontOffsetY() * (-1) * speed_rel_x + targetMetrics.top.getFrontOffsetY() * speed_rel_y + sideAxisTarget.getFrontOffsetY() * speed_rel_z;
+				double speed_z = targetMetrics.front.getFrontOffsetZ() * (-1) * speed_rel_x + targetMetrics.top.getFrontOffsetZ() * speed_rel_y + sideAxisTarget.getFrontOffsetZ() * speed_rel_z;
 
 				//update entity
 				entity.motionX = speed_x;
@@ -194,12 +195,12 @@ public class PortalManager extends WorldSavedData {
 					if (targetMetrics.isHorizontal()) {
 						entity.rotationYaw = (entity.rotationYaw + RotationUtils.get2DRotation(originMetrics.top, targetMetrics.top)) % 360;
 					} else {
-						entity.rotationPitch = (entity.rotationPitch + originMetrics.front.offsetY * (-90)) % 180;
+						entity.rotationPitch = (entity.rotationPitch + originMetrics.front.getFrontOffsetY() * (-90)) % 180;
 						entity.rotationYaw = (entity.rotationYaw + RotationUtils.get2DRotation(originMetrics.top, targetMetrics.front.getOpposite())) % 360;
 					}
 				} else {
 					if (targetMetrics.isHorizontal()) {
-						entity.rotationPitch = (entity.rotationPitch + targetMetrics.front.getOpposite().offsetY * 90) % 180;
+						entity.rotationPitch = (entity.rotationPitch + targetMetrics.front.getOpposite().getFrontOffsetY() * 90) % 180;
 						entity.rotationYaw = (entity.rotationYaw + RotationUtils.get2DRotation(originMetrics.front, targetMetrics.top)) % 360;
 					} else {
 						entity.rotationYaw = (entity.rotationYaw + RotationUtils.get2DRotation(originMetrics.front, targetMetrics.front.getOpposite())) % 360;
@@ -266,13 +267,13 @@ public class PortalManager extends WorldSavedData {
 		}
 		PortalConstructor.createPortalFromMetrics(worldServer, metrics, true, yOffset);
 		//create the controller
-		worldServer.setBlock(pos.x, pos.y + yOffset, pos.z, ModBlocks.blockPortalFrame, BlockPortalFrame.META_CONTROLLER_ENTITY, 3);
-		TileEntity te = worldServer.getTileEntity(pos.x, pos.y + yOffset, pos.z);
+		worldServer.setBlockState(pos.getPosition().up(yOffset), ModBlocks.blockPortalFrame.getDefaultState().withProperty(BlockPortalFrame.TYPE_PROPERTY, PortalFrameType.BASIC_CONTROLLER));
+		TileEntity te = worldServer.getTileEntity(pos.getPosition());
 		if (te != null && te instanceof TileEntityPortalControllerEntity) {
 			if (Settings.PORTAL_SPAWN_WITH_CARD) {
-				((TileEntityPortalControllerEntity) te).setInventorySlotContents(0, ItemDestinationCard.fromDestination(parent, ((TileEntityPortalControllerEntity) te).getInventoryName()));
+				((TileEntityPortalControllerEntity) te).setInventorySlotContents(0, ItemDestinationCard.fromDestination(parent, ((TileEntityPortalControllerEntity) te).getDisplayName().getFormattedText()));
 			}
-			((TileEntityPortalControllerEntity) te).onBlockPostPlaced(te.getWorldObj(), pos.x, pos.y + yOffset, pos.z, worldServer.getBlockMetadata(pos.x, pos.y + yOffset, pos.z));
+			((TileEntityPortalControllerEntity) te).onBlockPostPlaced(te.getWorld(), pos.getPosition(), worldServer.getBlockState(pos.getPosition().up(yOffset)));
 			if (parentTile instanceof IFacingSix) {
 				((TileEntityPortalControllerEntity) te).setFacing(((IFacingSix) parentTile).getFacing());
 			}

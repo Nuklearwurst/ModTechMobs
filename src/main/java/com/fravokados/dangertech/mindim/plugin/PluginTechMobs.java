@@ -4,7 +4,7 @@ import com.fravokados.dangertech.api.DangerousTechnologyAPI;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalFrame;
 import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 
 public class PluginTechMobs {
 	public static final String MOD_ID = "techmobs";

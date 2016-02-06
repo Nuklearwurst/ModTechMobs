@@ -1,8 +1,7 @@
 package com.fravokados.dangertech.mindim.plugin;
 
-import cpw.mods.fml.common.Loader;
-import ic2.api.item.IC2Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * @author Nuklearwurst
@@ -18,6 +17,8 @@ public class PluginIC2 {
 	}
 
 	public static boolean isItemWrench(ItemStack stack) {
-		return isAvailable() && stack != null && (stack.getItem() == IC2Items.getItem("wrench").getItem() || stack.getItem() == IC2Items.getItem("electricWrench").getItem());
+		return false;
+		//FIXME ic2 integration
+//		return isAvailable() && stack != null && (stack.getItem() == IC2Items.getItem("wrench").getItem() || stack.getItem() == IC2Items.getItem("electricWrench").getItem());
 	}
 }

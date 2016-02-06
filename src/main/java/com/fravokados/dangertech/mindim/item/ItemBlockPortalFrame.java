@@ -1,17 +1,20 @@
 package com.fravokados.dangertech.mindim.item;
 
-import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
+import com.fravokados.dangertech.api.upgrade.IUpgradable;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
+import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.lib.NBTKeys;
 import com.fravokados.dangertech.mindim.lib.Strings;
-import com.fravokados.dangertech.core.lib.util.ItemUtils;
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -28,10 +31,14 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 
 	@Override
 	public String getUnlocalizedNameForItem(ItemStack stack) {
-		switch (stack.getItemDamage()) {
-			case BlockPortalFrame.META_CONTROLLER_ENTITY:
+		int meta = stack.getItemDamage();
+		if(meta > PortalFrameType.values().length) {
+			meta = 0;
+		}
+		switch (PortalFrameType.values()[meta]) {
+			case BASIC_CONTROLLER:
 				return Strings.Block.portalMachineController;
-			case BlockPortalFrame.META_FRAME_ENTITY:
+			case BASIC_FRAME:
 				return Strings.Block.portalMachineFrame;
 		}
 		return Strings.Block.portalMachineBase;
@@ -65,9 +72,9 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 	}
 
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-		if(super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
-			TileEntity te = world.getTileEntity(x, y, z);
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+		if(super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
+			TileEntity te = world.getTileEntity(pos);
 			if(te != null) {
 				if(te instanceof IUpgradable) {
 					ItemUtils.readUpgradesFromItemStack(((IUpgradable) te).getUpgradeInventory(), stack);

@@ -13,18 +13,17 @@ import com.fravokados.dangertech.core.lib.util.LogHelperCore;
 import com.fravokados.dangertech.core.network.ModNetworkManager;
 import com.fravokados.dangertech.core.plugin.PluginManager;
 import com.fravokados.dangertech.core.plugin.ic2.IC2RecipeIntegrationCore;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLModDisabledEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 
 /**
@@ -78,7 +77,7 @@ public class ModNwCore {
 		proxy.registerEvents();
 
 		//Config handler
-		FMLCommonHandler.instance().bus().register(config);
+		MinecraftForge.EVENT_BUS.register(config);
 
 		//load recipes
 		try {

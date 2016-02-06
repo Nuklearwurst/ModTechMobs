@@ -12,6 +12,7 @@ import net.minecraft.world.gen.ChunkProviderGenerate;
  */
 public class WorldProviderMiningDimension extends WorldProvider {
 
+	@Override
     public void registerWorldChunkManager()
     {
         this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.desertHills, 0.8F);
@@ -19,14 +20,21 @@ public class WorldProviderMiningDimension extends WorldProvider {
 
     }
 
+	@Override
     public IChunkProvider createChunkGenerator()
     {
-        return new ChunkProviderGenerate(worldObj, worldObj.getSeed() + 42, true);
+        return new ChunkProviderGenerate(worldObj, worldObj.getSeed() + 42, true, null);
     }
 
+    @Override
     public String getDimensionName()
     {
         return "Mining Dimension";
+    }
+
+    @Override
+    public String getInternalNameSuffix() {
+        return "_mindim";
     }
 
     @Override

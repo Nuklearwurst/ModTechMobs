@@ -1,11 +1,12 @@
 package com.fravokados.dangertech.techmobs.command.techdata;
 
 import com.fravokados.dangertech.api.util.ChunkLocation;
+import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.techmobs.command.CommandHelpers;
 import com.fravokados.dangertech.techmobs.command.SubCommand;
-import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import com.fravokados.dangertech.techmobs.techdata.TDTickManager;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
@@ -21,7 +22,7 @@ public class CommandTechDataScan extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 		if(!CommandHelpers.processDefaultStandartCommands(sender, this, args, "level")) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
@@ -34,11 +35,11 @@ public class CommandTechDataScan extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			if (args.length != 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
-				TDTickManager.scheduleChunkScan(new ChunkLocation(sender.getEntityWorld().provider.dimensionId, WorldUtils.convertToChunkCoord(sender.getPlayerCoordinates())));
+				TDTickManager.scheduleChunkScan(new ChunkLocation(sender.getEntityWorld().provider.getDimensionId(), WorldUtils.convertToChunkCoord(sender.getPosition())));
 				sender.addChatMessage(new ChatComponentText("Scanning..."));
 				sender.addChatMessage(new ChatComponentText(TDTickManager.getTasksInQueue() + " scans in quene!"));
 			}
@@ -52,12 +53,12 @@ public class CommandTechDataScan extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			if (args.length != 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
-				TDManager.updateScoutedTechLevel(sender.getEntityWorld().provider.dimensionId, WorldUtils.convertToChunkCoord(sender.getPlayerCoordinates()));
-				sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getScoutedTechLevel(sender.getEntityWorld().provider.dimensionId, WorldUtils.convertToChunkCoord(sender.getPlayerCoordinates()))));
+				TDManager.updateScoutedTechLevel(sender.getEntityWorld().provider.getDimensionId(), WorldUtils.convertToChunkCoord(sender.getPosition()));
+				sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getScoutedTechLevel(sender.getEntityWorld().provider.getDimensionId(), WorldUtils.convertToChunkCoord(sender.getPosition()))));
 			}
 		}
 	}

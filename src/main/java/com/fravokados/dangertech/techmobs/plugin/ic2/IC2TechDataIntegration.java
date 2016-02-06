@@ -1,11 +1,8 @@
 package com.fravokados.dangertech.techmobs.plugin.ic2;
 
-import com.fravokados.dangertech.api.DangerousTechnologyAPI;
-import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffectEquipment;
 import com.fravokados.dangertech.techmobs.lib.util.LogHelperTM;
 import com.fravokados.dangertech.techmobs.plugin.PluginManager;
 import com.fravokados.dangertech.techmobs.techdata.values.TDValues;
-import ic2.api.item.IC2Items;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -32,6 +29,8 @@ public class IC2TechDataIntegration {
 	}
 
 	private static void loadItems() {
+		/*
+		//FIXME ic2 integration
 		itemNanoSaber = IC2Items.getItem("nanoSaber");
 
 		itemQuantumHelmet = IC2Items.getItem("quantumHelmet");
@@ -39,6 +38,7 @@ public class IC2TechDataIntegration {
 		itemQuantumLeggins = IC2Items.getItem("quantumLeggings");
 		itemQuantumBoots = IC2Items.getItem("quantumBoots");
 		itemChainsaw = IC2Items.getItem("chainsaw");
+		*/
 	}
 
 	@SuppressWarnings("unchecked")
@@ -143,6 +143,7 @@ public class IC2TechDataIntegration {
 		////////////////////
 		// Electric Tools //
 		////////////////////
+		/*
 		TDValues.getInstance().registerItemEntry(IC2Items.getItem("miningDrill"), 15);
 		TDValues.getInstance().registerItemEntry(IC2Items.getItem("diamondDrill"), 30);
 		TDValues.getInstance().registerItemEntry(IC2Items.getItem("iridiumDrill"), 200);
@@ -192,9 +193,11 @@ public class IC2TechDataIntegration {
 		TDValues.getInstance().registerItemEntry(IC2Items.getItem("solarHelmet"), 30);
 		TDValues.getInstance().registerItemEntry(IC2Items.getItem("staticBoots"), 20);
 		TDValues.getInstance().registerItemEntry(IC2Items.getItem("nightvisionGoggles"), 50);
+		*/
 	}
 
 	private static void loadEffects() {
+		/*
 		DangerousTechnologyAPI.effectRegistry.addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
 				itemNanoSaber,
 				itemQuantumHelmet,
@@ -211,5 +214,7 @@ public class IC2TechDataIntegration {
 				IC2Items.getItem("nanoLeggings"),
 				IC2Items.getItem("nanoBoots")
 		}, false, false, new int[]{2000, 500, 2000, 1000, 1000}).setDoesArmorDrop(false).checkContents());
+
+		*/
 	}
 }

@@ -3,6 +3,7 @@ package com.fravokados.dangertech.mindim.command;
 import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.lib.util.TeleportUtils;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,7 +25,7 @@ public class CommandEnterDimension extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] params) {
+    public void processCommand(ICommandSender sender, String[] params) throws CommandException {
         if(sender != null) {
 	        if(sender instanceof EntityPlayerMP) {
 		        if(((EntityPlayerMP) sender).dimension == Settings.dimensionId) {

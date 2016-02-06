@@ -1,6 +1,5 @@
 package com.fravokados.dangertech.mindim.lib.util;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -10,8 +9,7 @@ import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
-
-import java.util.Collection;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * @author Nuklearwurst
@@ -37,13 +35,13 @@ public class TeleportUtils {
 		entityPlayerMP.dimension = targetDimension;
 		WorldServer worldServerDestination = server.worldServerForDimension(entityPlayerMP.dimension);
 		//respawn player
-		entityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(entityPlayerMP.dimension, worldServerDestination.difficultySetting, worldServerDestination.getWorldInfo().getTerrainType(), entityPlayerMP.theItemInWorldManager.getGameType())); // Forge: Use new dimensions information
+		entityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(entityPlayerMP.dimension, worldServerDestination.getDifficulty(), worldServerDestination.getWorldInfo().getTerrainType(), entityPlayerMP.theItemInWorldManager.getGameType())); // Forge: Use new dimensions information
 		//remove player from origin world
 		worldServerOrigin.removePlayerEntityDangerously(entityPlayerMP);
 		entityPlayerMP.isDead = false;
 		//transfer entity to new world
 		transferEntityToWorld(entityPlayerMP, worldServerOrigin, worldServerDestination);
-		server.getConfigurationManager().func_72375_a(entityPlayerMP, worldServerOrigin);
+		server.getConfigurationManager().preparePlayer(entityPlayerMP, worldServerOrigin);
 		//update player location
 		entityPlayerMP.playerNetServerHandler.setPlayerLocation(x, y, z, yaw, pitch);
 		//update player world
@@ -52,7 +50,7 @@ public class TeleportUtils {
 		server.getConfigurationManager().updateTimeAndWeatherForPlayer(entityPlayerMP, worldServerDestination);
 		server.getConfigurationManager().syncPlayerInventory(entityPlayerMP);
 		//update potion effects
-		for (PotionEffect potioneffect : (Collection<PotionEffect>)entityPlayerMP.getActivePotionEffects()) {
+		for (PotionEffect potioneffect : entityPlayerMP.getActivePotionEffects()) {
 			entityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(entityPlayerMP.getEntityId(), potioneffect));
 		}
 		//update Experience level
@@ -87,7 +85,7 @@ public class TeleportUtils {
 
 			if (newEntity != null)
 			{
-				newEntity.copyDataFrom(entity, true);
+				newEntity.copyDataFromOld(entity);
 				worldServerDestination.spawnEntityInWorld(newEntity);
 			}
 

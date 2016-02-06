@@ -1,6 +1,5 @@
 package com.fravokados.dangertech.core.plugin.energy;
 
-import ic2.api.item.IElectricItem;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -18,7 +17,7 @@ public class EnergyManager {
 	public static boolean canItemProvideEnergy(ItemStack item, EnergyTypes type) {
 		switch (type) {
 			case IC2:
-				return item.getItem() instanceof IElectricItem && ((IElectricItem) item.getItem()).canProvideEnergy(item);
+//				return item.getItem() instanceof IElectricItem && ((IElectricItem) item.getItem()).canProvideEnergy(item);
 		}
 		return true;
 	}

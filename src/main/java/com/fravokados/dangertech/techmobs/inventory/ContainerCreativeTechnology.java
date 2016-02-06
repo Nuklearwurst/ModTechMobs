@@ -22,8 +22,8 @@ public class ContainerCreativeTechnology extends Container implements IContainer
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting crafter) {
-		super.addCraftingToCrafters(crafter);
+	public void onCraftGuiOpened(ICrafting crafter) {
+		super.onCraftGuiOpened(crafter);
 		if (crafter instanceof EntityPlayerMP) {
 			ModTDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdateClient((byte) 0, te.getTechData()), (EntityPlayerMP) crafter);
 		}

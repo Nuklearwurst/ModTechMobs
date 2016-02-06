@@ -2,7 +2,7 @@ package com.fravokados.dangertech.techmobs.lib.util;
 
 import com.fravokados.dangertech.techmobs.configuration.Settings;
 import com.fravokados.dangertech.techmobs.lib.Reference;
-import cpw.mods.fml.common.FMLLog;
+import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
 public class LogHelperTM {

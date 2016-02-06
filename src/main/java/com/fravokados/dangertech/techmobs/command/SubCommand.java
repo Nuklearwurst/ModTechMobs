@@ -1,7 +1,9 @@
 package com.fravokados.dangertech.techmobs.command;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.BlockPos;
 
 import java.util.*;
 
@@ -66,17 +68,17 @@ public abstract class SubCommand implements IModCommand {
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args) {
-		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args);
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args, pos);
 	}
 
 	@Override
-	public final void processCommand(ICommandSender sender, String[] args) {
+	public final void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (!CommandHelpers.processStandardCommands(sender, this, args))
 			processSubCommand(sender, args);
 	}
 
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 		CommandHelpers.throwWrongUsage(sender, this);
 	}
 
@@ -123,12 +125,8 @@ public abstract class SubCommand implements IModCommand {
 		return parent.getFullCommandString() + " " + getCommandName();
 	}
 
+	@Override
 	public int compareTo(ICommand command) {
 		return this.getCommandName().compareTo(command.getCommandName());
-	}
-
-	@Override
-	public int compareTo(Object command) {
-		return this.compareTo((ICommand) command);
 	}
 }

@@ -19,24 +19,22 @@ import com.fravokados.dangertech.techmobs.plugin.PluginManager;
 import com.fravokados.dangertech.techmobs.plugin.ic2.IC2RecipeIntegration;
 import com.fravokados.dangertech.techmobs.techdata.effects.TDEffects;
 import com.fravokados.dangertech.techmobs.techdata.values.TDValues;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY, canBeDeactivated=false)
 public class ModTechMobs {
 
-	@Instance(value = Reference.MOD_ID)
+	@Mod.Instance(value = Reference.MOD_ID)
 	public static ModTechMobs instance;
 	
 	@SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_SERVER)
@@ -55,7 +53,7 @@ public class ModTechMobs {
 	public static String[] cTileValues;
 	public static String[] cItemValues;
 
-	@EventHandler
+	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
 		//load config
 		config = new ConfigHandler(evt.getSuggestedConfigurationFile());
@@ -76,7 +74,7 @@ public class ModTechMobs {
 		ModBlocks.registerBlocks();
 	}
 
-	@EventHandler
+	@Mod.EventHandler
 	public void init(FMLInitializationEvent evt) {
 		//init modintegration
 		PluginManager.init();
@@ -111,7 +109,7 @@ public class ModTechMobs {
 		ModTDNetworkManager.init();
 	}
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		//init TD effects
 		TDEffects.init();
@@ -162,12 +160,12 @@ public class ModTechMobs {
 		LogHelperTM.info(Reference.MOD_NAME + ", version: " + Reference.VERSION + ", has successfully loaded!");
 	}
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void disableMod(FMLModDisabledEvent evt) {
 		LogHelperTM.info("Disabled " + Reference.MOD_NAME + " version: " + Reference.VERSION + "!");
 	}
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent evt) {
 		//register events
 		evt.registerServerCommand(new CommandTechMobs());

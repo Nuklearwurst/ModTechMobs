@@ -21,11 +21,11 @@ public class ChunkLocation {
 	}
 	
 	public ChunkLocation(World world, ChunkCoordIntPair coords) {
-		this(world.provider.dimensionId, coords);
+		this(world.provider.getDimensionId(), coords);
 	}
 	
 	public ChunkLocation(Chunk chunk) {
-		this(chunk.worldObj, chunk.getChunkCoordIntPair());
+		this(chunk.getWorld(), chunk.getChunkCoordIntPair());
 	}
 	
 	@Override

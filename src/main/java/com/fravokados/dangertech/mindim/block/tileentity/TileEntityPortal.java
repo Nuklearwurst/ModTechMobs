@@ -4,6 +4,7 @@ import com.fravokados.dangertech.mindim.block.BlockPortalMinDim;
 import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
 /**
  * helper tileentity that stores data used to determine the portals destination
@@ -15,20 +16,16 @@ public class TileEntityPortal extends TileEntity {
 
 	private boolean validPortal = false;
 
-	private int coreX;
-	private int coreY;
-	private int coreZ;
+	private BlockPos controllerPos;
 
-	public void setPortalController(int x, int y, int z) {
-		this.coreX = x;
-		this.coreY = y;
-		this.coreZ = z;
+	public void setPortalController(BlockPos controller) {
+		this.controllerPos = controller;
 		this.validPortal = true;
 	}
 
 	public void onEntityEnterPortal(Entity entity) {
 		if(!validPortal) {
-			this.worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+			this.worldObj.setBlockToAir(getPos());
 			return;
 		}
 		TileEntityPortalControllerEntity controller = getController();
@@ -38,10 +35,12 @@ public class TileEntityPortal extends TileEntity {
 	}
 
 	public TileEntityPortalControllerEntity getController() {
-		TileEntity controller = this.worldObj.getTileEntity(coreX, coreY, coreZ);
+		TileEntity controller = this.worldObj.getTileEntity(this.controllerPos);
 		if(controller == null || !(controller instanceof TileEntityPortalControllerEntity)) {
-			LogHelperMD.warn("Invalid Controller Found! portal: [" + xCoord + "; " + yCoord + "; " + zCoord + "], controller: [" + coreX + "; " + coreY + "; " + coreZ + "]");
-			((BlockPortalMinDim)blockType).removePortalAndSurroundingPortals(worldObj, xCoord, yCoord, zCoord);
+			LogHelperMD.warn("Invalid Controller Found! portal: ["
+					+ getPos().getX() + "; " + getPos().getY() + "; " + getPos().getZ() + "], controller: ["
+					+ controllerPos.getX() + "; " + controllerPos.getY() + "; " + controllerPos.getZ() + "]");
+			((BlockPortalMinDim)blockType).removePortalAndSurroundingPortals(worldObj, getPos());
 			return null;
 		}
 		return (TileEntityPortalControllerEntity) controller;

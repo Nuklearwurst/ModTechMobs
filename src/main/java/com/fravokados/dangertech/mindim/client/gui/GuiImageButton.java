@@ -1,10 +1,10 @@
 package com.fravokados.dangertech.mindim.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -49,7 +49,7 @@ public class GuiImageButton extends GuiButton {
 				}
 				mc.renderEngine.bindTexture(texture);
 				//needed?
-				this.field_146123_n = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+				this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
 
 				this.drawTexturedModalRect(0, 0, uvX, uvY, 16, 16);
 				//needed?
@@ -65,7 +65,7 @@ public class GuiImageButton extends GuiButton {
 
 				mc.renderEngine.bindTexture(texture);
 				//needed?
-				this.field_146123_n = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+				this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
 
 				this.drawTexturedModalRect(this.xPosition, this.yPosition, uvX, uvY, 16, 16);
 				//needed

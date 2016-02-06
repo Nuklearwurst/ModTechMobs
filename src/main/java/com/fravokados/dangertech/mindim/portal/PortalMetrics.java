@@ -7,13 +7,16 @@ import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
 import com.fravokados.dangertech.mindim.block.BlockPortalMinDim;
 import com.fravokados.dangertech.mindim.block.ModBlocks;
+import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.lib.Strings;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 
@@ -40,8 +43,8 @@ public class PortalMetrics {
 		}
 	}
 
-	public ForgeDirection top = ForgeDirection.UP;
-	public ForgeDirection front = ForgeDirection.EAST;
+	public EnumFacing top = EnumFacing.UP;
+	public EnumFacing front = EnumFacing.EAST;
 
 	public double originX;
 	public double originY;
@@ -101,7 +104,8 @@ public class PortalMetrics {
 	}
 
 	public void addCoord(TileEntity te) {
-		addCoord(te.xCoord, te.yCoord, te.zCoord);
+		BlockPos pos = te.getPos();
+		addCoord(pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	public int biggestDimension() {
@@ -125,8 +129,7 @@ public class PortalMetrics {
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	public boolean placePortalsInsideFrame(World world, int x, int y, int z) {
-		int meta = BlockPortalMinDim.convertFacingToMeta(front.ordinal());
+	public boolean placePortalsInsideFrame(World world, BlockPos pos) {
 		for(int j = minX; j <= maxX; j++) { //X
 			for(int k = minY; k <= maxY; k++) { //Y
 				for(int l = minZ; l <= maxZ; l++) { //Z
@@ -139,7 +142,7 @@ public class PortalMetrics {
 					if(minZ - maxZ != 0 && (l == minZ || l == maxZ)) {
 						continue;
 					}
-					BlockPortalMinDim.placePortalInWorld(world, j, k, l, x, y, z, meta);
+					BlockPortalMinDim.placePortalInWorld(world, new BlockPos(j, k, l), pos, front.getAxis());
 				}
 			}
 		}
@@ -164,8 +167,10 @@ public class PortalMetrics {
 					if(minZ - maxZ != 0 && (l == minZ || l == maxZ)) {
 						continue;
 					}
-					if(world.getBlock(j, k, l) instanceof BlockPortalMinDim) {
-						world.setBlockToAir(j, k, l);
+					BlockPos pos = new BlockPos(j, k, l);
+					Block block = world.getBlockState(pos).getBlock();
+					if(block instanceof BlockPortalMinDim) {
+						world.setBlockToAir(pos);
 					}
 				}
 			}
@@ -199,21 +204,21 @@ public class PortalMetrics {
 				max = orientation[i];
 			}
 		}
-		front = ForgeDirection.getOrientation(facing);
+		front = EnumFacing.getFront(facing);
 		if(maxX - minX == 0) {
-			top = ForgeDirection.UP;
-			if(front != ForgeDirection.EAST && front != ForgeDirection.WEST) {
-				front = ForgeDirection.EAST;
+			top = EnumFacing.UP;
+			if(front != EnumFacing.EAST && front != EnumFacing.WEST) {
+				front = EnumFacing.EAST;
 			}
 		} else if(maxY - minY == 0) {
-			if(front != ForgeDirection.DOWN && front != ForgeDirection.UP) {
-				front = ForgeDirection.UP;
+			if(front != EnumFacing.DOWN && front != EnumFacing.UP) {
+				front = EnumFacing.UP;
 			}
-			top = front == ForgeDirection.UP ? ForgeDirection.EAST : ForgeDirection.WEST;
+			top = front == EnumFacing.UP ? EnumFacing.EAST : EnumFacing.WEST;
 		} else if(maxZ - minZ == 0) {
-			top = ForgeDirection.UP;
-			if(front != ForgeDirection.NORTH && front != ForgeDirection.SOUTH) {
-				front = ForgeDirection.NORTH;
+			top = EnumFacing.UP;
+			if(front != EnumFacing.NORTH && front != EnumFacing.SOUTH) {
+				front = EnumFacing.NORTH;
 			}
 		}
 	}
@@ -236,7 +241,8 @@ public class PortalMetrics {
 				for(int z = minZ; z <= maxZ; z++) {
 					flagZ = z == minZ || z == maxZ;
 					if(!(flagX == flagY ? flagX : flagZ)) {
-						if(!world.isAirBlock(x, y, z) && world.getBlock(x, y, z) != ModBlocks.blockPortalBlock) {
+						BlockPos pos = new BlockPos(x, y, z);
+						if(!world.isAirBlock(pos) && world.getBlockState(pos) != ModBlocks.blockPortalBlock) {
 							//skip portal block when searching for empty frame to allow client to update metrics when a portal is already opened
 							//see ClientPortalInfo for more information
 							return false;
@@ -261,7 +267,8 @@ public class PortalMetrics {
 				for(int z = minZ; z <= maxZ; z++) {
 					flagZ = z == minZ || z == maxZ;
 					if(flagX == flagY ? flagX : flagZ) {
-						TileEntity te = world.getTileEntity(x, y, z);
+						BlockPos pos = new BlockPos(x, y, z);
+						TileEntity te = world.getTileEntity(pos);
 						if(te == null || !(te instanceof IEntityPortalComponent)) {
 							return false;
 						}
@@ -301,7 +308,8 @@ public class PortalMetrics {
 		for(int i = minX; i <= maxX; i++) {
 			for(int j = minY; j <= maxY; j++) {
 				for(int k = minZ; k <= maxZ; k++) {
-					if(!BlockUtils.isBlockReplaceable(world, i, j, k)) {
+					BlockPos pos = new BlockPos(i, j, k);
+					if(!BlockUtils.isBlockReplaceable(world, pos)) {
 						return false;
 					}
 				}
@@ -334,8 +342,8 @@ public class PortalMetrics {
 		maxX = nbt.getInteger("maxX");
 		maxY = nbt.getInteger("maxY");
 		maxZ = nbt.getInteger("maxZ");
-		top = ForgeDirection.getOrientation(nbt.getInteger("top"));
-		front = ForgeDirection.getOrientation(nbt.getInteger("front"));
+		top = EnumFacing.getFront(nbt.getInteger("top"));
+		front = EnumFacing.getFront(nbt.getInteger("front"));
 	}
 
 	public static PortalMetrics getMetricsFromNBT(NBTTagCompound nbt) {
@@ -348,46 +356,42 @@ public class PortalMetrics {
 	}
 
 	public double getMaxUp() {
-		if(top.offsetX != 0) {
-			return maxX - originX;
-		} else if(top.offsetY != 0) {
-			return  maxY - originY;
-		} else if(top.offsetZ != 0) {
-			return maxZ - originZ;
-		}
-		return 0;
+		return getMaxForFace(top);
 	}
 
 	public double getMinUp() {
-		if(top.offsetX != 0) {
-			return minX - originX;
-		} else if(top.offsetY != 0) {
-			return  minY - originY;
-		} else if(top.offsetZ != 0) {
-			return minZ - originZ;
-		}
-		return 0;
+		return getMinForFace(top);
 	}
 
 	public double getMaxSide() {
-		ForgeDirection side = top.getRotation(front);
-		if(side.offsetX != 0) {
+		EnumFacing side = top.rotateAround(front.getAxis());
+		return getMaxForFace(side);
+	}
+
+	public double getMinSide() {
+		EnumFacing side = top.rotateAround(front.getAxis());
+		return getMinForFace(side);
+	}
+
+	@SuppressWarnings("Duplicates")
+	private double getMaxForFace(EnumFacing face) {
+		if(face.getFrontOffsetX() != 0) {
 			return maxX - originX;
-		} else if(side.offsetY != 0) {
+		} else if(face.getFrontOffsetY() != 0) {
 			return  maxY - originY;
-		} else if(side.offsetZ != 0) {
+		} else if(face.getFrontOffsetZ() != 0) {
 			return maxZ - originZ;
 		}
 		return 0;
 	}
 
-	public double getMinSide() {
-		ForgeDirection side = top.getRotation(front);
-		if(side.offsetX != 0) {
+	@SuppressWarnings("Duplicates")
+	private double getMinForFace(EnumFacing face) {
+		if(face.getFrontOffsetX() != 0) {
 			return minX - originX;
-		} else if(side.offsetY != 0) {
+		} else if(face.getFrontOffsetY() != 0) {
 			return  minY - originY;
-		} else if(side.offsetZ != 0) {
+		} else if(face.getFrontOffsetZ() != 0) {
 			return minZ - originZ;
 		}
 		return 0;
@@ -425,14 +429,15 @@ public class PortalMetrics {
 				flagY = j == minY || j == maxY;
 				for(int k = minZ; k <= maxZ; k++) {
 					flagZ = k == minZ || k == maxZ;
+					BlockPos pos = new BlockPos(x + i, y + j, z + k);
 					if(flagX == flagY ? flagX : flagZ) {
-						world.setBlock(x + i, y + j, z + k, ModBlocks.blockPortalFrame, BlockPortalFrame.META_FRAME_ENTITY, 0);
-						TileEntity te = world.getTileEntity(x + i, y + j, z + k);
+						world.setBlockState(pos, ModBlocks.blockPortalFrame.getDefaultState().withProperty(BlockPortalFrame.TYPE_PROPERTY, PortalFrameType.BASIC_FRAME));
+						TileEntity te = world.getTileEntity(pos);
 						if(te != null && te instanceof IFacingSix) {
 							((IFacingSix) te).setFacing((short) front.ordinal());
 						}
 					} else {
-						world.setBlock(x + i, y + j, z + k, Blocks.air, 0, 0);
+						world.setBlockState(pos, Blocks.air.getDefaultState());
 					}
 				}
 			}
@@ -452,7 +457,8 @@ public class PortalMetrics {
 				for(int k = minZ; k <= maxZ; k++) {
 					flagZ = k == minZ || k == maxZ;
 					if(flagX == flagY ? flagX : flagZ) {
-						worldObj.markBlockForUpdate(i, j, k);
+						BlockPos pos = new BlockPos(i, j, k);
+						worldObj.markBlockForUpdate(pos);
 					}
 				}
 			}

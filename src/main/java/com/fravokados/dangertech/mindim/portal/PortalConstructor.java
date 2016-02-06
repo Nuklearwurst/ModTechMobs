@@ -7,8 +7,9 @@ import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import com.fravokados.dangertech.mindim.lib.util.SimpleObjectReference;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,18 +26,18 @@ public class PortalConstructor {
 		ERROR_PORTAL_NOT_EMPTY, ERROR_PORTAL_FRAME_INCOMPLETE
 	}
 
-	public static Result createPortalMultiBlock(World world, int x, int y, int z) {
+	public static Result createPortalMultiBlock(World world, BlockPos pos) {
 		List<IEntityPortalMandatoryComponent> frames = new ArrayList<IEntityPortalMandatoryComponent>();
-		return createPortalMultiBlock(world, x, y, z, frames);
+		return createPortalMultiBlock(world, pos, frames);
 	}
 
-	public static Result createPortalMultiBlock(World world, int x, int y, int z, List<IEntityPortalMandatoryComponent> frames) {
+	public static Result createPortalMultiBlock(World world, BlockPos pos, List<IEntityPortalMandatoryComponent> frames) {
 		LogHelperMD.logDev("Searching for Portal MultiBlock");
 		//settings up
 		SimpleObjectReference<TileEntityPortalControllerEntity> controller = new SimpleObjectReference<TileEntityPortalControllerEntity>();
 		PortalMetrics metrics = new PortalMetrics();
 		//Finding connected Blocks
-		Result result = createPortalMultiBlock(world, x, y, z, frames, controller, metrics);
+		Result result = createPortalMultiBlock(world, pos, frames, controller, metrics);
 		//Checking structure
 		if (result != Result.SUCCESS) {
 			LogHelperMD.logDev("MultiBlock forming failed: " + result);
@@ -60,7 +61,7 @@ public class PortalConstructor {
 		}
 		//update frames
 		for (IEntityPortalMandatoryComponent frame : frames) {
-			frame.setPortalController(controller.get().xCoord, controller.get().yCoord, controller.get().zCoord);
+			frame.setPortalController(controller.get().getPos());
 		}
 		//calculate Origin
 		metrics.calculateOrigin(frames);
@@ -74,17 +75,15 @@ public class PortalConstructor {
 	/**
 	 * finds all connected PortalFrameBlocsk (and controller)
 	 * @param world The World
-	 * @param x starting position X
-	 * @param y starting position Y
-	 * @param z starting position Z
+	 * @param pos starting position
 	 * @param frames List to store found Frames
 	 * @param controller Controller reference to update
 	 * @param metrics Metrics to update
 	 * @return SUCCESS if no error was found, size and completion still has to be checked
 	 */
-	private static Result createPortalMultiBlock(World world, int x, int y, int z, List<IEntityPortalMandatoryComponent> frames, SimpleObjectReference<TileEntityPortalControllerEntity> controller, PortalMetrics metrics) {
+	private static Result createPortalMultiBlock(World world, BlockPos pos, List<IEntityPortalMandatoryComponent> frames, SimpleObjectReference<TileEntityPortalControllerEntity> controller, PortalMetrics metrics) {
 		Stack<TileEntity> blocksToScan = new Stack<TileEntity>();
-		TileEntity te = world.getTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(pos);
 		if(te == null || !(te instanceof IEntityPortalComponent)) {
 			return Result.ERROR_NO_PORTAL_BLOCK;
 		}
@@ -107,8 +106,8 @@ public class PortalConstructor {
 			if(metrics.biggestDimension() > Settings.MAX_PORTAL_SIZE) {
 				return Result.ERROR_TO_BIG;
 			}
-			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-				TileEntity te2 = world.getTileEntity(te.xCoord + dir.offsetX, te.yCoord + dir.offsetY, te.zCoord + dir.offsetZ);
+			for(EnumFacing dir : EnumFacing.VALUES) {
+				TileEntity te2 = world.getTileEntity(te.getPos().offset(dir));
 				//make sure we found a new one
 				if(te2 != null &&
 						(!blocksToScan.contains(te2)) &&

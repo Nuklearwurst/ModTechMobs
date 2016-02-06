@@ -8,14 +8,14 @@ import com.fravokados.dangertech.techmobs.techdata.effects.TDEffectHandler;
 import com.fravokados.dangertech.techmobs.techdata.effects.TDEffects;
 import com.fravokados.dangertech.techmobs.techdata.values.TDValues;
 import com.fravokados.dangertech.techmobs.world.TechDataStorage;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -80,7 +80,7 @@ public class TDTickManager {
 			if (world != null) {
 				Chunk chunk = world.getChunkFromChunkCoords(task.x, task.z);
 				if (chunk != null) {
-					Collection<TileEntity> col = chunk.chunkTileEntityMap.values();
+					Collection<TileEntity> col = chunk.getTileEntityMap().values();
 					int value = 0;
 					for (TileEntity te : col) {
 						value += TDValues.getInstance().getTechDataForTileEntity(te);

@@ -3,6 +3,7 @@ package com.fravokados.dangertech.techmobs.techdata.effects.player;
 import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 
 /**
  * @author Nuklearwurst
@@ -13,7 +14,8 @@ public class TDPlayerEffectLightning extends TDPlayerEffect {
 
 	@Override
 	public boolean isUsable(int techvalue, String username, EntityPlayer entity) {
-		return techvalue >= 1000 && entity.getEntityWorld().isRaining() && entity.getEntityWorld().canLightningStrikeAt(entity.serverPosX, entity.serverPosY, entity.serverPosZ);
+		BlockPos pos = new BlockPos(entity);
+		return techvalue >= 1000 && entity.getEntityWorld().isRaining() && entity.getEntityWorld().canLightningStrike(pos);
 	}
 
 	@Override

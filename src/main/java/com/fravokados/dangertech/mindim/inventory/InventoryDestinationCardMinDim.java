@@ -1,10 +1,12 @@
 package com.fravokados.dangertech.mindim.inventory;
 
-import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
+import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.item.ItemBlockPortalFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 
 /**
  * @author Nuklearwurst
@@ -51,6 +53,14 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	}
 
 	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		ItemStack stack = item;
+		item = null;
+		return stack;
+	}
+
+	/*
+	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		if(item != null) {
 			ItemStack stack = item;
@@ -60,6 +70,7 @@ public class InventoryDestinationCardMinDim implements IInventory {
 			return null;
 		}
 	}
+	*/
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
@@ -70,13 +81,18 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return new ChatComponentText(getName());
 	}
 
 	@Override
@@ -95,17 +111,37 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack item) {
-		return item.getItem() instanceof ItemBlockPortalFrame && item.getItemDamage() == BlockPortalFrame.META_FRAME_ENTITY;
+		return item.getItem() instanceof ItemBlockPortalFrame && item.getItemDamage() == PortalFrameType.BASIC_FRAME.ordinal();
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		item = null;
 	}
 }

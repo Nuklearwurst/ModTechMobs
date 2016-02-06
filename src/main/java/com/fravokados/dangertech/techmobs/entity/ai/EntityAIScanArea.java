@@ -1,11 +1,11 @@
 package com.fravokados.dangertech.techmobs.entity.ai;
 
 import com.fravokados.dangertech.techmobs.lib.util.LogHelperTM;
-import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import com.fravokados.dangertech.techmobs.techdata.TDTickManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.util.Facing;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 public class EntityAIScanArea extends EntityAIBase {
 	/**
@@ -38,10 +38,7 @@ public class EntityAIScanArea extends EntityAIBase {
 		super.startExecuting();
 		if (timer == 0) {
 			LogHelperTM.logDev("Mob is scanning chunk!");
-			TDTickManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords((int) (e.posX), (int) (e.posZ)));
-			for (int i = 2; i < 6; i++) {
-				TDTickManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords((int) (e.posX + Facing.offsetsXForSide[i] * 16), (int) (e.posZ + Facing.offsetsZForSide[i] * 16)));
-			}
+			scanChunk();
 			timer = maxTimer;
 		}
 	}
@@ -56,10 +53,14 @@ public class EntityAIScanArea extends EntityAIBase {
 		super.updateTask();
 		timer--;
 		if (timer > scoutTimer && timer % scanOffset == 0) {
-			TDManager.updateScoutedTechLevel(e.worldObj.getChunkFromBlockCoords((int) (e.posX), (int) (e.posZ)));
-			for (int i = 2; i < 6; i++) {
-				TDManager.updateScoutedTechLevel(e.worldObj.getChunkFromBlockCoords((int) (e.posX + Facing.offsetsXForSide[i] * 16), (int) (e.posZ + Facing.offsetsZForSide[i] * 16)));
-			}
+			scanChunk();
+		}
+	}
+
+	private void scanChunk() {
+		TDTickManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords(new BlockPos((int) (e.posX), (int) e.posY, (int) (e.posZ))));
+		for (int i = 2; i < 6; i++) {
+			TDTickManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords(new BlockPos((int) (e.posX + EnumFacing.getFront(i).getFrontOffsetX() * 16), 0, (int) (e.posZ + EnumFacing.getFront(i).getFrontOffsetX() * 16))));
 		}
 	}
 

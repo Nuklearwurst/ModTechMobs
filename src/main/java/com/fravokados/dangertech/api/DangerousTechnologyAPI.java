@@ -2,9 +2,9 @@ package com.fravokados.dangertech.api;
 
 import com.fravokados.dangertech.api.techdata.effects.TDEffectRegistry;
 import com.fravokados.dangertech.api.techdata.values.TDValueRegistry;
-import cpw.mods.fml.common.Loader;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.DamageSource;
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * @author Nuklearwurst

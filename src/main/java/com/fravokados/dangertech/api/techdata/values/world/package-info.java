@@ -2,4 +2,4 @@
 package com.fravokados.dangertech.api.techdata.values.world;
 
 import com.fravokados.dangertech.api.DangerousTechnologyAPI;
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;

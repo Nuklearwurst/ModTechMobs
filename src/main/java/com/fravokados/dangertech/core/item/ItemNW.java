@@ -1,39 +1,49 @@
 package com.fravokados.dangertech.core.item;
 
 import com.fravokados.dangertech.core.ModNwCore;
-import com.fravokados.dangertech.core.lib.Textures;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import com.fravokados.dangertech.core.lib.Reference;
+import com.fravokados.dangertech.core.lib.util.ModelUtils;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemNW extends Item {
 
-	public ItemNW() {
+	private final String modId;
+	private final String itemName;
+
+	public ItemNW(String itemName) {
+		this(Reference.MOD_ID, itemName, ModNwCore.CREATIVE_TABS);
+	}
+
+	/**
+	 * @param modId the mod that register's this item
+	 * @param registryName this name will be used both for registry, as well as for localization
+	 * @param tab the creativetab this item should get added to
+	 */
+	public ItemNW(String modId, String registryName, CreativeTabs tab) {
 		super();
-		this.setCreativeTab(ModNwCore.CREATIVE_TABS);
+		this.modId = modId;
+		this.itemName = registryName;
+
+		this.setRegistryName(modId, itemName);
+		this.setUnlocalizedName(modId + ":" + itemName);
+
+		this.setCreativeTab(tab);
 	}
 
-	public ItemNW(String name) {
-		this();
-		this.setUnlocalizedName(name);
+	@SideOnly(Side.CLIENT)
+	public void registerModels() {
+		registerItemModel(itemName, 0);
 	}
 
-	protected String getUnwrappedUnlocalizedName(String unlocalizedName) {
-		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
+	@SideOnly(Side.CLIENT)
+	protected void registerItemModel(String name, int meta) {
+		ModelUtils.registerModelVariant(this, meta, modId, name);
 	}
 
-	@Override
-	public String getUnlocalizedName() {
-		return String.format("item.%s%s", Textures.MOD_ASSET_DOMAIN, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-	}
-
-	@Override
-	public String getUnlocalizedName(ItemStack s) {
-		return String.format("item.%s%s", Textures.MOD_ASSET_DOMAIN, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-	}
-
-	@Override
-	public void registerIcons(IIconRegister reg) {
-		itemIcon = reg.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
+	public String getItemName() {
+		return itemName;
 	}
 }

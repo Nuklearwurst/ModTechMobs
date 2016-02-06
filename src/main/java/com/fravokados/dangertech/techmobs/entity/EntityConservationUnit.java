@@ -1,6 +1,7 @@
 package com.fravokados.dangertech.techmobs.entity;
 
 import com.fravokados.dangertech.api.DangerousTechnologyAPI;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.techmobs.ModTechMobs;
 import com.fravokados.dangertech.techmobs.common.EMPExplosion;
 import com.fravokados.dangertech.techmobs.common.IEmpHandler;
@@ -12,9 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -44,13 +43,13 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		super(world);
 		this.preventEntitySpawning = true;
 		this.setSize(1F, 3.0F);
-		this.yOffset = 0.5F;
+//		this.yOffset = 0.5F;
 		this.stepHeight = 1.0F;
 	}
 
 	public EntityConservationUnit(World world, double x, double y, double z) {
 		this(world);
-		setPosition(x, y + yOffset, z);
+		setPosition(x, y + getYOffset(), z);
 		motionX = motionY = motionZ = 0;
 		prevPosX = x;
 		prevPosY = y;
@@ -73,10 +72,11 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		return false;
 	}
 
-	@Override
-	public float getShadowSize() {
-		return 0.5F;
-	}
+
+//	@Override
+//	public float getShadowSize() {
+//		return 0.5F;
+//	}
 
 	@Override
 	protected void entityInit() {
@@ -85,20 +85,14 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity) {
-		return entity.canBePushed() ? entity.boundingBox : null;
-	}
-
-	@Override
-	public AxisAlignedBB getBoundingBox() {
-		return boundingBox;
+		return entity.canBePushed() ? entity.getEntityBoundingBox() : null;
 	}
 
 	protected void collideWithNearbyEntities() {
-		List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+		List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(0.2D, 0.0D, 0.2D));
 
 		if (list != null && !list.isEmpty()) {
-			for (Object aList : list) {
-				Entity entity = (Entity) aList;
+			for (Entity entity : list) {
 
 				if (entity.canBePushed()) {
 					if (entity.riddenByEntity != this && entity.ridingEntity != this) {
@@ -142,7 +136,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if (!this.worldObj.isRemote && !this.isDead) {
-			if (this.isEntityInvulnerable()) {
+			if (this.isEntityInvulnerable(source)) {
 				return false;
 			} else {
 				this.setTimeSinceHit(10);
@@ -173,7 +167,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 						}
 					}
 					if(empCounter > 0) {
-						EMPExplosion emp = new EMPExplosion(worldObj, posX, posY + yOffset, posZ, empCounter / 10, empCounter / 2);
+						EMPExplosion emp = new EMPExplosion(worldObj, posX, posY + getYOffset(), posZ, empCounter / 10, empCounter / 2);
 						emp.doExplosionWithEffects();
 					}
 					this.setDead();
@@ -223,12 +217,12 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 		if (age < IMMUNITY) {
 			if (age % 10 == 0) {
-				worldObj.spawnParticle("reddust", posX, posY, posZ, rand.nextDouble() * 5, rand.nextDouble(), rand.nextDouble() * 5);
-				worldObj.spawnParticle("reddust", posX, posY, posZ, rand.nextDouble() * 4, rand.nextDouble(), rand.nextDouble() * 4);
-				worldObj.spawnParticle("reddust", posX, posY, posZ, rand.nextDouble() * 3, rand.nextDouble(), rand.nextDouble() * 3);
-				worldObj.spawnParticle("lava", posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
-				worldObj.spawnParticle("lava", posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
-				worldObj.spawnParticle("lava", posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 5, rand.nextDouble(), rand.nextDouble() * 5);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 4, rand.nextDouble(), rand.nextDouble() * 4);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 3, rand.nextDouble(), rand.nextDouble() * 3);
+				worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+				worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+				worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
 			}
 		}
 		collideWithNearbyEntities();
@@ -268,8 +262,8 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 
-	public String getCommandSenderName() {
-		return this.entityName != null ? this.entityName : super.getCommandSenderName();
+	public String getName() {
+		return this.entityName != null ? this.entityName : super.getName();
 	}
 
 	@Override
@@ -284,27 +278,17 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (getStackInSlot(slot) != null) {
-			ItemStack itemstack;
-
-			if (getStackInSlot(slot).stackSize <= amount) {
-				itemstack = getStackInSlot(slot);
-				setInventorySlotContents(slot, null);
-				return itemstack;
-			} else {
-				itemstack = getStackInSlot(slot).splitStack(amount);
-
-				if (getStackInSlot(slot).stackSize == 0) {
-					setInventorySlotContents(slot, null);
-				}
-
-				return itemstack;
-			}
-		} else {
-			return null;
-		}
+		return ItemUtils.decrStackSize(this, slot, amount);
 	}
 
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		ItemStack stack = getStackInSlot(index);
+		setInventorySlotContents(index, null);
+		return stack;
+	}
+
+	/*
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		if (getStackInSlot(slot) != null) {
@@ -315,6 +299,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 			return null;
 		}
 	}
+	*/
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
@@ -325,12 +310,12 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	@Override
-	public String getInventoryName() {
-		return getEntityName();
+	public IChatComponent getDisplayName() {
+		return new ChatComponentText(getEntityName());
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return this.entityName != null;
 	}
 
@@ -350,18 +335,38 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return true;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+
 	}
 
 	public String getEntityName() {

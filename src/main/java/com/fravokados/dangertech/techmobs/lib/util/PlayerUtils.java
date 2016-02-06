@@ -12,7 +12,7 @@ import net.minecraft.server.MinecraftServer;
 public class PlayerUtils {
 
 	public static EntityPlayer getPlayerFromName(String username) {
-		return MinecraftServer.getServer().getConfigurationManager().func_152612_a(username);
+		return MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(username);
 	}
 
 	/**

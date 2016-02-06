@@ -3,10 +3,10 @@ package com.fravokados.dangertech.core.configuration;
 import com.fravokados.dangertech.core.lib.Reference;
 import com.fravokados.dangertech.core.lib.Strings;
 import com.fravokados.dangertech.core.lib.util.LogHelperCore;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 

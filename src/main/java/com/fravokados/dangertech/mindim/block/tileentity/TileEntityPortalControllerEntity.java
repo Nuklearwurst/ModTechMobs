@@ -10,12 +10,13 @@ import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
 import com.fravokados.dangertech.core.inventory.InventoryUpgrade;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
+import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
-import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
-import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.mindim.block.tileentity.energy.EnergyStorage;
+import com.fravokados.dangertech.mindim.block.types.IPortalFrameWithState;
+import com.fravokados.dangertech.mindim.block.types.PortalFrameState;
 import com.fravokados.dangertech.mindim.client.ClientPortalInfo;
 import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.inventory.ContainerEntityPortalController;
@@ -28,15 +29,7 @@ import com.fravokados.dangertech.mindim.portal.BlockPositionDim;
 import com.fravokados.dangertech.mindim.portal.PortalConstructor;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
 import com.fravokados.dangertech.mindim.portal.PortalMetrics;
-import com.fravokados.dangertech.core.lib.util.WorldUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.item.ElectricItem;
-import ic2.api.tile.IWrenchable;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -48,17 +41,19 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author Nuklearwurst
  */
-public class TileEntityPortalControllerEntity extends TileEntity implements ISidedInventory, IBlockPlacedListener, IEntityPortalController, IFacingSix, IEnergySink, IWrenchable, IUpgradable {
+public class TileEntityPortalControllerEntity extends TileEntity implements ISidedInventory, IBlockPlacedListener, IEntityPortalController, IFacingSix, IUpgradable, ITickable, IPortalFrameWithState {
 
 	/**
 	 * possible states of the controller
@@ -206,14 +201,14 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	 * @return success
 	 */
 	public boolean placePortalBlocks() {
-		return metrics != null && metrics.placePortalsInsideFrame(worldObj, xCoord, yCoord, zCoord);
+		return metrics != null && metrics.placePortalsInsideFrame(worldObj, getPos());
 	}
 
 	/**
 	 * Used to update portal strucutre metrics
 	 */
 	public boolean updateMetrics() {
-		return PortalConstructor.createPortalMultiBlock(worldObj, xCoord, yCoord, zCoord) == PortalConstructor.Result.SUCCESS;
+		return PortalConstructor.createPortalMultiBlock(worldObj, getPos()) == PortalConstructor.Result.SUCCESS;
 	}
 
 
@@ -254,6 +249,20 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		return state;
 	}
 
+	@Override
+	public PortalFrameState getPortalFrameState() {
+		switch (state) {
+			case NO_MULTIBLOCK:
+			case READY:
+				return PortalFrameState.DISABLED;
+			case INCOMING_PORTAL:
+			case OUTGOING_PORTAL:
+				return PortalFrameState.ACTIVE;
+			default:
+				return PortalFrameState.CONNECTING;
+		}
+	}
+
 	public Error getLastError() {
 		return lastError;
 	}
@@ -278,7 +287,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			}
 		}
 		this.state = state;
-		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		this.worldObj.markBlockForUpdate(getPos());
 		if (metrics != null) {
 			metrics.updatePortalFrames(worldObj);
 		}
@@ -316,9 +325,9 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		if (inventory[0].getItem() instanceof ItemDestinationCard) {
 			if (inventory[0].getItemDamage() == ItemDestinationCard.META_MIN_DIM) {
 				return PortalManager.PORTAL_MINING_DIMENSION;
-			} else if (inventory[0].stackTagCompound != null && inventory[0].stackTagCompound.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) && inventory[0].stackTagCompound.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_ID)) {
-				if (inventory[0].stackTagCompound.getInteger(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) == PortalMetrics.Type.ENTITY_PORTAL.ordinal()) {
-					return inventory[0].stackTagCompound.getInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID);
+			} else if (inventory[0].getTagCompound() != null && inventory[0].getTagCompound().hasKey(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) && inventory[0].getTagCompound().hasKey(NBTKeys.DESTINATION_CARD_PORTAL_ID)) {
+				if (inventory[0].getTagCompound().getInteger(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) == PortalMetrics.Type.ENTITY_PORTAL.ordinal()) {
+					return inventory[0].getTagCompound().getInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID);
 				} else {
 					return PortalManager.PORTAL_WRONG_TYPE;
 				}
@@ -353,13 +362,13 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	 * registers portal
 	 */
 	@Override
-	public void onBlockPostPlaced(World world, int x, int y, int z, int meta) {
+	public void onBlockPostPlaced(World world, BlockPos pos, IBlockState state) {
 		if(id >= 0) {
 			PortalManager.getInstance().registerEntityPortal(id, new BlockPositionDim(this));
 		} else {
 			id = ModMiningDimension.instance.portalManager.registerNewEntityPortal(new BlockPositionDim(this));
 		}
-		PortalConstructor.createPortalMultiBlock(world, x, y, z);
+		PortalConstructor.createPortalMultiBlock(world, pos);
 	}
 
 	/**
@@ -374,8 +383,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if (worldObj.isRemote) {
 			return;
 		}
@@ -388,7 +396,8 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			}
 			if (energyType == EnergyTypes.IC2) {
 				//init ic2 energy net
-				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+				//MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+				//FIXME ic2 integration
 			}
 		}
 		//Write Destination Cards (Side GUI)
@@ -396,7 +405,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			if (inventory[2].getItem() instanceof ItemDestinationCard && inventory[2].getItemDamage() != ItemDestinationCard.META_MIN_DIM) {
 				inventory[3] = inventory[2];
 				inventory[2] = null;
-				ItemDestinationCard.writeDestination(inventory[3], id, getInventoryName());
+				ItemDestinationCard.writeDestination(inventory[3], id, getDisplayName().getFormattedText());
 				markDirty();
 			}
 		}
@@ -417,7 +426,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 					} else {
 						MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 						WorldServer world = server.worldServerForDimension(pos.dimension);
-						TileEntity te = world.getTileEntity(pos.x, pos.y, pos.z);
+						TileEntity te = world.getTileEntity(pos.getPosition());
 						if (te != null && te instanceof TileEntityPortalControllerEntity) {
 							//inform target of our connection
 							((TileEntityPortalControllerEntity) te).setState(State.INCOMING_CONNECTION);
@@ -532,9 +541,12 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		//recharge energy
 		if (!energy.isFull() && inventory[1] != null) {
 			if (energyType == EnergyTypes.IC2) {
+				/*
 				if (EnergyManager.canItemProvideEnergy(inventory[1], EnergyTypes.IC2)) {
 					energy.receiveEnergy(ElectricItem.manager.discharge(inventory[1], getDemandedEnergy(), getSinkTier(), false, true, false), false);
 				}
+				*/
+				//FIXME ic2 integration
 			}
 		}
 	}
@@ -545,7 +557,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		if(chunkLoaderTicket == null) {
 			LogHelperMD.warn("Chunkloading Ticket limit reached!");
 		} else {
-			ChunkCoordIntPair chunkToLoad = WorldUtils.convertToChunkCoord(pos.x, pos.z);
+			ChunkCoordIntPair chunkToLoad = WorldUtils.convertToChunkCoord(pos.getPosition());
 			ForgeChunkManager.forceChunk(chunkLoaderTicket, chunkToLoad);
 		}
 	}
@@ -565,8 +577,9 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			return;
 		}
 		if (init && energyType == EnergyTypes.IC2) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-			init = false;
+//			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+//			init = false;
+			//FIXME ic2 integration
 		}
 		closePortal(true);
 	}
@@ -586,27 +599,15 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (this.inventory[slot] != null) {
-			ItemStack itemstack;
-
-			if (this.inventory[slot].stackSize <= amount) {
-				itemstack = this.inventory[slot];
-				this.inventory[slot] = null;
-				return itemstack;
-			} else {
-				itemstack = this.inventory[slot].splitStack(amount);
-
-				if (this.inventory[slot].stackSize == 0) {
-					this.inventory[slot] = null;
-				}
-
-				return itemstack;
-			}
-		} else {
-			return null;
-		}
+		return ItemUtils.decrStackSize(this, slot, amount);
 	}
 
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		return null;
+	}
+
+/*
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		if (this.inventory[slot] != null) {
@@ -617,6 +618,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			return null;
 		}
 	}
+	*/
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemStack) {
@@ -625,16 +627,6 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		if (itemStack != null && itemStack.stackSize > this.getInventoryStackLimit()) {
 			itemStack.stackSize = this.getInventoryStackLimit();
 		}
-	}
-
-	@Override
-	public String getInventoryName() {
-		return hasCustomInventoryName() ? name : Strings.translate(Strings.Gui.CONTROLLER_NAME_UNNAMED);
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return name != null;
 	}
 
 	@Override
@@ -648,11 +640,13 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
+
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
+
 	}
 
 	@Override
@@ -670,19 +664,33 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	}
 
 	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+
+	}
+
+	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 
 		NBTTagList nbttaglist = nbt.getTagList("Items", 10); //10 is compound type
 		this.inventory = new ItemStack[this.getSizeInventory()];
 
-		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-			NBTTagCompound tag = nbttaglist.getCompoundTagAt(i);
-			byte slot = tag.getByte("Slot");
-			if (slot >= 0 && slot < this.inventory.length) {
-				this.inventory[slot] = ItemStack.loadItemStackFromNBT(tag);
-			}
-		}
+		ItemUtils.readInventoryContentsFromNBT(this, nbttaglist);
 		if (nbt.hasKey("name")) {
 			name = nbt.getString("name");
 		}
@@ -703,16 +711,9 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < this.inventory.length; ++i) {
-			if (this.inventory[i] != null) {
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setByte("Slot", (byte) i);
-				this.inventory[i].writeToNBT(tag);
-				nbttaglist.appendTag(tag);
-			}
-		}
+		ItemUtils.writeInventoryContentsToNBT(this, nbttaglist);
 		nbt.setTag("Items", nbttaglist);
-		if (hasCustomInventoryName()) {
+		if (hasCustomName()) {
 			nbt.setString("name", name);
 		}
 		nbt.setInteger("PortalID", id);
@@ -738,7 +739,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		//register portal and log warning
 		if (id == PortalManager.PORTAL_NOT_CONNECTED) {
 			LogHelperMD.warn("Invalid Controller found!");
-			LogHelperMD.warn((hasCustomInventoryName() ? "Unnamed Controller" : ("Controller " + name)) + " @dim: " + worldObj.provider.dimensionId + ", pos: " + xCoord + "; " + yCoord + "; " + zCoord + " has no valid id. Registering...");
+			LogHelperMD.warn((hasCustomName() ? "Unnamed Controller" : ("Controller " + name)) + " @dim: " + worldObj.provider.getDimensionId() + ", pos: " + getPos().getX() + "; " + getPos().getY() + "; " + getPos().getZ() + " has no valid id. Registering...");
 			id = ModMiningDimension.instance.portalManager.registerNewEntityPortal(new BlockPositionDim(this));
 		}
 	}
@@ -814,42 +815,46 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	@Override
 	public void setFacing(short b) {
 		facing = b;
-		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		this.worldObj.markBlockForUpdate(getPos());
 	}
 
-	@Override
-	public boolean wrenchCanSetFacing(EntityPlayer entityPlayer, int side) {
-		return facing != side;
-	}
+//	@Override
+//	public boolean wrenchCanSetFacing(EntityPlayer entityPlayer, int side) {
+//		return facing != side;
+//	}
 
 	@Override
 	public short getFacing() {
 		return facing;
 	}
 
-
 	@Override
-	public boolean wrenchCanRemove(EntityPlayer entityPlayer) {
-		return true;
+	public EnumFacing getEnumFacing() {
+		return EnumFacing.getFront(facing);
 	}
 
-	@Override
-	public float getWrenchDropRate() {
-		return 1;
-	}
-
-	@Override
-	public ItemStack getWrenchDrop(EntityPlayer entityPlayer) {
-		ItemStack out = new ItemStack(ModBlocks.blockPortalFrame, 1, BlockPortalFrame.META_CONTROLLER_ENTITY);
-		ItemUtils.writeUpgradesToItemStack(getUpgradeInventory(), out);
-		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(out);
-		nbt.setInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID, id);
-		if(hasCustomInventoryName()) {
-			nbt.setString(NBTKeys.DESTINATION_CARD_PORTAL_NAME, getInventoryName());
-		}
-		upgrades = null; //Hack to prevent droping of upgrades when removing using a wrench
-		return out;
-	}
+	//	@Override
+//	public boolean wrenchCanRemove(EntityPlayer entityPlayer) {
+//		return true;
+//	}
+//
+//	@Override
+//	public float getWrenchDropRate() {
+//		return 1;
+//	}
+//
+//	@Override
+//	public ItemStack getWrenchDrop(EntityPlayer entityPlayer) {
+//		ItemStack out = new ItemStack(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_CONTROLLER.ordinal());
+//		ItemUtils.writeUpgradesToItemStack(getUpgradeInventory(), out);
+//		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(out);
+//		nbt.setInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID, id);
+//		if(hasCustomName()) {
+//			nbt.setString(NBTKeys.DESTINATION_CARD_PORTAL_NAME, getDisplayName().getFormattedText());
+//		}
+//		upgrades = null; //Hack to prevent droping of upgrades when removing using a wrench
+//		return out;
+//	}
 
 	@Override
 	public Packet getDescriptionPacket() {
@@ -869,19 +874,19 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 				}
 			}
 		}
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 0, nbt);
+		return new S35PacketUpdateTileEntity(getPos(), 0, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		NBTTagCompound nbt = pkt.func_148857_g();
+		NBTTagCompound nbt = pkt.getNbtCompound();
 		if (nbt != null) {
 			if(nbt.hasKey("portalFacing")) {
 				renderInfo = new ClientPortalInfo();
-				renderInfo.originDirection = ForgeDirection.getOrientation(nbt.getByte("portalFacing"));
+				renderInfo.originDirection = EnumFacing.getFront(nbt.getByte("portalFacing"));
 				if(nbt.hasKey("targetFacing")) {
 					renderInfo.targetDimension = nbt.getInteger("targetDimension");
-					renderInfo.targetDirection = ForgeDirection.getOrientation(nbt.getByte("targetFacing"));
+					renderInfo.targetDirection = EnumFacing.getFront(nbt.getByte("targetFacing"));
 					renderInfo.targetX = nbt.getInteger("targetX");
 					renderInfo.targetY = nbt.getInteger("targetY");
 					renderInfo.targetZ = nbt.getInteger("targetZ");
@@ -896,13 +901,14 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 				State oldState = state;
 				setState(State.values()[nbt.getInteger("state")]);
 				if (oldFacing != facing || oldState != state) {
-					this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+					this.worldObj.markBlockForUpdate(getPos());
 				}
 			}
 		}
 	}
 
 
+	/*
 	@Override
 	public double getDemandedEnergy() {
 		return Math.max(0, energy.getMaxEnergyStored() - energy.getEnergyStored());
@@ -922,6 +928,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
 		return energyType == EnergyTypes.IC2;
 	}
+	*/
 
 	public double getEnergyStored() {
 		return energy.getEnergyStored();
@@ -943,19 +950,33 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		lastError = error;
 	}
 
-
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		return new int[] {0};
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing direction) {
 		return slot == 0 && stack.getItem() instanceof ItemDestinationCard;
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing direction) {
 		return slot == 0 && stack.getItem() instanceof ItemDestinationCard;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public boolean hasCustomName() {
+		return name != null;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return hasCustomName() ? new ChatComponentText(name) : new ChatComponentTranslation(Strings.Gui.CONTROLLER_NAME_UNNAMED);
 	}
 }

@@ -3,10 +3,10 @@ package com.fravokados.dangertech.techmobs.client.gui;
 import com.fravokados.dangertech.techmobs.entity.EntityConservationUnit;
 import com.fravokados.dangertech.techmobs.inventory.ContainerConservationUnit;
 import com.fravokados.dangertech.techmobs.lib.Textures;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**

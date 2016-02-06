@@ -2,8 +2,6 @@ package com.fravokados.dangertech.techmobs.entity;
 
 import com.fravokados.dangertech.techmobs.common.EMPExplosion;
 import com.fravokados.dangertech.techmobs.entity.ai.EntityAIEMPCreeperSwell;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -18,6 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author Nuklearwurst
@@ -43,12 +43,12 @@ public class EntityEMPCreeper extends EntityMob {
 		super(world);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIEMPCreeperSwell(this));
-		this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityOcelot.class, 6.0F, 1.0D, 1.2D));
+		this.tasks.addTask(3, new EntityAIAvoidEntity<EntityOcelot>(this, EntityOcelot.class, 6.0F, 1.0D, 1.2D));
 		this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, false));
 		this.tasks.addTask(5, new EntityAIWander(this, 0.8D));
 		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true, true));
 		this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
 	}
 
@@ -66,19 +66,16 @@ public class EntityEMPCreeper extends EntityMob {
 		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
 	}
 
-	@Override
-	public boolean isAIEnabled() {
-		return true;
-	}
-
+	/*
 	@Override
 	public int getMaxSafePointTries() {
 		return this.getAttackTarget() == null ? 3 : 3 + (int) (this.getHealth() - 1.0F);
 	}
+	*/
 
 	@Override
-	protected void fall(float distance) {
-		super.fall(distance);
+	public void fall(float distance, float multiplier) {
+		super.fall(distance, multiplier);
 		this.timeSinceIgnited = (int) ((float) this.timeSinceIgnited + distance * 1.5F);
 
 		if (this.timeSinceIgnited > this.fuseTime - 5) {

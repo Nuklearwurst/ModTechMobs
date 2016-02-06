@@ -1,18 +1,16 @@
 package com.fravokados.dangertech.techmobs.common.handler;
 
 import com.fravokados.dangertech.api.item.IItemAttackTargetListener;
-import com.fravokados.dangertech.techmobs.common.init.ModItems;
+import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.techmobs.common.SleepingManager;
+import com.fravokados.dangertech.techmobs.common.init.ModItems;
 import com.fravokados.dangertech.techmobs.configuration.Settings;
 import com.fravokados.dangertech.techmobs.entity.EntityConservationUnit;
 import com.fravokados.dangertech.techmobs.entity.ai.EntityAIScanArea;
-import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.techmobs.lib.util.EntityUtils;
 import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import com.fravokados.dangertech.techmobs.techdata.effects.TDEffectHandler;
 import com.fravokados.dangertech.techmobs.world.TechDataStorage;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -21,8 +19,9 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
@@ -32,6 +31,8 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class TMEventHandler {
 
@@ -121,26 +122,30 @@ public class TMEventHandler {
 	@SubscribeEvent
 	public void onPlayerDropsOnDeath(PlayerDropsEvent evt) {
 		World world = evt.entityPlayer.getEntityWorld();
-		if (!world.isRemote && !world.getGameRules().getGameRuleBooleanValue("keepInventory")) {
+		if (!world.isRemote && !world.getGameRules().getBoolean("keepInventory")) {
 			for (EntityItem entityItem : evt.drops) {
 				if (entityItem != null && entityItem.getEntityItem()  != null && entityItem.getEntityItem().stackSize != 0 && entityItem.getEntityItem().getItem() == ModItems.conservationUnit) {
 					int x = (int) evt.entityPlayer.posX;
 					int y = (int) evt.entityPlayer.posY;
 					int z = (int) evt.entityPlayer.posZ;
-					if (BlockUtils.isBlockReplaceable(world, x, y, z)) {
-						while (BlockUtils.isBlockReplaceable(world, x, y - 1, z) && y > 3) {
+					BlockPos pos = new BlockPos(x, y, z);
+					if (BlockUtils.isBlockReplaceable(world, pos)) {
+						while (BlockUtils.isBlockReplaceable(world, pos.down()) && y > 3) {
 							y--;
+							pos = pos.down();
 						}
 					} else {
 						boolean found = false;
 						for (int dist = 0; dist < 3; dist++) {
-							for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-								if (BlockUtils.isBlockReplaceable(world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)) {
-									x += dir.offsetX;
-									y += dir.offsetY;
-									z += dir.offsetZ;
-									while (BlockUtils.isBlockReplaceable(world, x, y - 1, z) && y > 3) {
+							for (EnumFacing dir : EnumFacing.VALUES) {
+								if (BlockUtils.isBlockReplaceable(world, pos.offset(dir))) {
+									x += dir.getFrontOffsetX();
+									y += dir.getFrontOffsetY();
+									z += dir.getFrontOffsetZ();
+									pos = pos.offset(dir);
+									while (BlockUtils.isBlockReplaceable(world, pos.down()) && y > 3) {
 										y--;
+										pos = pos.down();
 									}
 									found = true;
 									break;

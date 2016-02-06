@@ -5,6 +5,7 @@ import com.fravokados.dangertech.techmobs.command.CommandTechData;
 import com.fravokados.dangertech.techmobs.command.SubCommand;
 import com.fravokados.dangertech.techmobs.world.techdata.TDChunk;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
@@ -20,7 +21,7 @@ public class CommandTechDataRemove extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 		if(!CommandHelpers.processDefaultStandartCommands(sender, this, args, "level")) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
@@ -33,12 +34,12 @@ public class CommandTechDataRemove extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			if(args.length != 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
 				TDChunk chunk = CommandTechData.getChunkData(sender);
-				chunk.techLevel -= CommandBase.parseInt(sender, args[1]);
+				chunk.techLevel -= CommandBase.parseInt(args[1]);
 				sender.addChatMessage(new ChatComponentText("TechLevel in this Chunk: " + chunk.techLevel));
 			}
 		}
@@ -51,12 +52,12 @@ public class CommandTechDataRemove extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			if(args.length != 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
 				TDChunk chunk = CommandTechData.getChunkData(sender);
-				chunk.scoutedTechLevel -= CommandBase.parseInt(sender, args[1]);
+				chunk.scoutedTechLevel -= CommandBase.parseInt(args[1]);
 				sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 			}
 		}

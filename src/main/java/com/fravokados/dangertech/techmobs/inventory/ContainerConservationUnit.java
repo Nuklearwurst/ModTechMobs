@@ -41,10 +41,10 @@ public class ContainerConservationUnit extends Container {
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting crafter) {
-		super.addCraftingToCrafters(crafter);
-
+	public void onCraftGuiOpened(ICrafting listener) {
+		super.onCraftGuiOpened(listener);
 	}
+
 
 	@Override
 	public void detectAndSendChanges() {

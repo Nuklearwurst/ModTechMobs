@@ -1,10 +1,12 @@
 package com.fravokados.dangertech.api.block;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
  * @author Nuklearwurst
  */
 public interface IBlockPlacedListener {
-	void onBlockPostPlaced(World world, int x,  int y, int z, int meta);
+	void onBlockPostPlaced(World world, BlockPos pos, IBlockState state);
 }

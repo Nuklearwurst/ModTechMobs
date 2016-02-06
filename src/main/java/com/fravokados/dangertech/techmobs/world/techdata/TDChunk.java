@@ -1,10 +1,9 @@
 package com.fravokados.dangertech.techmobs.world.techdata;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.event.world.ChunkDataEvent;
-
 import com.fravokados.dangertech.api.util.ChunkLocation;
 import com.fravokados.dangertech.techmobs.world.TechDataStorage;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.event.world.ChunkDataEvent;
 
 /**
  * contains TechData of a chunk<br>

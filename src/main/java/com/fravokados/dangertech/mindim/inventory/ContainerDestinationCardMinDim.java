@@ -1,11 +1,11 @@
 package com.fravokados.dangertech.mindim.inventory;
 
-import com.fravokados.dangertech.mindim.block.BlockPortalFrame;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
+import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.inventory.slot.SlotDestinationCardMinDim;
 import com.fravokados.dangertech.mindim.item.ItemBlockPortalFrame;
 import com.fravokados.dangertech.mindim.network.IElementButtonHandler;
-import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -68,10 +68,10 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting icrafting) {
-		super.addCraftingToCrafters(icrafting);
+	public void onCraftGuiOpened(ICrafting listener) {
+		super.onCraftGuiOpened(listener);
 		int newCount = ItemUtils.getNBTTagCompound(heldInventory).getInteger("frame_blocks");
-		icrafting.sendProgressBarUpdate(this, 0, newCount);
+		listener.sendProgressBarUpdate(this, 0, newCount);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 			int maxCount = Settings.MAX_PORTAL_SIZE * 4 - 4;
 			ItemStack items = inventory.decrStackSize(0, Math.max(0, maxCount - count));
 			if (items != null) {
-				if (!(items.getItem() instanceof ItemBlockPortalFrame) || items.getItemDamage() != BlockPortalFrame.META_FRAME_ENTITY) {
+				if (!(items.getItem() instanceof ItemBlockPortalFrame) || items.getItemDamage() != PortalFrameType.BASIC_FRAME.ordinal()) {
 					this.mergeItemStack(items, 0, 1, false); //error, put items back where they came from
 				} else {
 					count += items.stackSize;
@@ -125,7 +125,7 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 				}
 				slot.onSlotChange(stackSlot, stackCopy);
 			} else {
-				if (stackSlot.getItem() instanceof ItemBlockPortalFrame && stackSlot.getItemDamage() == BlockPortalFrame.META_FRAME_ENTITY) {
+				if (stackSlot.getItem() instanceof ItemBlockPortalFrame && stackSlot.getItemDamage() == PortalFrameType.BASIC_FRAME.ordinal()) {
 					if (!this.mergeItemStack(stackSlot, 0, 1, false)) {
 						return null;
 					}
@@ -150,7 +150,6 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 
 			slot.onPickupFromSlot(player, stackSlot);
 		}
-
 		return stackCopy;
 	}
 
@@ -158,7 +157,7 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
 		if (inventory.getStackInSlot(0) != null) {
-			player.dropPlayerItemWithRandomChoice(inventory.getStackInSlotOnClosing(0), false);
+			player.dropPlayerItemWithRandomChoice(inventory.removeStackFromSlot(0), false);
 		}
 	}
 }

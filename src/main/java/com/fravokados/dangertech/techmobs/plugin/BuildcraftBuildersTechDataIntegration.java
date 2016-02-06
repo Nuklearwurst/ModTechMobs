@@ -2,8 +2,8 @@ package com.fravokados.dangertech.techmobs.plugin;
 
 import com.fravokados.dangertech.techmobs.lib.util.LogHelperTM;
 import com.fravokados.dangertech.techmobs.techdata.values.TDValues;
-import cpw.mods.fml.common.Loader;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * @author Nuklearwurst

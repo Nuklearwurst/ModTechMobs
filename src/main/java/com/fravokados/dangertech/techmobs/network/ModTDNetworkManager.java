@@ -5,8 +5,8 @@ import com.fravokados.dangertech.techmobs.network.message.MessageContainerIntege
 import com.fravokados.dangertech.techmobs.network.message.MessageContainerIntegerUpdateServer;
 import com.fravokados.dangertech.techmobs.network.message.MessageEMP;
 import com.fravokados.dangertech.techmobs.network.message.MessageGuiElementClicked;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * @author Nuklearwurst

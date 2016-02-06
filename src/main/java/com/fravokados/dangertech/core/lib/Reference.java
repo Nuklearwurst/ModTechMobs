@@ -14,5 +14,5 @@ public class Reference {
 
 	public static final String GUI_FACTORY = "com.fravokados.dangertech.core.configuration.gui.GuiFactoryConfig";
 
-	public static final String ASSET_DIR = "nwcore";
+	public static final String ASSET_DIR = MOD_ID;
 }

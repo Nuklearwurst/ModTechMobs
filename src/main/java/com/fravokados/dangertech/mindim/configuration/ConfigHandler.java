@@ -3,9 +3,9 @@ package com.fravokados.dangertech.mindim.configuration;
 import com.fravokados.dangertech.mindim.lib.Reference;
 import com.fravokados.dangertech.mindim.lib.Strings.Keys;
 import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 

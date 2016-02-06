@@ -1,42 +1,12 @@
 package com.fravokados.dangertech.mindim.item;
 
+import com.fravokados.dangertech.core.item.ItemNW;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
-import com.fravokados.dangertech.mindim.lib.Textures;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import com.fravokados.dangertech.mindim.lib.Reference;
 
-public class ItemMD extends Item {
+public class ItemMD extends ItemNW {
 
-	public ItemMD() {
-		super();
-		this.setCreativeTab(ModMiningDimension.TAB_MD);
-	}
-
-	public ItemMD(String name) {
-		this();
-		this.setUnlocalizedName(name);
-	}
-	
-	protected String getUnwrappedUnlocalizedName(String unlocalizedName)
-    {
-        return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
-    }
-	
-	@Override
-    public String getUnlocalizedName()
-    {
-        return String.format("item.%s%s", Textures.TEXTURE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-    }
-	
-	@Override
-    public String getUnlocalizedName(ItemStack s)
-    {
-        return String.format("item.%s%s", Textures.TEXTURE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-    }
-	
-	@Override
-	public void registerIcons(IIconRegister reg) {
-		itemIcon = reg.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
+	public ItemMD(String registryName) {
+		super(Reference.MOD_ID, registryName, ModMiningDimension.TAB_MD);
 	}
 }

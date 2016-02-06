@@ -2,15 +2,16 @@ package com.fravokados.dangertech.techmobs.client.render.entity;
 
 import com.fravokados.dangertech.techmobs.entity.EntityEMPCreeper;
 import com.fravokados.dangertech.techmobs.lib.Textures;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelCreeper;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -23,8 +24,8 @@ public class RenderEMPCreeper extends RenderLiving {
 	 */
 	private final ModelBase creeperModel = new ModelCreeper(2.0F);
 
-	public RenderEMPCreeper() {
-		super(new ModelCreeper(), 0.5F);
+	public RenderEMPCreeper(RenderManager renderManager) {
+		super(renderManager, new ModelCreeper(), 0.5F);
 	}
 
 	@Override
@@ -68,6 +69,8 @@ public class RenderEMPCreeper extends RenderLiving {
 		}
 	}
 
+
+/*
 	@Override
 	protected int shouldRenderPass(EntityLivingBase entityLiving, int pass, float partialTickTime) {
 		if (((EntityEMPCreeper) entityLiving).isPowered()) {
@@ -105,11 +108,14 @@ public class RenderEMPCreeper extends RenderLiving {
 
 		return -1;
 	}
+	*/
 
+	/*
 	@Override
 	protected int inheritRenderPass(EntityLivingBase p_77035_1_, int p_77035_2_, float p_77035_3_) {
 		return -1;
 	}
+	*/
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {

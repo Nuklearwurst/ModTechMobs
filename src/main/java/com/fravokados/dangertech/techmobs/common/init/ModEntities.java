@@ -6,12 +6,12 @@ import com.fravokados.dangertech.techmobs.entity.EntityCyberZombie;
 import com.fravokados.dangertech.techmobs.entity.EntityEMPCreeper;
 import com.fravokados.dangertech.techmobs.lib.Strings;
 import com.fravokados.dangertech.techmobs.lib.util.LogHelperTM;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class ModEntities {
 
@@ -45,19 +45,19 @@ public class ModEntities {
 		registerEntity(EntityConservationUnit.class, Strings.Entity.CON_UNIT);
 
 
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, forest);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, hills);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, desert);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, mountain);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, jungle);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, magic);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, plains);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, swamp);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, frozen);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, wasteland);
-		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.monster, beach);
-		EntityRegistry.removeSpawn(EntityCyberZombie.class, EnumCreatureType.monster, nether);
-		EntityRegistry.removeSpawn(EntityCyberZombie.class, EnumCreatureType.monster, end);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, forest);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, hills);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, desert);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, mountain);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, jungle);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, magic);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, plains);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, swamp);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, frozen);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, wasteland);
+		EntityRegistry.addSpawn(EntityCyberZombie.class, 10, 1, 5, EnumCreatureType.MONSTER, beach);
+		EntityRegistry.removeSpawn(EntityCyberZombie.class, EnumCreatureType.MONSTER, nether);
+		EntityRegistry.removeSpawn(EntityCyberZombie.class, EnumCreatureType.MONSTER, end);
 
 	}
 

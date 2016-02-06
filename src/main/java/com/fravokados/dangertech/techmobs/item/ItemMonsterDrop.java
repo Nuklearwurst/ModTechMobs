@@ -1,22 +1,17 @@
 package com.fravokados.dangertech.techmobs.item;
 
-import java.util.List;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
+import com.fravokados.dangertech.techmobs.lib.Strings;
+import com.fravokados.dangertech.techmobs.lib.Textures;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 
-import com.fravokados.dangertech.techmobs.lib.Strings;
-import com.fravokados.dangertech.techmobs.lib.Textures;
+import java.util.List;
 
 public class ItemMonsterDrop extends ItemTM {
-
-	private IIcon[] icons;
 
 	public ItemMonsterDrop() {
 		super(Strings.Item.MONSTER_DROP);
@@ -32,19 +27,13 @@ public class ItemMonsterDrop extends ItemTM {
 		}
 	}
 
-	@Override
-	public void registerIcons(IIconRegister reg) {
-		icons = new IIcon[Strings.Item.MONSTER_DROP_SUBTYPES.length];
 
+	@Override
+	public void registerModels() {
 		for (int i = 0; i < Strings.Item.MONSTER_DROP_SUBTYPES.length; i++)
 		{
-			icons[i] = reg.registerIcon(Textures.MOD_ASSET_DOMAIN + Strings.Item.MONSTER_DROP + "_" + Strings.Item.MONSTER_DROP_SUBTYPES[i]);
+			registerItemModel(Strings.Item.MONSTER_DROP + "_" + Strings.Item.MONSTER_DROP_SUBTYPES[i], i);
 		}
-	}
-
-	@Override
-	public IIcon getIconFromDamage(int meta) {
-		return icons[MathHelper.clamp_int(meta, 0,Strings.Item.MONSTER_DROP_SUBTYPES.length - 1)];
 	}
 
 	@Override

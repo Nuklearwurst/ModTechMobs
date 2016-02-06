@@ -1,44 +1,52 @@
 package com.fravokados.dangertech.mindim.portal;
 
+import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class BlockPositionDim {
+
 	public int dimension;
-	public int x;
-	public int y;
-	public int z;
+	public BlockPos position;
 
 	public BlockPositionDim() {
 	}
 
+	public BlockPositionDim(BlockPos pos, int dim) {
+		this.position = pos;
+		this.dimension = dim;
+	}
+
 	public BlockPositionDim(int x, int y, int z, int dim) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this.position = new BlockPos(x, y, z);
 		this.dimension = dim;
 	}
 
 	public BlockPositionDim(TileEntity tileEntity) {
-		this(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity.getWorldObj().provider.dimensionId);
+		this(tileEntity.getPos(), tileEntity.getWorld().provider.getDimensionId());
+	}
+
+	public int getDimension() {
+		return dimension;
+	}
+
+	public BlockPos getPosition() {
+		return position;
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
-		this.x = nbt.getInteger("x");
-		this.y = nbt.getInteger("y");
-		this.z = nbt.getInteger("z");
+		this.position = BlockUtils.readBlockPosFromNBT(nbt);
 		this.dimension = nbt.getInteger("dim");
 	}
 
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("x", x);
-		nbt.setInteger("y", y);
-		nbt.setInteger("z", z);
+		BlockUtils.writeBlockPosToNBT(position, nbt);
 		nbt.setInteger("dim", dimension);
 	}
 
@@ -49,7 +57,7 @@ public class BlockPositionDim {
 
 	public TileEntityPortalControllerEntity getControllerEntity() {
 		World world = getWorldServer();
-		TileEntity te = world.getTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(position);
 		if (te != null && te instanceof TileEntityPortalControllerEntity) {
 			return (TileEntityPortalControllerEntity) te;
 		}

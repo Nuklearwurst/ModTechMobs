@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.techmobs.common;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +16,11 @@ public class SleepingManager {
 	 * helper class to store player spawn and sleep info
 	 */
 	private static class PlayerInfo {
-		public ChunkCoordinates loc;
+		public BlockPos loc;
 		public boolean forced;
 		public boolean wakeUp = false;
 
-		public PlayerInfo(ChunkCoordinates loc, boolean b) {
+		public PlayerInfo(BlockPos loc, boolean b) {
 			this.loc = loc;
 			this.forced = b;
 		}
@@ -55,7 +55,7 @@ public class SleepingManager {
 	 */
 	public static void removeAndResetPlayer(EntityPlayer player) {
 		if(!player.worldObj.isRemote && sleepingPlayers.containsKey(player)) {
-			player.setSpawnChunk(sleepingPlayers.get(player).loc, sleepingPlayers.get(player).forced);
+			player.setSpawnChunk(sleepingPlayers.get(player).loc, sleepingPlayers.get(player).forced, player.dimension);
 			removePlayer(player);
 		}
 	}

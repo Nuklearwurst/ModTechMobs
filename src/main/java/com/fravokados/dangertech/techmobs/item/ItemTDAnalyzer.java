@@ -2,9 +2,9 @@ package com.fravokados.dangertech.techmobs.item;
 
 import com.fravokados.dangertech.api.techdata.values.player.ITechdataItem;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
+import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.techmobs.lib.Strings;
 import com.fravokados.dangertech.techmobs.lib.util.EntityUtils;
-import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import com.fravokados.dangertech.techmobs.techdata.values.TDValues;
 import net.minecraft.entity.Entity;
@@ -13,7 +13,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
@@ -30,10 +32,10 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (getItemMode(stack) == Mode.BLOCK) {
 			if (!world.isRemote) {
-				TileEntity te = world.getTileEntity(x, y, z);
+				TileEntity te = world.getTileEntity(pos);
 				if (te != null) {
 					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
 				} else {
@@ -53,7 +55,7 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 			setMode(stack, mode);
 		} else {
 			if (!world.isRemote && getItemMode(stack) == Mode.CHUNK) {
-				player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerChunk, TDManager.getScoutedTechLevel(player.getEntityWorld().provider.dimensionId, WorldUtils.convertToChunkCoord(player.getPlayerCoordinates()))));
+				player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerChunk, TDManager.getScoutedTechLevel(player.getEntityWorld().provider.getDimensionId(), WorldUtils.convertToChunkCoord(player.getPosition()))));
 			} else if (world.isRemote && getItemMode(stack) == Mode.ITEM) {
 				Entity entity = EntityUtils.rayTraceEntity(player);
 				if (entity != null && entity instanceof EntityItem) {
@@ -61,7 +63,7 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerItem, TDValues.getInstance().getTechDataForItem(itemStack)));
 				}
 			} else if (!world.isRemote && getItemMode(stack) == Mode.PLAYER) {
-				player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayer, player.getCommandSenderName(), TDManager.getPlayerScoutedTechLevel(player)));
+				player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayer, player.getName(), TDManager.getPlayerScoutedTechLevel(player)));
 			}
 		}
 		return stack;
@@ -72,7 +74,7 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 		if (getItemMode(stack) == Mode.PLAYER) {
 			if (!player.getEntityWorld().isRemote) {
 				if (entity instanceof EntityPlayer) {
-					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayer, entity.getCommandSenderName(), TDManager.getPlayerScoutedTechLevel((EntityPlayer) entity)));
+					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayer, entity.getName(), TDManager.getPlayerScoutedTechLevel((EntityPlayer) entity)));
 				} else {
 					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayerNoPlayer));
 				}

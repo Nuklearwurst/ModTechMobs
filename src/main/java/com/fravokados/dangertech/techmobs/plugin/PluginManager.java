@@ -2,7 +2,6 @@ package com.fravokados.dangertech.techmobs.plugin;
 
 import com.fravokados.dangertech.techmobs.lib.util.LogHelperTM;
 import com.fravokados.dangertech.techmobs.plugin.ic2.IC2TechDataIntegration;
-import ic2.api.info.Info;
 
 public class PluginManager {
 
@@ -15,7 +14,9 @@ public class PluginManager {
 	}
 
 	public static boolean ic2Activated() {
-		return Info.isIc2Available();
+		return false;
+		//FIXME ic2 integration
+//		return Info.isIc2Available();
 	}
 
 }

@@ -4,10 +4,11 @@ import com.fravokados.dangertech.techmobs.lib.Textures;
 import com.fravokados.dangertech.techmobs.network.ModTDNetworkManager;
 import com.fravokados.dangertech.techmobs.network.message.MessageEMP;
 import com.fravokados.dangertech.techmobs.plugin.EMPHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class EMPExplosion {
 				}
 			}
 		}
-		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.getBoundingBox(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius));
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.fromBounds(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius));
 		for (Entity entity : list) {
 			EMPHandler.applyEMPOnEntity(entity, x, y, z, strength, radius);
 		}
@@ -65,8 +66,8 @@ public class EMPExplosion {
 		double rad = Math.PI / 32;
 		for (int i = 0; i < 64; i++) {
 			//TODO better particle effects
-			world.spawnParticle("explode", x, y, z, Math.sin(i * rad) * strength * 0.2, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 0.2);
-			world.spawnParticle("portal", x, y, z, Math.sin(i * rad) * strength * 0.3, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 0.3);
+			world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, x, y, z, Math.sin(i * rad) * strength * 0.2, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 0.2);
+			world.spawnParticle(EnumParticleTypes.PORTAL, x, y, z, Math.sin(i * rad) * strength * 0.3, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 0.3);
 		}
 		world.playSoundEffect(x, y, z, Textures.MOD_ASSET_DOMAIN + "emp", strength, 1);
 	}
@@ -77,7 +78,7 @@ public class EMPExplosion {
 	}
 
 	public void doEffectsOnClientsAround() {
-		ModTDNetworkManager.INSTANCE.sendToAllAround(new MessageEMP(this), new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, 100));
+		ModTDNetworkManager.INSTANCE.sendToAllAround(new MessageEMP(this), new NetworkRegistry.TargetPoint(world.provider.getDimensionId(), x, y, z, 100));
 	}
 
 	public void doEffectsOnClientAndServer() {
@@ -103,7 +104,7 @@ public class EMPExplosion {
 	}
 
 	public static void createExplosion(Entity exploder, float strength, int radius) {
-		createExplosion(exploder, exploder.posX, exploder.posY + exploder.yOffset, exploder.posZ, strength, radius);
+		createExplosion(exploder, exploder.posX, exploder.posY + exploder.getYOffset(), exploder.posZ, strength, radius);
 	}
 
 	public static void createExplosion(Entity exploder, int radius) {

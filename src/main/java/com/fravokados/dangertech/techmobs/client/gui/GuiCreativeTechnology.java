@@ -5,20 +5,24 @@ import com.fravokados.dangertech.techmobs.inventory.ContainerCreativeTechnology;
 import com.fravokados.dangertech.techmobs.lib.Textures;
 import com.fravokados.dangertech.techmobs.network.ModTDNetworkManager;
 import com.fravokados.dangertech.techmobs.network.message.MessageContainerIntegerUpdateServer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 /**
  * @author Nuklearwurst
  */
 @SideOnly(Side.CLIENT)
 public class GuiCreativeTechnology extends GuiContainer {
+
+	private static final int BUTTON_ID_SAVE = 0;
+	private static final int BUTTON_ID_TEXT_FIELD = 1;
 
 	private TileEntityCreativeTechnology te;
 	private GuiTextField txtValue;
@@ -35,11 +39,11 @@ public class GuiCreativeTechnology extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
-		txtValue = new GuiTextField(fontRendererObj, width / 2 - 60, height / 2 - 25, 120, 20);
+		txtValue = new GuiTextField(BUTTON_ID_TEXT_FIELD, fontRendererObj, width / 2 - 60, height / 2 - 25, 120, 20);
 		txtValue.setFocused(true);
 		txtValue.setText(String.valueOf(te.getTechData()));
 		oldValue = te.getTechData();
-		this.buttonList.add(new GuiButton(0, width / 2 - 50, height / 2 + 25, 100, 20, "Save"));
+		this.buttonList.add(new GuiButton(BUTTON_ID_SAVE, width / 2 - 50, height / 2 + 25, 100, 20, "Save"));
 	}
 
 	@Override
@@ -68,11 +72,11 @@ public class GuiCreativeTechnology extends GuiContainer {
 		}
 	}
 
-	protected void keyTyped(char keyPressed, int keyCode) {
+	protected void keyTyped(char keyPressed, int keyCode) throws IOException {
 		this.txtValue.textboxKeyTyped(keyPressed, keyCode);
 
 		if (keyCode == KeyEvent.VK_ENTER) {
-			this.actionPerformed((GuiButton) this.buttonList.get(0));
+			this.actionPerformed(this.buttonList.get(0));
 		}
 
 		super.keyTyped(keyPressed, keyCode);

@@ -6,8 +6,11 @@ import com.fravokados.dangertech.techmobs.lib.GUIIDs;
 import com.fravokados.dangertech.techmobs.lib.Strings;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
@@ -20,7 +23,7 @@ public class BlockCreativeTechnology extends BlockTM  implements ITileEntityProv
 	}
 
 	@Override
-	public boolean hasTileEntity(int metadata) {
+	public boolean hasTileEntity(IBlockState state) {
 		return true;
 	}
 
@@ -30,9 +33,9 @@ public class BlockCreativeTechnology extends BlockTM  implements ITileEntityProv
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float a1, float a2, float a3) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if(!world.isRemote) {
-			player.openGui(ModTechMobs.instance, GUIIDs.CREATIVE_TECHNOLOGY, world, x, y, z);
+			player.openGui(ModTechMobs.instance, GUIIDs.CREATIVE_TECHNOLOGY, world, pos.getX(), pos.getY(), pos.getZ());
 		}
 		return true;
 	}

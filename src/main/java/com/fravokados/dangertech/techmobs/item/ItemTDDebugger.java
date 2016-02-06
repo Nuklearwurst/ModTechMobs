@@ -6,7 +6,9 @@ import com.fravokados.dangertech.techmobs.techdata.values.TDValues;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
@@ -19,9 +21,9 @@ public class ItemTDDebugger extends ItemTM {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if(!world.isRemote) {
-			TileEntity te = world.getTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(pos);
 			if(te != null) {
 				player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.debuggerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
 			} else {
@@ -30,6 +32,7 @@ public class ItemTDDebugger extends ItemTM {
 		}
 		return true;
 	}
+
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {

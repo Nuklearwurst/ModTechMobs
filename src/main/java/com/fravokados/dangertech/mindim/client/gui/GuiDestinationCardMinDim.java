@@ -5,13 +5,15 @@ import com.fravokados.dangertech.mindim.lib.Strings;
 import com.fravokados.dangertech.mindim.lib.Textures;
 import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
 import com.fravokados.dangertech.mindim.network.message.MessageGuiElementClicked;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
 
 /**
  * @author Nuklearwurst
@@ -47,13 +49,13 @@ public class GuiDestinationCardMinDim extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_) {
 		super.drawGuiContainerForegroundLayer(p_146979_1_, p_146979_2_);
-		int count = (heldInventory.stackTagCompound == null) ? 0 : heldInventory.stackTagCompound.getInteger("frame_blocks");
+		int count = (heldInventory.getTagCompound() == null) ? 0 : heldInventory.getTagCompound().getInteger("frame_blocks");
 		String s = Strings.translateWithFormat(Strings.Gui.DESTINATION_CARD_PORTAL_BLOCKS_STORED, count);
 		fontRendererObj.drawString(s, this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, 20, 4210752);
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton btn) {
+	protected void actionPerformed(GuiButton btn) throws IOException {
 		switch (btn.id) {
 			case BUTTON_ID_ADD:
 				ModMDNetworkManager.INSTANCE.sendToServer(new MessageGuiElementClicked(ContainerDestinationCardMinDim.NETWORK_ID_ADD, 0));

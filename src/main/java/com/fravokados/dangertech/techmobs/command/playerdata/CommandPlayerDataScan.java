@@ -4,9 +4,11 @@ import com.fravokados.dangertech.techmobs.command.CommandHelpers;
 import com.fravokados.dangertech.techmobs.command.SubCommand;
 import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class CommandPlayerDataScan extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 		if(!CommandHelpers.processDefaultStandartCommands(sender, this, args, "level")) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
@@ -36,7 +38,7 @@ public class CommandPlayerDataScan extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			EntityPlayer player = null;
 			if(args.length == 1) {
 				player = CommandBase.getPlayer(sender, args[0]);
@@ -57,7 +59,7 @@ public class CommandPlayerDataScan extends SubCommand {
 		}
 
 		@Override
-		public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+		public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 			if(args.length == 1) {
 				return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
 			}
@@ -72,7 +74,7 @@ public class CommandPlayerDataScan extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			EntityPlayer player = null;
 			if(args.length == 1) {
 				player = CommandBase.getPlayer(sender, args[0]);
@@ -92,7 +94,7 @@ public class CommandPlayerDataScan extends SubCommand {
 		}
 
 		@Override
-		public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+		public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 			if(args.length == 1) {
 				return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
 			}

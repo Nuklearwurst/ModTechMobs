@@ -46,11 +46,11 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 				if (rand >= 0.8 * data) {
 					//special effects happen
 					if (data > TechDataStorage.getInstance().getDangerousPlayerLevel()) { //very nasty
-						TDEffectHandler.applyRandomEffectOnPlayer(player, player.getCommandSenderName(), itemRand);
+						TDEffectHandler.applyRandomEffectOnPlayer(player, player.getName(), itemRand);
 						stack.damageItem(20, player);
 						player.worldObj.createExplosion(null, player.posX, player.posY + 1, player.posZ, 0.4F, false);
 					} else if (data > 0.8 * TechDataStorage.getInstance().getDangerousPlayerLevel()) { //normal effects
-						TDEffectHandler.applyRandomEffectOnPlayer(player, player.getCommandSenderName(), itemRand);
+						TDEffectHandler.applyRandomEffectOnPlayer(player, player.getName(), itemRand);
 						stack.damageItem(10, player);
 					} else { //simple effects
 						int i = evt.entity.worldObj.rand.nextInt(4);
@@ -83,7 +83,7 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 	 * returns the name of the entity or a special identifier for additional chat messages (eg. creeper)
 	 */
 	private String getSpecialEntityName(EntityLivingBase e) {
-		String name = e.getCommandSenderName();
+		String name = e.getName();
 		if (e.worldObj.rand.nextBoolean()) {
 			if (e instanceof EntityCreeper) {
 				name = CREEPER;

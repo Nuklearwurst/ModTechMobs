@@ -36,11 +36,11 @@ public class ItemQuantumSword extends ItemTMSword {
 					if (rand >= 0.8 * data) {
 						//special effects happen
 						if (data > TechDataStorage.getInstance().getDangerousPlayerLevel()) { //very nasty
-							TDEffectHandler.applyRandomEffectOnPlayer(origin, origin.getCommandSenderName(), itemRand);
+							TDEffectHandler.applyRandomEffectOnPlayer(origin, origin.getName(), itemRand);
 							stack.damageItem(20, origin);
 							origin.worldObj.createExplosion(null, origin.posX, origin.posY + 1, origin.posZ, 0.4F, false);
 						} else if (data > 0.8 * TechDataStorage.getInstance().getDangerousPlayerLevel()) { //normal effects
-							TDEffectHandler.applyRandomEffectOnPlayer(origin, origin.getCommandSenderName(), itemRand);
+							TDEffectHandler.applyRandomEffectOnPlayer(origin, origin.getName(), itemRand);
 							stack.damageItem(10, origin);
 						} else { //simple effects
 							origin.worldObj.playSoundEffect(origin.posX, origin.posY, origin.posZ, "mob.endermen.scream", 1.0F, itemRand.nextInt() + 0.5F);

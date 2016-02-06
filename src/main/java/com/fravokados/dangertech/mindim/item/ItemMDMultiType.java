@@ -1,7 +1,6 @@
 package com.fravokados.dangertech.mindim.item;
 
 import com.fravokados.dangertech.mindim.lib.Textures;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,14 +11,8 @@ import java.util.List;
  * @author Nuklearwurst
  */
 public abstract class ItemMDMultiType extends ItemMD {
-
-	public ItemMDMultiType() {
-		super();
-		this.setHasSubtypes(true);
-	}
-
-	public ItemMDMultiType(String name) {
-		super(name);
+	public ItemMDMultiType(String registryName) {
+		super(registryName);
 		this.setHasSubtypes(true);
 	}
 
@@ -27,12 +20,20 @@ public abstract class ItemMDMultiType extends ItemMD {
 	public abstract void getSubItems(Item item, CreativeTabs tabs, List list);
 
 	@Override
-	public String getUnlocalizedName(ItemStack s) {
-		return String.format("item.%s%s", Textures.TEXTURE_PREFIX, getUnwrappedUnlocalizedName(getUnlocalizedNameForItem(s)));
-	}
+	public abstract void registerModels();
 
-	protected abstract String getUnlocalizedNameForItem(ItemStack stack);
 
 	@Override
-	public abstract void registerIcons(IIconRegister reg);
+	public String getUnlocalizedName(ItemStack s) {
+		String name = getNameForItemStack(s);
+		if(name.startsWith("item.")) {
+			return name;
+		}
+		return "item." + Textures.TEXTURE_PREFIX + name;
+	}
+
+	/**
+	 * @return unlocalized name for the given itemstack with out any prefixes
+	 */
+	protected abstract String getNameForItemStack(ItemStack s);
 }

@@ -7,8 +7,6 @@ import com.fravokados.dangertech.techmobs.lib.util.PlayerUtils;
 import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import com.fravokados.dangertech.techmobs.world.techdata.TDChunk;
 import com.fravokados.dangertech.techmobs.world.techdata.TDWorld;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.WorldSavedData;
@@ -16,6 +14,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.*;
 
@@ -222,13 +221,13 @@ public class TechDataStorage extends WorldSavedData {
 	 */
 	public static void onWorldLoad(WorldEvent.Load evt) {
 		//only on server side (--> intergrated server) && only on dim = 0 as it stores player data
-		if (!evt.world.isRemote && evt.world.provider.dimensionId == 0) {
+		if (!evt.world.isRemote && evt.world.provider.getDimensionId() == 0) {
 			WorldServer world = (WorldServer) evt.world;
-			TechDataStorage data = (TechDataStorage) world.perWorldStorage.loadData(TechDataStorage.class, SAVE_DATA_NAME);
+			TechDataStorage data = (TechDataStorage) world.getPerWorldStorage().loadData(TechDataStorage.class, SAVE_DATA_NAME);
 
 			if (data == null) {
 				data = new TechDataStorage(SAVE_DATA_NAME);
-				world.perWorldStorage.setData(SAVE_DATA_NAME, data);
+				world.getPerWorldStorage().setData(SAVE_DATA_NAME, data);
 			}
 
 			if (instance != null) {
@@ -240,7 +239,7 @@ public class TechDataStorage extends WorldSavedData {
 
 
 	public static void onWorldUnload(WorldEvent.Unload evt) {
-		if (!evt.world.isRemote && evt.world.provider.dimensionId == 0) {
+		if (!evt.world.isRemote && evt.world.provider.getDimensionId() == 0) {
 			LogHelperTM.info("Unloading TechDataStorage...");
 			instance = null;
 		}
@@ -252,7 +251,7 @@ public class TechDataStorage extends WorldSavedData {
 	 */
 	public static void onChunkDataSave(ChunkDataEvent.Save evt) {
 		if(!evt.world.isRemote) {
-			int dimId = evt.world.provider.dimensionId;
+			int dimId = evt.world.provider.getDimensionId();
 			if (getInstance().worldData.containsKey(dimId)) {
 				getInstance().worldData.get(dimId).saveChunkData(evt); //save here
 			}
@@ -264,7 +263,7 @@ public class TechDataStorage extends WorldSavedData {
 	 */
 	public static void onChunkDataLoad(ChunkDataEvent.Load evt) {
 		if(!evt.world.isRemote) {
-			int dimId = evt.world.provider.dimensionId;
+			int dimId = evt.world.provider.getDimensionId();
 			if (getInstance().worldData.containsKey(dimId)) {
 				//load from disk and add to already loaded world
 				getInstance().worldData.get(dimId).loadChunkData(evt); // load data here
@@ -285,7 +284,7 @@ public class TechDataStorage extends WorldSavedData {
 	public static void onChunkUnload(ChunkEvent.Unload evt) {
 		if(!evt.world.isRemote) {
 			//unload chunk if data exists for the given world
-			int dimId = evt.world.provider.dimensionId;
+			int dimId = evt.world.provider.getDimensionId();
 			if (getInstance().worldData.containsKey(dimId)) {
 				TDWorld world = getInstance().worldData.get(dimId);
 				world.unloadChunk(evt);
@@ -301,10 +300,10 @@ public class TechDataStorage extends WorldSavedData {
 	/**
 	 * loads the player techdata
 	 */
-	public static void onPlayerLogin(PlayerLoggedInEvent evt) {
+	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent evt) {
 		//add player to techPlayersList if necessary
 		if(!evt.player.worldObj.isRemote) {
-			getInstance().addDangerousPlayerIfNeeded(evt.player.getCommandSenderName(), TDManager.getPlayerScoutedTechLevel(evt.player));
+			getInstance().addDangerousPlayerIfNeeded(evt.player.getName(), TDManager.getPlayerScoutedTechLevel(evt.player));
 		}
 	}
 
@@ -312,10 +311,10 @@ public class TechDataStorage extends WorldSavedData {
 	/**
 	 * unloads and saves the player techdata
 	 */
-	public static void onPlayerLogout(PlayerLoggedOutEvent evt) {
+	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent evt) {
 		//remove player from techPlayers list
 		if(!evt.player.worldObj.isRemote) {
-			getInstance().removeDangerousPlayer(evt.player.getCommandSenderName());
+			getInstance().removeDangerousPlayer(evt.player.getName());
 		}
 	}
 
