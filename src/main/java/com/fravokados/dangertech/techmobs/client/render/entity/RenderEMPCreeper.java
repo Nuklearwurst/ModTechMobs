@@ -6,8 +6,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelCreeper;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class RenderEMPCreeper extends RenderLiving {
+public class RenderEMPCreeper extends RenderLiving<EntityEMPCreeper> {
 	private static final ResourceLocation armoredCreeperTextures = Textures.getResourceLocation("textures/entity/emp_creeper_armor");
 	private static final ResourceLocation creeperTextures = Textures.getResourceLocation("textures/entity/emp_creeper");
 
@@ -29,8 +27,8 @@ public class RenderEMPCreeper extends RenderLiving {
 	}
 
 	@Override
-	protected void preRenderCallback(EntityLivingBase p_77041_1_, float p_77041_2_) {
-		float flashIntensity = ((EntityEMPCreeper) p_77041_1_).getCreeperFlashIntensity(p_77041_2_);
+	protected void preRenderCallback(EntityEMPCreeper entityCreeper, float partialTickTime) {
+		float flashIntensity = entityCreeper.getCreeperFlashIntensity(partialTickTime);
 		float flashCycle = 1.0F + MathHelper.sin(flashIntensity * 100.0F) * flashIntensity * 0.01F;
 
 		if (flashIntensity < 0.0F) {
@@ -49,8 +47,8 @@ public class RenderEMPCreeper extends RenderLiving {
 	}
 
 	@Override
-	protected int getColorMultiplier(EntityLivingBase p_77030_1_, float p_77030_2_, float p_77030_3_) {
-		float flashIntensity = ((EntityEMPCreeper) p_77030_1_).getCreeperFlashIntensity(p_77030_3_);
+	protected int getColorMultiplier(EntityEMPCreeper entityCreeper, float lightBrightness, float partialTickTime) {
+		float flashIntensity = entityCreeper.getCreeperFlashIntensity(partialTickTime);
 
 		if ((int) (flashIntensity * 10.0F) % 2 == 0) {
 			return 0;
@@ -118,7 +116,7 @@ public class RenderEMPCreeper extends RenderLiving {
 	*/
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
+	protected ResourceLocation getEntityTexture(EntityEMPCreeper creeper) {
 		return creeperTextures;
 	}
 }

@@ -5,7 +5,6 @@ import com.fravokados.dangertech.techmobs.entity.EntityConservationUnit;
 import com.fravokados.dangertech.techmobs.lib.Textures;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,7 +15,7 @@ import org.lwjgl.opengl.GL11;
  * @author Nuklearwurst
  */
 @SideOnly(Side.CLIENT)
-public class RenderConservationUnit extends Render {
+public class RenderConservationUnit extends Render<EntityConservationUnit> {
 	private static final ResourceLocation RESOURCE_LOCATION = Textures.getResourceLocation("textures/entity/ConservationUnit.png");
 
 	protected ModelConservationUnit modelConservationUnit;
@@ -28,11 +27,13 @@ public class RenderConservationUnit extends Render {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity par1Entity) {
+	protected ResourceLocation getEntityTexture(EntityConservationUnit par1Entity) {
 		return RESOURCE_LOCATION;
 	}
 
-	public void renderConservationUnit(EntityConservationUnit entity, double x, double y, double z, float par8, float rotate) {
+	@Override
+	public void doRender(EntityConservationUnit entity, double x, double y, double z, float par8, float rotate) {
+		super.doRender(entity, x, y, z, par8, rotate);
 		GL11.glPushMatrix();
 		float yOffset = MathHelper.sin(((float) entity.age + rotate) / 10.0F + entity.hoverStart) * + 0.2F;
 		float rotation = (((float) entity.age + rotate) / 100.0F + entity.hoverStart) * (180F / (float) Math.PI);
@@ -43,10 +44,5 @@ public class RenderConservationUnit extends Render {
 
 		this.modelConservationUnit.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GL11.glPopMatrix();
-	}
-
-	@Override
-	public void doRender(Entity entity, double x, double y, double z, float par8, float par9) {
-		this.renderConservationUnit((EntityConservationUnit) entity, x, y, z, par8, par9);
 	}
 }

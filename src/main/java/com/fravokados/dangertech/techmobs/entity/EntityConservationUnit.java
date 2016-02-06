@@ -288,19 +288,6 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		return stack;
 	}
 
-	/*
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		if (getStackInSlot(slot) != null) {
-			ItemStack itemstack = getStackInSlot(slot);
-			setInventorySlotContents(slot, null);
-			return itemstack;
-		} else {
-			return null;
-		}
-	}
-	*/
-
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		while(slot <= mainInventory.size()) {

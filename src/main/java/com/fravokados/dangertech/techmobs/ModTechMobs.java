@@ -72,6 +72,9 @@ public class ModTechMobs {
 		ModItems.registerItems();
 		//registerBlocks blocks
 		ModBlocks.registerBlocks();
+
+		//init rendering
+		proxy.registerRenderer();
 	}
 
 	@Mod.EventHandler
@@ -84,18 +87,17 @@ public class ModTechMobs {
 
 		//register TileEntities
 		ModBlocks.registerTileEntities();
-		
-		//init rendering
-		proxy.registerRenderer();
+
+		//load Entities
+		ModEntities.init();
+
 		
 		//register EventHandlers
 		proxy.registerEvents();
 		
 		//Config handler
 		FMLCommonHandler.instance().bus().register(config);
-		
-		//load Entities
-		ModEntities.init();
+
 
 		//load recipes
 		try {
