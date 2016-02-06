@@ -6,9 +6,9 @@ import net.minecraft.nbt.NBTTagCompound;
  * @author Nuklearwurst
  */
 public enum EnergyTypes {
-	IC2, INVALID;
+	IC2, VANILLA, INVALID;
 
-	public static final EnergyTypes[] validTypes = {IC2};
+	public static final EnergyTypes[] validTypes = {IC2, VANILLA};
 
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("EnergyType", ordinal());

@@ -45,20 +45,6 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 	public static final PropertyEnum<PortalFrameState> STATE_PROPERTY = PropertyEnum.create("state", PortalFrameState.class);
 	public static final PropertyDirection FACING_PROPERTY = PropertyDirection.create("facing");
 
-	/*
-	private IIcon[] iconFrameSide;
-	private IIcon[] iconFrameSideRotated;
-	private IIcon[] iconFrameBack;
-	private IIcon[] iconFrameFront;
-
-	private IIcon iconController_online;
-	private IIcon iconController_offline;
-	private IIcon iconController_disabled;
-	private IIcon iconController_front_online;
-	private IIcon iconController_front_offline;
-	private IIcon iconController_front_disabled;
-	*/
-
 	public BlockPortalFrame() {
 		super(Material.iron, Strings.Block.portalMachineBase);
 		this.setHardness(2.0F);
@@ -132,104 +118,6 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 		registerItemBlockModel(Textures.ITEM_BLOCK_PORTAL_FRAME, 0);
 		registerItemBlockModel(Textures.ITEM_BLOCK_PORTAL_CONTROLLER, 1);
 	}
-
-	/*
-	@Override
-	public void registerBlockIcons(IIconRegister reg) {
-		//Controller Entity
-		iconController_online = reg.registerIcon(Textures.BLOCK_PORTAL_CONTROLLER_ONLINE);
-		iconController_offline = reg.registerIcon(Textures.BLOCK_PORTAL_CONTROLLER_OFFLINE);
-		iconController_disabled = reg.registerIcon(Textures.BLOCK_PORTAL_CONTROLLER_DISABLED);
-		iconController_front_online = reg.registerIcon(Textures.BLOCK_PORTAL_CONTROLLER_ONLINE_FRONT);
-		iconController_front_offline = reg.registerIcon(Textures.BLOCK_PORTAL_CONTROLLER_OFFLINE_FRONT);
-		iconController_front_disabled = reg.registerIcon(Textures.BLOCK_PORTAL_CONTROLLER_DISABLED_FRONT);
-		//Frame Entity
-		iconFrameBack = new IIcon[3];
-		iconFrameFront = new IIcon[3];
-		iconFrameSide = new IIcon[3];
-		iconFrameSideRotated = new IIcon[3];
-		for(int i = 0; i < 3; i++) {
-			iconFrameBack[i] = reg.registerIcon(Textures.BLOCK_PORTAL_FRAME_BACK[i]);
-			iconFrameFront[i] = reg.registerIcon(Textures.BLOCK_PORTAL_FRAME_FRONT[i]);
-			iconFrameSide[i] = reg.registerIcon(Textures.BLOCK_PORTAL_FRAME_SIDE[i]);
-			iconFrameSideRotated[i] = reg.registerIcon(Textures.BLOCK_PORTAL_FRAME_SIDE_ROTATED[i]);
-		}
-	}
-	*/
-
-	/*
-	@Override
-	public IIcon getIcon(int side, int meta) {
-		switch (meta) {
-			case META_FRAME_ENTITY:
-				return side == 3 ? iconFrameFront[2] : iconFrameBack[2];
-			case META_CONTROLLER_ENTITY:
-				return side == 3 ? iconController_front_online : iconController_online;
-		}
-		return iconFrameFront[2];
-	}
-	*/
-
-	/*
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		TileEntity te = world.getTileEntity(x, y, z);
-		if(te != null) {
-			if(te instanceof TileEntityPortalControllerEntity) {
-				short facing = ((TileEntityPortalControllerEntity) te).getFacing();
-				TileEntityPortalControllerEntity.State state = ((TileEntityPortalControllerEntity) te).getState();
-				if(side == facing) {
-					if(state == TileEntityPortalControllerEntity.State.NO_MULTIBLOCK || state == TileEntityPortalControllerEntity.State.READY) {
-						return iconController_front_disabled;
-					} else if(state == TileEntityPortalControllerEntity.State.INCOMING_PORTAL || state == TileEntityPortalControllerEntity.State.OUTGOING_PORTAL) {
-						return iconController_front_online;
-					} else {
-						return iconController_front_offline;
-					}
-				} else {
-					if(state == TileEntityPortalControllerEntity.State.NO_MULTIBLOCK || state == TileEntityPortalControllerEntity.State.READY) {
-						return iconController_disabled;
-					} else if(state == TileEntityPortalControllerEntity.State.INCOMING_PORTAL || state == TileEntityPortalControllerEntity.State.OUTGOING_PORTAL) {
-						return iconController_online;
-					} else {
-						return iconController_offline;
-					}
-				}
-			} else if(te instanceof TileEntityPortalFrame) {
-				short facing = ((TileEntityPortalFrame) te).getFacing();
-				TileEntityPortalControllerEntity.State state = ((TileEntityPortalFrame) te).getControllerState();
-				byte index = 1;
-				if(state == TileEntityPortalControllerEntity.State.NO_MULTIBLOCK || state == TileEntityPortalControllerEntity.State.READY) {
-					index = 0;
-				} else if(state == TileEntityPortalControllerEntity.State.INCOMING_PORTAL || state == TileEntityPortalControllerEntity.State.OUTGOING_PORTAL) {
-					index = 2;
-				}
-				if(state == TileEntityPortalControllerEntity.State.INCOMING_CONNECTION || state == TileEntityPortalControllerEntity.State.INCOMING_PORTAL || state == TileEntityPortalControllerEntity.State.OUTGOING_PORTAL || state == TileEntityPortalControllerEntity.State.CONNECTING) {
-					if(((TileEntityPortalFrame) te).getClientRenderInfo() != null) {
-						facing = (short) ((TileEntityPortalFrame) te).getClientRenderInfo().originDirection.ordinal();
-					}
-				}
-				if(facing == side) {
-					return iconFrameFront[index];
-				}
-				boolean flagY = side > 1 && (world.getBlock(x , y + 1, z) == this || world.getBlock(x, y - 1, z) == this);
-				boolean flagZ = (side != 2 && side != 3) && (world.getBlock(x , y, z + 1) == this || world.getBlock(x, y, z - 1) == this);
-				boolean flagX = (side != 4 && side != 5) && (world.getBlock(x + 1 , y, z) == this || world.getBlock(x - 1, y, z) == this);
-				if(flagX == flagY ? flagX : flagZ) {
-					return iconFrameBack[index];
-				} else {
-					if(flagY || side < 2 && flagZ) {
-						return iconFrameSide[index];
-					} else {
-						//top and bottom sides need to be rotated on x axis
-						return iconFrameSideRotated[index];
-					}
-				}
-			}
-		}
-		return super.getIcon(world, x, y, z, side);
-	}
-	*/
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {

@@ -1,6 +1,7 @@
 package com.fravokados.dangertech.core.plugin.energy;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 /**
  * Functions to help manage energy apis
@@ -18,7 +19,10 @@ public class EnergyManager {
 		switch (type) {
 			case IC2:
 //				return item.getItem() instanceof IElectricItem && ((IElectricItem) item.getItem()).canProvideEnergy(item);
+				return false;
+			case VANILLA:
+				return TileEntityFurnace.getItemBurnTime(item) > 0;
 		}
-		return true;
+		return false;
 	}
 }

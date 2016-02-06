@@ -23,7 +23,7 @@ public class WorldProviderMiningDimension extends WorldProvider {
 	@Override
     public IChunkProvider createChunkGenerator()
     {
-        return new ChunkProviderGenerate(worldObj, worldObj.getSeed() + 42, true, null);
+        return new ChunkProviderGenerate(worldObj, worldObj.getSeed() + 42, true, worldObj.getWorldInfo().getGeneratorOptions());
     }
 
     @Override

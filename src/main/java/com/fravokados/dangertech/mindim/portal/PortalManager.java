@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.WorldSavedData;
@@ -267,13 +268,15 @@ public class PortalManager extends WorldSavedData {
 		}
 		PortalConstructor.createPortalFromMetrics(worldServer, metrics, true, yOffset);
 		//create the controller
-		worldServer.setBlockState(pos.getPosition().up(yOffset), ModBlocks.blockPortalFrame.getDefaultState().withProperty(BlockPortalFrame.TYPE_PROPERTY, PortalFrameType.BASIC_CONTROLLER));
-		TileEntity te = worldServer.getTileEntity(pos.getPosition());
+		BlockPos controllerPos = pos.getPosition().up(yOffset);
+		//noinspection ConstantConditions
+		worldServer.setBlockState(controllerPos, ModBlocks.blockPortalFrame.getDefaultState().withProperty(BlockPortalFrame.TYPE_PROPERTY, PortalFrameType.BASIC_CONTROLLER));
+		TileEntity te = worldServer.getTileEntity(controllerPos);
 		if (te != null && te instanceof TileEntityPortalControllerEntity) {
 			if (Settings.PORTAL_SPAWN_WITH_CARD) {
 				((TileEntityPortalControllerEntity) te).setInventorySlotContents(0, ItemDestinationCard.fromDestination(parent, ((TileEntityPortalControllerEntity) te).getDisplayName().getFormattedText()));
 			}
-			((TileEntityPortalControllerEntity) te).onBlockPostPlaced(te.getWorld(), pos.getPosition(), worldServer.getBlockState(pos.getPosition().up(yOffset)));
+			((TileEntityPortalControllerEntity) te).onBlockPostPlaced(te.getWorld(), controllerPos, worldServer.getBlockState(controllerPos));
 			if (parentTile instanceof IFacingSix) {
 				((TileEntityPortalControllerEntity) te).setFacing(((IFacingSix) parentTile).getFacing());
 			}

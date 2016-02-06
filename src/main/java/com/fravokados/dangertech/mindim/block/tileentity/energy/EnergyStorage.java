@@ -100,6 +100,14 @@ public class EnergyStorage {
 		}
 	}
 
+	public double getRoomForEnergy() {
+		return capacity - energy;
+	}
+
+	public boolean hasRoomForEnergy(double energy) {
+		return energy <= getRoomForEnergy();
+	}
+
 	public boolean isFull() {
 		return getEnergyStored() >= getMaxEnergyStored();
 	}

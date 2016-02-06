@@ -41,6 +41,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.*;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -152,7 +153,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	/**
 	 * EnergyType of this block
 	 */
-	private EnergyTypes energyType = EnergyTypes.IC2; //TODO proper initialization of this value and support of different energy mods
+	private EnergyTypes energyType = EnergyTypes.VANILLA; //TODO proper initialization of this value and support of different energy mods
 	/**
 	 * Energy Storage
 	 */
@@ -540,13 +541,22 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		}
 		//recharge energy
 		if (!energy.isFull() && inventory[1] != null) {
-			if (energyType == EnergyTypes.IC2) {
-				/*
-				if (EnergyManager.canItemProvideEnergy(inventory[1], EnergyTypes.IC2)) {
-					energy.receiveEnergy(ElectricItem.manager.discharge(inventory[1], getDemandedEnergy(), getSinkTier(), false, true, false), false);
-				}
-				*/
-				//FIXME ic2 integration
+			switch (energyType) {
+				case IC2:
+					/*
+					if (EnergyManager.canItemProvideEnergy(inventory[1], EnergyTypes.IC2)) {
+						energy.receiveEnergy(ElectricItem.manager.discharge(inventory[1], getDemandedEnergy(), getSinkTier(), false, true, false), false);
+					}
+					*/
+					//FIXME ic2 integration
+					break;
+				case VANILLA:
+					double fuelValue = TileEntityFurnace.getItemBurnTime(inventory[SLOT_FUEL]);
+					if(energy.hasRoomForEnergy(fuelValue)) {
+						energy.receiveEnergy(fuelValue, false);
+						decrStackSize(SLOT_FUEL, 1);
+					}
+					break;
 			}
 		}
 	}
