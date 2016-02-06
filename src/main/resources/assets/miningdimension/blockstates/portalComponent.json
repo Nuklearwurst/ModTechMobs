@@ -1,0 +1,78 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"textures": {
+			"particle": "#front"
+		}
+	},
+    "variants": {
+		"inventory": {
+			"model": "miningdimension:portalFrame",
+			"textures": {
+				"front": "miningdimension:blocks/portalFrame_front_disabled",
+				"back": "miningdimension:blocks/portalFrame_back_disabled",
+				"side": "miningdimension:blocks/portalFrame_side_disabled"
+			}
+		},
+		"facing": {
+			"down":  { "model": "miningdimension:portalFrame", "x": 270 },
+			"up":    { "model": "miningdimension:portalFrame", "x": 90 },
+			"north": { "model": "miningdimension:portalFrame" },
+			"south": { "model": "miningdimension:portalFrame", "y": 180 },
+			"west":  { "model": "miningdimension:portalFrame", "y": 270 },
+			"east":  { "model": "miningdimension:portalFrame", "y": 90 }
+		},
+		
+		"state": {
+			"active": {
+				"textures": {
+					"front": "#frontActive",
+					"back": "#backActive",
+					"side": "#sideActive"
+				}
+			},
+			"connecting": {
+				"textures": {
+					"front": "#frontConnecting",
+					"back": "#backConnecting",
+					"side": "#sideConnecting"
+				}
+			},
+			"disabled": {
+				"textures": {
+					"front": "#frontDisabled",
+					"back": "#backDisabled",
+					"side": "#sideDisabled"
+				}
+			}
+		},
+		"type": {
+			"basic_frame": {
+				"textures": {
+					"frontActive": "miningdimension:blocks/portalFrame_front_online",
+					"backActive": "miningdimension:blocks/portalFrame_back_online",
+					"sideActive": "miningdimension:blocks/portalFrame_side_online",
+					"frontConnecting": "miningdimension:blocks/portalFrame_front_offline",
+					"backConnecting": "miningdimension:blocks/portalFrame_back_offline",
+					"sideConnecting": "miningdimension:blocks/portalFrame_side_offline",
+					"frontDisabled": "miningdimension:blocks/portalFrame_front_disabled",
+					"backDisabled": "miningdimension:blocks/portalFrame_back_disabled",
+					"sideDisabled": "miningdimension:blocks/portalFrame_side_disabled"
+				}
+			},
+			"basic_controller": {
+				"textures": {
+					"frontActive": "miningdimension:blocks/portalController_front_online",
+					"backActive": "miningdimension:blocks/portalFrame_back_online",
+					"sideActive": "miningdimension:blocks/portalFrame_back_online",
+					"frontConnecting": "miningdimension:blocks/portalController_front_offline",
+					"backConnecting": "miningdimension:blocks/portalFrame_back_offline",
+					"sideConnecting": "miningdimension:blocks/portalFrame_back_offline",
+					"frontDisabled": "miningdimension:blocks/portalController_front_disabled",
+					"backDisabled": "miningdimension:blocks/portalFrame_back_disabled",
+					"sideDisabled": "miningdimension:blocks/portalFrame_back_disabled"
+				}
+			}
+		}
+    }
+}

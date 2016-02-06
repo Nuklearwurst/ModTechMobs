@@ -1,0 +1,6 @@
+{
+    "parent": "nwcore:item/item_base",
+    "textures": {
+        "layer0": "techmobs:items/tdDebugger"
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "nwcore:item/item_base",
+    "textures": {
+        "layer0": "miningdimension:items/destinationCard"
+    }
+}
