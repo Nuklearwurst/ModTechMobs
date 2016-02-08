@@ -2,4 +2,4 @@
 itemGroup.nwcore=Dangerous Technology
 
 #Items
-item.techmobs:upgradeTool.name=Upgrade Tool
+item.nwcore:upgradeTool.name=Upgrade Tool
