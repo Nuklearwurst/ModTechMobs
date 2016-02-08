@@ -37,9 +37,8 @@ public class ItemMindDimUpgrade extends ItemMDMultiType implements IUpgrade {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void getSubItems(Item item, CreativeTabs tabs, List list) {
+    public void getSubItems(Item item, CreativeTabs tabs, List<ItemStack> list) {
 	    list.add(new ItemStack(item, 1, META_EMPTY));
         list.add(new ItemStack(item, 1, META_REVERSE_DIRECTION));
         list.add(new ItemStack(item, 1, META_CLOSE_INCOMING_PORTAL));

@@ -2,6 +2,9 @@ package com.fravokados.dangertech.mindim.item;
 
 import com.fravokados.dangertech.api.upgrade.IUpgradable;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
+import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
+import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
+import com.fravokados.dangertech.core.plugin.energy.IEnergyTypeAware;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.lib.NBTKeys;
@@ -44,10 +47,14 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 		return Strings.Block.portalMachineBase;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean b) {
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
+		if(nbt.hasKey(EnergyTypes.getNBTKey())) {
+			EnergyTypes types = EnergyTypes.readFromNBT(nbt);
+			//TODO translation
+			list.add(types.toString());
+		}
 		if(nbt.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_NAME)) {
 			list.add(Strings.translate(Strings.Tooltip.NAME) + " " + nbt.getString(NBTKeys.DESTINATION_CARD_PORTAL_NAME));
 		} else if(nbt.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_ID)) {
@@ -87,6 +94,7 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 					if(tag.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_NAME)) {
 						((TileEntityPortalControllerEntity) te).setName(tag.getString(NBTKeys.DESTINATION_CARD_PORTAL_NAME));
 					}
+					EnergyManager.writeEnergyTypeToEnergyTypeAware((IEnergyTypeAware) te, stack);
 				}
 			}
 			return true;

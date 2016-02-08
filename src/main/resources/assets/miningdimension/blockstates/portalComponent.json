@@ -15,8 +15,8 @@
 			}
 		},
 		"facing": {
-			"down":  { "model": "miningdimension:portalFrame", "x": 270 },
-			"up":    { "model": "miningdimension:portalFrame", "x": 90 },
+			"down":  { "model": "miningdimension:portalFrame", "x": 90 },
+			"up":    { "model": "miningdimension:portalFrame", "x": 270 },
 			"north": { "model": "miningdimension:portalFrame" },
 			"south": { "model": "miningdimension:portalFrame", "y": 180 },
 			"west":  { "model": "miningdimension:portalFrame", "y": 270 },

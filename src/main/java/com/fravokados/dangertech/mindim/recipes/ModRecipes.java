@@ -1,5 +1,7 @@
 package com.fravokados.dangertech.mindim.recipes;
 
+import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
+import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
 import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.item.ItemDestinationCard;
@@ -14,7 +16,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  * @author Nuklearwurst
  */
 @SuppressWarnings("UnnecessaryBoxing")
-public class RecipeManager {
+public class ModRecipes {
 
 	public static void initRecipes() {
 //		ItemStack electronicCircuit = IC2Items.getItem("electronicCircuit");
@@ -73,7 +75,7 @@ public class RecipeManager {
 		/**
 		 * PortalController
 		 */
-		GameRegistry.addRecipe(new ItemStack(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_CONTROLLER.ordinal()),
+		GameRegistry.addRecipe(EnergyManager.createItemStackWithEnergyType(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_CONTROLLER.ordinal(), EnergyTypes.VANILLA),
 				"ded",
 				"afa",
 				"tct",

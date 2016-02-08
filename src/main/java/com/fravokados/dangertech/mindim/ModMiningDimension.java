@@ -16,7 +16,7 @@ import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import com.fravokados.dangertech.mindim.network.ModMDNetworkManager;
 import com.fravokados.dangertech.mindim.plugin.PluginTechMobs;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
-import com.fravokados.dangertech.mindim.recipes.RecipeManager;
+import com.fravokados.dangertech.mindim.recipes.ModRecipes;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -92,7 +92,7 @@ public class ModMiningDimension {
 	    proxy.initRendering();
 
 		//register recipes
-        RecipeManager.initRecipes();
+        ModRecipes.initRecipes();
     }
 
     @Mod.EventHandler

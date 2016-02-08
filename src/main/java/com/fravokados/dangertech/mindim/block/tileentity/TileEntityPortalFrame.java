@@ -27,7 +27,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 
 	private BlockPos controllerPos;
 
-	private short facing = 1;
+	private EnumFacing facing = EnumFacing.NORTH;
 
 	public void setPortalController(BlockPos controllerPos) {
 		this.controllerPos = controllerPos;
@@ -52,7 +52,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 		if(nbtController != null) {
 			controllerPos = BlockUtils.readBlockPosFromNBT(nbtController);
 		}
-		facing = nbt.getShort("facing");
+		facing = EnumFacing.getFront(nbt.getByte("facing"));
 	}
 
 	@Override
@@ -61,13 +61,13 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 		NBTTagCompound nbtController = new NBTTagCompound();
 		BlockUtils.writeBlockPosToNBT(controllerPos, nbtController);
 		nbt.setTag("controllerPos", nbtController);
-		nbt.setShort("facing", facing);
+		nbt.setByte("facing", (byte) facing.getIndex());
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setShort("facing", facing);
+		nbt.setByte("facing", (byte) facing.getIndex());
 		if(controllerPos != null) {
 			nbt.setInteger("x_core", controllerPos.getX());
 			nbt.setInteger("y_core", controllerPos.getY());
@@ -80,7 +80,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.getNbtCompound();
 		if(nbt != null && nbt.hasKey("facing")) {
-			facing = nbt.getShort("facing");
+			facing = EnumFacing.getFront(nbt.getShort("facing"));
 			if(nbt.hasKey("x_core")) {
 				controllerPos = new BlockPos(nbt.getInteger("x_core"), nbt.getInteger("y_core"), nbt.getInteger("z_core"));
 			} else {
@@ -103,7 +103,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 		}
 	}
 
-	public void setFacing(short facing) {
+	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
 	}
 
@@ -127,7 +127,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 //		return side != facing;
 //	}
 
-	public short getFacing() {
+	public EnumFacing getFacing() {
 		return facing;
 	}
 
@@ -160,10 +160,5 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 			}
 		}
 		return PortalFrameState.DISABLED;
-	}
-
-	@Override
-	public EnumFacing getEnumFacing() {
-		return EnumFacing.getFront(facing);
 	}
 }

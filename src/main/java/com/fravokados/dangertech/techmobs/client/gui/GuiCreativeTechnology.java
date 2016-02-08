@@ -35,7 +35,6 @@ public class GuiCreativeTechnology extends GuiContainer {
 		this.te = te;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
 		super.initGui();

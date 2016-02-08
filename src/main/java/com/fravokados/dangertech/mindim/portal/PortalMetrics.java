@@ -194,7 +194,7 @@ public class PortalMetrics {
 		//Orientation
 		int[] orientation = {0, 0, 0, 0, 0, 0};
 		for(IEntityPortalMandatoryComponent frame : list) {
-			orientation[frame.getFacing()]++;
+			orientation[frame.getFacing().getIndex()]++;
 		}
 		int facing = 0;
 		int max = 0;
@@ -434,7 +434,7 @@ public class PortalMetrics {
 						world.setBlockState(pos, ModBlocks.blockPortalFrame.getDefaultState().withProperty(BlockPortalFrame.TYPE_PROPERTY, PortalFrameType.BASIC_FRAME));
 						TileEntity te = world.getTileEntity(pos);
 						if(te != null && te instanceof IFacingSix) {
-							((IFacingSix) te).setFacing((short) front.ordinal());
+							((IFacingSix) te).setFacing(front);
 						}
 					} else {
 						world.setBlockState(pos, Blocks.air.getDefaultState());

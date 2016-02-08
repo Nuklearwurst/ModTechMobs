@@ -23,9 +23,10 @@ public class GuiConservationUnit extends GuiContainer {
 	public GuiConservationUnit(EntityConservationUnit conservationUnit, ContainerConservationUnit container) {
 		super(container);
 		this.conservationUnit = conservationUnit;
+		this.xSize = 174;
+		this.ySize = 198;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
 		super.initGui();

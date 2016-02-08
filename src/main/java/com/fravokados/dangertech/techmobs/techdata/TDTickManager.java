@@ -67,7 +67,6 @@ public class TDTickManager {
 		return Settings.TechScanning.MAX_SCANS_PER_TICK;
 	}
 
-	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void onServerTick(TickEvent.ServerTickEvent evt) {
 		//tick once

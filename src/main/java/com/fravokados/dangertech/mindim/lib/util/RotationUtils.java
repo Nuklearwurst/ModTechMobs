@@ -1,15 +1,21 @@
 package com.fravokados.dangertech.mindim.lib.util;
 
 import com.fravokados.dangertech.api.block.IFacingSix;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 /**
  * @author Nuklearwurst
  */
 public class RotationUtils {
+
+	public static EnumFacing getFacingFromEntity(World world, BlockPos pos, EntityLivingBase entity) {
+		return BlockPistonBase.getFacingFromEntity(world, pos, entity);
+	}
 
 	public static void updateFacing(IFacingSix te, EntityLivingBase player, BlockPos pos) {
 		//rotate block
@@ -18,22 +24,22 @@ public class RotationUtils {
 			int rotationSegment = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 			if (player.rotationPitch >= 65)
 			{
-				te.setFacing((byte)1);
+				te.setFacing(EnumFacing.UP);
 			}
 			else if (player.rotationPitch <= -65)
 			{
-				te.setFacing((byte)0);
+				te.setFacing(EnumFacing.DOWN);
 			}
 			else
 			{
 				switch (rotationSegment)
 				{
-					case 0: te.setFacing((byte) 2); break;
-					case 1: te.setFacing((byte) 5); break;
-					case 2: te.setFacing((byte) 3); break;
-					case 3: te.setFacing((byte) 4); break;
+					case 0: te.setFacing(EnumFacing.NORTH); break;
+					case 1: te.setFacing(EnumFacing.EAST); break;
+					case 2: te.setFacing(EnumFacing.SOUTH); break;
+					case 3: te.setFacing(EnumFacing.WEST); break;
 					default:
-						te.setFacing((byte) 0); break;
+						te.setFacing(EnumFacing.DOWN); break;
 				}
 			}
 		}

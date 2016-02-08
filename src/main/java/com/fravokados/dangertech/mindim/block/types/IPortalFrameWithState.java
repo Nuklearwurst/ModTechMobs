@@ -1,12 +1,10 @@
 package com.fravokados.dangertech.mindim.block.types;
 
-import net.minecraft.util.EnumFacing;
+import com.fravokados.dangertech.api.block.IFacingSix;
 
 /**
  * @author Nuklearwurst
  */
-public interface IPortalFrameWithState {
+public interface IPortalFrameWithState extends IFacingSix {
 	PortalFrameState getPortalFrameState();
-
-	EnumFacing getEnumFacing();
 }

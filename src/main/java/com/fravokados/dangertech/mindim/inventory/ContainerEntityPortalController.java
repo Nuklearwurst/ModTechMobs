@@ -1,6 +1,7 @@
 package com.fravokados.dangertech.mindim.inventory;
 
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
+import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.inventory.slot.SlotControllerDestinationCard;
 import com.fravokados.dangertech.mindim.inventory.slot.SlotEnergyFuel;
@@ -36,6 +37,8 @@ public class ContainerEntityPortalController extends Container implements IEleme
 	private int lastEnergyStored = 0;
 	private int lastMaxEnergyStored = 100000;
 	private int lastFlags = 0;
+	private EnergyTypes lastType = null;
+
 	private boolean nameChanged = false;
 
 
@@ -44,7 +47,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 		this.te = te;
 
 		this.addSlotToContainer(new SlotControllerDestinationCard(te, 0, 55, 80)); //destination card
-		this.addSlotToContainer(new SlotEnergyFuel(te, 1, 199, 80, te.getEnergyType())); //battery
+		this.addSlotToContainer(new SlotEnergyFuel(te, 1, 199, 80, te)); //battery
 		this.addSlotToContainer(new SlotControllerDestinationCard(te, 2, 14, 10)); //input destination card
 		this.addSlotToContainer(new SlotOutput(te, 3, 14, 68)); //output destination card
 
@@ -66,6 +69,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 		crafter.sendProgressBarUpdate(this, 0, te.getId());
 		crafter.sendProgressBarUpdate(this, 1, te.getState().ordinal());
 		crafter.sendProgressBarUpdate(this, 2, te.getLastError().ordinal());
+		crafter.sendProgressBarUpdate(this, 4, te.getEnergyType().getId());
 		if (crafter instanceof EntityPlayerMP) {
 			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) crafter);
 			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 1, te.getMaxEnergyStored()), (EntityPlayerMP) crafter);
@@ -98,6 +102,10 @@ public class ContainerEntityPortalController extends Container implements IEleme
 			if (this.lastFlags != te.getUpgradeTrackerFlags()) {
 				icrafting.sendProgressBarUpdate(this, 3, te.getUpgradeTrackerFlags());
 			}
+//			if(this.lastType != te.getEnergyType()) {
+//				icrafting.sendProgressBarUpdate(this, 4, te.getEnergyType().getId());
+//			}
+
 			if (nameChanged && icrafting instanceof EntityPlayerMP) {
 				ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomName() ? te.getDisplayName().getFormattedText() : ""), (EntityPlayerMP) icrafting);
 			}
@@ -107,6 +115,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 		this.lastEnergyStored = (int) te.getEnergyStored();
 		this.lastMaxEnergyStored = te.getMaxEnergyStored();
 		this.lastFlags = te.getUpgradeTrackerFlags();
+//		this.lastType = te.getEnergyType();
 		nameChanged = false;
 	}
 
@@ -126,6 +135,9 @@ public class ContainerEntityPortalController extends Container implements IEleme
 				break;
 			case 3:
 				this.te.setUpgradeTrackerFlags(value);
+				break;
+			case 4:
+				this.te.setEnergyType(EnergyTypes.getEnergyType(value));
 				break;
 		}
 	}

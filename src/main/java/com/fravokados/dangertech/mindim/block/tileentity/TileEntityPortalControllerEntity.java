@@ -13,6 +13,7 @@ import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
+import com.fravokados.dangertech.core.plugin.energy.IEnergyTypeAware;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.tileentity.energy.EnergyStorage;
 import com.fravokados.dangertech.mindim.block.types.IPortalFrameWithState;
@@ -54,7 +55,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author Nuklearwurst
  */
-public class TileEntityPortalControllerEntity extends TileEntity implements ISidedInventory, IBlockPlacedListener, IEntityPortalController, IFacingSix, IUpgradable, ITickable, IPortalFrameWithState {
+public class TileEntityPortalControllerEntity extends TileEntity
+		implements  ISidedInventory, IBlockPlacedListener, IEntityPortalController,
+					IFacingSix, IUpgradable, ITickable,
+					IPortalFrameWithState, IEnergyTypeAware {
 
 	/**
 	 * possible states of the controller
@@ -132,7 +136,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	/**
 	 * block facing
 	 */
-	private short facing = 0;
+	private EnumFacing facing = EnumFacing.NORTH;
 
 	/**
 	 * controller state
@@ -153,7 +157,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	/**
 	 * EnergyType of this block
 	 */
-	private EnergyTypes energyType = EnergyTypes.VANILLA; //TODO proper initialization of this value and support of different energy mods
+	private EnergyTypes energyType = EnergyTypes.INVALID; //TODO support of different energy mods
 	/**
 	 * Energy Storage
 	 */
@@ -306,8 +310,14 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 		this.id = id;
 	}
 
+	@Override
 	public EnergyTypes getEnergyType() {
 		return energyType;
+	}
+
+	@Override
+	public void setEnergyType(EnergyTypes energyType) {
+		this.energyType = energyType;
 	}
 
 	public void setName(String name) {
@@ -370,6 +380,8 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			id = ModMiningDimension.instance.portalManager.registerNewEntityPortal(new BlockPositionDim(this));
 		}
 		PortalConstructor.createPortalMultiBlock(world, pos);
+		//TODO proper EnergyTypes
+		setEnergyType(EnergyTypes.VANILLA);
 	}
 
 	/**
@@ -705,7 +717,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			name = nbt.getString("name");
 		}
 		id = nbt.getInteger("PortalID");
-		facing = nbt.getShort("facing");
+		facing = EnumFacing.getFront(nbt.getByte("facing"));
 		if (nbt.hasKey("metrics")) {
 			metrics = PortalMetrics.getMetricsFromNBT(nbt.getCompoundTag("metrics"));
 		}
@@ -727,7 +739,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			nbt.setString("name", name);
 		}
 		nbt.setInteger("PortalID", id);
-		nbt.setShort("facing", facing);
+		nbt.setByte("facing", (byte) facing.getIndex());
 		if (metrics != null) {
 			NBTTagCompound metricsTag = new NBTTagCompound();
 			metrics.writeToNBT(metricsTag);
@@ -823,8 +835,8 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	}
 
 	@Override
-	public void setFacing(short b) {
-		facing = b;
+	public void setFacing(EnumFacing f) {
+		this.facing = f;
 		this.worldObj.markBlockForUpdate(getPos());
 	}
 
@@ -834,13 +846,8 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 //	}
 
 	@Override
-	public short getFacing() {
+	public EnumFacing getFacing() {
 		return facing;
-	}
-
-	@Override
-	public EnumFacing getEnumFacing() {
-		return EnumFacing.getFront(facing);
 	}
 
 	//	@Override
@@ -869,7 +876,7 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setShort("facing", facing);
+		nbt.setByte("facing", (byte) facing.getIndex());
 		nbt.setInteger("state", state.ordinal());
 		if(metrics != null) {
 			nbt.setByte("portalFacing", (byte) metrics.front.ordinal());
@@ -906,8 +913,8 @@ public class TileEntityPortalControllerEntity extends TileEntity implements ISid
 			}
 
 			if (nbt.hasKey("facing")) {
-				int oldFacing = facing;
-				facing = nbt.getShort("facing");
+				EnumFacing oldFacing = facing;
+				facing = EnumFacing.getFront(nbt.getByte("facing"));
 				State oldState = state;
 				setState(State.values()[nbt.getInteger("state")]);
 				if (oldFacing != facing || oldState != state) {

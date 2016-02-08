@@ -17,7 +17,7 @@ public abstract class ItemMDMultiType extends ItemMD {
 	}
 
 	@Override
-	public abstract void getSubItems(Item item, CreativeTabs tabs, List list);
+	public abstract void getSubItems(Item item, CreativeTabs tabs, List<ItemStack> list);
 
 	@Override
 	public abstract void registerModels();

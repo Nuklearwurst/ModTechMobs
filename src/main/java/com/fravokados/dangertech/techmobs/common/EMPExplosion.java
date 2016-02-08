@@ -47,7 +47,6 @@ public class EMPExplosion {
 		msg.radius = radius;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void doExplosion() {
 		for (int posX = 1 - radius; posX < radius; posX++) {
 			for (int posY = 1 - radius; posY < radius; posY++) {

@@ -9,13 +9,14 @@ public enum EnergyTypes {
 	IC2, VANILLA, INVALID;
 
 	public static final EnergyTypes[] validTypes = {IC2, VANILLA};
+	public static final String ENERGY_TYPE = "EnergyType";
 
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("EnergyType", ordinal());
+		nbt.setInteger(ENERGY_TYPE, ordinal());
 	}
 
 	public static EnergyTypes readFromNBT(NBTTagCompound nbt) {
-		int value = nbt.getInteger("EnergyType");
+		int value = nbt.getInteger(ENERGY_TYPE);
 		return getEnergyType(value);
 	}
 
@@ -24,5 +25,13 @@ public enum EnergyTypes {
 			return INVALID;
 		}
 		return validTypes[value];
+	}
+
+	public int getId() {
+		return ordinal();
+	}
+
+	public static String getNBTKey() {
+		return ENERGY_TYPE;
 	}
 }

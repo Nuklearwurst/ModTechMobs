@@ -25,9 +25,8 @@ public class EntityUtils {
 	 * @param task     the task to add {@link EntityAITasks#addTask(int, EntityAIBase)}
 	 * @return true if the task was added
 	 */
-	@SuppressWarnings("unchecked")
 	public static boolean addAITask(EntityLiving entity, int priority, EntityAIBase task) {
-		for (EntityAITasks.EntityAITaskEntry entry : (List<EntityAITasks.EntityAITaskEntry>) entity.tasks.taskEntries) {
+		for (EntityAITasks.EntityAITaskEntry entry : entity.tasks.taskEntries) {
 			if (entry.action.getClass() == task.getClass())
 				return false;
 		}
@@ -35,7 +34,6 @@ public class EntityUtils {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Entity rayTraceEntity(EntityPlayer player) {
 		float reach = 5F;
 		Vec3 vecPos = player.getPositionVector();
@@ -43,10 +41,10 @@ public class EntityUtils {
 		Vec3 vecEnd = vecPos.addVector(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach);
 		Entity pointedEntity = null;
 		final float expand = 1.0F;
-		List list = player.getEntityWorld().getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach).expand((double) expand, (double) expand, (double) expand));
+		List<Entity> list = player.getEntityWorld().getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach).expand((double) expand, (double) expand, (double) expand));
 		double lastDistance = reach;
 
-		for (Entity entity : (List<Entity>)list) {
+		for (Entity entity : list) {
 			float collisionBorderSize = entity.getCollisionBorderSize();
 			AxisAlignedBB bounds = entity.getEntityBoundingBox().expand((double) collisionBorderSize, (double) collisionBorderSize, (double) collisionBorderSize);
 			MovingObjectPosition movingobjectposition = bounds.calculateIntercept(vecPos, vecEnd);

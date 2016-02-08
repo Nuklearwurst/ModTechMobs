@@ -3,6 +3,7 @@ package com.fravokados.dangertech.mindim.block;
 import com.fravokados.dangertech.api.block.IBlockPlacedListener;
 import com.fravokados.dangertech.api.block.IFacingSix;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
+import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalFrame;
@@ -58,7 +59,7 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 		if(te == null || !(te instanceof IPortalFrameWithState)) {
 			return state.withProperty(STATE_PROPERTY, PortalFrameState.DISABLED).withProperty(FACING_PROPERTY, EnumFacing.UP);
 		}
-		return state.withProperty(STATE_PROPERTY, ((IPortalFrameWithState) te).getPortalFrameState()).withProperty(FACING_PROPERTY, ((IPortalFrameWithState) te).getEnumFacing());
+		return state.withProperty(STATE_PROPERTY, ((IPortalFrameWithState) te).getPortalFrameState()).withProperty(FACING_PROPERTY, ((IPortalFrameWithState) te).getFacing());
 	}
 
 	@Override
@@ -101,11 +102,10 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 		return state.getValue(TYPE_PROPERTY).ordinal();
 	}
 
-	@SuppressWarnings(value = {"unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs creativeTab, List list) {
+	public void getSubBlocks(Item item, CreativeTabs creativeTab, List<ItemStack> list) {
 		list.add(new ItemStack(item, 1, 0));
-		list.add(new ItemStack(item, 1, 1));
+		EnergyManager.createItemVariantsForEnergyTypes(list, item, 1);
 	}
 
 	@Override
@@ -125,7 +125,8 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 		TileEntity te = world.getTileEntity(pos);
 		if(te != null) {
 			if(te instanceof IFacingSix) {
-				RotationUtils.updateFacing((IFacingSix) te, placer, pos);
+//				RotationUtils.updateFacing((IFacingSix) te, placer, pos);
+				((IFacingSix) te).setFacing(RotationUtils.getFacingFromEntity(world, pos, placer));
 			}
 			if(!world.isRemote) {
 				if (te instanceof IBlockPlacedListener) {
