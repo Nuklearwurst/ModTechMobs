@@ -43,7 +43,6 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		super(world);
 		this.preventEntitySpawning = true;
 		this.setSize(1F, 3.0F);
-//		this.yOffset = 0.5F;
 		this.stepHeight = 1.0F;
 	}
 
@@ -54,6 +53,10 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		prevPosX = x;
 		prevPosY = y;
 		prevPosZ = z;
+	}
+
+	public float getRenderYOffset() {
+		return 0.5F;
 	}
 
 	public void addCapturedDrops(List<EntityItem> drops) {
@@ -68,15 +71,14 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	@Override
+	public double getYOffset() {
+		return 0.5F;
+	}
+
+	@Override
 	protected boolean canTriggerWalking() {
 		return false;
 	}
-
-
-//	@Override
-//	public float getShadowSize() {
-//		return 0.5F;
-//	}
 
 	@Override
 	protected void entityInit() {
@@ -86,6 +88,11 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity) {
 		return entity.canBePushed() ? entity.getEntityBoundingBox() : null;
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox() {
+		return getEntityBoundingBox();
 	}
 
 	protected void collideWithNearbyEntities() {
@@ -290,7 +297,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
-		while(slot <= mainInventory.size()) {
+		while(slot >= mainInventory.size()) {
 			mainInventory.add(null);
 		}
 		mainInventory.set(slot, stack);

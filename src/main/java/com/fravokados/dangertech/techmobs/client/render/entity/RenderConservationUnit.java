@@ -35,7 +35,7 @@ public class RenderConservationUnit extends Render<EntityConservationUnit> {
 	public void doRender(EntityConservationUnit entity, double x, double y, double z, float par8, float rotate) {
 		super.doRender(entity, x, y, z, par8, rotate);
 		GL11.glPushMatrix();
-		float yOffset = MathHelper.sin(((float) entity.age + rotate) / 10.0F + entity.hoverStart) * + 0.2F;
+		float yOffset = MathHelper.sin(((float) entity.age + rotate) / 10.0F + entity.hoverStart) * 0.2F + entity.getRenderYOffset();
 		float rotation = (((float) entity.age + rotate) / 100.0F + entity.hoverStart) * (180F / (float) Math.PI);
 		GL11.glTranslatef((float) x, (float) y + 1.45F + yOffset, (float) z);
 		GL11.glRotatef(rotation, 0.0F, 1.0F, 0.0F);
