@@ -5,6 +5,7 @@ import com.fravokados.dangertech.techmobs.command.CommandTechData;
 import com.fravokados.dangertech.techmobs.command.CommandTechMobs;
 import com.fravokados.dangertech.techmobs.command.CommandTechPlayer;
 import com.fravokados.dangertech.techmobs.common.CommonProxy;
+import com.fravokados.dangertech.techmobs.common.SleepingManager;
 import com.fravokados.dangertech.techmobs.common.handler.GuiHandler;
 import com.fravokados.dangertech.techmobs.common.init.ModBlocks;
 import com.fravokados.dangertech.techmobs.common.init.ModEntities;
@@ -31,7 +32,12 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY, canBeDeactivated=false)
+@Mod(modid = Reference.MOD_ID,
+		name = Reference.MOD_NAME,
+		version = Reference.VERSION,
+		guiFactory = Reference.GUI_FACTORY,
+		acceptedMinecraftVersions = Reference.ACCEPTABLE_MC_VERSIONS,
+		dependencies = Reference.DEPENDENCIES)
 public class ModTechMobs {
 
 	@Mod.Instance(value = Reference.MOD_ID)
@@ -163,16 +169,17 @@ public class ModTechMobs {
 	}
 	
 	@Mod.EventHandler
-	public void disableMod(FMLModDisabledEvent evt) {
-		LogHelperTM.info("Disabled " + Reference.MOD_NAME + " version: " + Reference.VERSION + "!");
-	}
-	
-	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent evt) {
 		//register events
 		evt.registerServerCommand(new CommandTechMobs());
 		evt.registerServerCommand(new CommandTechData());
 		evt.registerServerCommand(new CommandTechPlayer());
+	}
+
+	@Mod.EventHandler
+	public void serverStopping(FMLServerStoppingEvent evt) {
+		//make sure sleeping data does not get carried over
+		SleepingManager.clear();
 	}
 
 }

@@ -51,6 +51,11 @@ public class TDTickManager {
 		scanningTasks = new ArrayList<ChunkLocation>();
 	}
 
+	/**
+	 * Calculates how many chunks should get scanned<br></br>
+	 * depends on the size of the current scanning queue
+	 * @return the amount of scans that are to be done in the next tick
+	 */
 	private int getScansToPerform() {
 		if (scanningTasks.isEmpty()) {
 			return 0;

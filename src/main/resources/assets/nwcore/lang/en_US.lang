@@ -3,3 +3,7 @@ itemGroup.nwcore=Dangerous Technology
 
 #Items
 item.nwcore:upgradeTool.name=Upgrade Tool
+
+#EnergyTypes
+tooltip.item.energyType.vanilla=Solid Fuel
+tooltip.item.energyType.ic2=EU Electricity

@@ -58,7 +58,7 @@ public class GeneralUtils {
 
 	/**
 	 * Parses an integer from the current .lang file
-	 * TODO: should this throw an NumberFormatExceeption instead of providing a default value?
+	 * TODO: should this throw an NumberFormatException instead of providing a default value?
 	 * @param key the unlocalized key
 	 * @param def default if number could not be parsed
 	 * @return number

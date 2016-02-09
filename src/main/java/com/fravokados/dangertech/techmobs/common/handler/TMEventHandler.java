@@ -27,6 +27,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
+import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -75,7 +76,12 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public void onPlayerWakeUp(PlayerWakeUpEvent evt) {
-		SleepingManager.onPlayerWakeUp(evt.entityPlayer);
+		SleepingManager.onPlayerWakeUp(evt);
+	}
+
+	@SubscribeEvent
+	public void onPlayerSetSpawn(PlayerSetSpawnEvent evt) {
+		SleepingManager.onPlayerSetSpawn(evt);
 	}
 
 	@SubscribeEvent

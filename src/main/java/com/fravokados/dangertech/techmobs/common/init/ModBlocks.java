@@ -1,6 +1,7 @@
 package com.fravokados.dangertech.techmobs.common.init;
 
 import com.fravokados.dangertech.core.ModNwCore;
+import com.fravokados.dangertech.techmobs.block.BlockCot;
 import com.fravokados.dangertech.techmobs.block.BlockCreativeTechnology;
 import com.fravokados.dangertech.techmobs.block.BlockTM;
 import com.fravokados.dangertech.techmobs.block.tileentity.TileEntityCreativeTechnology;
@@ -34,7 +35,7 @@ public class ModBlocks {
 		////////////////////
 		// General Blocks //
 		////////////////////
-//		GameRegistry.registerBlock(new BlockCot());
+		ModNwCore.proxy.registerBlock(new BlockCot());
 
 		//////////////////
 		// Debug Blocks //

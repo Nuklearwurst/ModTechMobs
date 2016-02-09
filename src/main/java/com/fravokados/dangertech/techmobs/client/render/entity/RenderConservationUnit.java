@@ -16,19 +16,18 @@ import org.lwjgl.opengl.GL11;
  */
 @SideOnly(Side.CLIENT)
 public class RenderConservationUnit extends Render<EntityConservationUnit> {
-	private static final ResourceLocation RESOURCE_LOCATION = Textures.getResourceLocation("textures/entity/ConservationUnit.png");
 
 	protected ModelConservationUnit modelConservationUnit;
 
 	public RenderConservationUnit(RenderManager renderManager) {
 		super(renderManager);
 		this.modelConservationUnit = new ModelConservationUnit();
-		this.shadowSize = 0.5F;
+		this.shadowSize = 0.7F;
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityConservationUnit par1Entity) {
-		return RESOURCE_LOCATION;
+		return Textures.ENTITY_CONSERVATION_UNIT;
 	}
 
 	@Override

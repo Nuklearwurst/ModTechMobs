@@ -62,6 +62,10 @@ item.techmobs:upgradeTool.name=Upgrade Tool
 item.techmobs:tdAnalyzer.name=TechData Analyzer
 item.techmobs:quantumSword.name=Quantum Sword
 item.techmobs:conservationUnit.name=Conservation Unit
+item.techmobs:item_cot.name=Cot
+item.techmobs:tdDebugger.name=TM Debug Tool
+
+item.techmobs:monsterDrop_common.name=Weird Flesh
 
 #Analyzer Modes
 item.tdAnalyzer.mode.block=Block
@@ -71,6 +75,7 @@ item.tdAnalyzer.mode.chunk=Area
 
 #Blocks
 tile.techmobs:gateExtender.name=Gate Extender
+tile.techmobs:creativeTechnology.name=Creative Technology Block
 
 #Entities
 entity.cyber_zombie.name=Cyber Zombie

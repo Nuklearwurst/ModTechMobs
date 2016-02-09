@@ -1,6 +1,15 @@
 package com.fravokados.dangertech.techmobs.item;
 
+import com.fravokados.dangertech.techmobs.common.init.ModBlocks;
 import com.fravokados.dangertech.techmobs.lib.Strings;
+import net.minecraft.block.BlockBed;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
 /**
  * @author Nuklearwurst
@@ -11,43 +20,39 @@ public class ItemCot extends ItemTM {
 		super(Strings.Item.COT);
 	}
 
-	/*
+
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos blockPosFeet, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (world.isRemote) {
 			return true;
 		} else if (side != EnumFacing.UP) {
 			return false;
 		} else {
-			y++;
-			int rotation = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			byte offsetX = 0;
-			byte offsetZ = 0;
+			boolean replaceableClicked = world.getBlockState(blockPosFeet).getBlock().isReplaceable(world, blockPosFeet);
 
-			switch (rotation) {
-				case 0:
-					offsetZ = 1;
-					break;
-				case 1:
-					offsetX = -1;
-					break;
-				case 2:
-					offsetZ = -1;
-					break;
-				case 3:
-					offsetX = 1;
-					break;
+			if (!replaceableClicked) {
+				blockPosFeet = blockPosFeet.up();
 			}
 
-			if (player.canPlayerEdit(pos, side, stack) && player.canPlayerEdit(x + offsetX, y, z + offsetZ, side, stack)) {
-				if (world.isAirBlock(pos) && world.isAirBlock(x + offsetX, y, z + offsetZ) && World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) && World.doesBlockHaveSolidTopSurface(world, x + offsetX, y - 1, z + offsetZ)) {
-					world.setBlockState(pos, ModBlocks.block_cot, rotation, 3);
+			int fourWayRotationInt = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			EnumFacing rotation = EnumFacing.getHorizontal(fourWayRotationInt);
+			BlockPos blockPosHead = blockPosFeet.offset(rotation);
 
-					if (world.getBlockState(pos).getBlock() == ModBlocks.block_cot) {
-						world.setBlockState(x + offsetX, y, z + offsetZ, ModBlocks.block_cot, rotation + 8, 3);
+			if (player.canPlayerEdit(blockPosFeet, side, stack) && player.canPlayerEdit(blockPosHead, side, stack)) {
+				boolean replaceableHead = world.getBlockState(blockPosHead).getBlock().isReplaceable(world, blockPosHead);
+				boolean isFeetBlockFree = replaceableClicked || world.isAirBlock(blockPosFeet);
+				boolean isHeadBlockFree = replaceableHead || world.isAirBlock(blockPosHead);
+
+				if (isFeetBlockFree && isHeadBlockFree && World.doesBlockHaveSolidTopSurface(world, blockPosFeet.down()) && World.doesBlockHaveSolidTopSurface(world, blockPosHead.down())) {
+					//noinspection ConstantConditions
+					IBlockState blockStateFoot = ModBlocks.block_cot.getDefaultState().withProperty(BlockBed.OCCUPIED, false).withProperty(BlockBed.FACING, rotation).withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
+
+					if (world.setBlockState(blockPosFeet, blockStateFoot, 3)) {
+						IBlockState blockStateHead = blockStateFoot.withProperty(BlockBed.PART, BlockBed.EnumPartType.HEAD);
+						world.setBlockState(blockPosHead, blockStateHead, 3);
 					}
 
-					stack.stackSize--;
+					--stack.stackSize;
 					return true;
 				} else {
 					return false;
@@ -57,5 +62,5 @@ public class ItemCot extends ItemTM {
 			}
 		}
 	}
-	*/
+
 }

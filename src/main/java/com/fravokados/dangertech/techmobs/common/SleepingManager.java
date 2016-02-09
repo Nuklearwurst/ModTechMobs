@@ -1,10 +1,12 @@
 package com.fravokados.dangertech.techmobs.common;
 
+import com.fravokados.dangertech.techmobs.common.init.ModBlocks;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 
 /**
  * tracks players sleeping in cots to restore their spawn points
@@ -12,24 +14,7 @@ import java.util.Map;
  */
 public class SleepingManager {
 
-	/**
-	 * helper class to store player spawn and sleep info
-	 */
-	private static class PlayerInfo {
-		public BlockPos loc;
-		public boolean forced;
-		public boolean wakeUp = false;
-
-		public PlayerInfo(BlockPos loc, boolean b) {
-			this.loc = loc;
-			this.forced = b;
-		}
-	}
-
-	/**
-	 * tracked players list
-	 */
-	private static Map<EntityPlayer, PlayerInfo> sleepingPlayers = new HashMap<EntityPlayer, PlayerInfo>();
+	private static HashSet<EntityPlayer> sleepingPlayers = new HashSet<EntityPlayer>();
 
 	/**
 	 * removes a player from the tracked players list
@@ -38,54 +23,40 @@ public class SleepingManager {
 		sleepingPlayers.remove(player);
 	}
 
-	/**
-	 * resets player spawn point and removes him from the tracked players list,
-	 * only gets executed the first tick after wakeup
-	 * @param player the player to reset
-	 */
-	public static void removeAndResetPlayerOnWakeup(EntityPlayer player) {
-		if(isWakeUpPhase(player)) {
-			removeAndResetPlayer(player);
-		}
-	}
-
-	/**
-	 * resets player spawn point and removes him from the tracked players list
-	 * @param player the player to reset
-	 */
-	public static void removeAndResetPlayer(EntityPlayer player) {
-		if(!player.worldObj.isRemote && sleepingPlayers.containsKey(player)) {
-			player.setSpawnChunk(sleepingPlayers.get(player).loc, sleepingPlayers.get(player).forced, player.dimension);
-			removePlayer(player);
-		}
-	}
 
 	/**
 	 * adds a player to the tracked players list (and save his spawn coordinates)
 	 * @param player the player to save
 	 */
 	public static void addPlayer(EntityPlayer player) {
-		if(!player.worldObj.isRemote) {
-			sleepingPlayers.put(player, new PlayerInfo(player.getBedLocation(player.dimension), player.isSpawnForced(player.dimension)));
-		}
-	}
-
-	/**
-	 * checks whether we are in the wakeup tick
-	 * @param player player to check
-	 * @return true if the player just woke up
-	 */
-	public static boolean isWakeUpPhase(EntityPlayer player) {
-		return sleepingPlayers.containsKey(player) && sleepingPlayers.get(player).wakeUp;
+		sleepingPlayers.add(player);
 	}
 
 	/**
 	 * wakeup event
 	 */
-	public static void onPlayerWakeUp(EntityPlayer player) {
-		if(sleepingPlayers.containsKey(player)) {
-			sleepingPlayers.get(player).wakeUp = true;
+	public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
+		if(sleepingPlayers.contains(event.entityPlayer)) {
+			if(!event.setSpawn) {
+				sleepingPlayers.remove(event.entityPlayer);
+				return;
+			}
+			IBlockState iblockstate =  event.entityPlayer.worldObj.getBlockState(event.entityPlayer.playerLocation);
+			if(iblockstate.getBlock() != ModBlocks.block_cot) {
+				sleepingPlayers.remove(event.entityPlayer);
+			}
 		}
+	}
+
+	/**
+	 * @return if setting spawnpoint should get cancelled
+	 */
+	public static boolean onPlayerSetSpawn(PlayerSetSpawnEvent event) {
+		if(!event.forced && sleepingPlayers.contains(event.entityPlayer)) {
+			removePlayer(event.entityPlayer);
+			return true;
+		}
+		return false;
 	}
 
 	/**

@@ -53,7 +53,7 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 		if(nbt.hasKey(EnergyTypes.getNBTKey())) {
 			EnergyTypes types = EnergyTypes.readFromNBT(nbt);
 			//TODO translation
-			list.add(types.toString());
+			list.add(Strings.translate(types.getUnlocalizedName()));
 		}
 		if(nbt.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_NAME)) {
 			list.add(Strings.translate(Strings.Tooltip.NAME) + " " + nbt.getString(NBTKeys.DESTINATION_CARD_PORTAL_NAME));
