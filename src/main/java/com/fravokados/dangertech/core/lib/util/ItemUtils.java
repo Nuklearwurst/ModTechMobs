@@ -5,6 +5,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Nuklearwurst
@@ -21,6 +24,7 @@ public class ItemUtils {
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
+		//noinspection ConstantConditions
 		return stack.getTagCompound();
 	}
 
@@ -30,7 +34,7 @@ public class ItemUtils {
 	 * @param inventory the inventory that should be saved
 	 * @param stack     the stack that should hold the information
 	 */
-	public static void writeUpgradesToItemStack(IUpgradeInventory inventory, ItemStack stack) {
+	public static void writeUpgradesToItemStack(@Nullable IUpgradeInventory inventory, ItemStack stack) {
 		if (inventory == null) {
 			return;
 		}
@@ -53,7 +57,7 @@ public class ItemUtils {
 	public static void readUpgradesFromItemStack(IUpgradeInventory inventory, ItemStack stack) {
 		NBTTagCompound nbt = getNBTTagCompound(stack);
 		if (nbt.hasKey("Upgrades")) {
-			NBTTagList nbttaglist = nbt.getTagList("Upgrades", 10); //10 is compound type
+			NBTTagList nbttaglist = nbt.getTagList("Upgrades", Constants.NBT.TAG_COMPOUND);
 			readInventoryContentsFromNBT(inventory, nbttaglist);
 		}
 	}
@@ -83,6 +87,7 @@ public class ItemUtils {
 			if (inventory.getStackInSlot(i) != null) {
 				NBTTagCompound tag = new NBTTagCompound();
 				tag.setByte("Slot", (byte) i);
+				//noinspection ConstantConditions
 				inventory.getStackInSlot(i).writeToNBT(tag);
 				nbtTagList.appendTag(tag);
 			}
@@ -93,15 +98,16 @@ public class ItemUtils {
 	 * a default implementation for decrStackSize of IInventory
 	 */
 	public static ItemStack decrStackSize(IInventory inventory, int slot, int amount) {
-		if (inventory.getStackInSlot(slot) != null) {
+		ItemStack stackInSlot = inventory.getStackInSlot(slot);
+		if (stackInSlot != null) {
 			ItemStack itemstack;
-			if (inventory.getStackInSlot(slot).stackSize <= amount) {
-				itemstack = inventory.getStackInSlot(slot);
+			if (stackInSlot.stackSize <= amount) {
+				itemstack = stackInSlot;
 				inventory.setInventorySlotContents(slot, null);
 				return itemstack;
 			} else {
-				itemstack = inventory.getStackInSlot(slot).splitStack(amount);
-				if (inventory.getStackInSlot(slot).stackSize == 0) {
+				itemstack = stackInSlot.splitStack(amount);
+				if (stackInSlot.stackSize == 0) {
 					inventory.setInventorySlotContents(slot, null);
 				}
 				return itemstack;

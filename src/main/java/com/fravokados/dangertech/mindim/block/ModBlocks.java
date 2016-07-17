@@ -4,7 +4,6 @@ import com.fravokados.dangertech.core.ModNwCore;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortal;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalFrame;
-import com.fravokados.dangertech.mindim.item.ItemBlockPortalFrame;
 import com.fravokados.dangertech.mindim.lib.Reference;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -19,7 +18,7 @@ public class ModBlocks {
 	public static final BlockMD blockPortalBlock = null;
 
 	public static void registerBlocks() {
-		ModNwCore.proxy.registerBlock(new BlockPortalFrame(), ItemBlockPortalFrame.class);
+		ModNwCore.proxy.registerBlock(new BlockPortalFrame());
 		ModNwCore.proxy.registerBlock(new BlockPortalMinDim());
 	}
 

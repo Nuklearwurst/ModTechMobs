@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.api.portal;
 
 import com.fravokados.dangertech.api.block.IFacingSix;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * @author Nuklearwurst

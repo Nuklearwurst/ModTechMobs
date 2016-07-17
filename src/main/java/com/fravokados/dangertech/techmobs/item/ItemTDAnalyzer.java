@@ -13,9 +13,12 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 /**
@@ -32,51 +35,54 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (getItemMode(stack) == Mode.BLOCK) {
 			if (!world.isRemote) {
 				TileEntity te = world.getTileEntity(pos);
 				if (te != null) {
-					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
+					player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
 				} else {
-					player.addChatMessage(new ChatComponentTranslation(Strings.Chat.analyzerTileEntityNotFound));
+					player.addChatMessage(new TextComponentTranslation(Strings.Chat.analyzerTileEntityNotFound));
 				}
 			}
-			return true;
+			return EnumActionResult.SUCCESS;
 		}
-		return false;
+		return EnumActionResult.PASS;
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote && player.isSneaking()) {
 			int mode = getItemModeInt(stack);
 			mode = (mode + 1) % Mode.values().length;
 			setMode(stack, mode);
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		} else {
 			if (!world.isRemote && getItemMode(stack) == Mode.CHUNK) {
-				player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerChunk, TDManager.getScoutedTechLevel(player.getEntityWorld().provider.getDimensionId(), WorldUtils.convertToChunkCoord(player.getPosition()))));
+				player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerChunk, TDManager.getScoutedTechLevel(player.getEntityWorld().provider.getDimension(), WorldUtils.convertToChunkCoord(player.getPosition()))));
 			} else if (world.isRemote && getItemMode(stack) == Mode.ITEM) {
 				Entity entity = EntityUtils.rayTraceEntity(player);
 				if (entity != null && entity instanceof EntityItem) {
 					ItemStack itemStack = ((EntityItem) entity).getEntityItem();
-					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerItem, TDValues.getInstance().getTechDataForItem(itemStack)));
+					player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerItem, TDValues.getInstance().getTechDataForItem(itemStack)));
 				}
 			} else if (!world.isRemote && getItemMode(stack) == Mode.PLAYER) {
-				player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayer, player.getName(), TDManager.getPlayerScoutedTechLevel(player)));
+				player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, player.getName(), TDManager.getPlayerScoutedTechLevel(player)));
+			} else {
+				return new ActionResult<>(EnumActionResult.PASS, stack);
 			}
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		}
-		return stack;
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity) {
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity, EnumHand hand) {
 		if (getItemMode(stack) == Mode.PLAYER) {
 			if (!player.getEntityWorld().isRemote) {
 				if (entity instanceof EntityPlayer) {
-					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayer, entity.getName(), TDManager.getPlayerScoutedTechLevel((EntityPlayer) entity)));
+					player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, entity.getName(), TDManager.getPlayerScoutedTechLevel((EntityPlayer) entity)));
 				} else {
-					player.addChatComponentMessage(new ChatComponentTranslation(Strings.Chat.analyzerPlayerNoPlayer));
+					player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayerNoPlayer));
 				}
 			}
 			return true;

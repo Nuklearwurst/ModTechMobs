@@ -10,6 +10,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Nuklearwurst
  */
@@ -45,6 +47,7 @@ public class MessageEMP implements IMessage, IMessageHandler<MessageEMP, IMessag
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	@Nullable
 	public IMessage onMessage(MessageEMP message, MessageContext ctx) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		EMPExplosion emp = new EMPExplosion(player.getEntityWorld(), message.x,message.y, message.z, message.strength, message.radius);

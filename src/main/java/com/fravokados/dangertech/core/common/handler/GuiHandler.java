@@ -7,9 +7,11 @@ import com.fravokados.dangertech.core.lib.GUIIDs;
 import com.fravokados.dangertech.core.lib.util.LogHelperCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Nuklearwurst
@@ -17,6 +19,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 public class GuiHandler implements IGuiHandler {
 
 	@Override
+	@Nullable
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		switch (ID) {
@@ -26,7 +29,7 @@ public class GuiHandler implements IGuiHandler {
 				if(te instanceof IUpgradable) {
 					return new ContainerUpgradeTool(player.inventory, (IUpgradable) te);
 				} else {
-					LogHelperCore.error("Tried opening upgrade gui on not upgradable tile!\nPlayer: " + player.toString() + "Tile: [" + world.provider.getDimensionId() + ": " + x + ", " + y + ", " + z + "]");
+					LogHelperCore.error("Tried opening upgrade gui on not upgradable tile!\nPlayer: " + player.toString() + "Tile: [" + world.provider.getDimension() + ": " + x + ", " + y + ", " + z + "]");
 					return null;
 				}
 			}
@@ -35,6 +38,7 @@ public class GuiHandler implements IGuiHandler {
 	}
 
 	@Override
+	@Nullable
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		switch (ID) {
@@ -44,7 +48,7 @@ public class GuiHandler implements IGuiHandler {
 				if(te instanceof IUpgradable) {
 					return new GuiUpgradeTool(player.inventory, (IUpgradable) te);
 				} else {
-					LogHelperCore.error("Tried opening upgrade gui on not upgradable tile!\nPlayer: " + player.toString() + "Tile: [" + world.provider.getDimensionId() + ": " + x + ", " + y + ", " + z + "]");
+					LogHelperCore.error("Tried opening upgrade gui on not upgradable tile!\nPlayer: " + player.toString() + "Tile: [" + world.provider.getDimension() + ": " + x + ", " + y + ", " + z + "]");
 					return null;
 				}
 			}

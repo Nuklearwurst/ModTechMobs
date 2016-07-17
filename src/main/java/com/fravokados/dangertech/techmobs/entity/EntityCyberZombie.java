@@ -25,7 +25,7 @@ public class EntityCyberZombie extends EntityZombie {
 	
 	@Override
 	protected Item getDropItem() {
-		return Items.rotten_flesh;
+		return Items.ROTTEN_FLESH;
 	}
 	
 	@Override
@@ -40,9 +40,9 @@ public class EntityCyberZombie extends EntityZombie {
 	public boolean attackEntityAsMob(Entity entity) {
 		if(entity instanceof EntityPlayer) {
 			int data = TDManager.getPlayerScoutedTechLevel((EntityPlayer) entity);
-			double damage = this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getBaseValue();
+			double damage = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue();
 			double modifier = data / TechDataStorage.getInstance().getDangerousPlayerLevel();
-			this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(0.5 + damage * modifier);
+			this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5 + damage * modifier);
 		}
 		return super.attackEntityAsMob(entity);
 	}

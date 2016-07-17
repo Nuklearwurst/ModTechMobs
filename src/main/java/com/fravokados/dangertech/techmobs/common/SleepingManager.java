@@ -36,14 +36,15 @@ public class SleepingManager {
 	 * wakeup event
 	 */
 	public static void onPlayerWakeUp(PlayerWakeUpEvent event) {
-		if(sleepingPlayers.contains(event.entityPlayer)) {
-			if(!event.setSpawn) {
-				sleepingPlayers.remove(event.entityPlayer);
+		if(sleepingPlayers.contains(event.getEntityPlayer())) {
+			if(!event.shouldSetSpawn()) {
+				sleepingPlayers.remove(event.getEntityPlayer());
 				return;
 			}
-			IBlockState iblockstate =  event.entityPlayer.worldObj.getBlockState(event.entityPlayer.playerLocation);
+			IBlockState iblockstate =  event.getEntityPlayer().worldObj.getBlockState(event.getEntityPlayer().playerLocation);
+			//noinspection ConstantConditions
 			if(iblockstate.getBlock() != ModBlocks.block_cot) {
-				sleepingPlayers.remove(event.entityPlayer);
+				sleepingPlayers.remove(event.getEntityPlayer());
 			}
 		}
 	}
@@ -52,8 +53,8 @@ public class SleepingManager {
 	 * @return if setting spawnpoint should get cancelled
 	 */
 	public static boolean onPlayerSetSpawn(PlayerSetSpawnEvent event) {
-		if(!event.forced && sleepingPlayers.contains(event.entityPlayer)) {
-			removePlayer(event.entityPlayer);
+		if(!event.isForced() && sleepingPlayers.contains(event.getEntityPlayer())) {
+			removePlayer(event.getEntityPlayer());
 			return true;
 		}
 		return false;

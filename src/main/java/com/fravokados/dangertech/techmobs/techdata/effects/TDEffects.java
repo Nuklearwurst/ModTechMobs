@@ -21,8 +21,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -92,6 +92,7 @@ public class TDEffects implements TDEffectRegistry {
 	/**
 	 * used to get a List containing all MobEffects that are applicable for the given Entity
 	 */
+	@Override
 	public List<TDMobEffect> getUsableMobEffects(int techData, EntityLivingBase entityLiving) {
 		List<TDMobEffect> out = new ArrayList<TDMobEffect>();
 		for(TDMobEffect eff : mobEffects) {
@@ -135,12 +136,13 @@ public class TDEffects implements TDEffectRegistry {
 	 */
 	public static void init() {
 		getInstance().addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
-				new ItemStack(Items.diamond_sword),
-				new ItemStack(Items.diamond_helmet),
-				new ItemStack(Items.diamond_chestplate),
-				new ItemStack(Items.diamond_leggings),
-				new ItemStack(Items.diamond_boots)
-		}, false, false, new int[]{400, 100, 400, 200, 200}).setDoesArmorDrop(false));
+				new ItemStack(Items.DIAMOND_SWORD),
+				new ItemStack(Items.SHIELD),
+				new ItemStack(Items.DIAMOND_HELMET),
+				new ItemStack(Items.DIAMOND_CHESTPLATE),
+				new ItemStack(Items.DIAMOND_LEGGINGS),
+				new ItemStack(Items.DIAMOND_BOOTS)
+		}, false, false, new int[]{400, 50, 100, 400, 200, 200}).setDoesArmorDrop(false));
 		getInstance().addMobEffect(new TDMobEffectChargedCreeper());
 		getInstance().addMobEffect(new TDMobEffectPotion(300, 5, 1500, 1));
 		getInstance().addMobEffect(new TDMobEffectPotion(100, 8, 1500, 1));
@@ -152,13 +154,13 @@ public class TDEffects implements TDEffectRegistry {
 
 		getInstance().addPlayerEffect(new TDPlayerEffectFakeExplosion());
 		getInstance().addPlayerEffect(new TDPlayerEffectWeather());
-		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 9, 400, 3, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectNausea, EnumChatFormatting.DARK_PURPLE))); //Nausea IV
-		getInstance().addPlayerEffect(new TDPlayerEffectPotion(800, 15, 200, 0, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectBlindness, EnumChatFormatting.RED))); //Blindness
-		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 18, 200, 2, new ChatComponentTranslation(Strings.Chat.effectWeakness))); //Weakness II
-		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 17, 100, 1, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectHunger, EnumChatFormatting.GOLD))); //Hunger II
-		getInstance().addPlayerEffect(new TDPlayerEffectPotion(300, 4, 100, 1, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectMiningFatigue, EnumChatFormatting.DARK_RED))); //Mining Fatigue II
-		getInstance().addPlayerEffect(new TDPlayerEffectPotion(300, 2, 100, 1, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectSlowness, EnumChatFormatting.BLUE))); //Slowness II
-		getInstance().addPlayerEffect(new TDPlayerEffectPotion(3000, 2, 100, 3, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectSlowness_2, EnumChatFormatting.DARK_PURPLE))); //Slowness IV
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 9, 400, 3, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectNausea, TextFormatting.DARK_PURPLE))); //Nausea IV
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(800, 15, 200, 0, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectBlindness, TextFormatting.RED))); //Blindness
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 18, 200, 2, new TextComponentTranslation(Strings.Chat.effectWeakness))); //Weakness II
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(400, 17, 100, 1, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectHunger, TextFormatting.GOLD))); //Hunger II
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(300, 4, 100, 1, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectMiningFatigue, TextFormatting.DARK_RED))); //Mining Fatigue II
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(300, 2, 100, 1, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectSlowness, TextFormatting.BLUE))); //Slowness II
+		getInstance().addPlayerEffect(new TDPlayerEffectPotion(3000, 2, 100, 3, ChatUtils.getTranslatedChatComponentWithColor(Strings.Chat.effectSlowness_2, TextFormatting.DARK_PURPLE))); //Slowness IV
 		getInstance().addPlayerEffect(new TDPlayerEffectLightning());
 
 		getInstance().addChunkEffect(new TDChunkEffectRain());

@@ -7,8 +7,11 @@ public class Settings {
 	/** simple test to determine wether we are in a dev environment */
 	public static final boolean IS_OBFUSCATED = !World.class.getSimpleName().equals("World");
 
-	/** dimension id of mining dimension, final for now */
-	public static final int dimensionId = 20;
+	/** provider id of mining dimension, final for now */
+	public static final int providerId = 20;
+
+	/** dimension id of mining dimension */
+	public static int dimensionId = 20;
 
 	/** general testing features */
 	public static boolean DEBUG_TESTING = false;

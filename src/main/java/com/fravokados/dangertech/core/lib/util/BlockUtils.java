@@ -10,9 +10,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -24,15 +25,20 @@ public class BlockUtils {
 	/**
 	 * saves the blockpos data using the keys 'x', 'y' and 'z'
 	 */
-	public static void writeBlockPosToNBT(BlockPos pos, NBTTagCompound nbt) {
+	public static NBTTagCompound writeBlockPosToNBT(@Nullable BlockPos pos, NBTTagCompound nbt) {
 		if(pos != null) {
 			nbt.setInteger("x", pos.getX());
 			nbt.setInteger("y", pos.getY());
 			nbt.setInteger("z", pos.getZ());
 		}
+		return nbt;
 	}
 
-	public static BlockPos readBlockPosFromNBT(NBTTagCompound nbt) {
+	@Nullable
+	public static BlockPos readBlockPosFromNBT(@Nullable NBTTagCompound nbt) {
+		if(nbt == null || !nbt.hasKey("x") || !nbt.hasKey("y") || !nbt.hasKey("z")) {
+			return null;
+		}
 		return new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
 	}
 
@@ -90,6 +96,7 @@ public class BlockUtils {
 				EntityItem entityItem = new EntityItem(world, pos.getX() + dX, pos.getY() + dY, pos.getZ() + dZ, itemStack.copy());
 
 				if (itemStack.hasTagCompound()) {
+					//noinspection ConstantConditions
 					entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
 				}
 
@@ -103,7 +110,7 @@ public class BlockUtils {
 		}
 	}
 
-	public static List<ItemStack> addInventoryToList(List<ItemStack> list, IInventory inv) {
+	public static List<ItemStack> addInventoryToList(List<ItemStack> list, @Nullable IInventory inv) {
 		if(inv != null) {
 			for (int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
@@ -130,8 +137,7 @@ public class BlockUtils {
 
 	public static boolean isBlockReplaceable(World world, BlockPos pos) {
 		Block block = world.getBlockState(pos).getBlock();
-		return block == null || world.isAirBlock(pos) || block.isReplaceable(world, pos) ||
-				block == Blocks.vine  || block == Blocks.tallgrass || block == Blocks.deadbush;
+		return world.isAirBlock(pos) || block.isReplaceable(world, pos) || block == Blocks.VINE || block == Blocks.TALLGRASS || block == Blocks.DEADBUSH;
 	}
 
 	public static boolean isTileEntityUsableByPlayer(TileEntity te, EntityPlayer player) {

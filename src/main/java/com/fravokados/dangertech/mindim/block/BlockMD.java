@@ -13,7 +13,7 @@ public class BlockMD extends BlockNW {
 
 
 	public BlockMD(String registryName) {
-		super(Material.rock, Reference.MOD_ID, registryName, ModMiningDimension.TAB_MD);
+		super(Material.ROCK, Reference.MOD_ID, registryName, ModMiningDimension.TAB_MD);
 	}
 
 	public BlockMD(Material material, String registryName) {

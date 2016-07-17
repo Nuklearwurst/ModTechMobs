@@ -11,18 +11,31 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Nuklearwurst
  */
 public class EntityEMPCreeper extends EntityMob {
+
+
+	private static final DataParameter<Integer> STATE = EntityDataManager.createKey(EntityEMPCreeper.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> POWERED = EntityDataManager.createKey(EntityEMPCreeper.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IGNITED = EntityDataManager.createKey(EntityEMPCreeper.class, DataSerializers.BOOLEAN);
 
 	/**
 	 * Time when this creeper was last in an active state (Messed up code here, probably causes creeper animation to go
@@ -44,7 +57,7 @@ public class EntityEMPCreeper extends EntityMob {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIEMPCreeperSwell(this));
 		this.tasks.addTask(3, new EntityAIAvoidEntity<EntityOcelot>(this, EntityOcelot.class, 6.0F, 1.0D, 1.2D));
-		this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, false));
+		this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, false));
 		this.tasks.addTask(5, new EntityAIWander(this, 0.8D));
 		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
@@ -55,15 +68,15 @@ public class EntityEMPCreeper extends EntityMob {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.addObject(16, (byte) -1); //state (idle or fused)
-		this.dataWatcher.addObject(17, (byte) 0); //powered (hit by lightning)
-		this.dataWatcher.addObject(18, (byte) 0); //ignited (used for flint and steel and nbt
+		this.dataManager.register(STATE, -1);
+		this.dataManager.register(POWERED, false);
+		this.dataManager.register(IGNITED, false);
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 	}
 
 	/*
@@ -87,7 +100,7 @@ public class EntityEMPCreeper extends EntityMob {
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		super.writeEntityToNBT(tag);
 
-		if (this.dataWatcher.getWatchableObjectByte(17) == 1) {
+		if (this.dataManager.get(POWERED)) {
 			tag.setBoolean("powered", true);
 		}
 
@@ -99,7 +112,7 @@ public class EntityEMPCreeper extends EntityMob {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
 		super.readEntityFromNBT(tag);
-		this.dataWatcher.updateObject(17, (byte) (tag.getBoolean("powered") ? 1 : 0));
+		this.dataManager.set(POWERED, tag.getBoolean("powered"));
 
 		if (tag.hasKey("Fuse", 99)) {
 			this.fuseTime = tag.getShort("Fuse");
@@ -126,7 +139,7 @@ public class EntityEMPCreeper extends EntityMob {
 			int i = this.getCreeperState();
 
 			if (i > 0 && this.timeSinceIgnited == 0) {
-				this.playSound("creeper.primed", 1.0F, 0.5F);
+				this.playSound(SoundEvents.ENTITY_CREEPER_PRIMED, 1.0F, 0.5F);
 			}
 
 			this.timeSinceIgnited += i;
@@ -145,13 +158,13 @@ public class EntityEMPCreeper extends EntityMob {
 	}
 
 	@Override
-	protected String getHurtSound() {
-		return "mob.creeper.say";
+	protected SoundEvent getHurtSound() {
+		return SoundEvents.ENTITY_CREEPER_HURT;
 	}
 
 	@Override
-	protected String getDeathSound() {
-		return "mob.creeper.death";
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ENTITY_CREEPER_DEATH;
 	}
 
 	@Override
@@ -159,8 +172,8 @@ public class EntityEMPCreeper extends EntityMob {
 		super.onDeath(source);
 		//FIXME: should emp Creepers drop disks on death?
 		if (source.getEntity() instanceof EntitySkeleton) {
-			int i = Item.getIdFromItem(Items.record_13);
-			int j = Item.getIdFromItem(Items.record_wait);
+			int i = Item.getIdFromItem(Items.RECORD_13);
+			int j = Item.getIdFromItem(Items.RECORD_WAIT);
 			int k = i + this.rand.nextInt(j - i + 1);
 			this.dropItem(Item.getItemById(k), 1);
 		}
@@ -175,7 +188,7 @@ public class EntityEMPCreeper extends EntityMob {
 	 * Returns true if the creeper is powered by a lightning bolt.
 	 */
 	public boolean isPowered() {
-		return this.dataWatcher.getWatchableObjectByte(17) == 1;
+		return this.dataManager.get(POWERED);
 	}
 
 	/**
@@ -188,46 +201,47 @@ public class EntityEMPCreeper extends EntityMob {
 
 	@Override
 	protected Item getDropItem() {
-		return Items.gunpowder;
+		return Items.GUNPOWDER;
 	}
 
 	/**
 	 * Returns the current state of creeper, -1 is idle, 1 is 'in fuse'
 	 */
 	public int getCreeperState() {
-		return this.dataWatcher.getWatchableObjectByte(16);
+		return this.dataManager.get(STATE);
 	}
 
 	/**
 	 * Sets the state of creeper, -1 to idle and 1 to be 'in fuse'
 	 */
 	public void setCreeperState(int state) {
-		this.dataWatcher.updateObject(16, (byte) state);
+		this.dataManager.set(STATE, state);
 	}
 
 	@Override
 	public void onStruckByLightning(EntityLightningBolt entityLightningBolt) {
 		super.onStruckByLightning(entityLightningBolt);
-		this.dataWatcher.updateObject(17, (byte) 1);
+		this.dataManager.set(POWERED, true);
 	}
 
 	@Override
-	protected boolean interact(EntityPlayer player) {
+	protected boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack)
+	{
 		//FIXME: should EMPCreeper explode when used with flint and steel?
-		ItemStack itemstack = player.inventory.getCurrentItem();
+		if (stack != null && stack.getItem() == Items.FLINT_AND_STEEL)
+		{
+			this.worldObj.playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
+			player.swingArm(hand);
 
-		if (itemstack != null && itemstack.getItem() == Items.flint_and_steel) {
-			this.worldObj.playSoundEffect(this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D, "fire.ignite", 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
-			player.swingItem();
-
-			if (!this.worldObj.isRemote) {
+			if (!this.worldObj.isRemote)
+			{
 				this.ignite();
-				itemstack.damageItem(1, player);
+				stack.damageItem(1, player);
 				return true;
 			}
 		}
 
-		return super.interact(player);
+		return super.processInteract(player, hand, stack);
 	}
 
 	private void explode() {
@@ -243,10 +257,10 @@ public class EntityEMPCreeper extends EntityMob {
 	}
 
 	public boolean isIgnited() {
-		return this.dataWatcher.getWatchableObjectByte(18) != 0;
+		return this.dataManager.get(IGNITED);
 	}
 
 	public void ignite() {
-		this.dataWatcher.updateObject(18, (byte) 1);
+		this.dataManager.set(IGNITED, true);
 	}
 }

@@ -12,11 +12,10 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.*;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+
+import javax.annotation.Nullable;
 
 public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetListener {
 
@@ -31,15 +30,16 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 
 	@Override
 	public void onSetAttackTarget(LivingSetAttackTargetEvent evt, ItemStack stack) {
-		if (evt.target instanceof EntityPlayer) {
-			if (evt.entityLiving.getLastAttacker() != null && evt.entityLiving.getLastAttacker().equals(evt.target) && evt.entityLiving.getLastAttackerTime() < 100) {
+		if (evt.getTarget() instanceof EntityPlayer) {
+			//noinspection ConstantConditions
+			if (evt.getEntityLiving().getLastAttacker() != null && evt.getEntityLiving().getLastAttacker().equals(evt.getTarget()) && evt.getEntityLiving().getLastAttackerTime() < 100) {
 				return;
 			}
-			EntityPlayer player = (EntityPlayer) evt.target;
+			EntityPlayer player = (EntityPlayer) evt.getTarget();
 			int data = TDManager.getPlayerTechLevel(player);
 			//safe techvalue --> good information
 			if (data <= Settings.TechData.SAFE_TECH_VALUE) {
-				sendExactWarningMessage(player, getSpecialEntityName(evt.entityLiving));
+				sendExactWarningMessage(player, getSpecialEntityName(evt.getEntityLiving()));
 			} else {
 				//randomize effects
 				int rand = itemRand.nextInt(data);
@@ -53,7 +53,7 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 						TDEffectHandler.applyRandomEffectOnPlayer(player, player.getName(), itemRand);
 						stack.damageItem(10, player);
 					} else { //simple effects
-						int i = evt.entity.worldObj.rand.nextInt(4);
+						int i = evt.getEntity().worldObj.rand.nextInt(4);
 						switch (i) {
 							case 0:
 								sendExactWarningMessage(player, CREEPER);
@@ -70,7 +70,7 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 					sendGenericWarningMessage(player);
 					stack.damageItem(1, player);
 				} else { //exact message
-					sendExactWarningMessage(player, getSpecialEntityName(evt.entityLiving));
+					sendExactWarningMessage(player, getSpecialEntityName(evt.getEntityLiving()));
 					if (itemRand.nextInt(10) == 0) {
 						stack.damageItem(1, player);
 					}
@@ -97,21 +97,21 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 	}
 
 	public void sendGenericWarningMessage(EntityPlayer player) {
-		player.addChatMessage(new ChatComponentTranslation(Strings.Chat.mobTargetingWarning_generic).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+		player.addChatMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_generic).setStyle(new Style().setColor(TextFormatting.RED)));
 	}
 
-	public void sendExactWarningMessage(EntityPlayer player, String name) {
+	public void sendExactWarningMessage(EntityPlayer player, @Nullable String name) {
 		if (name == null) {
 			sendGenericWarningMessage(player);
 		} else if (CREEPER.equals(name)) {
-			player.addChatMessage(new ChatComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_creeper, GeneralUtils.random)));
+			player.addChatMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_creeper, GeneralUtils.random)));
 		} else if (ZOMBIE_BABY.equals(name)) {
-			player.addChatMessage(new ChatComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_babyZombie, GeneralUtils.random)));
+			player.addChatMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_babyZombie, GeneralUtils.random)));
 		} else {
-			player.addChatMessage(new ChatComponentTranslation(Strings.Chat.mobTargetingWarning_exact_1)
-					.appendSibling(new ChatComponentText(" " + name + " ")
-							.setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)))
-					.appendSibling(new ChatComponentTranslation(Strings.Chat.mobTargetingWarning_exact_2)));
+			player.addChatMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_1)
+					.appendSibling(new TextComponentString(" " + name + " ")
+							.setStyle(new Style().setColor(TextFormatting.RED)))
+					.appendSibling(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_2)));
 		}
 	}
 }

@@ -10,6 +10,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Nuklearwurst
  */
@@ -41,6 +43,7 @@ public class MessageContainerIntegerUpdateClient implements IMessage, IMessageHa
 
 	@SideOnly(Side.CLIENT)
 	@Override
+	@Nullable
 	public IMessage onMessage(MessageContainerIntegerUpdateClient message, MessageContext ctx) {
 		EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
 

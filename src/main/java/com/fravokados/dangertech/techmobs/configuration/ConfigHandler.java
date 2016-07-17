@@ -71,11 +71,11 @@ public class ConfigHandler {
 		
 		
 		prop = config.get(Keys.CATEGORY_TECH_SCANNING, Keys.TechScanning.SPLIT_STEPS_KEY, DefaultSettings.TechScanning.SPLIT_STEPS_KEY);
-		prop.comment = "This defines the steps how chunks are scanned\n(eg. if step one is 0.2 and there are less then 20% of the maximum amount of chunks to be scanned in queue the amount of chunks defined in split_steps_value is scanned)";
+		prop.setComment("This defines the steps how chunks are scanned\n(eg. if step one is 0.2 and there are less then 20% of the maximum amount of chunks to be scanned in queue the amount of chunks defined in split_steps_value is scanned)");
 		Settings.TechScanning.SPLIT_STEPS_KEY = prop.getDoubleList();
 		
 		prop = config.get(Keys.CATEGORY_TECH_SCANNING, Keys.TechScanning.SPLIT_STEPS_VALUE, DefaultSettings.TechScanning.SPLIT_STEPS_VALUE);
-		prop.comment = "The percentage of chunks that get scanned for each step (in relation to the maximal amount of chunks that would otherwise be scanned)";
+		prop.setComment("The percentage of chunks that get scanned for each step (in relation to the maximal amount of chunks that would otherwise be scanned)");
 		Settings.TechScanning.SPLIT_STEPS_VALUE = prop.getDoubleList();
 		
 		Settings.TechScanning.INJECT_SCANNING_AI = config.getInt(TechScanning.INJECT_SCANNING_AI, Keys.CATEGORY_TECH_SCANNING, DefaultSettings.TechScanning.INJECT_SCANNING_AI, 0, Integer.MAX_VALUE, "Inject Scanning AI into vanilla mobs during spawn\nThis is experimental!\nchance (n out of value) that a zombie or skeleton will spawn with scanning ai");
@@ -98,7 +98,7 @@ public class ConfigHandler {
 
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-		if(eventArgs.modID.equalsIgnoreCase(Reference.MOD_ID)) {
+		if(eventArgs.getModID().equalsIgnoreCase(Reference.MOD_ID)) {
 			load(false);
 			LogHelperTM.info("Reloading config!");
 		}

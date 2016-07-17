@@ -7,10 +7,12 @@ import com.fravokados.dangertech.techmobs.world.techdata.TDChunk;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class CommandTechData extends CommandBase implements IModCommand {
@@ -79,8 +81,8 @@ public class CommandTechData extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		if (!CommandHelpers.processStandardCommands(server, sender, this, args)) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}
@@ -88,13 +90,13 @@ public class CommandTechData extends CommandBase implements IModCommand {
 	public static TDChunk getChunkData(ICommandSender sender) {
 		World world = sender.getEntityWorld();
 		BlockPos coords = sender.getPosition();
-		ChunkCoordIntPair chunkCoords = WorldUtils.convertToChunkCoord(coords);
-		return TechDataStorage.getInstance().getChunkData(chunkCoords, world.provider.getDimensionId());
+		ChunkPos chunkCoords = WorldUtils.convertToChunkCoord(coords);
+		return TechDataStorage.getInstance().getChunkData(chunkCoords, world.provider.getDimension());
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args, pos);
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+		return CommandHelpers.getTabCompletionOptionsForSubCommands(server, this, sender, args, pos);
 	}
 
 	@Override

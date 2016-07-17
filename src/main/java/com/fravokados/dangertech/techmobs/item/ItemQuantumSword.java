@@ -9,9 +9,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.TextComponentTranslation;
 
 /**
  * @author Nuklearwurst
@@ -26,8 +28,8 @@ public class ItemQuantumSword extends ItemTMSword {
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer origin, Entity target) {
 		if (target instanceof EntityLivingBase) {
 			int armor = ((EntityLivingBase) target).getTotalArmorValue();
-			target.attackEntityFrom(DamageSource.inWall, (float) Math.max(2, armor * (origin.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue() / 20)));
-			origin.worldObj.playSoundEffect(origin.posX, origin.posY, origin.posZ, "random.eat", 1.0F, origin.getRNG().nextFloat() * 0.1F + 0.9F);
+			target.attackEntityFrom(DamageSource.inWall, (float) Math.max(2, armor * (origin.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / 20)));
+			origin.worldObj.playSound(null, origin.posX, origin.posY, origin.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.0F, origin.getRNG().nextFloat() * 0.1F + 0.9F);
 			if (!origin.worldObj.isRemote) {
 				int data = TDManager.getPlayerTechLevel(origin);
 				if (data > Settings.TechData.SAFE_TECH_VALUE) {
@@ -43,8 +45,8 @@ public class ItemQuantumSword extends ItemTMSword {
 							TDEffectHandler.applyRandomEffectOnPlayer(origin, origin.getName(), itemRand);
 							stack.damageItem(10, origin);
 						} else { //simple effects
-							origin.worldObj.playSoundEffect(origin.posX, origin.posY, origin.posZ, "mob.endermen.scream", 1.0F, itemRand.nextInt() + 0.5F);
-							origin.addChatMessage(new ChatComponentTranslation(Strings.Chat.quantumSword));
+							origin.worldObj.playSound(null, origin.posX, origin.posY, origin.posZ, SoundEvents.ENTITY_ENDERMEN_SCREAM, SoundCategory.PLAYERS, 1.0F, itemRand.nextInt() + 0.5F);
+							origin.addChatMessage(new TextComponentTranslation(Strings.Chat.quantumSword));
 							stack.damageItem(4, origin);
 						}
 					} else if (rand >= 0.5 * data) { //generic message

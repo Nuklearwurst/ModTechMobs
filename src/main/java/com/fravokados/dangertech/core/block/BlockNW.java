@@ -1,14 +1,14 @@
 package com.fravokados.dangertech.core.block;
 
 import com.fravokados.dangertech.core.ModNwCore;
+import com.fravokados.dangertech.core.item.ItemBlockNW;
 import com.fravokados.dangertech.core.lib.Reference;
-import com.fravokados.dangertech.core.lib.util.ModelUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Nuklearwurst
@@ -23,7 +23,7 @@ public class BlockNW extends Block {
 	}
 
 	public BlockNW(String registryName) {
-		this(Material.rock, Reference.MOD_ID, registryName, ModNwCore.CREATIVE_TABS);
+		this(Material.ROCK, Reference.MOD_ID, registryName, ModNwCore.CREATIVE_TABS);
 	}
 
 	public BlockNW(Material material, String modId, String registryName, CreativeTabs tab) {
@@ -37,17 +37,22 @@ public class BlockNW extends Block {
 		this.setCreativeTab(tab);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void registerModels() {
-		registerItemBlockModel(blockName, 0);
-	}
-
-	@SideOnly(Side.CLIENT)
-	protected void registerItemBlockModel(String name, int meta) {
-		ModelUtils.registerModelVariant(Item.getItemFromBlock(this), meta, modId, name);
-	}
-
 	public String getBlockName() {
 		return blockName;
+	}
+
+	/**
+	 * Creates a new instance of the associated Item for this Block
+	 * <p/>
+	 * Can return null when Block has no Item
+	 * @return an Item associated with this block (registry name already set)
+	 */
+	@Nullable
+	public Item createItemBlock() {
+		return new ItemBlockNW(this);
+	}
+
+	public String getModId() {
+		return modId;
 	}
 }

@@ -3,9 +3,10 @@ package com.fravokados.dangertech.mindim.lib.util;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S07PacketRespawn;
-import net.minecraft.network.play.server.S1DPacketEntityEffect;
-import net.minecraft.network.play.server.S1FPacketSetExperience;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketRespawn;
+import net.minecraft.network.play.server.SPacketEntityEffect;
+import net.minecraft.network.play.server.SPacketSetExperience;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
@@ -35,26 +36,26 @@ public class TeleportUtils {
 		entityPlayerMP.dimension = targetDimension;
 		WorldServer worldServerDestination = server.worldServerForDimension(entityPlayerMP.dimension);
 		//respawn player
-		entityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(entityPlayerMP.dimension, worldServerDestination.getDifficulty(), worldServerDestination.getWorldInfo().getTerrainType(), entityPlayerMP.theItemInWorldManager.getGameType())); // Forge: Use new dimensions information
+		entityPlayerMP.connection.sendPacket(new SPacketRespawn(entityPlayerMP.dimension, worldServerDestination.getDifficulty(), worldServerDestination.getWorldInfo().getTerrainType(), entityPlayerMP.interactionManager.getGameType())); // Forge: Use new dimensions information
 		//remove player from origin world
-		worldServerOrigin.removePlayerEntityDangerously(entityPlayerMP);
+		worldServerOrigin.removeEntityDangerously(entityPlayerMP);
 		entityPlayerMP.isDead = false;
 		//transfer entity to new world
 		transferEntityToWorld(entityPlayerMP, worldServerOrigin, worldServerDestination);
-		server.getConfigurationManager().preparePlayer(entityPlayerMP, worldServerOrigin);
+		server.getPlayerList().preparePlayer(entityPlayerMP, worldServerOrigin);
 		//update player location
-		entityPlayerMP.playerNetServerHandler.setPlayerLocation(x, y, z, yaw, pitch);
+		entityPlayerMP.connection.setPlayerLocation(x, y, z, yaw, pitch);
 		//update player world
-		entityPlayerMP.theItemInWorldManager.setWorld(worldServerDestination);
+		entityPlayerMP.interactionManager.setWorld(worldServerDestination);
 		//update player data
-		server.getConfigurationManager().updateTimeAndWeatherForPlayer(entityPlayerMP, worldServerDestination);
-		server.getConfigurationManager().syncPlayerInventory(entityPlayerMP);
+		server.getPlayerList().updateTimeAndWeatherForPlayer(entityPlayerMP, worldServerDestination);
+		server.getPlayerList().syncPlayerInventory(entityPlayerMP);
 		//update potion effects
 		for (PotionEffect potioneffect : entityPlayerMP.getActivePotionEffects()) {
-			entityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(entityPlayerMP.getEntityId(), potioneffect));
+			entityPlayerMP.connection.sendPacket(new SPacketEntityEffect(entityPlayerMP.getEntityId(), potioneffect));
 		}
 		//update Experience level
-		entityPlayerMP.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(entityPlayerMP.experience, entityPlayerMP.experienceTotal, entityPlayerMP.experienceLevel));
+		entityPlayerMP.connection.sendPacket(new SPacketSetExperience(entityPlayerMP.experience, entityPlayerMP.experienceTotal, entityPlayerMP.experienceLevel));
 		//fire event
 		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(entityPlayerMP, originDimension, targetDimension);
 	}
@@ -67,7 +68,14 @@ public class TeleportUtils {
 	{
 		if (!entity.worldObj.isRemote && !entity.isDead)
 		{
-			MinecraftServer minecraftserver = FMLCommonHandler.instance().getMinecraftServerInstance();
+			if (!net.minecraftforge.common.ForgeHooks.onTravelToDimension(entity, targetDimension)) return;
+
+			MinecraftServer minecraftserver = entity.getServer();
+
+			if(minecraftserver == null) {
+				LogHelperMD.error("Minecraft Server is null!! This is a bug!!");
+				return;
+			}
 
 			int originDimension = entity.dimension;
 
@@ -85,7 +93,12 @@ public class TeleportUtils {
 
 			if (newEntity != null)
 			{
-				newEntity.copyDataFromOld(entity);
+				//Copy Data
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				entity.writeToNBT(nbttagcompound);
+				nbttagcompound.removeTag("Dimension");
+				newEntity.readFromNBT(nbttagcompound);
+
 				worldServerDestination.spawnEntityInWorld(newEntity);
 			}
 

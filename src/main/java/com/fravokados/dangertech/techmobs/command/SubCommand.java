@@ -3,8 +3,10 @@ package com.fravokados.dangertech.techmobs.command;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -68,17 +70,17 @@ public abstract class SubCommand implements IModCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args, pos);
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+		return CommandHelpers.getTabCompletionOptionsForSubCommands(server, this, sender, args, pos);
 	}
 
 	@Override
-	public final void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		if (!CommandHelpers.processStandardCommands(sender, this, args))
-			processSubCommand(sender, args);
+	public final void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		if (!CommandHelpers.processStandardCommands(server, sender, this, args))
+			processSubCommand(server, sender, args);
 	}
 
-	public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+	public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		CommandHelpers.throwWrongUsage(sender, this);
 	}
 
@@ -92,8 +94,10 @@ public abstract class SubCommand implements IModCommand {
 		return permLevel.permLevel;
 	}
 
+
+
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
 		return sender.canCommandSenderUseCommand(getPermissionLevel(), getCommandName());
 	}
 

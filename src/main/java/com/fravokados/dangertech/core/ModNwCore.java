@@ -14,7 +14,6 @@ import com.fravokados.dangertech.core.network.ModNetworkManager;
 import com.fravokados.dangertech.core.plugin.PluginManager;
 import com.fravokados.dangertech.core.plugin.ic2.IC2RecipeIntegrationCore;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -30,7 +29,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
  * Shared code for Dangerous Technology and Mining Dimension Mod
  * @author Nuklearwurst
  */
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY, canBeDeactivated=false)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY)
 public class ModNwCore {
 
 	@Mod.Instance(value = Reference.MOD_ID)
@@ -39,13 +38,7 @@ public class ModNwCore {
 	@SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_SERVER)
 	public static CommonProxy proxy;
 
-	public static final CreativeTabs CREATIVE_TABS = new CreativeTabs(Strings.CREATIVE_TAB) {
-		@Override
-		public Item getTabIconItem() {
-			//TODO proper creative tab item icon
-			return Items.rotten_flesh;
-		}
-	};
+	public static CreativeTabs CREATIVE_TABS;
 
 	public static ConfigHandler config;
 
@@ -57,6 +50,15 @@ public class ModNwCore {
 		//init networking
 		ModNetworkManager.init();
 		//init keybindings
+
+		//init CreativeTab
+		CREATIVE_TABS = new CreativeTabs(Strings.CREATIVE_TAB) {
+			@Override
+			public Item getTabIconItem() {
+				//noinspection ConstantConditions
+				return ModItems.upgradeTool;
+			}
+		};
 
 		//init API
 		DangerousTechnologyAPI.creativeTab = CREATIVE_TABS;
@@ -78,6 +80,7 @@ public class ModNwCore {
 
 		//Config handler
 		MinecraftForge.EVENT_BUS.register(config);
+
 
 		//load recipes
 		try {

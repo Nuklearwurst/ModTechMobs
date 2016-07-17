@@ -7,10 +7,7 @@ import com.fravokados.dangertech.techmobs.command.CommandTechPlayer;
 import com.fravokados.dangertech.techmobs.common.CommonProxy;
 import com.fravokados.dangertech.techmobs.common.SleepingManager;
 import com.fravokados.dangertech.techmobs.common.handler.GuiHandler;
-import com.fravokados.dangertech.techmobs.common.init.ModBlocks;
-import com.fravokados.dangertech.techmobs.common.init.ModEntities;
-import com.fravokados.dangertech.techmobs.common.init.ModItems;
-import com.fravokados.dangertech.techmobs.common.init.ModRecipes;
+import com.fravokados.dangertech.techmobs.common.init.*;
 import com.fravokados.dangertech.techmobs.configuration.ConfigHandler;
 import com.fravokados.dangertech.techmobs.lib.Reference;
 import com.fravokados.dangertech.techmobs.lib.Strings;
@@ -21,10 +18,9 @@ import com.fravokados.dangertech.techmobs.plugin.ic2.IC2RecipeIntegration;
 import com.fravokados.dangertech.techmobs.techdata.effects.TDEffects;
 import com.fravokados.dangertech.techmobs.techdata.values.TDValues;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -46,13 +42,7 @@ public class ModTechMobs {
 	@SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_SERVER)
 	public static CommonProxy proxy;
 
-	public static final CreativeTabs TAB_TM = new CreativeTabs(Strings.CREATIVE_TAB) {
-		@Override
-		public Item getTabIconItem() {
-			//TODO proper creative tab item icon
-			return Items.rotten_flesh;
-		}
-	};
+	public static CreativeTabs TAB_TM;
 	
 	public static ConfigHandler config;
 
@@ -71,8 +61,16 @@ public class ModTechMobs {
 		//init API
 		DangerousTechnologyAPI.effectRegistry = new TDEffects();
 		DangerousTechnologyAPI.valueRegistry = new TDValues();
-		DangerousTechnologyAPI.creativeTab = TAB_TM;
 		DangerousTechnologyAPI.damageSourceEMP = new DamageSource(Strings.DAMAGE_SOURCE_EMP).setDamageBypassesArmor();
+
+		//init creative tab
+		TAB_TM = new CreativeTabs(Strings.CREATIVE_TAB) {
+			@Override
+			public Item getTabIconItem() {
+				//noinspection ConstantConditions
+				return ModItems.monsterDetector;
+			}
+		};
 
 		//registerItems items
 		ModItems.registerItems();
@@ -81,6 +79,9 @@ public class ModTechMobs {
 
 		//init rendering
 		proxy.registerRenderer();
+
+		//init sounds
+		ModSounds.registerSounds();
 	}
 
 	@Mod.EventHandler
@@ -97,12 +98,12 @@ public class ModTechMobs {
 		//load Entities
 		ModEntities.init();
 
-		
+
 		//register EventHandlers
 		proxy.registerEvents();
 		
 		//Config handler
-		FMLCommonHandler.instance().bus().register(config);
+		MinecraftForge.EVENT_BUS.register(config);
 
 
 		//load recipes

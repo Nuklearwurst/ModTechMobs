@@ -1,16 +1,16 @@
 package com.fravokados.dangertech.mindim.item;
 
+import com.fravokados.dangertech.core.block.BlockNW;
+import com.fravokados.dangertech.core.item.ItemBlockNW;
 import com.fravokados.dangertech.mindim.lib.Textures;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 /**
  * @author Nuklearwurst
  */
-public abstract class ItemMDBlockMultiType extends ItemBlock {
+public abstract class ItemMDBlockMultiType extends ItemBlockNW {
 
-	public ItemMDBlockMultiType(Block block) {
+	public ItemMDBlockMultiType(BlockNW block) {
 		super(block);
 		this.setHasSubtypes(true);
 	}
@@ -39,7 +39,4 @@ public abstract class ItemMDBlockMultiType extends ItemBlock {
 	}
 
 	protected abstract String getUnlocalizedNameForItem(ItemStack stack);
-
-//	@Override
-//	public abstract void registerIcons(IIconRegister register);
 }

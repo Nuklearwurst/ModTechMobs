@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.api.util;
 
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -16,12 +16,12 @@ public class ChunkLocation {
 		this.dimension = dimension;
 	}
 	
-	public ChunkLocation(int dimension, ChunkCoordIntPair coords) {
+	public ChunkLocation(int dimension, ChunkPos coords) {
 		this(dimension, coords.chunkXPos, coords.chunkZPos);
 	}
 	
-	public ChunkLocation(World world, ChunkCoordIntPair coords) {
-		this(world.provider.getDimensionId(), coords);
+	public ChunkLocation(World world, ChunkPos coords) {
+		this(world.provider.getDimension(), coords);
 	}
 	
 	public ChunkLocation(Chunk chunk) {
@@ -33,7 +33,7 @@ public class ChunkLocation {
 		return obj instanceof ChunkLocation && ((ChunkLocation) obj).x == x && ((ChunkLocation) obj).z == z && ((ChunkLocation) obj).dimension == dimension;
 	}
 
-	public ChunkCoordIntPair getChunkCoordIntPair() {
-		return new ChunkCoordIntPair(x, z);
+	public ChunkPos getChunkCoordIntPair() {
+		return new ChunkPos(x, z);
 	}
 }

@@ -1,6 +1,7 @@
 package com.fravokados.dangertech.core.item;
 
 import com.fravokados.dangertech.core.ModNwCore;
+import com.fravokados.dangertech.core.client.IModelProvider;
 import com.fravokados.dangertech.core.lib.Reference;
 import com.fravokados.dangertech.core.lib.util.ModelUtils;
 import net.minecraft.creativetab.CreativeTabs;
@@ -8,7 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemNW extends Item {
+public class ItemNW extends Item implements IModelProvider {
 
 	private final String modId;
 	private final String itemName;
@@ -34,6 +35,7 @@ public class ItemNW extends Item {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Override
 	public void registerModels() {
 		registerItemModel(itemName, 0);
 	}

@@ -5,6 +5,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Nuklearwurst
  */
@@ -19,7 +21,7 @@ public class SlotUpgrade extends Slot {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack stack) {
-		return this.inventory.isItemValidForSlot(this.slotNumber, stack);
+	public boolean isItemValid(@Nullable ItemStack stack) {
+		return stack != null && this.inventory.isItemValidForSlot(this.slotNumber, stack);
 	}
 }

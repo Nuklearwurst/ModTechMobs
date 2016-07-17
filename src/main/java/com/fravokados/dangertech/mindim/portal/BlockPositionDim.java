@@ -5,10 +5,12 @@ import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControl
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import javax.annotation.Nullable;
 
 public class BlockPositionDim {
 
@@ -29,7 +31,7 @@ public class BlockPositionDim {
 	}
 
 	public BlockPositionDim(TileEntity tileEntity) {
-		this(tileEntity.getPos(), tileEntity.getWorld().provider.getDimensionId());
+		this(tileEntity.getPos(), tileEntity.getWorld().provider.getDimension());
 	}
 
 	public int getDimension() {
@@ -55,6 +57,7 @@ public class BlockPositionDim {
 		return server.worldServerForDimension(dimension);
 	}
 
+	@Nullable
 	public TileEntityPortalControllerEntity getControllerEntity() {
 		World world = getWorldServer();
 		TileEntity te = world.getTileEntity(position);

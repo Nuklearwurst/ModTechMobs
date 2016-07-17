@@ -4,8 +4,9 @@ import com.fravokados.dangertech.techmobs.entity.EntityConservationUnit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author Nuklearwurst
@@ -40,16 +41,11 @@ public class ContainerConservationUnit extends Container {
 		}
 	}
 
-	@Override
-	public void onCraftGuiOpened(ICrafting listener) {
-		super.onCraftGuiOpened(listener);
-	}
-
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (Object crafter : this.crafters) {
+		for (IContainerListener crafter : this.listeners) {
 
 		}
 	}
@@ -57,5 +53,53 @@ public class ContainerConservationUnit extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return true;
+	}
+
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotId) {
+		ItemStack stackCopy = null;
+		Slot slot = this.inventorySlots.get(slotId);
+
+		if (slot != null && slot.getHasStack()) {
+			ItemStack stackSlot = slot.getStack();
+			//noinspection ConstantConditions
+			stackCopy = stackSlot.copy();
+
+			if(slotId < 27) { //machine inventory slots (main-inventory)
+				if (!this.mergeItemStack(stackSlot, 36, this.inventorySlots.size(), false)) {
+					return null;
+				}
+			} else if (slotId < 36) { //machine inventory slots (hotbar)
+				if(!this.mergeItemStack(stackSlot, 63, this.inventorySlots.size(), false)) { //prioritize hotbar
+					if (!this.mergeItemStack(stackSlot, 36, 63, false)) {
+						return null;
+					}
+				}
+			} else if(slotId < 63) { //from player (main)
+				if(!this.mergeItemStack(stackSlot, 0, 36, false)) {
+					return null;
+				}
+			} else { //from player (hotbar)
+				if(!this.mergeItemStack(stackSlot, 27, 36, false)) { //prioritize hotbar
+					if (!this.mergeItemStack(stackSlot, 0, 27, false)) {
+						return null;
+					}
+				}
+			}
+
+			if (stackSlot.stackSize == 0) {
+				slot.putStack(null);
+			} else {
+				slot.onSlotChanged();
+			}
+
+			if (stackSlot.stackSize == stackCopy.stackSize) {
+				return null;
+			}
+
+			slot.onPickupFromSlot(player, stackSlot);
+		}
+
+		return stackCopy;
 	}
 }

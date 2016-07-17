@@ -28,7 +28,7 @@
   "dependencies": ["nwcore"]
 },
 {
-  "modid": "MiningDimension",
+  "modid": "miningdimension",
   "name": "Mining Dimension",
   "description": "Mining Dimension and Portals",
   "version": "${version}",

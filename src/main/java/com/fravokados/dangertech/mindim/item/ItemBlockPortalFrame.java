@@ -1,24 +1,26 @@
 package com.fravokados.dangertech.mindim.item;
 
 import com.fravokados.dangertech.api.upgrade.IUpgradable;
+import com.fravokados.dangertech.core.block.BlockNW;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
-import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
+import com.fravokados.dangertech.core.plugin.energy.EnergyType;
 import com.fravokados.dangertech.core.plugin.energy.IEnergyTypeAware;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.lib.NBTKeys;
 import com.fravokados.dangertech.mindim.lib.Strings;
-import net.minecraft.block.Block;
+import com.fravokados.dangertech.mindim.lib.Textures;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ import java.util.List;
  */
 public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 
-	public ItemBlockPortalFrame(Block block) {
+	public ItemBlockPortalFrame(BlockNW block) {
 		super(block);
 	}
 
@@ -50,8 +52,8 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean b) {
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
-		if(nbt.hasKey(EnergyTypes.getNBTKey())) {
-			EnergyTypes types = EnergyTypes.readFromNBT(nbt);
+		if(nbt.hasKey(EnergyType.getNBTKey())) {
+			EnergyType types = EnergyType.readFromNBT(nbt);
 			//TODO translation
 			list.add(Strings.translate(types.getUnlocalizedName()));
 		}
@@ -61,7 +63,7 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 			list.add(Strings.translate(Strings.Tooltip.NAME + " " + Strings.Gui.CONTROLLER_NAME_UNNAMED));
 		}
 		if(nbt.hasKey("Upgrades")) {
-			NBTTagList nbttaglist = nbt.getTagList("Upgrades", 10); //10 is compound type
+			NBTTagList nbttaglist = nbt.getTagList("Upgrades", Constants.NBT.TAG_COMPOUND);
 			List<ItemStack> inv = new ArrayList<ItemStack>(nbttaglist.tagCount());
 			for (int i = 0; i < nbttaglist.tagCount(); ++i) {
 				NBTTagCompound tag = nbttaglist.getCompoundTagAt(i);
@@ -100,5 +102,11 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void registerModels() {
+		registerItemBlockModel(Textures.ITEM_BLOCK_PORTAL_FRAME, 0);
+		registerItemBlockModel(Textures.ITEM_BLOCK_PORTAL_CONTROLLER, 1);
 	}
 }

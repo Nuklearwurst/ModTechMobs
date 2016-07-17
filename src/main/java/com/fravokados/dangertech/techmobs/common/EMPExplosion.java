@@ -1,15 +1,17 @@
 package com.fravokados.dangertech.techmobs.common;
 
-import com.fravokados.dangertech.techmobs.lib.Textures;
+import com.fravokados.dangertech.techmobs.common.init.ModSounds;
 import com.fravokados.dangertech.techmobs.network.ModTDNetworkManager;
 import com.fravokados.dangertech.techmobs.network.message.MessageEMP;
 import com.fravokados.dangertech.techmobs.plugin.EMPHandler;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ public class EMPExplosion {
 	private float strength;
 	private int radius;
 
-	public EMPExplosion(Entity exploder, World world, double x, double y, double z, float strength, int radius) {
+	public EMPExplosion(@Nullable Entity exploder, World world, double x, double y, double z, float strength, int radius) {
 		this.exploder = exploder;
 		this.world = world;
 		this.x = x;
@@ -55,7 +57,7 @@ public class EMPExplosion {
 				}
 			}
 		}
-		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.fromBounds(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius));
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius));
 		for (Entity entity : list) {
 			EMPHandler.applyEMPOnEntity(entity, x, y, z, strength, radius);
 		}
@@ -68,7 +70,7 @@ public class EMPExplosion {
 			world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, x, y, z, Math.sin(i * rad) * strength * 0.2, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 0.2);
 			world.spawnParticle(EnumParticleTypes.PORTAL, x, y, z, Math.sin(i * rad) * strength * 0.3, (world.rand.nextDouble() - 0.5) * 0.5, Math.cos(i * rad) * strength * 0.3);
 		}
-		world.playSoundEffect(x, y, z, Textures.MOD_ASSET_DOMAIN + "emp", strength, 1);
+		world.playSound(null, x, y, z, ModSounds.EMP, SoundCategory.HOSTILE, strength, 1);
 	}
 
 	public void doExplosionWithEffects() {
@@ -77,7 +79,7 @@ public class EMPExplosion {
 	}
 
 	public void doEffectsOnClientsAround() {
-		ModTDNetworkManager.INSTANCE.sendToAllAround(new MessageEMP(this), new NetworkRegistry.TargetPoint(world.provider.getDimensionId(), x, y, z, 100));
+		ModTDNetworkManager.INSTANCE.sendToAllAround(new MessageEMP(this), new NetworkRegistry.TargetPoint(world.provider.getDimension(), x, y, z, 100));
 	}
 
 	public void doEffectsOnClientAndServer() {

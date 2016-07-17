@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Nuklearwurst
  */
@@ -41,6 +43,7 @@ public class MessageGuiTextUpdate implements IMessage, IMessageHandler<MessageGu
 	}
 
 	@Override
+	@Nullable
 	public IMessage onMessage(MessageGuiTextUpdate message, MessageContext ctx) {
 		EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
 

@@ -11,7 +11,7 @@ public class TileEntityControllerEntityRenderer extends TileEntitySpecialRendere
 
 	@Override
 	public void renderTileEntityAt(TileEntityPortalControllerEntity tileEntity, double x, double y, double z, float delta, int destroyStage) {
-		if(PluginLookingGlass.isAvailable() && tileEntity != null & tileEntity != null) {
+		if(PluginLookingGlass.isAvailable()) {
 			//			if(te.isActive() && te.renderInfo != null && te.renderInfo.lookingGlass != null && te.renderInfo.lookingGlass.isValid()) {
 //				if(te.getMetrics() == null) {
 //					te.updateMetrics();

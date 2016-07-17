@@ -8,7 +8,7 @@ import com.fravokados.dangertech.techmobs.techdata.TDManager;
 import com.fravokados.dangertech.techmobs.world.techdata.TDChunk;
 import com.fravokados.dangertech.techmobs.world.techdata.TDWorld;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -16,6 +16,7 @@ import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -61,11 +62,12 @@ public class TechDataStorage extends WorldSavedData {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		//saving highest techValues not really needed
 		//--> chunks/players get removed from list on unload
 		//and readded un load
 		//function kept for future uses
+		return nbt;
 	}
 
 	@Override
@@ -89,7 +91,7 @@ public class TechDataStorage extends WorldSavedData {
 	 * internal use only
 	 *
 	 */
-	public TDChunk getChunkData(ChunkCoordIntPair coords, int dimensionId) {
+	public TDChunk getChunkData(ChunkPos coords, int dimensionId) {
 		return getWorldData(dimensionId).getChunk(coords);
 	}
 
@@ -194,6 +196,7 @@ public class TechDataStorage extends WorldSavedData {
 		}
 	}
 
+	@Nullable
 	public String getRandomDangerousPlayer(Random rand) {
 		if (techPlayers.isEmpty()) {
 			return null;
@@ -201,6 +204,7 @@ public class TechDataStorage extends WorldSavedData {
 		return techPlayers.get(rand.nextInt(techPlayers.size()));
 	}
 
+	@Nullable
 	public ChunkLocation getRandomDangerousChunk(Random rand) {
 		if (techChunks.isEmpty()) {
 			return null;
@@ -221,9 +225,9 @@ public class TechDataStorage extends WorldSavedData {
 	 */
 	public static void onWorldLoad(WorldEvent.Load evt) {
 		//only on server side (--> intergrated server) && only on dim = 0 as it stores player data
-		if (!evt.world.isRemote && evt.world.provider.getDimensionId() == 0) {
-			WorldServer world = (WorldServer) evt.world;
-			TechDataStorage data = (TechDataStorage) world.getPerWorldStorage().loadData(TechDataStorage.class, SAVE_DATA_NAME);
+		if (!evt.getWorld().isRemote && evt.getWorld().provider.getDimension() == 0) {
+			WorldServer world = (WorldServer) evt.getWorld();
+			TechDataStorage data = (TechDataStorage) world.getPerWorldStorage().getOrLoadData(TechDataStorage.class, SAVE_DATA_NAME);
 
 			if (data == null) {
 				data = new TechDataStorage(SAVE_DATA_NAME);
@@ -239,7 +243,7 @@ public class TechDataStorage extends WorldSavedData {
 
 
 	public static void onWorldUnload(WorldEvent.Unload evt) {
-		if (!evt.world.isRemote && evt.world.provider.getDimensionId() == 0) {
+		if (!evt.getWorld().isRemote && evt.getWorld().provider.getDimension() == 0) {
 			LogHelperTM.info("Unloading TechDataStorage...");
 			instance = null;
 		}
@@ -250,8 +254,8 @@ public class TechDataStorage extends WorldSavedData {
 	 * saves chunk techdata to disk
 	 */
 	public static void onChunkDataSave(ChunkDataEvent.Save evt) {
-		if(!evt.world.isRemote) {
-			int dimId = evt.world.provider.getDimensionId();
+		if(!evt.getWorld().isRemote) {
+			int dimId = evt.getWorld().provider.getDimension();
 			if (getInstance().worldData.containsKey(dimId)) {
 				getInstance().worldData.get(dimId).saveChunkData(evt); //save here
 			}
@@ -262,8 +266,8 @@ public class TechDataStorage extends WorldSavedData {
 	 * loads chunk techdata from disk
 	 */
 	public static void onChunkDataLoad(ChunkDataEvent.Load evt) {
-		if(!evt.world.isRemote) {
-			int dimId = evt.world.provider.getDimensionId();
+		if(!evt.getWorld().isRemote) {
+			int dimId = evt.getWorld().provider.getDimension();
 			if (getInstance().worldData.containsKey(dimId)) {
 				//load from disk and add to already loaded world
 				getInstance().worldData.get(dimId).loadChunkData(evt); // load data here
@@ -282,9 +286,9 @@ public class TechDataStorage extends WorldSavedData {
 	 * removes chunk from storage (--> it got unloaded and is not needed anymore)
 	 */
 	public static void onChunkUnload(ChunkEvent.Unload evt) {
-		if(!evt.world.isRemote) {
+		if(!evt.getWorld().isRemote) {
 			//unload chunk if data exists for the given world
-			int dimId = evt.world.provider.getDimensionId();
+			int dimId = evt.getWorld().provider.getDimension();
 			if (getInstance().worldData.containsKey(dimId)) {
 				TDWorld world = getInstance().worldData.get(dimId);
 				world.unloadChunk(evt);

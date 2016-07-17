@@ -11,12 +11,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ import java.util.List;
 public class GuiHandler implements IGuiHandler {
 
 	@Override
+	@Nullable
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		switch (ID) {
@@ -38,11 +40,11 @@ public class GuiHandler implements IGuiHandler {
 			}
 			case GUIIDs.CONSERVATION_UNIT:
 			{
-				List list = world.getEntitiesWithinAABB(EntityConservationUnit.class, AxisAlignedBB.fromBounds(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1));
+				List list = world.getEntitiesWithinAABB(EntityConservationUnit.class, new AxisAlignedBB(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1));
 				if(list.isEmpty() || list.size() > 1) {
 					player.closeScreen();
 					player.openContainer = null;
-					player.addChatComponentMessage(new ChatComponentText("Cannot access! Please try a different location!"));
+					player.addChatComponentMessage(new TextComponentString("Cannot access! Please try a different location!"));
 				} else {
 					EntityConservationUnit e = (EntityConservationUnit) list.get(0);
 					return new ContainerConservationUnit(player.inventory, e);
@@ -54,6 +56,7 @@ public class GuiHandler implements IGuiHandler {
 	}
 
 	@Override
+	@Nullable
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		switch (ID) {
@@ -69,7 +72,7 @@ public class GuiHandler implements IGuiHandler {
 			{
 				Entity e = Minecraft.getMinecraft().objectMouseOver.entityHit;
 				if (e == null || !(e instanceof EntityConservationUnit)) {
-					List list = world.getEntitiesWithinAABB(EntityConservationUnit.class, AxisAlignedBB.fromBounds(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1));
+					List list = world.getEntitiesWithinAABB(EntityConservationUnit.class, new AxisAlignedBB(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1));
 					if(list.isEmpty() || list.size() > 1) {
 						player.closeScreen();
 						player.openContainer = null;

@@ -7,3 +7,8 @@ item.nwcore:upgradeTool.name=Upgrade Tool
 #EnergyTypes
 tooltip.item.energyType.vanilla=Solid Fuel
 tooltip.item.energyType.ic2=EU Electricity
+tooltip.item.energyType.redstoneflux=Redstone Flux
+
+tooltip.item.energyType.short.vanilla=Fuel
+tooltip.item.energyType.short.ic2=EU
+tooltip.item.energyType.short.redstoneflux=RF

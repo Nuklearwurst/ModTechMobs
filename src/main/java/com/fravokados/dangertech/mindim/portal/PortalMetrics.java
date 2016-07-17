@@ -10,11 +10,12 @@ import com.fravokados.dangertech.mindim.block.ModBlocks;
 import com.fravokados.dangertech.mindim.block.types.PortalFrameType;
 import com.fravokados.dangertech.mindim.lib.Strings;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -347,9 +348,6 @@ public class PortalMetrics {
 	}
 
 	public static PortalMetrics getMetricsFromNBT(NBTTagCompound nbt) {
-		if(nbt == null) {
-			return null;
-		}
 		PortalMetrics metrics = new PortalMetrics();
 		metrics.readFromNBT(nbt);
 		return metrics;
@@ -437,7 +435,7 @@ public class PortalMetrics {
 							((IFacingSix) te).setFacing(front);
 						}
 					} else {
-						world.setBlockState(pos, Blocks.air.getDefaultState());
+						world.setBlockState(pos, Blocks.AIR.getDefaultState());
 					}
 				}
 			}
@@ -457,8 +455,9 @@ public class PortalMetrics {
 				for(int k = minZ; k <= maxZ; k++) {
 					flagZ = k == minZ || k == maxZ;
 					if(flagX == flagY ? flagX : flagZ) {
-						BlockPos pos = new BlockPos(i, j, k);
-						worldObj.markBlockForUpdate(pos);
+						final BlockPos pos = new BlockPos(i, j, k);
+						final IBlockState blockState= worldObj.getBlockState(pos);
+						worldObj.notifyBlockUpdate(pos, blockState, blockState, 3);
 					}
 				}
 			}

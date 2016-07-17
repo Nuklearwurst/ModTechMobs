@@ -3,7 +3,7 @@
     "category": "block",
     "sounds": [
       {
-        "name": "emp",
+        "name": "techmobs:emp",
         "stream": false
       }
     ]

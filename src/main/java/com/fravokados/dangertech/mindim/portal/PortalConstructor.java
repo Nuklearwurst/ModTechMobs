@@ -7,7 +7,7 @@ import com.fravokados.dangertech.mindim.configuration.Settings;
 import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import com.fravokados.dangertech.mindim.lib.util.SimpleObjectReference;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 

@@ -10,6 +10,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ public class ItemMindDimUpgrade extends ItemMDMultiType implements IUpgrade {
     }
 
     @Override
+    @Nullable
     public IUpgradeDefinition getUpgradeDefinition(ItemStack item) {
         switch (item.getItemDamage()) {
             case META_REVERSE_DIRECTION:

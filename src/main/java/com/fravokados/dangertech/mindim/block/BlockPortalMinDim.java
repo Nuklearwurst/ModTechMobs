@@ -7,15 +7,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,52 +31,52 @@ import java.util.Random;
  */
 public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 
-	public static final PropertyEnum<EnumFacing.Axis> AXIS_PROPERTY = PropertyEnum.create("axis", EnumFacing.Axis.class);
+	private static final PropertyEnum<EnumFacing.Axis> AXIS_PROPERTY = PropertyEnum.create("axis", EnumFacing.Axis.class);
 
+	protected static final AxisAlignedBB X_AABB = new AxisAlignedBB(0.2F, 0, 0, 0.8F, 1, 1);
+	protected static final AxisAlignedBB Y_AABB = new AxisAlignedBB(0, 0.2F, 0, 1, 0.8F, 1);
+	protected static final AxisAlignedBB Z_AABB = new AxisAlignedBB(0, 0, 0.2F, 1, 1, 0.8F);
 
 	public BlockPortalMinDim() {
-		super(Material.portal, Strings.Block.portal);
-		this.setCreativeTab(null);
+		super(Material.PORTAL, Strings.Block.portal);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(AXIS_PROPERTY, EnumFacing.Axis.X));
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return null;
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-		switch (world.getBlockState(pos).getValue(AXIS_PROPERTY)) {
-			case X: //X axis
-				setBlockBounds(0.2F, 0, 0, 0.8F, 1, 1);
-				break;
-			case Y: //Y axis
-				setBlockBounds(0, 0.2F, 0, 1, 0.8F, 1);
-				break;
-			case Z: //Z axis
-				setBlockBounds(0, 0, 0.2F, 1, 1, 0.8F);
-				break;
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		switch (state.getValue(AXIS_PROPERTY)) {
+			case X:
+				return X_AABB;
+			case Y:
+				return Y_AABB;
+			case Z:
+			default:
+				return Z_AABB;
 		}
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, AXIS_PROPERTY);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, AXIS_PROPERTY);
 	}
 
 	@Override
-	public boolean isFullCube() {
+	public boolean isFullCube(IBlockState blockState) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullBlock() {
+	public boolean isFullBlock(IBlockState blockState) {
 		return false;
 	}
 
@@ -97,7 +99,7 @@ public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 		for(EnumFacing dir : EnumFacing.VALUES) {
 			BlockPos newPos = pos.offset(dir);
 			Block b = world.getBlockState(newPos).getBlock();
-			if(b != null && b instanceof BlockPortalMinDim) {
+			if(b instanceof BlockPortalMinDim) {
 				this.removePortalAndSurroundingPortals(world, newPos);
 			}
 		}
@@ -116,15 +118,16 @@ public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 	}
 
 	@Override
-	public Item getItem(World worldIn, BlockPos pos) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		//noinspection ConstantConditions
 		return null;
 	}
 
-
+	@Override
 	@SideOnly(Side.CLIENT)
-	public EnumWorldBlockLayer getBlockLayer()
+	public BlockRenderLayer getBlockLayer()
 	{
-		return EnumWorldBlockLayer.TRANSLUCENT;
+		return BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
@@ -143,9 +146,12 @@ public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 
 
 	public static void placePortalInWorld(World world, BlockPos pos, BlockPos controllerPos, EnumFacing.Axis axis) {
+		//noinspection ConstantConditions
 		world.setBlockState(pos, ModBlocks.blockPortalBlock.getDefaultState().withProperty(AXIS_PROPERTY, axis));
 		TileEntityPortal te = (TileEntityPortal) world.getTileEntity(pos);
-		te.setPortalController(controllerPos);
+		if (te != null) {
+			te.setPortalController(controllerPos);
+		}
 	}
 
 	public static int convertFacingToMeta(int facing) {

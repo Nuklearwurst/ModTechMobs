@@ -1,11 +1,10 @@
 package com.fravokados.dangertech.techmobs.entity.ai;
 
-import com.fravokados.dangertech.techmobs.lib.util.LogHelperTM;
 import com.fravokados.dangertech.techmobs.techdata.TDTickManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public class EntityAIScanArea extends EntityAIBase {
 	/**
@@ -37,7 +36,7 @@ public class EntityAIScanArea extends EntityAIBase {
 	public void startExecuting() {
 		super.startExecuting();
 		if (timer == 0) {
-			LogHelperTM.logDev("Mob is scanning chunk!");
+//			LogHelperTM.logDev("Mob is scanning chunk!");
 			scanChunk();
 			timer = maxTimer;
 		}

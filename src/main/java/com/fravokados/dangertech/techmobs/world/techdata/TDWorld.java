@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.techmobs.world.techdata;
 
 import com.fravokados.dangertech.techmobs.lib.util.LogHelperTM;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 
@@ -19,10 +19,10 @@ public class TDWorld {
 	/**
 	 * contains chunk techdata
 	 */
-	public final Map<ChunkCoordIntPair, TDChunk> chunkData;
+	public final Map<ChunkPos, TDChunk> chunkData;
 	
 	public TDWorld() {
-		chunkData = new HashMap<ChunkCoordIntPair, TDChunk>();
+		chunkData = new HashMap<ChunkPos, TDChunk>();
 	}
 	
 	/**
@@ -37,7 +37,7 @@ public class TDWorld {
 	 * loads chunkData from disk
 	 */
 	public boolean loadChunkData(ChunkDataEvent.Load evt) {
-		ChunkCoordIntPair pos = evt.getChunk().getChunkCoordIntPair();
+		ChunkPos pos = evt.getChunk().getChunkCoordIntPair();
 		if(chunkData.containsKey(pos)) {
 			LogHelperTM.warn("Something happened during chunk loading! This chunk was already loaded!");
 		}
@@ -66,7 +66,7 @@ public class TDWorld {
 		chunkData.remove(evt.getChunk().getChunkCoordIntPair());		
 	}
 	
-	public TDChunk getChunk(ChunkCoordIntPair coords) {
+	public TDChunk getChunk(ChunkPos coords) {
 		if(!chunkData.containsKey(coords)) {
 			chunkData.put(coords, new TDChunk());
 		}

@@ -9,7 +9,7 @@ import net.minecraft.creativetab.CreativeTabs;
 public class BlockTM extends BlockNW {
 
 	public BlockTM(String registryName) {
-		super(Material.rock, Reference.MOD_ID, registryName, ModTechMobs.TAB_TM);
+		super(Material.ROCK, Reference.MOD_ID, registryName, ModTechMobs.TAB_TM);
 	}
 
 	public BlockTM(Material material, String registryName) {

@@ -4,7 +4,8 @@ import com.fravokados.dangertech.techmobs.command.CommandTechData;
 import com.fravokados.dangertech.techmobs.command.SubCommand;
 import com.fravokados.dangertech.techmobs.world.techdata.TDChunk;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * @author Nuklearwurst
@@ -16,9 +17,9 @@ public class CommandTechDataRead extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) {
 		TDChunk chunk = CommandTechData.getChunkData(sender);
-		sender.addChatMessage(new ChatComponentText("TechLevel in this Chunk: " + chunk.techLevel));
-		sender.addChatMessage(new ChatComponentText("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
+		sender.addChatMessage(new TextComponentString("TechLevel in this Chunk: " + chunk.techLevel));
+		sender.addChatMessage(new TextComponentString("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 	}
 }

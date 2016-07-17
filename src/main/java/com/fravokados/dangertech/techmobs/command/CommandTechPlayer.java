@@ -5,23 +5,22 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class CommandTechPlayer extends CommandBase implements IModCommand {
 	
 	private final List<String> aliases;
 	
-	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(new Comparator<SubCommand>() {
-		@Override
-		public int compare(SubCommand o1, SubCommand o2) {
-			return o1.compareTo(o2);
-		}
+	private final SortedSet<SubCommand> children = new TreeSet<>((o1, o2) -> {
+		return o1.compareTo(o2);
 	});
 
 	public CommandTechPlayer() {
-		this.aliases = new ArrayList<String>();
+		this.aliases = new ArrayList<>();
 		this.aliases.add("techplayer");
 		this.aliases.add("tdp");
 		addChildCommand(new CommandPlayerDataRead());
@@ -72,8 +71,8 @@ public class CommandTechPlayer extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
+	public void execute(MinecraftServer server,  ICommandSender sender, String[] args) throws CommandException {
+		if (!CommandHelpers.processStandardCommands(server, sender, this, args)) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}
@@ -86,8 +85,8 @@ public class CommandTechPlayer extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args, pos);
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+		return CommandHelpers.getTabCompletionOptionsForSubCommands(server, this, sender, args, pos);
 	}
 
 	@Override

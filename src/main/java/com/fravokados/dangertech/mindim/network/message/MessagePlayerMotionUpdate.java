@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Nuklearwurst
  */
@@ -51,6 +53,7 @@ public class MessagePlayerMotionUpdate implements IMessage, IMessageHandler<Mess
 
 	@SideOnly(Side.CLIENT)
 	@Override
+	@Nullable
 	public IMessage onMessage(MessageGuiElementClicked message, MessageContext ctx) {
 		EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
 		if (entityPlayer != null)

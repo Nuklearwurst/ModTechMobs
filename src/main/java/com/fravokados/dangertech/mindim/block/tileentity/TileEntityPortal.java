@@ -4,7 +4,9 @@ import com.fravokados.dangertech.mindim.block.BlockPortalMinDim;
 import com.fravokados.dangertech.mindim.lib.util.LogHelperMD;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
 
 /**
  * helper tileentity that stores data used to determine the portals destination
@@ -34,6 +36,7 @@ public class TileEntityPortal extends TileEntity {
 		}
 	}
 
+	@Nullable
 	public TileEntityPortalControllerEntity getController() {
 		TileEntity controller = this.worldObj.getTileEntity(this.controllerPos);
 		if(controller == null || !(controller instanceof TileEntityPortalControllerEntity)) {

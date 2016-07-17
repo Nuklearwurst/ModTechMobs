@@ -20,6 +20,7 @@ public class Strings {
 	public static final class Item {
 		public static final String destinationCard = "destinationCard";
 		public static final String destinationCardMinDim = "destinationCardMinDim";
+		public static final String debugger = "debugger";
 		public static final String upgrade = "upgrade";
 
 		public static final String upgradeReverse = "upgrade_reverse";

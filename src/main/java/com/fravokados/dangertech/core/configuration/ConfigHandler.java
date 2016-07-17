@@ -48,7 +48,7 @@ public class ConfigHandler {
 
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-		if(eventArgs.modID.equalsIgnoreCase(Reference.MOD_ID)) {
+		if(eventArgs.getModID().equalsIgnoreCase(Reference.MOD_ID)) {
 			load(false);
 			LogHelperCore.info("Reloading config!");
 		}

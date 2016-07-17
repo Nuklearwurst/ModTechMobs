@@ -4,15 +4,16 @@ import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.dangertech.core.lib.util.GeneralUtils;
 import com.fravokados.dangertech.techmobs.common.EMPExplosion;
 import com.fravokados.dangertech.techmobs.techdata.effects.TDEffects;
-import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class CommandTechMobs extends CommandBase implements IModCommand {
@@ -30,7 +31,6 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		this.aliases = new ArrayList<String>();
 		this.aliases.add("techmobs");
 		this.aliases.add("tmobs");
-		addChildCommand(new CommandFill());
 		addChildCommand(new Effect());
 		addChildCommand(new EMP());
 	}
@@ -76,65 +76,15 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		if (!CommandHelpers.processStandardCommands(server, sender, this, args)) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		return CommandHelpers.addTabCompletionOptionsForSubCommands(this, sender, args, pos);
-	}
-
-	public static class CommandFill extends SubCommand {
-
-		public CommandFill() {
-			super("fill");
-		}
-
-		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
-			if (args.length < 7) {
-				CommandHelpers.throwWrongUsage(sender, this);
-			} else {
-				BlockPos pos = sender.getPosition();
-				int x1 = CommandHelpers.getCoordFromCommand(pos.getX(), args[0]);
-				int y1 = CommandHelpers.getCoordFromCommand(pos.getY(), args[1]);
-				int z1 = CommandHelpers.getCoordFromCommand(pos.getZ(), args[2]);
-
-				int x2 = CommandHelpers.getCoordFromCommand(pos.getX(), args[3]);
-				int y2 = CommandHelpers.getCoordFromCommand(pos.getY(), args[4]);
-				int z2 = CommandHelpers.getCoordFromCommand(pos.getZ(), args[5]);
-
-				Block block = Block.getBlockFromName(args[6]);
-
-				boolean xn = x1 < x2;
-				boolean yn = y1 < y2;
-				boolean zn = z1 < z2;
-				World world = sender.getEntityWorld();
-				if (world != null) {
-					for (int x = 0; x <= GeneralUtils.getDifference(x1, x2); x++) {
-						for (int y = 0; y <= GeneralUtils.getDifference(y1, y2); y++) {
-							for (int z = 0; z <= GeneralUtils.getDifference(z1, z2); z++) {
-								int xt = xn ? x1 + x : x1 - x;
-								int yt = yn ? y1 + y : y1 - y;
-								int zt = zn ? z1 + z : z1 - z;
-								world.setBlockState(new BlockPos(xt, yt, zt), block.getDefaultState());
-							}
-						}
-					}
-				}
-			}
-		}
-
-		@Override
-		public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-			if (args.length == 7) {
-				return getListOfStringsMatchingLastWord(args, Block.blockRegistry.getKeys());
-			}
-			return null;
-		}
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+		return CommandHelpers.getTabCompletionOptionsForSubCommands(server, this, sender, args, pos);
 	}
 
 	public static class Effect extends SubCommand {
@@ -151,13 +101,13 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 			}
 
 			@Override
-			public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+			public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 				if (sender instanceof EntityPlayer && args.length == 1) {
 					int effectStrength = CommandBase.parseInt(args[0]);
 					List<TDPlayerEffect> list = TDEffects.getInstance().getUsablePlayerEffects(effectStrength, sender.getName(), (EntityPlayer) sender);
 					int index = GeneralUtils.random.nextInt(list.size());
 					int result = list.get(index).applyEffect(effectStrength, sender.getName(), (EntityPlayer) sender);
-					sender.addChatMessage(new ChatComponentText("Needed TechValue: " + result));
+					sender.addChatMessage(new TextComponentString("Needed TechValue: " + result));
 				} else {
 					CommandHelpers.throwWrongUsage(sender, this);
 				}
@@ -172,9 +122,9 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+		public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 			World world = sender.getEntityWorld();
-			if((world == null) || (!(sender instanceof EntityPlayer))) {
+			if(!(sender instanceof EntityPlayer)) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}
 			EMPExplosion emp = new EMPExplosion(world, ((EntityPlayer)sender).posX, ((EntityPlayer) sender).posY + 1, ((EntityPlayer) sender).posZ, 1, 4);

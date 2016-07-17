@@ -8,9 +8,11 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,8 +27,8 @@ public class CommandPlayerDataScan extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
-		if(!CommandHelpers.processDefaultStandartCommands(sender, this, args, "level")) {
+	public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		if(!CommandHelpers.processDefaultStandardCommands(server, sender, this, args, "level")) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}
@@ -38,10 +40,10 @@ public class CommandPlayerDataScan extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+		public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 			EntityPlayer player = null;
 			if(args.length == 1) {
-				player = CommandBase.getPlayer(sender, args[0]);
+				player = CommandBase.getPlayer(server, sender, args[0]);
 			} else if(args.length == 0 && sender instanceof EntityPlayer) {
 				player = CommandBase.getCommandSenderAsPlayer(sender);
 			}
@@ -49,8 +51,8 @@ public class CommandPlayerDataScan extends SubCommand {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}
 			TDManager.scanPlayer(player);
-			sender.addChatMessage(new ChatComponentText("Scanning..."));
-			sender.addChatMessage(new ChatComponentText("Updated TechLevel: " + TDManager.getPlayerTechLevel(player)));
+			sender.addChatMessage(new TextComponentString("Scanning..."));
+			sender.addChatMessage(new TextComponentString("Updated TechLevel: " + TDManager.getPlayerTechLevel(player)));
 		}
 
 		@Override
@@ -59,11 +61,11 @@ public class CommandPlayerDataScan extends SubCommand {
 		}
 
 		@Override
-		public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+		public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 			if(args.length == 1) {
-				return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
+				return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 			}
-			return null;
+			return new ArrayList<>();
 		}
 	}
 
@@ -74,10 +76,10 @@ public class CommandPlayerDataScan extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+		public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 			EntityPlayer player = null;
 			if(args.length == 1) {
-				player = CommandBase.getPlayer(sender, args[0]);
+				player = CommandBase.getPlayer(server, sender, args[0]);
 			} else if(args.length == 0 && sender instanceof EntityPlayer) {
 				player = CommandBase.getCommandSenderAsPlayer(sender);
 			}
@@ -85,7 +87,7 @@ public class CommandPlayerDataScan extends SubCommand {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}
 			TDManager.updatePlayerScoutedTechLevel(player);
-			sender.addChatMessage(new ChatComponentText("Updated Scouted TechLevel: " + TDManager.getPlayerScoutedTechLevel(player)));
+			sender.addChatMessage(new TextComponentString("Updated Scouted TechLevel: " + TDManager.getPlayerScoutedTechLevel(player)));
 		}
 
 		@Override
@@ -94,11 +96,11 @@ public class CommandPlayerDataScan extends SubCommand {
 		}
 
 		@Override
-		public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+		public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 			if(args.length == 1) {
-				return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
+				return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 			}
-			return null;
+			return new ArrayList<>();
 		}
 	}
 }

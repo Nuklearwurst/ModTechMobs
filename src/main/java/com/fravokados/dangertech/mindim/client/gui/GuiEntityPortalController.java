@@ -17,11 +17,12 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,6 @@ public class GuiEntityPortalController extends GuiContainer {
 	private GuiButton btnStart;
 
 	private GuiTextField txtName;
-	private GuiImageButton btnEdit;
 
 	public GuiEntityPortalController(InventoryPlayer inv, TileEntityPortalControllerEntity te) {
 		super(new ContainerEntityPortalController(inv, te));
@@ -63,12 +63,12 @@ public class GuiEntityPortalController extends GuiContainer {
 		btnStop = new GuiButton(BUTTON_ID_STOP, guiLeft + 133, guiTop + 78, 56, 20, Strings.translate(Strings.Gui.GUI_STOP));
 		this.buttonList.add(btnStop);
 
-		btnEdit = new GuiImageButton(BUTTON_ID_EDIT, guiLeft + 179, guiTop + 18, true, Textures.GUI_BUTTON_EDIT);
+		GuiImageButton btnEdit = new GuiImageButton(BUTTON_ID_EDIT, guiLeft + 179, guiTop + 18, true, Textures.GUI_BUTTON_EDIT);
 		this.buttonList.add(btnEdit);
 
 		txtName = new GuiTextField(BUTTON_ID_TEXT_FIELD, this.fontRendererObj, 58 + fontRendererObj.getStringWidth(Strings.translate(Strings.Gui.CONTROLLER_NAME) + " "), 18, 90, 20);
 		txtName.setTextColor(0x00FF00);
-		txtName.setText(te.getDisplayName().getFormattedText());
+		txtName.setText(te.getDisplayName().getUnformattedText());
 		txtName.setEnableBackgroundDrawing(false);
 		txtName.setCanLoseFocus(false);
 	}
@@ -108,8 +108,8 @@ public class GuiEntityPortalController extends GuiContainer {
 				|| (te.getState() == TileEntityPortalControllerEntity.State.INCOMING_PORTAL && (te.getUpgradeTrackerFlags() & TileEntityPortalControllerEntity.FLAG_CAN_DISCONNECT_INCOMING) == TileEntityPortalControllerEntity.FLAG_CAN_DISCONNECT_INCOMING);
 		super.drawScreen(x, y, f);
 		drawTooltips(x, y);
-		if (!txtName.isFocused() && !te.getDisplayName().getFormattedText().equals(txtName.getText())) {
-			txtName.setText(te.getDisplayName().getFormattedText());
+		if (!txtName.isFocused() && !te.getDisplayName().getUnformattedText().equals(txtName.getText())) {
+			txtName.setText(te.getDisplayName().getUnformattedText());
 		}
 	}
 
@@ -131,7 +131,7 @@ public class GuiEntityPortalController extends GuiContainer {
 		drawString(this.fontRendererObj, Strings.translate(Strings.Gui.CONTROLLER_NAME), 58, 18, 0xa2cc42);
 		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_DESTINATION, getDestinationString(te.getDestination(), te.getStackInSlot(0))), 58, 30, 0xa2cc42);
 		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_STATE, te.getState().getTranslationShort()), 58, 40, 0xa2cc42);
-		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_ERROR, te.getLastError() == TileEntityPortalControllerEntity.Error.NO_ERROR ? te.getLastError().getTranslationShort() : (EnumChatFormatting.RED + te.getLastError().getTranslationShort() + EnumChatFormatting.RESET)), 58, 50, 0xa2cc42);
+		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_ERROR, te.getLastError() == TileEntityPortalControllerEntity.Error.NO_ERROR ? te.getLastError().getTranslationShort() : (TextFormatting.RED + te.getLastError().getTranslationShort() + TextFormatting.RESET)), 58, 50, 0xa2cc42);
 
 		txtName.drawTextBox();
 	}
@@ -146,7 +146,7 @@ public class GuiEntityPortalController extends GuiContainer {
 		if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 199, guiLeft + 199 + 16, guiTop + 15, guiTop + 15 + 55)) {
 			List<String> list = new ArrayList<String>();
 			//TODO support multiple energy types
-			list.add(EnumChatFormatting.GRAY + "" + (int) te.getEnergyStored() + " EU / " + te.getMaxEnergyStored() + " EU" + EnumChatFormatting.RESET);
+			list.add(TextFormatting.GRAY + "" + (int) te.getEnergyStored() + " EU / " + te.getMaxEnergyStored() + " EU" + TextFormatting.RESET);
 			drawHoveringText(list, x, y, fontRendererObj);
 		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 55, guiLeft + 190, guiTop + 40, guiTop + 50)) {
 			List<String> list = new ArrayList<String>();
@@ -154,7 +154,7 @@ public class GuiEntityPortalController extends GuiContainer {
 			drawHoveringText(list, x, y, fontRendererObj);
 		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 55, guiLeft + 190, guiTop + 50, guiTop + 60)) {
 			List<String> list = new ArrayList<String>();
-			list.add((te.getLastError() == TileEntityPortalControllerEntity.Error.NO_ERROR ? EnumChatFormatting.GREEN : EnumChatFormatting.RED) + te.getLastError().getTranslationDetail() + EnumChatFormatting.RESET);
+			list.add((te.getLastError() == TileEntityPortalControllerEntity.Error.NO_ERROR ? TextFormatting.GREEN : TextFormatting.RED) + te.getLastError().getTranslationDetail() + TextFormatting.RESET);
 			drawHoveringText(list, x, y, fontRendererObj);
 		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 179, guiLeft + 187, guiTop + 18, guiTop + 26)) {
 			List<String> list = new ArrayList<String>();
@@ -169,7 +169,7 @@ public class GuiEntityPortalController extends GuiContainer {
 		return false;
 	}
 
-	private String getDestinationString(int dest, ItemStack stack) {
+	private String getDestinationString(int dest, @Nullable ItemStack stack) {
 		switch (dest) {
 			case PortalManager.PORTAL_MINING_DIMENSION:
 				return Strings.translate(Strings.Gui.CONTROLLER_DESTINATION_MINDIM);
@@ -199,7 +199,7 @@ public class GuiEntityPortalController extends GuiContainer {
 					return;
 				case 1:
 					txtName.setFocused(false);
-					txtName.setText(te.getDisplayName().getFormattedText());
+					txtName.setText(te.getDisplayName().getUnformattedText());
 					return;
 			}
 			txtName.textboxKeyTyped(c, keyCode);
@@ -224,6 +224,6 @@ public class GuiEntityPortalController extends GuiContainer {
 		} else {
 			te.setName(text);
 		}
-		txtName.setText(te.getDisplayName().getFormattedText());
+		txtName.setText(te.getDisplayName().getUnformattedText());
 	}
 }

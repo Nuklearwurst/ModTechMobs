@@ -8,9 +8,11 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,22 +25,19 @@ public class CommandPlayerDataRead extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
+	public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		EntityPlayer player = null;
 		if(args.length == 1) {
-			player = CommandBase.getPlayer(sender, args[0]);
+			player = CommandBase.getPlayer(server, sender, args[0]);
 		} else if(args.length == 0 && sender instanceof EntityPlayer) {
 			player = (EntityPlayer) sender;
 		} else {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
-		if(player == null) {
-			CommandHelpers.throwWrongUsage(sender, this);
-		}
 		int scoutedTechLevel = TDManager.getPlayerScoutedTechLevel(player);
 		int techLevel = TDManager.getPlayerTechLevel(player);
-		sender.addChatMessage(new ChatComponentText("TechLevel of this Player: " + techLevel));
-		sender.addChatMessage(new ChatComponentText("Scouted TechLevel of this Player: " + scoutedTechLevel));
+		sender.addChatMessage(new TextComponentString("TechLevel of this Player: " + techLevel));
+		sender.addChatMessage(new TextComponentString("Scouted TechLevel of this Player: " + scoutedTechLevel));
 	}
 
 	@Override
@@ -47,10 +46,10 @@ public class CommandPlayerDataRead extends SubCommand {
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		if(args.length == 1) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 		}
-		return null;
+		return new ArrayList<>();
 	}
 }

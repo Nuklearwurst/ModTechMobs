@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import javax.annotation.Nullable;
+
 /**
  * adapted from pahimars Equivalent Exchannge
  * https://github.com/pahimar/Equivalent-Exchange-3/
@@ -39,6 +41,7 @@ public class MessageGuiElementClicked implements IMessage, IMessageHandler<Messa
 	}
 
 	@Override
+	@Nullable
 	public IMessage onMessage(MessageGuiElementClicked message, MessageContext ctx) {
 		EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
 

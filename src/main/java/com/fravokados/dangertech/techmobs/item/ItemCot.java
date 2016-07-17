@@ -6,9 +6,11 @@ import net.minecraft.block.BlockBed;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 /**
@@ -22,11 +24,11 @@ public class ItemCot extends ItemTM {
 
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos blockPosFeet, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos blockPosFeet, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (world.isRemote) {
-			return true;
+			return EnumActionResult.SUCCESS;
 		} else if (side != EnumFacing.UP) {
-			return false;
+			return EnumActionResult.FAIL;
 		} else {
 			boolean replaceableClicked = world.getBlockState(blockPosFeet).getBlock().isReplaceable(world, blockPosFeet);
 
@@ -43,7 +45,7 @@ public class ItemCot extends ItemTM {
 				boolean isFeetBlockFree = replaceableClicked || world.isAirBlock(blockPosFeet);
 				boolean isHeadBlockFree = replaceableHead || world.isAirBlock(blockPosHead);
 
-				if (isFeetBlockFree && isHeadBlockFree && World.doesBlockHaveSolidTopSurface(world, blockPosFeet.down()) && World.doesBlockHaveSolidTopSurface(world, blockPosHead.down())) {
+				if (isFeetBlockFree && isHeadBlockFree && world.isSideSolid(blockPosFeet.down(), EnumFacing.UP) && world.isSideSolid(blockPosHead.down(), EnumFacing.UP)) {
 					//noinspection ConstantConditions
 					IBlockState blockStateFoot = ModBlocks.block_cot.getDefaultState().withProperty(BlockBed.OCCUPIED, false).withProperty(BlockBed.FACING, rotation).withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
 
@@ -53,12 +55,12 @@ public class ItemCot extends ItemTM {
 					}
 
 					--stack.stackSize;
-					return true;
+					return EnumActionResult.SUCCESS;
 				} else {
-					return false;
+					return EnumActionResult.FAIL;
 				}
 			} else {
-				return false;
+				return EnumActionResult.FAIL;
 			}
 		}
 	}

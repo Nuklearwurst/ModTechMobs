@@ -71,6 +71,7 @@ public class GuiCreativeTechnology extends GuiContainer {
 		}
 	}
 
+	@Override
 	protected void keyTyped(char keyPressed, int keyCode) throws IOException {
 		this.txtValue.textboxKeyTyped(keyPressed, keyCode);
 

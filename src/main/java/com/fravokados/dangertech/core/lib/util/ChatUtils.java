@@ -1,17 +1,17 @@
 package com.fravokados.dangertech.core.lib.util;
 
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * @author Nuklearwurst
  */
 public class ChatUtils {
 
-	public static IChatComponent getTranslatedChatComponentWithColor(String key, EnumChatFormatting color) {
-		IChatComponent c = new ChatComponentTranslation(key);
-		c.getChatStyle().setColor(color);
+	public static ITextComponent getTranslatedChatComponentWithColor(String key, TextFormatting color) {
+		ITextComponent c = new TextComponentTranslation(key);
+		c.getStyle().setColor(color);
 		return c;
 	}
 }

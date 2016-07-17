@@ -27,9 +27,10 @@ public class TileEntityCreativeTechnology extends TileEntity implements ITechdat
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setInteger("value", value);
+		return tag;
 	}
 
 	public void setTechData(int value) {

@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Nuklearwurst
  */
@@ -37,6 +39,7 @@ public class MessageContainerIntegerUpdateServer implements IMessage, IMessageHa
 	}
 
 	@Override
+	@Nullable
 	public IMessage onMessage(MessageContainerIntegerUpdateServer message, MessageContext ctx) {
 		EntityPlayer entityPlayer = ctx.getServerHandler().playerEntity;
 		if (entityPlayer != null) {

@@ -55,7 +55,7 @@ public class TDChunk {
 			techLevel = data.getInteger(NBT_KEY + "techLevel");
 			scoutedTechLevel = data.getInteger(NBT_KEY + "scoutedTechLevel");
 			if(scoutedTechLevel > TechDataStorage.getInstance().getDangerousChunkLevel()) {
-				ChunkLocation chunk = new ChunkLocation(evt.world, evt.getChunk().getChunkCoordIntPair());
+				ChunkLocation chunk = new ChunkLocation(evt.getWorld(), evt.getChunk().getChunkCoordIntPair());
 				TechDataStorage.getInstance().addDangerousChunk(chunk, techLevel);
 			}
 			return true;

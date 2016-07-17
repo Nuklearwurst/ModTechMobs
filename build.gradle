@@ -7,7 +7,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
 
@@ -18,23 +18,31 @@ group= "com.fravokados.dangertech" // http://maven.apache.org/guides/mini/guide-
 //noinspection GroovyUnusedAssignment
 archivesBaseName = "DangerousTechnology"
 
+// java version
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 minecraft {
-    version = "1.8.9-11.15.1.1722"
+    version = mcversion + "-" + forgeversion
     runDir = "run"
 
-    mappings = "stable_20"
+    mappings = mcp_mappings
 	
 	replace '@VERSION@', project.version
 }
 
 repositories {
 	maven {
-		name = "ic2"
-		url = "http://maven.ic2.player.to/"
+		name "ic2"
+		url "http://maven.ic2.player.to/"
 	}
     maven {
         name "xcompwiz"
         url "http://maven.xcompwiz.com"
+    }
+    maven {
+        name "tesla"
+        url 'http://maven.epoxide.xyz'
     }
 }
 
@@ -56,8 +64,10 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    //api 'net.industrial-craft:industrialcraft-2:2.2.719-experimental:api'
-    //api "com.xcompwiz.lookingglass:lookingglass:0.2.0.00:dev"
+
+
+    api "net.industrial-craft:industrialcraft-2:2.6.9-ex110:api"
+    api "net.darkhax.tesla:Tesla:1.9.4-1.1.0.24"
 
 }
 
@@ -75,7 +85,7 @@ processResources
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
         
-    // copy everything else, thats not the mcmod.info
+    // copy everything else, that's not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
 //        exclude 'mcmod.info'
         include 'assets/**/*.*'
@@ -97,10 +107,11 @@ jar {
                 exclude '**/lookingglass/api/hook/**'
                 exclude '**/lookingglass/api/impl/**'
                 exclude '**/lookingglass/api/view/**'
+                exclude '**/net/darkhax/tesla/**'
             }
         }
     }
-    //exclude unneded mcmod.info files
+    //exclude unneeded mcmod.info files
     exclude 'nwcore.info'
     exclude 'techmobs.info'
     exclude 'mindim.info'

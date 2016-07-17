@@ -19,7 +19,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -91,12 +91,12 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent evt) {
-		if (evt.world.isRemote) {
+		if (evt.getWorld().isRemote) {
 			return;
 		}
-		if (Settings.TechScanning.INJECT_SCANNING_AI > 0 && (Settings.TechScanning.INJECT_SCANNING_AI == 1 || evt.world.rand.nextInt(Settings.TechScanning.INJECT_SCANNING_AI) == 0)) {
-			if (evt.entity instanceof EntityZombie || evt.entity instanceof EntitySkeleton) {
-				EntityLiving e = ((EntityLiving) evt.entity);
+		if (Settings.TechScanning.INJECT_SCANNING_AI > 0 && (Settings.TechScanning.INJECT_SCANNING_AI == 1 || evt.getWorld().rand.nextInt(Settings.TechScanning.INJECT_SCANNING_AI) == 0)) {
+			if (evt.getEntity() instanceof EntityZombie || evt.getEntity() instanceof EntitySkeleton) {
+				EntityLiving e = ((EntityLiving) evt.getEntity());
 				EntityUtils.addAITask(e, 3, new EntityAIScanArea(e));
 			}
 		}
@@ -105,8 +105,8 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public void onEntitySetAttackTarget(LivingSetAttackTargetEvent evt) {
-		if (!evt.entity.worldObj.isRemote && evt.target instanceof EntityPlayer && (evt.entityLiving instanceof IMob || evt.entityLiving instanceof EntityTameable)) {
-			EntityPlayer player = (EntityPlayer) evt.target;
+		if (!evt.getEntity().worldObj.isRemote && evt.getTarget() instanceof EntityPlayer && (evt.getEntityLiving() instanceof IMob || evt.getEntityLiving() instanceof EntityTameable)) {
+			EntityPlayer player = (EntityPlayer) evt.getTarget();
 			for (ItemStack stack : player.inventory.mainInventory) {
 				if (stack != null && stack.stackSize != 0 && stack.getItem() instanceof IItemAttackTargetListener) {
 					((IItemAttackTargetListener) stack.getItem()).onSetAttackTarget(evt, stack);
@@ -118,22 +118,23 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public void onEntityAttack(LivingAttackEvent evt) {
-		if (!evt.entity.worldObj.isRemote && evt.entity instanceof EntityPlayer) {
-			if (evt.source.getEntity() instanceof IMob) {
-				TDManager.scanAndUpdatePlayerTD((EntityPlayer) evt.entity);
+		if (!evt.getEntity().worldObj.isRemote && evt.getEntity() instanceof EntityPlayer) {
+			if (evt.getSource().getEntity() instanceof IMob) {
+				TDManager.scanAndUpdatePlayerTD((EntityPlayer) evt.getEntity());
 			}
 		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerDropsOnDeath(PlayerDropsEvent evt) {
-		World world = evt.entityPlayer.getEntityWorld();
+		World world = evt.getEntityPlayer().getEntityWorld();
 		if (!world.isRemote && !world.getGameRules().getBoolean("keepInventory")) {
-			for (EntityItem entityItem : evt.drops) {
-				if (entityItem != null && entityItem.getEntityItem()  != null && entityItem.getEntityItem().stackSize != 0 && entityItem.getEntityItem().getItem() == ModItems.conservationUnit) {
-					int x = (int) evt.entityPlayer.posX;
-					int y = (int) evt.entityPlayer.posY;
-					int z = (int) evt.entityPlayer.posZ;
+			for (EntityItem entityItem : evt.getDrops()) {
+				//noinspection ConstantConditions
+				if (entityItem != null && entityItem.getEntityItem().getItem() == ModItems.conservationUnit && entityItem.getEntityItem().stackSize != 0) {
+					int x = (int) evt.getEntityPlayer().posX;
+					int y = (int) evt.getEntityPlayer().posY;
+					int z = (int) evt.getEntityPlayer().posZ;
 					BlockPos pos = new BlockPos(x, y, z);
 					if (BlockUtils.isBlockReplaceable(world, pos)) {
 						while (BlockUtils.isBlockReplaceable(world, pos.down()) && y > 3) {
@@ -166,7 +167,7 @@ public class TMEventHandler {
 						}
 					}
 					EntityConservationUnit entity = new EntityConservationUnit(world, x, y + 1, z);
-					entity.addCapturedDrops(evt.drops);
+					entity.addCapturedDrops(evt.getDrops());
 					world.spawnEntityInWorld(entity);
 					evt.setCanceled(true);
 					break;

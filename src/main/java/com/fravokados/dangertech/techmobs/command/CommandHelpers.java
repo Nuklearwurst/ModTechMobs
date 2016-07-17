@@ -6,9 +6,13 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,39 +22,40 @@ import java.util.List;
  */
 public class CommandHelpers {
 
-	public static World getWorld(ICommandSender sender, IModCommand command, String[] args, int worldArgIndex) throws CommandException {
+	public static World getWorld(MinecraftServer server, ICommandSender sender, IModCommand command, String[] args, int worldArgIndex) throws CommandException {
 		// Handle passed in world argument
 		if (worldArgIndex < args.length)
 			try {
 				int dim = Integer.parseInt(args[worldArgIndex]);
-				World world = MinecraftServer.getServer().worldServerForDimension(dim);
+				World world = server.worldServerForDimension(dim);
+				//noinspection ConstantConditions
 				if (world != null)
 					return world;
 			} catch (Exception ex) {
 				throwWrongUsage(sender, command);
 			}
-		return getWorld(sender, command);
+		return getWorld(server, sender, command);
 	}
 
-	public static World getWorld(ICommandSender sender, IModCommand command) {
+	public static World getWorld(MinecraftServer server, ICommandSender sender, IModCommand command) {
 		if (sender instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) sender;
 			return player.worldObj;
 		}
-		return MinecraftServer.getServer().worldServerForDimension(0);
+		return server.worldServerForDimension(0);
 	}
 
-	public static String[] getPlayers() {
-		return MinecraftServer.getServer().getAllUsernames();
+	public static String[] getPlayersUserNames(MinecraftServer server) {
+		return server.getAllUsernames();
 	}
 
 	public static void sendLocalizedChatMessage(ICommandSender sender, String locTag, Object... args) {
-		sender.addChatMessage(new ChatComponentTranslation(locTag, args));
+		sender.addChatMessage(new TextComponentTranslation(locTag, args));
 	}
 
-	public static void sendLocalizedChatMessage(ICommandSender sender, ChatStyle chatStyle, String locTag, Object... args) {
-		ChatComponentTranslation chat = new ChatComponentTranslation(locTag, args);
-		chat.setChatStyle(chatStyle);
+	public static void sendLocalizedChatMessage(ICommandSender sender, Style chatStyle, String locTag, Object... args) {
+		TextComponentTranslation chat = new TextComponentTranslation(locTag, args);
+		chat.setStyle(chatStyle);
 		sender.addChatMessage(chat);
 	}
 
@@ -58,20 +63,20 @@ public class CommandHelpers {
 		throw new WrongUsageException((GeneralUtils.translateWithFormat("command.techmobs.help", command.getCommandUsage(sender))));
 	}
 
-	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) throws CommandException {
+	public static void processChildCommand(MinecraftServer server, ICommandSender sender, SubCommand child, String[] args) throws CommandException {
 		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString()))
 			throw new WrongUsageException(GeneralUtils.translate("command.techmobs.noperms"));
 		String[] newargs = new String[args.length - 1];
 		System.arraycopy(args, 1, newargs, 0, newargs.length);
-		child.processCommand(sender, newargs);
+		child.execute(server, sender, newargs);
 	}
 
 	public static void printHelp(ICommandSender sender, IModCommand command) {
-		ChatStyle header = new ChatStyle();
-		header.setColor(EnumChatFormatting.BLUE);
+		Style header = new Style();
+		header.setColor(TextFormatting.BLUE);
 		sendLocalizedChatMessage(sender, header, "command.techmobs." + command.getFullCommandString().replace(" ", ".") + ".format", command.getFullCommandString());
-		ChatStyle body = new ChatStyle();
-		body.setColor(EnumChatFormatting.GRAY);
+		Style body = new Style();
+		body.setColor(TextFormatting.GRAY);
 		sendLocalizedChatMessage(sender, body, "command.techmobs.aliases", command.getCommandAliases().toString().replace("[", "").replace("]", ""));
 		sendLocalizedChatMessage(sender, body, "command.techmobs.permlevel", command.getPermissionLevel());
 		sendLocalizedChatMessage(sender, body, "command.techmobs." + command.getFullCommandString().replace(" ", ".") + ".help");
@@ -83,14 +88,14 @@ public class CommandHelpers {
 		}
 	}
 
-	public static boolean processDefaultStandartCommands(ICommandSender sender, IModCommand command, String[] oldArgs, String newArg) throws CommandException {
+	public static boolean processDefaultStandardCommands(MinecraftServer server, ICommandSender sender, IModCommand command, String[] oldArgs, String newArg) throws CommandException {
 		String[] newargs = new String[oldArgs.length + 1];
 		newargs[0] = newArg;
 		System.arraycopy(oldArgs, 0, newargs, 1, oldArgs.length);
-		return CommandHelpers.processStandardCommands(sender, command, newargs);
+		return CommandHelpers.processStandardCommands(server, sender, command, newargs);
 	}
 
-	public static boolean processStandardCommands(ICommandSender sender, IModCommand command, String[] args) throws CommandException {
+	public static boolean processStandardCommands(MinecraftServer server, ICommandSender sender, IModCommand command, String[] args) throws CommandException {
 		if (args.length >= 1) {
 			if (args[0].equals("help")) {
 				command.printHelp(sender);
@@ -98,7 +103,7 @@ public class CommandHelpers {
 			}
 			for (SubCommand child : command.getChildren()) {
 				if (matches(args[0], child)) {
-					processChildCommand(sender, child, args);
+					processChildCommand(server, sender, child, args);
 					return true;
 				}
 			}
@@ -107,13 +112,15 @@ public class CommandHelpers {
 	}
 
 	public static boolean matches(String commandName, IModCommand command) {
-		if (commandName.equals(command.getCommandName()))
+		if (commandName.equals(command.getCommandName())) {
 			return true;
-		else if (command.getCommandAliases() != null)
+		} else {
 			for (String alias : command.getCommandAliases()) {
-				if (commandName.equals(alias))
+				if (commandName.equals(alias)) {
 					return true;
+				}
 			}
+		}
 		return false;
 	}
 
@@ -127,22 +134,22 @@ public class CommandHelpers {
 		return Integer.parseInt(arg);
 	}
 
-	public static List<String> addTabCompletionOptionsForSubCommands(IModCommand command, ICommandSender sender, String[] args, BlockPos pos) {
+	public static List<String> getTabCompletionOptionsForSubCommands(MinecraftServer server, IModCommand command, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		if(args.length == 1) {
-			List<String> list = new ArrayList<String>();
+			List<String> list = new ArrayList<>();
 			for (SubCommand sub : command.getChildren()) {
 				if(sub.getCommandName().toLowerCase().startsWith(args[0].toLowerCase())) {
 					list.add(sub.getCommandName());
 				}
 			}
-			return list.isEmpty() ? null : list;
+			return list;
 		} else {
 			for (SubCommand child : command.getChildren()) {
 				if (matches(args[0], child)) {
-					return child.addTabCompletionOptions(sender, Arrays.copyOfRange(args, 1, args.length), pos);
+					return child.getTabCompletionOptions(server, sender, Arrays.copyOfRange(args, 1, args.length), pos);
 				}
 			}
 		}
-		return null;
+		return new ArrayList<>();
 	}
 }

@@ -38,7 +38,6 @@ public class ModItems {
 		///////////////////
 		// General Items //
 		///////////////////
-		ModNwCore.proxy.registerItem(new ItemCot());
 
 		////////////////////
 		// TechData Items //

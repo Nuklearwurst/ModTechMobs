@@ -2,6 +2,7 @@ package com.fravokados.dangertech.techmobs.lib.util;
 
 import com.google.common.collect.Lists;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class CommandUtils {
@@ -10,7 +11,7 @@ public class CommandUtils {
 	 * inspired by OpenModsLib of the OpenMods-Team <br>
 	 * <a href="https://github.com/OpenMods/OpenModsLib/">https://github.com/OpenMods/OpenModsLib/</a>
 	 */
-	public static List<String> filterCompletion(String prefix, List<String> completionList) {
+	public static List<String> filterCompletion(@Nullable String prefix, List<String> completionList) {
 		if (prefix == null || prefix.isEmpty() || prefix.equals(" ")) {
 			return Lists.newArrayList(completionList);
 		}

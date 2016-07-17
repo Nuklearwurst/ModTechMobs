@@ -5,6 +5,7 @@ import com.fravokados.dangertech.api.upgrade.IUpgradeDefinition;
 import com.fravokados.dangertech.core.plugin.ic2.IC2UpgradeIntegration;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +14,12 @@ import java.util.List;
  */
 public class UpgradeHelper {
 
-	public static boolean isUpgrade(ItemStack item) {
+	public static boolean isUpgrade(@Nullable ItemStack item) {
 		return item != null && (item.getItem() instanceof IUpgrade || IC2UpgradeIntegration.isUpgrade(item));
 	}
 
-	public static IUpgradeDefinition getUpgradeDefinition(ItemStack item) {
+	@Nullable
+	public static IUpgradeDefinition getUpgradeDefinition(@Nullable ItemStack item) {
 		if(item != null) {
 			if (item.getItem() instanceof IUpgrade) {
 				return ((IUpgrade) item.getItem()).getUpgradeDefinition(item);

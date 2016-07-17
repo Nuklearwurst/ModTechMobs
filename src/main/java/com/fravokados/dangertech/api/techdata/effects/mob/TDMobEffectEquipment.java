@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 import java.security.InvalidParameterException;
@@ -17,14 +18,29 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	protected boolean replaceEquipment;
 	protected boolean applyAll = true; //not working (settings are always default)
 	protected boolean randomStart = true;
-	protected final float[] dropChances = new float[] {-1, -1, -1, -1, -1};
+	protected final float[] dropChances = new float[] {-1, -1, -1, -1, -1, -1};
 
+	/**
+	 * equipment and values array needs to have exactly 6 values (they can be null / 0)
+	 * <p>
+	 *     Items are in the following order:
+	 *     <ul>
+	 *         <li>MainHand</li>
+	 *         <li>OffHand</li>
+	 *         <li>Feet</li>
+	 *         <li>Legs</li>
+	 *         <li>Chest</li>
+	 *         <li>Head</li>
+	 *     </ul>
+	 * </p>
+	 * @see EntityEquipmentSlot
+	 */
 	public TDMobEffectEquipment(ItemStack[] equipment, boolean asSet, boolean replaceEquipment, int[] values) {
-		if(equipment.length < 5) {
-			throw new InvalidParameterException("The equipment array has to have all 5 equipment pieces! (These can be null)");
+		if(equipment.length < 6) {
+			throw new InvalidParameterException("The equipment array has to have all 6 equipment pieces! (These can be null)");
 		}
-		if(values.length < 5) {
-			throw new InvalidParameterException("The values array has to have all 5 values! (These can be zero)");
+		if(values.length < 6) {
+			throw new InvalidParameterException("The values array has to have all 6 values! (These can be zero)");
 		}
 		this.equipment = equipment;
 		this.asSet = asSet;
@@ -42,7 +58,7 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	 * @param drop if set to false the chance to drop is set to zero
 	 */
 	public TDMobEffectEquipment setDoesArmorDrop(boolean drop) {
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < 6; i++) {
 			dropChances[i] = drop ? -1 : 0;
 		}		
 		return this;
@@ -63,9 +79,10 @@ public class TDMobEffectEquipment extends TDMobEffect {
 		}
 		int counter = 0;
 		for(int i = 0; i < 5; i++) {
-			if(e.getEquipmentInSlot(i) != null && equipment[i] != null) {
+			ItemStack stack = e.getItemStackFromSlot(EntityEquipmentSlot.values()[i]);
+			if(stack != null && equipment[i] != null) {
 				if(replaceEquipment) {
-					if(e.getEquipmentInSlot(i).isItemEqual(equipment[i])) {
+					if(stack.isItemEqual(equipment[i])) {
 						if(asSet) {
 							return false;
 						}
@@ -96,7 +113,7 @@ public class TDMobEffectEquipment extends TDMobEffect {
 		//everthing should be clear for a set
 		if(asSet) {
 			for(int i = 0; i < 5; i++) {
-				e.setCurrentItemOrArmor(i, equipment[i].copy());
+				e.setItemStackToSlot(EntityEquipmentSlot.values()[i], equipment[i].copy());
 			}
 			return values[0] + values[1] + values[2] + values[3] + values[4];
 		}
@@ -110,12 +127,14 @@ public class TDMobEffectEquipment extends TDMobEffect {
 			if(values[j] > (techdata - used)) {
 				continue;
 			}
-			if((!replaceEquipment && e.getEquipmentInSlot(j) != null) || (replaceEquipment && e.getEquipmentInSlot(j).isItemEqual(equipment[j]))) {
+			final EntityEquipmentSlot slot = EntityEquipmentSlot.values()[j];
+			final ItemStack stack = e.getItemStackFromSlot(slot);
+			if((!replaceEquipment && stack != null) || (replaceEquipment && stack != null && stack.isItemEqual(equipment[j]))) {
 				continue;
 			}
-			e.setCurrentItemOrArmor(j, equipment[j].copy());
+			e.setItemStackToSlot(slot, equipment[j].copy());
 			if(dropChances[j] != -1) {
-				e.setEquipmentDropChance(j, dropChances[j]);
+				e.setDropChance(slot, dropChances[j]);
 			}
 			used += values[j];
 		}

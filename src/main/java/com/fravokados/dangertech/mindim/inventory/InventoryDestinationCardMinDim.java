@@ -5,8 +5,10 @@ import com.fravokados.dangertech.mindim.item.ItemBlockPortalFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Nuklearwurst
@@ -16,7 +18,7 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	private ItemStack item;
 	private final String name;
 
-	public InventoryDestinationCardMinDim(ItemStack item, String name) {
+	public InventoryDestinationCardMinDim(@Nullable ItemStack item, String name) {
 		this.item = item;
 		this.name = name;
 	}
@@ -73,7 +75,7 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	*/
 
 	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack) {
+	public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
 		item = stack;
 		if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
 			stack.stackSize = this.getInventoryStackLimit();
@@ -91,8 +93,8 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
-		return new ChatComponentText(getName());
+	public ITextComponent getDisplayName() {
+		return new TextComponentString(getName());
 	}
 
 	@Override

@@ -6,8 +6,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class ItemMonsterDrop extends ItemTM {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player,
 			List tags, boolean b) {
-		tags.add(StatCollector.translateToLocal(Strings.Item.MONSTER_DROP_TOOLTIP[MathHelper.clamp_int(stack.getItemDamage(), 0, Strings.Item.MONSTER_DROP_TOOLTIP.length)]));
+		tags.add(I18n.translateToLocal(Strings.Item.MONSTER_DROP_TOOLTIP[MathHelper.clamp_int(stack.getItemDamage(), 0, Strings.Item.MONSTER_DROP_TOOLTIP.length)]));
 	}
 
 }

@@ -6,8 +6,7 @@ import com.fravokados.dangertech.mindim.common.ChunkLoaderCallback;
 import com.fravokados.dangertech.mindim.common.CommonProxy;
 import com.fravokados.dangertech.mindim.common.GuiHandler;
 import com.fravokados.dangertech.mindim.configuration.ConfigHandler;
-import com.fravokados.dangertech.mindim.configuration.Settings;
-import com.fravokados.dangertech.mindim.dimension.WorldProviderMiningDimension;
+import com.fravokados.dangertech.mindim.dimension.ModDimensions;
 import com.fravokados.dangertech.mindim.event.ModEventHandler;
 import com.fravokados.dangertech.mindim.item.ModItems;
 import com.fravokados.dangertech.mindim.lib.Reference;
@@ -18,9 +17,7 @@ import com.fravokados.dangertech.mindim.plugin.PluginTechMobs;
 import com.fravokados.dangertech.mindim.portal.PortalManager;
 import com.fravokados.dangertech.mindim.recipes.ModRecipes;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -32,15 +29,10 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, guiFactory = Reference.GUI_FACTORY, dependencies = Reference.MOD_DEPENDENCIES, canBeDeactivated=false)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, guiFactory = Reference.GUI_FACTORY, dependencies = Reference.MOD_DEPENDENCIES)
 public class ModMiningDimension {
 
-    public static final CreativeTabs TAB_MD = new CreativeTabs(Strings.CREATIVE_TAB) {
-	    @Override
-	    public Item getTabIconItem() {
-		    return Items.boat;
-	    }
-    };
+    public static CreativeTabs TAB_MD;
 
     public PortalManager portalManager;
 
@@ -58,6 +50,15 @@ public class ModMiningDimension {
 	    config = new ConfigHandler(evt.getSuggestedConfigurationFile());
 	    config.load(true);
 
+	    //register Creative Tab
+	    TAB_MD = new CreativeTabs(Strings.CREATIVE_TAB) {
+		    @Override
+		    public Item getTabIconItem() {
+			    //noinspection ConstantConditions
+			    return ModItems.itemDestinationCard;
+		    }
+	    };
+
 	    //register blocks and tileentities
         ModBlocks.registerBlocks();
         ModBlocks.registerTileEntities();
@@ -72,12 +73,12 @@ public class ModMiningDimension {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent evt) {
+
 	    //register gui handler
 	    NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
 	    //register Dimension
-        DimensionManager.registerProviderType(Settings.dimensionId, WorldProviderMiningDimension.class, false);
-        DimensionManager.registerDimension(Settings.dimensionId, Settings.dimensionId);
+	    ModDimensions.init();
 
 	    //initalize NetworkHandler
 	    ModMDNetworkManager.init();

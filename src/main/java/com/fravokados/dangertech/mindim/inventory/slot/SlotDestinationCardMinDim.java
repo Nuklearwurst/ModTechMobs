@@ -6,6 +6,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Nuklearwurst
  */
@@ -16,7 +18,7 @@ public class SlotDestinationCardMinDim extends Slot {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack stack) {
-		return stack.getItem() instanceof ItemBlockPortalFrame && stack.getItemDamage() == PortalFrameType.BASIC_FRAME.ordinal();
+	public boolean isItemValid(@Nullable ItemStack stack) {
+		return stack != null && stack.getItem() instanceof ItemBlockPortalFrame && stack.getItemDamage() == PortalFrameType.BASIC_FRAME.ordinal();
 	}
 }

@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.core.lib.util;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +26,7 @@ public class GeneralUtils {
 	 */
 	public static String translate(String key)
 	{
-		String result = StatCollector.translateToLocal(key);
+		String result = I18n.translateToLocal(key);
 		int comment = result.indexOf('#');
 		return (comment > 0) ? result.substring(0, comment).trim() : result;
 	}
@@ -51,7 +51,7 @@ public class GeneralUtils {
 	 */
 	public static String translateWithFormat(String key, Object... values)
 	{
-		String result = StatCollector.translateToLocalFormatted(key, values);
+		String result = I18n.translateToLocalFormatted(key, values);
 		int comment = result.indexOf('#');
 		return (comment > 0) ? result.substring(0, comment).trim() : result;
 	}

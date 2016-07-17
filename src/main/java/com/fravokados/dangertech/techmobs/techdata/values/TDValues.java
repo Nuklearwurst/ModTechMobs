@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class TDValues implements TDValueRegistry {
 	 * registers a new Item Entry
 	 */
 	@Override
-	public void registerItemEntry(Item item, TDEntryItem entry) {
+	public void registerItemEntry(Item item, @Nullable TDEntryItem entry) {
 		//unneeded
 		if (entry == null && itemEntries.containsKey(item)) {
 			LogHelperTM.warn("Removing item-techdata mapping!");
@@ -68,9 +69,7 @@ public class TDValues implements TDValueRegistry {
 
 	@Override
 	public void registerItemEntry(ItemStack item, int value) {
-		if (item != null) {
-			registerItemEntry(item.getItem(), value);
-		}
+		registerItemEntry(item.getItem(), value);
 	}
 
 	/**
@@ -78,15 +77,7 @@ public class TDValues implements TDValueRegistry {
 	 */
 	@Override
 	public void registerMultiItemEntry(Item item, int[] meta, int[] values) {
-		TDEntrySimpleMultiItem entry = new TDEntrySimpleMultiItem();
-		if (itemEntries.containsKey(item)) {
-			TDEntryItem old = itemEntries.get(item);
-			if (old instanceof TDEntrySimpleItem) {
-				entry.add((TDEntrySimpleItem) old);
-			} else if (old instanceof TDEntrySimpleMultiItem) {
-				entry = (TDEntrySimpleMultiItem) old;
-			}
-		}
+		TDEntrySimpleMultiItem entry = getOrCreateMultiItemEntry(item);
 		entry.add(meta, values);
 		registerItemEntry(item, entry);
 	}
@@ -96,17 +87,23 @@ public class TDValues implements TDValueRegistry {
 	 */
 	@Override
 	public void registerMultiItemEntry(Item item, int meta, int values) {
+		TDEntrySimpleMultiItem entry = getOrCreateMultiItemEntry(item);
+		entry.add(meta, values);
+		registerItemEntry(item, entry);
+	}
+
+	private TDEntrySimpleMultiItem getOrCreateMultiItemEntry(Item item) {
 		TDEntrySimpleMultiItem entry = new TDEntrySimpleMultiItem();
 		if (itemEntries.containsKey(item)) {
 			TDEntryItem old = itemEntries.get(item);
 			if (old instanceof TDEntrySimpleItem) {
+				//Migrate simple item entry to MultiItem entry
 				entry.add((TDEntrySimpleItem) old);
 			} else if (old instanceof TDEntrySimpleMultiItem) {
-				entry = (TDEntrySimpleMultiItem) old;
+				return (TDEntrySimpleMultiItem) old;
 			}
 		}
-		entry.add(meta, values);
-		registerItemEntry(item, entry);
+		return entry;
 	}
 
 	/**
@@ -129,7 +126,7 @@ public class TDValues implements TDValueRegistry {
 	 * registers a new TileEntityEntry
 	 */
 	@Override
-	public void registerTileEntityEntry(Class<? extends TileEntity> clazz, TDEntryTileEntity entry) {
+	public void registerTileEntityEntry(Class<? extends TileEntity> clazz, @Nullable TDEntryTileEntity entry) {
 		//unneeded
 		if (entry == null && tileEntityEntries.containsKey(clazz)) {
 			LogHelperTM.warn("Removing tileentity-techdata mapping!");
@@ -191,7 +188,7 @@ public class TDValues implements TDValueRegistry {
 			//tileentities
 			getInstance().registerTileEntityEntry(TileEntityFurnace.class, 1000);
 			//items
-			getInstance().registerItemEntry(Items.diamond_sword, 1000);
+			getInstance().registerItemEntry(Items.DIAMOND_SWORD, 1000);
 		}
 	}
 

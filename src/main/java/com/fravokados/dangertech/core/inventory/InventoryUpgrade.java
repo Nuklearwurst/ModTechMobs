@@ -7,9 +7,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -67,7 +69,7 @@ public class InventoryUpgrade implements IUpgradeInventory {
 	}
 
 	@Override
-	public void setInventorySlotContents(int slot, ItemStack itemStack) {
+	public void setInventorySlotContents(int slot, @Nullable ItemStack itemStack) {
 		this.inventory[slot] = itemStack;
 
 		if (itemStack != null && itemStack.stackSize > this.getInventoryStackLimit()) {
@@ -86,8 +88,8 @@ public class InventoryUpgrade implements IUpgradeInventory {
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
-		return new ChatComponentText(getName());
+	public ITextComponent getDisplayName() {
+		return new TextComponentString(getName());
 	}
 
 	@Override
@@ -163,7 +165,7 @@ public class InventoryUpgrade implements IUpgradeInventory {
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
-		NBTTagList nbttaglist = nbt.getTagList("ItemsUpgrade", 10); //10 is compound type
+		NBTTagList nbttaglist = nbt.getTagList("ItemsUpgrade", Constants.NBT.TAG_COMPOUND);
 		this.inventory = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i) {

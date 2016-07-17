@@ -5,10 +5,11 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -34,11 +35,12 @@ public class EntityUtils {
 		return true;
 	}
 
+	@Nullable
 	public static Entity rayTraceEntity(EntityPlayer player) {
 		float reach = 5F;
-		Vec3 vecPos = player.getPositionVector();
-		Vec3 vecLook = player.getLook(1);
-		Vec3 vecEnd = vecPos.addVector(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach);
+		Vec3d vecPos = player.getPositionVector();
+		Vec3d vecLook = player.getLook(1);
+		Vec3d vecEnd = vecPos.addVector(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach);
 		Entity pointedEntity = null;
 		final float expand = 1.0F;
 		List<Entity> list = player.getEntityWorld().getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().addCoord(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach).expand((double) expand, (double) expand, (double) expand));
@@ -47,7 +49,7 @@ public class EntityUtils {
 		for (Entity entity : list) {
 			float collisionBorderSize = entity.getCollisionBorderSize();
 			AxisAlignedBB bounds = entity.getEntityBoundingBox().expand((double) collisionBorderSize, (double) collisionBorderSize, (double) collisionBorderSize);
-			MovingObjectPosition movingobjectposition = bounds.calculateIntercept(vecPos, vecEnd);
+			RayTraceResult movingobjectposition = bounds.calculateIntercept(vecPos, vecEnd);
 
 			if (bounds.isVecInside(vecPos)) {
 				if (lastDistance >= 0.0D) {
@@ -58,7 +60,7 @@ public class EntityUtils {
 				double distanceTo = vecPos.distanceTo(movingobjectposition.hitVec);
 
 				if (distanceTo < lastDistance || lastDistance == 0.0D) {
-					if (entity == player.ridingEntity && !entity.canRiderInteract()) {
+					if (entity == player.getRidingEntity() && !entity.canRiderInteract()) {
 						if (lastDistance == 0.0D) {
 							pointedEntity = entity;
 						}

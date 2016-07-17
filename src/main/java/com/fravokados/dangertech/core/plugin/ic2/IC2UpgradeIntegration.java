@@ -4,6 +4,8 @@ import com.fravokados.dangertech.api.upgrade.IUpgradeDefinition;
 import com.fravokados.dangertech.api.upgrade.SimpleIntegerUpgrade;
 import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
 import com.fravokados.dangertech.core.plugin.PluginManager;
+import ic2.api.info.Info;
+import ic2.api.item.IC2Items;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -16,13 +18,15 @@ public class IC2UpgradeIntegration {
 	private static ItemStack upgradeOverclocker;
 	private static ItemStack upgradeEjector;
 
-	public static void init() {
-		if(PluginManager.ic2Activated()) {
-//			upgradeEnergyStorage = IC2Items.getItem("energyStorageUpgrade");
-//			upgradeEnergyTier = IC2Items.getItem("transformerUpgrade");
-//			upgradeOverclocker = IC2Items.getItem("overclockerUpgrade");
-//			upgradeEjector = IC2Items.getItem("ejectorUpgrade");
+	public static boolean init() {
+		if(Info.isIc2Available()) {
+			upgradeEnergyStorage = IC2Items.getItem("energyStorageUpgrade");
+			upgradeEnergyTier = IC2Items.getItem("transformerUpgrade");
+			upgradeOverclocker = IC2Items.getItem("overclockerUpgrade");
+			upgradeEjector = IC2Items.getItem("ejectorUpgrade");
+			return true;
 		}
+		return false;
 	}
 
 

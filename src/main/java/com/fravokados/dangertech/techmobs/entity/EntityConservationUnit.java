@@ -13,9 +13,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +34,11 @@ import java.util.List;
  */
 public class EntityConservationUnit extends Entity implements IEmpHandler, IInventory {
 
-	private static final int DATA_WATCHER_DAMAGE = 17;
+
+
+	private static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityConservationUnit.class, DataSerializers.FLOAT);
+	private static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityConservationUnit.class, DataSerializers.VARINT);
+
 	public final float hoverStart = (float) (Math.random() * Math.PI * 2.0D);
 
 	private String entityName;
@@ -42,7 +56,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	public EntityConservationUnit(World world) {
 		super(world);
 		this.preventEntitySpawning = true;
-		this.setSize(1F, 3.0F);
+		this.setSize(1F, 2.6F);
 		this.stepHeight = 1.0F;
 	}
 
@@ -56,12 +70,13 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	public float getRenderYOffset() {
-		return 0.5F;
+		return 0.3F;
 	}
 
 	public void addCapturedDrops(List<EntityItem> drops) {
 		boolean item = false;
 		for (EntityItem drop : drops) {
+			//noinspection ConstantConditions
 			if (!item && drop.getEntityItem().getItem() == ModItems.conservationUnit) {
 				item = true;
 			} else {
@@ -82,12 +97,13 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	protected void entityInit() {
-		this.dataWatcher.addObject(17, (float) 0);
+		this.dataManager.register(DAMAGE, 0F);
+		this.dataManager.register(AGE, 0);
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity) {
-		return entity.canBePushed() ? entity.getEntityBoundingBox() : null;
+		return entity.getEntityBoundingBox();
 	}
 
 	@Override
@@ -96,38 +112,46 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	protected void collideWithNearbyEntities() {
-		List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(0.2D, 0.0D, 0.2D));
+		List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(0.2D, -0.01D, 0.2D));
 
-		if (list != null && !list.isEmpty()) {
+		if (!list.isEmpty()) {
 			for (Entity entity : list) {
 
-				if (entity.canBePushed()) {
-					if (entity.riddenByEntity != this && entity.ridingEntity != this) {
-						double deltaX = entity.posX - this.posX;
-						double deltaZ = entity.posZ - this.posZ;
-						double abs_max = MathHelper.abs_max(deltaX, deltaZ);
+				if (!this.isRidingSameEntity(entity))
+				{
+					if (!entity.noClip && !this.noClip)
+					{
+						if(entity.getEntityBoundingBox().minY < this.getEntityBoundingBox().maxY - 1D) {
+							double deltaX = entity.posX - this.posX;
+							double deltaZ = entity.posZ - this.posZ;
+							double abs_max = MathHelper.abs_max(deltaX, deltaZ);
 
-						if (abs_max >= 0.001) {
-							abs_max = (double) MathHelper.sqrt_double(abs_max);
-							deltaX /= abs_max;
-							deltaZ /= abs_max;
-							double multiplier = 1.0D / abs_max;
+							if (abs_max >= 0.001) {
+								abs_max = (double) MathHelper.sqrt_double(abs_max);
+								deltaX /= abs_max;
+								deltaZ /= abs_max;
+								double multiplier = 1.0D / abs_max;
 
-							if (multiplier > 1.0D) {
-								multiplier = 1.0D;
-							}
+								if (multiplier > 1.0D) {
+									multiplier = 1.0D;
+								}
 
-							deltaX *= multiplier;
-							deltaZ *= multiplier;
-							deltaX *= 0.0001;
-							deltaZ *= 0.0001;
-							if (Math.abs(motionX - deltaX) > 0.1 && Math.abs(motionX) < Math.abs(motionX - deltaX)) {
-								deltaX = 0;
+								deltaX *= multiplier;
+								deltaZ *= multiplier;
+								deltaX *= 0.003;
+								deltaZ *= 0.003;
+								deltaX *= (1.0F - this.entityCollisionReduction);
+								deltaZ *= (1.0F - this.entityCollisionReduction);
+								if (Math.abs(motionX - deltaX) > 0.1 && Math.abs(motionX) < Math.abs(motionX - deltaX)) {
+									deltaX = 0;
+								}
+								if (Math.abs(motionZ - deltaZ) > 0.1 && Math.abs(motionZ) < Math.abs(motionZ - deltaZ)) {
+									deltaZ = 0;
+								}
+								if (!this.isBeingRidden()) {
+									addVelocity(-deltaX, 0, -deltaZ);
+								}
 							}
-							if (Math.abs(motionZ - deltaZ) > 0.1 && Math.abs(motionZ) < Math.abs(motionZ - deltaZ)) {
-								deltaZ = 0;
-							}
-							addVelocity(-deltaX, 0, -deltaZ);
 						}
 					}
 				}
@@ -137,7 +161,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public boolean canBePushed() {
-		return age > IMMUNITY;
+		return age > IMMUNITY || worldObj.isRemote;
 	}
 
 	@Override
@@ -162,7 +186,8 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 							EntityItem entityItem = new EntityItem(worldObj, posX + dX, posY + dY, posZ + dZ, itemStack.copy());
 
 							if (itemStack.hasTagCompound()) {
-								entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
+								//noinspection ConstantConditions
+								entityItem.getEntityItem().setTagCompound(itemStack.getTagCompound().copy());
 							}
 
 							float factor = 0.05F;
@@ -222,14 +247,16 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		this.motionY *= drag;
 		this.motionZ *= drag;
 
-		if (age < IMMUNITY) {
-			if (age % 10 == 0) {
-				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 5, rand.nextDouble(), rand.nextDouble() * 5);
-				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 4, rand.nextDouble(), rand.nextDouble() * 4);
-				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 3, rand.nextDouble(), rand.nextDouble() * 3);
-				worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
-				worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
-				worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+		if (!worldObj.isRemote) {
+			if (age < IMMUNITY) {
+				if (age % 10 == 0) {
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 5, rand.nextDouble(), rand.nextDouble() * 5);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 4, rand.nextDouble(), rand.nextDouble() * 4);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 3, rand.nextDouble(), rand.nextDouble() * 3);
+					worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+					worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+					worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+				}
 			}
 		}
 		collideWithNearbyEntities();
@@ -241,7 +268,8 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		if (tag.hasKey("CustomName", 8) && tag.getString("CustomName").length() > 0) {
 			this.entityName = tag.getString("CustomName");
 		}
-		age = tag.getInteger("age");
+		setAge(tag.getInteger("age"));
+
 		setDamage(tag.getFloat("damage"));
 	}
 
@@ -254,21 +282,31 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		tag.setFloat("damage", getDamage());
 	}
 
+	public void setAge(int age) {
+		this.age = age;
+		updateAge();
+	}
+
+	public void updateAge() {
+		this.dataManager.set(AGE, age);
+	}
+
 	/**
 	 * Gets the current amount of damage the entity has taken.
 	 */
 	public float getDamage() {
-		return this.dataWatcher.getWatchableObjectFloat(DATA_WATCHER_DAMAGE);
+		return this.dataManager.get(DAMAGE);
 	}
 
 	/**
 	 * Sets the current amount of damage the entity has taken.
 	 */
 	public void setDamage(float damage) {
-		this.dataWatcher.updateObject(DATA_WATCHER_DAMAGE, damage);
+		this.dataManager.set(DAMAGE, damage);
 	}
 
 
+	@Override
 	public String getName() {
 		return this.entityName != null ? this.entityName : super.getName();
 	}
@@ -296,7 +334,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack) {
+	public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
 		while(slot >= mainInventory.size()) {
 			mainInventory.add(null);
 		}
@@ -304,8 +342,8 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
-		return new ChatComponentText(getEntityName());
+	public ITextComponent getDisplayName() {
+		return new TextComponentString(getEntityName());
 	}
 
 	@Override
@@ -389,7 +427,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer player) {
+	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
 		player.openGui(ModTechMobs.instance, GUIIDs.CONSERVATION_UNIT, worldObj, (int) posX, (int) posY, (int) posZ);
 		return true;
 	}

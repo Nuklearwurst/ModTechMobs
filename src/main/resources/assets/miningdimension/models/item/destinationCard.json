@@ -1,5 +1,5 @@
 {
-    "parent": "nwcore:item/item_base",
+    "parent": "item/generated",
     "textures": {
         "layer0": "miningdimension:items/destinationCard"
     }

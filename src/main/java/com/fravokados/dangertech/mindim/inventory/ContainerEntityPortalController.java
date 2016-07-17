@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.mindim.inventory;
 
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
-import com.fravokados.dangertech.core.plugin.energy.EnergyTypes;
+import com.fravokados.dangertech.core.plugin.energy.EnergyType;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.mindim.inventory.slot.SlotControllerDestinationCard;
 import com.fravokados.dangertech.mindim.inventory.slot.SlotEnergyFuel;
@@ -17,9 +17,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Nuklearwurst
@@ -37,9 +39,9 @@ public class ContainerEntityPortalController extends Container implements IEleme
 	private int lastEnergyStored = 0;
 	private int lastMaxEnergyStored = 100000;
 	private int lastFlags = 0;
-	private EnergyTypes lastType = null;
+	private EnergyType lastType = null;
 
-	private boolean nameChanged = false;
+	private boolean nameChanged = true;
 
 
 	public ContainerEntityPortalController(InventoryPlayer player, TileEntityPortalControllerEntity te) {
@@ -64,50 +66,34 @@ public class ContainerEntityPortalController extends Container implements IEleme
 	}
 
 	@Override
-	public void onCraftGuiOpened(ICrafting crafter) {
-		super.onCraftGuiOpened(crafter);
-		crafter.sendProgressBarUpdate(this, 0, te.getId());
-		crafter.sendProgressBarUpdate(this, 1, te.getState().ordinal());
-		crafter.sendProgressBarUpdate(this, 2, te.getLastError().ordinal());
-		crafter.sendProgressBarUpdate(this, 4, te.getEnergyType().getId());
-		if (crafter instanceof EntityPlayerMP) {
-			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) crafter);
-			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 1, te.getMaxEnergyStored()), (EntityPlayerMP) crafter);
-			ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomName() ? te.getDisplayName().getFormattedText() : ""), (EntityPlayerMP) crafter);
-		}
-		crafter.sendProgressBarUpdate(this, 3, te.getUpgradeTrackerFlags());
-	}
-
-	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (Object crafter : this.crafters) {
-			ICrafting icrafting = (ICrafting) crafter;
+		for (IContainerListener crafter : this.listeners) {
 			if (this.lastState != te.getState()) {
-				icrafting.sendProgressBarUpdate(this, 1, te.getState().ordinal());
+				crafter.sendProgressBarUpdate(this, 1, te.getState().ordinal());
 			}
 			if (this.lastError != te.getLastError()) {
-				icrafting.sendProgressBarUpdate(this, 2, te.getLastError().ordinal());
+				crafter.sendProgressBarUpdate(this, 2, te.getLastError().ordinal());
 			}
 			if (this.lastEnergyStored != (int) te.getEnergyStored()) {
-				if (icrafting instanceof EntityPlayerMP) {
-					ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) icrafting);
+				if (crafter instanceof EntityPlayerMP) {
+					ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) crafter);
 				}
 			}
 			if (this.lastMaxEnergyStored != te.getMaxEnergyStored()) {
-				if (icrafting instanceof EntityPlayerMP) {
-					ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 1, te.getMaxEnergyStored()), (EntityPlayerMP) icrafting);
+				if (crafter instanceof EntityPlayerMP) {
+					ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 1, te.getMaxEnergyStored()), (EntityPlayerMP) crafter);
 				}
 			}
 			if (this.lastFlags != te.getUpgradeTrackerFlags()) {
-				icrafting.sendProgressBarUpdate(this, 3, te.getUpgradeTrackerFlags());
+				crafter.sendProgressBarUpdate(this, 3, te.getUpgradeTrackerFlags());
 			}
 //			if(this.lastType != te.getEnergyType()) {
 //				icrafting.sendProgressBarUpdate(this, 4, te.getEnergyType().getId());
 //			}
 
-			if (nameChanged && icrafting instanceof EntityPlayerMP) {
-				ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomName() ? te.getDisplayName().getFormattedText() : ""), (EntityPlayerMP) icrafting);
+			if (nameChanged && crafter instanceof EntityPlayerMP) {
+				ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomName() ? te.getDisplayName().getUnformattedText() : ""), (EntityPlayerMP) crafter);
 			}
 		}
 		this.lastState = te.getState();
@@ -137,7 +123,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 				this.te.setUpgradeTrackerFlags(value);
 				break;
 			case 4:
-				this.te.setEnergyType(EnergyTypes.getEnergyType(value));
+				this.te.setEnergyType(EnergyType.getEnergyType(value));
 				break;
 		}
 	}
@@ -146,10 +132,11 @@ public class ContainerEntityPortalController extends Container implements IEleme
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotId) {
 		ItemStack stackCopy = null;
-		Slot slot = (Slot) this.inventorySlots.get(slotId);
+		Slot slot = this.inventorySlots.get(slotId);
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stackSlot = slot.getStack();
+			//noinspection ConstantConditions
 			stackCopy = stackSlot.copy();
 
 			if (slotId == 3) { //Destination Card Output
@@ -205,7 +192,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 	}
 
 	@Override
-	public void handleElementButtonClick(String elementName, int mouseButton) {
+	public void handleElementButtonClick(@Nullable String elementName, int mouseButton) {
 		if (elementName != null) {
 			if (elementName.equals(NETWORK_ID_START)) {
 				te.handleStartButton(this);

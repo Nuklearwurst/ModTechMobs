@@ -9,7 +9,7 @@ import com.fravokados.dangertech.techmobs.world.techdata.TDChunk;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 
 
@@ -27,27 +27,27 @@ public class TDManager {
 	private static final String NBT_PLAYER_TECHDATA= "techdata";
 	private static final String NBT_PLAYER_TECHDATA_SCOUTED = "scouted.techdata";
 
-	public static int getScoutedTechLevel(int dimension, ChunkCoordIntPair coord) {
+	public static int getScoutedTechLevel(int dimension, ChunkPos coord) {
 		return getChunkData(dimension, coord).scoutedTechLevel;
 	}
 
-	public static int getTechLevel(int dimension, ChunkCoordIntPair coord) {
+	public static int getTechLevel(int dimension, ChunkPos coord) {
 		return getChunkData(dimension, coord).scoutedTechLevel;
 	}
 
-	public static void setScoutedTechLevel(int dimension, ChunkCoordIntPair coord, int value) {
+	public static void setScoutedTechLevel(int dimension, ChunkPos coord, int value) {
 		getChunkData(dimension, coord).scoutedTechLevel = value;
 		TechDataStorage.getInstance().updateDangerousChunkList(new ChunkLocation(dimension, coord), value);
 	}
 
-	public static void setTechLevel(int dimension, ChunkCoordIntPair coord, int value) {
+	public static void setTechLevel(int dimension, ChunkPos coord, int value) {
 		getChunkData(dimension, coord).techLevel = value;
 	}
 
 	/**
 	 * updates (increases) the scouted techlevel by a value set in the configs
 	 */
-	public static void updateScoutedTechLevel(int dimension, ChunkCoordIntPair coord) {
+	public static void updateScoutedTechLevel(int dimension, ChunkPos coord) {
 		TDChunk data = getChunkData(dimension, coord);
 		if(data.scoutedTechLevel > data.techLevel) {
 			data.scoutedTechLevel = data.techLevel;
@@ -65,7 +65,7 @@ public class TDManager {
 	 * updates (increases) the scouted techlevel by a value set in the configs
 	 */
 	public static void updateScoutedTechLevel(Chunk chunk) {
-		updateScoutedTechLevel(chunk.getWorld().provider.getDimensionId(), chunk.getChunkCoordIntPair());
+		updateScoutedTechLevel(chunk.getWorld().provider.getDimension(), chunk.getChunkCoordIntPair());
 	}
 
 
@@ -136,7 +136,7 @@ public class TDManager {
 	/**
 	 * access the chunk data
 	 */
-	private static TDChunk getChunkData(int dimension, ChunkCoordIntPair coord) {
+	private static TDChunk getChunkData(int dimension, ChunkPos coord) {
 		return TechDataStorage.getInstance().getChunkData(coord, dimension);
 	}
 

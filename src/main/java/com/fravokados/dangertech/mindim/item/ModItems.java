@@ -14,9 +14,13 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(Strings.Item.upgrade)
 	public static final ItemMD itemUpgrade = null;
 
+	@GameRegistry.ObjectHolder(Strings.Item.debugger)
+	public static final ItemMD itemDebugger = null;
+
 	public static void registerItems() {
 		registerItem(new ItemDestinationCard());
 		registerItem(new ItemMindDimUpgrade());
+		registerItem(new ItemMDDebugger());
 	}
 
 	private static void registerItem(ItemMD item) {

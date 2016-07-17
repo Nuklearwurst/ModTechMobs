@@ -16,13 +16,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +64,7 @@ public class PortalManager extends WorldSavedData {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("entityPortalCounter", entityPortalCounter);
 		int[] entityPortalKeys = new int[entityPortals.size()];
 		int i = 0;
@@ -75,6 +76,7 @@ public class PortalManager extends WorldSavedData {
 			i++;
 		}
 		nbt.setIntArray("entityPortalKeys", entityPortalKeys);
+		return nbt;
 	}
 
 	/**
@@ -214,14 +216,14 @@ public class PortalManager extends WorldSavedData {
 				////////////////
 				if (entity instanceof EntityPlayerMP) {
 					if (pos.dimension == entity.dimension) {
-						entity.mountEntity(null); //needed?
-						((EntityPlayerMP) entity).setPositionAndUpdate(x, y, z);
+						entity.dismountRidingEntity();
+						entity.setPositionAndUpdate(x, y, z);
 					} else {
+						entity.dismountRidingEntity();
 						TeleportUtils.transferPlayerToDimension((EntityPlayerMP) entity, pos.dimension, x, y, z, entity.rotationYaw, entity.rotationPitch);
 					}
 				} else {
 					if (pos.dimension == entity.dimension) {
-						entity.mountEntity(null); //needed?
 						entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch);
 					} else {
 						TeleportUtils.transferEntityToDimension(entity, pos.dimension, x, y, z, entity.rotationYaw);
@@ -274,7 +276,7 @@ public class PortalManager extends WorldSavedData {
 		TileEntity te = worldServer.getTileEntity(controllerPos);
 		if (te != null && te instanceof TileEntityPortalControllerEntity) {
 			if (Settings.PORTAL_SPAWN_WITH_CARD) {
-				((TileEntityPortalControllerEntity) te).setInventorySlotContents(0, ItemDestinationCard.fromDestination(parent, ((TileEntityPortalControllerEntity) te).getDisplayName().getFormattedText()));
+				((TileEntityPortalControllerEntity) te).setInventorySlotContents(0, ItemDestinationCard.fromDestination(parent, ((TileEntityPortalControllerEntity) te).getDisplayName().getUnformattedText()));
 			}
 			((TileEntityPortalControllerEntity) te).onBlockPostPlaced(te.getWorld(), controllerPos, worldServer.getBlockState(controllerPos));
 			if (parentTile instanceof IFacingSix) {
@@ -286,10 +288,12 @@ public class PortalManager extends WorldSavedData {
 		return PORTAL_NOT_CONNECTED;
 	}
 
+	@Nullable
 	public BlockPositionDim getEntityPortalForId(int id) {
 		return entityPortals.get(id);
 	}
 
+	@Nullable
 	public PortalMetrics getPortalMetricsForId(int id) {
 		BlockPositionDim pos = getEntityPortalForId(id);
 		if(pos != null) {

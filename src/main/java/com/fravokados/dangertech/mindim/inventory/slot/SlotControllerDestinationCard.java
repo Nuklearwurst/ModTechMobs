@@ -5,6 +5,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Nuklearwurst
  */
@@ -15,7 +17,7 @@ public class SlotControllerDestinationCard extends Slot {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack stack) {
+	public boolean isItemValid(@Nullable ItemStack stack) {
 		return stack.getItem() instanceof ItemDestinationCard;
 	}
 }

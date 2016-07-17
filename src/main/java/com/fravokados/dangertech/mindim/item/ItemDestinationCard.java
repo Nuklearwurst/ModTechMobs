@@ -12,9 +12,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -55,7 +59,7 @@ public class ItemDestinationCard extends ItemMDMultiType {
 					info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_TYPE, PortalMetrics.Type.getLocalizedName(type)));
 					info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_DESTINATION, dest));
 				} else {
-					info.add(EnumChatFormatting.ITALIC + Strings.translate(Strings.Tooltip.ITEM_DESTINATION_CARD_EMPTY) + EnumChatFormatting.RESET);
+					info.add(TextFormatting.ITALIC + Strings.translate(Strings.Tooltip.ITEM_DESTINATION_CARD_EMPTY) + TextFormatting.RESET);
 				}
 		} else {
 			int count = ItemUtils.getNBTTagCompound(stack).getInteger("frame_blocks");
@@ -67,11 +71,11 @@ public class ItemDestinationCard extends ItemMDMultiType {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote && itemStack.getItemDamage() == META_MIN_DIM && player.isSneaking()) {
 			player.openGui(ModMiningDimension.instance, GUIIDs.DESTINATION_CARD_MIN_DIM, world, (int) player.posX, (int) player.posY, (int) player.posZ);
 		}
-		return itemStack;
+		return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
 	}
 
 	@Override
@@ -85,10 +89,11 @@ public class ItemDestinationCard extends ItemMDMultiType {
 	}
 
 	public static ItemStack fromDestination(int id, String name) {
+		//noinspection ConstantConditions
 		return writeDestination(new ItemStack(ModItems.itemDestinationCard, 1, 0), id, name);
 	}
 
-	public static ItemStack writeDestination(ItemStack stack, int id, String name) {
+	public static ItemStack writeDestination(ItemStack stack, int id, @Nullable String name) {
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
 		nbt.setInteger("destinationPortalType", PortalMetrics.Type.ENTITY_PORTAL.ordinal());
 		nbt.setInteger("destinationPortal", id);

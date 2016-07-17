@@ -83,14 +83,12 @@ public class TDTickManager {
 			World world = DimensionManager.getWorld(task.dimension);
 			if (world != null) {
 				Chunk chunk = world.getChunkFromChunkCoords(task.x, task.z);
-				if (chunk != null) {
-					Collection<TileEntity> col = chunk.getTileEntityMap().values();
-					int value = 0;
-					for (TileEntity te : col) {
-						value += TDValues.getInstance().getTechDataForTileEntity(te);
-					}
-					TDManager.setTechLevel(task.dimension, task.getChunkCoordIntPair(), value);
+				Collection<TileEntity> col = chunk.getTileEntityMap().values();
+				int value = 0;
+				for (TileEntity te : col) {
+					value += TDValues.getInstance().getTechDataForTileEntity(te);
 				}
+				TDManager.setTechLevel(task.dimension, task.getChunkCoordIntPair(), value);
 			}
 			scanningTasks.remove(0);
 		}

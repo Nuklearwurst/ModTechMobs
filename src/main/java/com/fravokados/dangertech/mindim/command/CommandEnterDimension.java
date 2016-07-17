@@ -7,7 +7,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
 
 /**
  * teleports player to the mining dimension (same coordinates)
@@ -24,20 +24,16 @@ public class CommandEnterDimension extends CommandBase {
         return "tpw";
     }
 
-    @Override
-    public void processCommand(ICommandSender sender, String[] params) throws CommandException {
-        if(sender != null) {
-	        if(sender instanceof EntityPlayerMP) {
-		        if(((EntityPlayerMP) sender).dimension == Settings.dimensionId) {
-			        TeleportUtils.transferPlayerToDimension((EntityPlayerMP) sender, 0);
-		        } else {
-			        TeleportUtils.transferPlayerToDimension((EntityPlayerMP) sender, Settings.dimensionId);
-		        }
-	        } else {
-		        sender.addChatMessage(new ChatComponentText("This command can only be used as a player!"));
-	        }
-        } else {
-            throw new WrongUsageException("This command can only be used as a player!");
-        }
-    }
+	@Override
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		if(sender instanceof EntityPlayerMP) {
+			if(((EntityPlayerMP) sender).dimension == Settings.dimensionId) {
+				TeleportUtils.transferPlayerToDimension((EntityPlayerMP) sender, 0);
+			} else {
+				TeleportUtils.transferPlayerToDimension((EntityPlayerMP) sender, Settings.dimensionId);
+			}
+		} else {
+			throw new WrongUsageException("This command can only be used as a player!");
+		}
+	}
 }

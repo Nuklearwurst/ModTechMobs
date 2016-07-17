@@ -5,7 +5,7 @@ package com.fravokados.dangertech.core.plugin.energy;
  */
 public interface IEnergyTypeAware {
 
-	EnergyTypes getEnergyType();
+	EnergyType getEnergyType();
 
-	void setEnergyType(EnergyTypes types);
+	void setEnergyType(EnergyType types);
 }
