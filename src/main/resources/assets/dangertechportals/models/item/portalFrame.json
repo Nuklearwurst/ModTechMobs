@@ -1,8 +1,8 @@
 {
-    "parent": "miningdimension:block/portalFrame",
+    "parent": "dangertechportals:block/portalFrame",
 	"textures": {
-		"front": "miningdimension:blocks/portalFrame_front_disabled",
-		"back": "miningdimension:blocks/portalFrame_back_disabled",
-		"side": "miningdimension:blocks/portalFrame_side_disabled"
+		"front": "dangertechportals:blocks/portalFrame_front_disabled",
+		"back": "dangertechportals:blocks/portalFrame_back_disabled",
+		"side": "dangertechportals:blocks/portalFrame_side_disabled"
 	}
 }

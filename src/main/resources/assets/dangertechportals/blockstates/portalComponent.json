@@ -7,20 +7,20 @@
 	},
     "variants": {
 		"inventory": {
-			"model": "miningdimension:portalFrame",
+			"model": "dangertechportals:portalFrame",
 			"textures": {
-				"front": "miningdimension:blocks/portalFrame_front_disabled",
-				"back": "miningdimension:blocks/portalFrame_back_disabled",
-				"side": "miningdimension:blocks/portalFrame_side_disabled"
+				"front": "dangertechportals:blocks/portalFrame_front_disabled",
+				"back": "dangertechportals:blocks/portalFrame_back_disabled",
+				"side": "dangertechportals:blocks/portalFrame_side_disabled"
 			}
 		},
 		"facing": {
-			"down":  { "model": "miningdimension:portalFrame", "x": 90 },
-			"up":    { "model": "miningdimension:portalFrame", "x": 270 },
-			"north": { "model": "miningdimension:portalFrame" },
-			"south": { "model": "miningdimension:portalFrame", "y": 180 },
-			"west":  { "model": "miningdimension:portalFrame", "y": 270 },
-			"east":  { "model": "miningdimension:portalFrame", "y": 90 }
+			"down":  { "model": "dangertechportals:portalFrame", "x": 90 },
+			"up":    { "model": "dangertechportals:portalFrame", "x": 270 },
+			"north": { "model": "dangertechportals:portalFrame" },
+			"south": { "model": "dangertechportals:portalFrame", "y": 180 },
+			"west":  { "model": "dangertechportals:portalFrame", "y": 270 },
+			"east":  { "model": "dangertechportals:portalFrame", "y": 90 }
 		},
 		
 		"state": {
@@ -49,28 +49,28 @@
 		"type": {
 			"basic_frame": {
 				"textures": {
-					"frontActive": "miningdimension:blocks/portalFrame_front_online",
-					"backActive": "miningdimension:blocks/portalFrame_back_online",
-					"sideActive": "miningdimension:blocks/portalFrame_side_online",
-					"frontConnecting": "miningdimension:blocks/portalFrame_front_offline",
-					"backConnecting": "miningdimension:blocks/portalFrame_back_offline",
-					"sideConnecting": "miningdimension:blocks/portalFrame_side_offline",
-					"frontDisabled": "miningdimension:blocks/portalFrame_front_disabled",
-					"backDisabled": "miningdimension:blocks/portalFrame_back_disabled",
-					"sideDisabled": "miningdimension:blocks/portalFrame_side_disabled"
+					"frontActive": "dangertechportals:blocks/portalFrame_front_online",
+					"backActive": "dangertechportals:blocks/portalFrame_back_online",
+					"sideActive": "dangertechportals:blocks/portalFrame_side_online",
+					"frontConnecting": "dangertechportals:blocks/portalFrame_front_offline",
+					"backConnecting": "dangertechportals:blocks/portalFrame_back_offline",
+					"sideConnecting": "dangertechportals:blocks/portalFrame_side_offline",
+					"frontDisabled": "dangertechportals:blocks/portalFrame_front_disabled",
+					"backDisabled": "dangertechportals:blocks/portalFrame_back_disabled",
+					"sideDisabled": "dangertechportals:blocks/portalFrame_side_disabled"
 				}
 			},
 			"basic_controller": {
 				"textures": {
-					"frontActive": "miningdimension:blocks/portalController_front_online",
-					"backActive": "miningdimension:blocks/portalFrame_back_online",
-					"sideActive": "miningdimension:blocks/portalFrame_back_online",
-					"frontConnecting": "miningdimension:blocks/portalController_front_offline",
-					"backConnecting": "miningdimension:blocks/portalFrame_back_offline",
-					"sideConnecting": "miningdimension:blocks/portalFrame_back_offline",
-					"frontDisabled": "miningdimension:blocks/portalController_front_disabled",
-					"backDisabled": "miningdimension:blocks/portalFrame_back_disabled",
-					"sideDisabled": "miningdimension:blocks/portalFrame_back_disabled"
+					"frontActive": "dangertechportals:blocks/portalController_front_online",
+					"backActive": "dangertechportals:blocks/portalFrame_back_online",
+					"sideActive": "dangertechportals:blocks/portalFrame_back_online",
+					"frontConnecting": "dangertechportals:blocks/portalController_front_offline",
+					"backConnecting": "dangertechportals:blocks/portalFrame_back_offline",
+					"sideConnecting": "dangertechportals:blocks/portalFrame_back_offline",
+					"frontDisabled": "dangertechportals:blocks/portalController_front_disabled",
+					"backDisabled": "dangertechportals:blocks/portalFrame_back_disabled",
+					"sideDisabled": "dangertechportals:blocks/portalFrame_back_disabled"
 				}
 			}
 		}

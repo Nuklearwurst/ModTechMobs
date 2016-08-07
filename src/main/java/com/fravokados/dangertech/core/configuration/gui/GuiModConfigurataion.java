@@ -19,7 +19,6 @@ public class GuiModConfigurataion extends GuiConfig {
 				Reference.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath(ModNwCore.config.config.toString()));
 	}
 
-	@SuppressWarnings({ "rawtypes" })
 	private static List<IConfigElement> getConfigElements() {
 		List<IConfigElement> list = new ArrayList<IConfigElement>();
 		list.add(new ConfigElement(ModNwCore.config.config.getCategory(Configuration.CATEGORY_GENERAL)));

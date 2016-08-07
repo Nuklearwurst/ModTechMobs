@@ -25,8 +25,7 @@
   "credits": "MinecraftForge and all the OpenSource mods out there.",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": [],
-  "parent": "dangertech"
+  "dependencies": []
 },
 {
   "modid": "dangertechportals",
@@ -40,7 +39,6 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": [],
-  "parent": "dangertech"
+  "dependencies": []
 }
 ]

@@ -1,7 +1,7 @@
 {
     "textures": {
-        "particle": "miningdimension:blocks/mindimPortal",
-        "portal": "miningdimension:blocks/mindimPortal"
+        "particle": "dangertechportals:blocks/mindimPortal",
+        "portal": "dangertechportals:blocks/mindimPortal"
     },
     "elements": [
         {   "from": [ 4, 0, 0 ],

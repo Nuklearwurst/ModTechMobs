@@ -1,9 +1,9 @@
 {
 	"forge_marker": 1,
 	"variants": {
-		"axis=z": { "model": "miningdimension:portal", "y": 90},
-        "axis=x": { "model": "miningdimension:portal"},
-		"axis=y": { "model": "miningdimension:portal", "x": 90},
-		"inventory": { "model": "miningdimension:portal"}
+		"axis=z": { "model": "dangertechportals:portal", "y": 90},
+        "axis=x": { "model": "dangertechportals:portal"},
+		"axis=y": { "model": "dangertechportals:portal", "x": 90},
+		"inventory": { "model": "dangertechportals:portal"}
 	}
 }

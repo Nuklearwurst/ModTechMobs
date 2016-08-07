@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "miningdimension:items/upgrade_reverse"
+        "layer0": "dangertechportals:items/upgrade_reverse"
     }
 }

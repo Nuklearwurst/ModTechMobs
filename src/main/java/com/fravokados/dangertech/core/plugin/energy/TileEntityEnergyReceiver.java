@@ -23,7 +23,8 @@ import net.minecraftforge.fml.common.Optional;
  */
 @Optional.InterfaceList({
 		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaConsumer", modid = PluginManager.TESLA),
-		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = PluginManager.TESLA)
+		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = PluginManager.TESLA),
+		@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = PluginManager.IC2)
 })
 public abstract class TileEntityEnergyReceiver extends TileEntity implements IEnergyTypeAware, ITickable, IEnergySink, IEnergyReceiver, ITeslaConsumer, ITeslaHolder {
 	@CapabilityInject(ITeslaConsumer.class)
@@ -172,6 +173,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	@Override
 	public abstract boolean canConnectEnergy(EnumFacing from);
 
+	@Optional.Method(modid = PluginManager.IC2)
 	@Override
 	public double getDemandedEnergy() {
 		//EU - IC2
@@ -184,6 +186,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	@Override
 	public abstract int getSinkTier();
 
+	@Optional.Method(modid = PluginManager.IC2)
 	@Override
 	public double injectEnergy(EnumFacing from, double amount, double voltage) {
 		//EU - IC2
@@ -193,6 +196,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 		return amount - energyStorage.receiveEnergyAll(amount, false);
 	}
 
+	@Optional.Method(modid = PluginManager.IC2)
 	@Override
 	public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing from) {
 		//EU - IC2
