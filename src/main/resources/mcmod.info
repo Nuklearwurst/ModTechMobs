@@ -15,7 +15,7 @@
 },
 {
   "modid": "dangertechmobs",
-  "name": "Dangerous Technology - Portals",
+  "name": "Dangerous Technology - Monsters",
   "description": "It's all about balance!",
   "version": "${version}",
   "mcversion": "${mcversion}",
