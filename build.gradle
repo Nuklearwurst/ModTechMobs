@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "alpha-1.5"
 group= "com.fravokados.dangertech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-//noinspection GroovyUnusedAssignment
+
 archivesBaseName = "DangerousTechnology"
 
 // java version
@@ -46,29 +46,9 @@ repositories {
     }
 }
 
-configurations{
-    api
-    compile.extendsFrom api
-}
-
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
-
-    api "net.industrial-craft:industrialcraft-2:2.6.9-ex110:api"
-    api "net.darkhax.tesla:Tesla:1.9.4-1.1.0.24"
-
+    deobfCompile "net.industrial-craft:industrialcraft-2:2.6.36-ex110:api"
+    deobfCompile "net.darkhax.tesla:Tesla:1.10.2-1.2.1.44"
 }
 
 processResources
@@ -93,24 +73,6 @@ processResources
 }
 
 jar {
-    from {
-        configurations.api.collect {
-            it.isDirectory() ? it : zipTree(it).matching {
-                include '**/api/**'
-                exclude '**/buildcraft/**'
-                exclude '**/ic2/api/crops/**'
-                exclude '**/ic2/api/network/**'
-                exclude '**/ic2/api/event/**'
-                exclude '**/ic2/api/reactor/**'
-                exclude '**/lookingglass/api/animator/**'
-                exclude '**/lookingglass/api/event/**'
-                exclude '**/lookingglass/api/hook/**'
-                exclude '**/lookingglass/api/impl/**'
-                exclude '**/lookingglass/api/view/**'
-                exclude '**/net/darkhax/tesla/**'
-            }
-        }
-    }
     //exclude unneeded mcmod.info files
     exclude 'nwcore.info'
     exclude 'techmobs.info'
