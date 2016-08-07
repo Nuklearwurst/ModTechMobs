@@ -4,7 +4,6 @@ import com.fravokados.dangertech.api.block.IBlockPlacedListener;
 import com.fravokados.dangertech.api.block.IFacingSix;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
-import com.fravokados.dangertech.core.plugin.energy.EnergyType;
 import com.fravokados.dangertech.core.plugin.energy.IEnergyTypeAware;
 import com.fravokados.dangertech.mindim.ModMiningDimension;
 import com.fravokados.dangertech.mindim.block.tileentity.TileEntityPortalControllerEntity;
@@ -110,7 +109,7 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs creativeTab, List<ItemStack> list) {
 		list.add(new ItemStack(item, 1, 0));
-		EnergyManager.createItemVariantsForEnergyTypes(list, item, 1, EnergyType.validTypes);
+		EnergyManager.createItemVariantsForEnergyTypes(list, item, 1, EnergyManager.getAvailableEnergyTypes());
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Loader;
 public class DangerousTechnologyAPI {
 
 	public static final String MOD_ID_CORE = "nwcore";
+
 	public static final String API_ID = "dangerousTechnologyAPI";
 	public static final String API_VERSION = "1.0";
 

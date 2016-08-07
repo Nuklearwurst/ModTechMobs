@@ -8,9 +8,10 @@ import net.minecraftforge.fml.common.Loader;
 public class PluginManager {
 
 	public final static String IC2 = "ic2";
-	public final static String TESLA = "Tesla";
+	public final static String TESLA = "tesla";
 
 	private static boolean ic2Available = false;
+	private static boolean teslaAvailable = false;
 
 	public static void init() {
 
@@ -18,11 +19,23 @@ public class PluginManager {
 			loadIC2();
 		}
 
+		if(Loader.isModLoaded(TESLA)) {
+			loadTesla();
+		}
+
 		EnergyManager.init();
 	}
 
 	public static boolean ic2Activated() {
 		return ic2Available;
+	}
+
+	public static boolean teslaActivated() {
+		return teslaAvailable;
+	}
+
+	private static void loadTesla() {
+		teslaAvailable = true;
 	}
 
 	private static void loadIC2() {

@@ -10,9 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Functions to help manage energy apis
@@ -20,7 +18,8 @@ import java.util.Map;
  */
 public class EnergyManager {
 
-	private static Map<EnergyType, IEnergyPlugin> plugins = new HashMap<>();
+	private static final Map<EnergyType, IEnergyPlugin> plugins = new HashMap<>();
+	private static final Set<EnergyType> availableEnergyTypes = new HashSet<>();
 
 	/**
 	 * checks whether this item can provide energy to the specified energy type
@@ -37,7 +36,7 @@ public class EnergyManager {
 		return false;
 	}
 
-	public static void createItemVariantsForEnergyTypes(List<ItemStack> list, Item item, int meta, EnergyType... types) {
+	public static void createItemVariantsForEnergyTypes(List<ItemStack> list, Item item, int meta, Collection<EnergyType> types) {
 		for (EnergyType type : types) {
 			list.add(createItemStackWithEnergyType(item, 1, meta, type));
 		}
@@ -82,11 +81,33 @@ public class EnergyManager {
 
 	public static void init() {
 		plugins.clear();
+		availableEnergyTypes.clear();
 
 		plugins.put(EnergyType.VANILLA, new VanillaEnergyPlugin());
+		availableEnergyTypes.add(EnergyType.VANILLA);
 
 		if(PluginManager.ic2Activated()) {
 			plugins.put(EnergyType.IC2, new IC2EnergyPlugin());
+			availableEnergyTypes.add(EnergyType.IC2);
 		}
+
+		if(PluginManager.teslaActivated()) {
+			availableEnergyTypes.add(EnergyType.TESLA);
+		}
+
+		availableEnergyTypes.add(EnergyType.RF);
+	}
+
+	public static void disableVanillaEnergyType() {
+		availableEnergyTypes.remove(EnergyType.VANILLA);
+	}
+
+	public static void registerEnergyPlugin(EnergyType type, IEnergyPlugin plugin) {
+		availableEnergyTypes.add(type);
+		plugins.put(type, plugin);
+	}
+
+	public static Set<EnergyType> getAvailableEnergyTypes() {
+		return availableEnergyTypes;
 	}
 }
