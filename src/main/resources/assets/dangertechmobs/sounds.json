@@ -1,0 +1,11 @@
+{
+  "emp": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "dangertechmobs:emp",
+        "stream": false
+      }
+    ]
+  }
+}

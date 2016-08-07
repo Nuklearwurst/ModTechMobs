@@ -1,12 +1,9 @@
 package com.fravokados.dangertech.core.lib;
 
-/**
- * @author Nuklearwurst
- */
 public class Reference {
 
-	public static final String MOD_ID = "nwcore";
-	public static final String MOD_NAME = "NwCore";
+	public static final String MOD_ID = "dangertech";
+	public static final String MOD_NAME = "Dangerous Technology";
 	public static final String VERSION = "@VERSION@";
 
 	public static final String PROXY_CLIENT = "com.fravokados.dangertech.core.client.ClientProxy";
@@ -15,4 +12,7 @@ public class Reference {
 	public static final String GUI_FACTORY = "com.fravokados.dangertech.core.configuration.gui.GuiFactoryConfig";
 
 	public static final String ASSET_DIR = MOD_ID;
+
+	public static final String DEPENDENCIES = "";
+	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.10,1.10.2]";
 }

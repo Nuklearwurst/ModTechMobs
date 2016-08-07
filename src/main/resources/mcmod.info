@@ -1,11 +1,11 @@
 [
 {
-  "modid": "nwcore",
-  "name": "NwCore",
+  "modid": "dangertech",
+  "name": "Dangerous Technology",
   "description": "Shared Code for mods",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://github.com/Nuklearwurst/ModTechMobs",
   "updateUrl": "",
   "authorList": ["Nuklearwurst"],
   "credits": "",
@@ -14,22 +14,23 @@
   "dependencies": []
 },
 {
-  "modid": "techmobs",
-  "name": "Tech Mobs",
+  "modid": "dangertechmobs",
+  "name": "Dangerous Technology - Portals",
   "description": "It's all about balance!",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "https://github.com/Nuklearwurst/ModTechMobs",
   "updateUrl": "",
-  "authorList": ["nuklearwurst"],
+  "authorList": ["Nuklearwurst"],
   "credits": "MinecraftForge and all the OpenSource mods out there.",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": ["nwcore"]
+  "dependencies": [],
+  "parent": "dangertech"
 },
 {
-  "modid": "miningdimension",
-  "name": "Mining Dimension",
+  "modid": "dangertechportals",
+  "name": "Dangerous Technology - Portals",
   "description": "Mining Dimension and Portals",
   "version": "${version}",
   "mcversion": "${mcversion}",
@@ -39,6 +40,7 @@
   "credits": "",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": ["nwcore"]
+  "dependencies": [],
+  "parent": "dangertech"
 }
 ]

@@ -29,7 +29,12 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
  * Shared code for Dangerous Technology and Mining Dimension Mod
  * @author Nuklearwurst
  */
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY)
+@Mod(modid = Reference.MOD_ID,
+		name = Reference.MOD_NAME,
+		version = Reference.VERSION,
+		guiFactory = Reference.GUI_FACTORY,
+		dependencies = Reference.DEPENDENCIES,
+		acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSIONS)
 public class ModNwCore {
 
 	@Mod.Instance(value = Reference.MOD_ID)
