@@ -71,6 +71,7 @@ public class Strings {
 		public static final String ITEM_DESTINATION_CARD_EMPTY = "tooltip.item.destinationCard.empty";
 		public static final String ITEM_DESTINATION_CARD_MINDIM = "tooltip.item.destinationCard.mindim";
 		public static final String ITEM_DESTINATION_CARD_MINDIM_INFO_1 = "tooltip.item.destinationCard.mindim.info_1";
+		public static final String ITEM_DESTINATION_CARD_MINDIM_ENERGY_TYPE = "tooltip.item.destinationCard.mindim.energy_type";
 
 		public static final String NAME = "tooltip.name";
 		public static final String CONTROLLER_UPGRADES_INSTALLED = "tooltip.controller.upgrades.installed";

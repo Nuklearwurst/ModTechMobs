@@ -302,7 +302,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			return PortalManager.PORTAL_NOT_CONNECTED;
 		}
 		if (inventory[0].getItem() instanceof ItemDestinationCard) {
-			if (inventory[0].getItemDamage() == ItemDestinationCard.META_MIN_DIM) {
+			if (inventory[0].getItemDamage() == ItemDestinationCard.META_GENERATING) {
 				return PortalManager.PORTAL_MINING_DIMENSION;
 			} else if (inventory[0].getTagCompound() != null && inventory[0].getTagCompound().hasKey(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) && inventory[0].getTagCompound().hasKey(NBTKeys.DESTINATION_CARD_PORTAL_ID)) {
 				if (inventory[0].getTagCompound().getInteger(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) == PortalMetrics.Type.ENTITY_PORTAL.ordinal()) {
@@ -374,7 +374,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	public void updateMachineServer() {
 		//Write Destination Cards (Side GUI)
 		if (id > -1 && inventory[2] != null && inventory[3] == null) {
-			if (inventory[2].getItem() instanceof ItemDestinationCard && inventory[2].getItemDamage() != ItemDestinationCard.META_MIN_DIM) {
+			if (inventory[2].getItem() instanceof ItemDestinationCard && inventory[2].getItemDamage() != ItemDestinationCard.META_GENERATING) {
 				inventory[3] = inventory[2];
 				inventory[2] = null;
 				ItemDestinationCard.writeDestination(inventory[3], id, getDisplayName().getUnformattedText());

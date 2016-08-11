@@ -1,10 +1,10 @@
 #Creativetab
-itemGroup.techmobs=TechMobs
+itemGroup.dangertechmobs=Dangerous Technology - Monster
 
 # Chat
 chat.mobTargetingWarning.exact.1=A
 chat.mobTargetingWarning.exact.2=wants you dead!
-chat.mobTargetingWarning.generic=A mob seems angry!
+chat.mobTargetingWarning.generic=A mob seems angry!s
 
 chat.mobTargetingWarning.creeper.count=6
 chat.mobTargetingWarning.creeper.0=Hisssss...
@@ -46,10 +46,10 @@ chat.command.analyze.item.noitem=You have to hold the item you want to analyze!
 chat.quantumSword=You notice that your sword is getting quite rusty
 
 #Command Help
-command.techmobs.aliases=Aliases: %s
-command.techmobs.permlevel=Permission Level: %s
-command.techmobs.list=Available Subcommands:
-command.techmobs.help=Command Usage: %s
+command.dangertechmobs.aliases=Aliases: %s
+command.dangertechmobs.permlevel=Permission Level: %s
+command.dangertechmobs.list=Available Subcommands:
+command.dangertechmobs.help=Command Usage: %s
 
 #Entity
 entity.con_unit.name=Flying Coffin
@@ -57,15 +57,15 @@ entity.emp_creeper.name=EMP Creeper
 entity.cyber_zombie.name=Cyber Zombie
 
 #Items
-item.techmobs:monsterDetector.name=Monster Detector
-item.techmobs:upgradeTool.name=Upgrade Tool
-item.techmobs:tdAnalyzer.name=TechData Analyzer
-item.techmobs:quantumSword.name=Quantum Sword
-item.techmobs:conservationUnit.name=Conservation Unit
-item.techmobs:item_cot.name=Cot
-item.techmobs:tdDebugger.name=TM Debug Tool
+item.dangertechmobs:monsterDetector.name=Monster Detector
+item.dangertechmobs:upgradeTool.name=Upgrade Tool
+item.dangertechmobs:tdAnalyzer.name=TechData Analyzer
+item.dangertechmobs:quantumSword.name=Quantum Sword
+item.dangertechmobs:conservationUnit.name=Conservation Unit
+item.dangertechmobs:item_cot.name=Cot
+item.dangertechmobs:tdDebugger.name=TM Debug Tool
 
-item.techmobs:monsterDrop_common.name=Weird Flesh
+item.dangertechmobs:monsterDrop_common.name=Weird Flesh
 
 #Analyzer Modes
 item.tdAnalyzer.mode.block=Block
@@ -74,8 +74,8 @@ item.tdAnalyzer.mode.player=Player
 item.tdAnalyzer.mode.chunk=Area
 
 #Blocks
-tile.techmobs:gateExtender.name=Gate Extender
-tile.techmobs:creativeTechnology.name=Creative Technology Block
+tile.dangertechmobs:gateExtender.name=Gate Extender
+tile.dangertechmobs:creativeTechnology.name=Creative Technology Block
 
 #Entities
 entity.cyber_zombie.name=Cyber Zombie

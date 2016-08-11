@@ -1,18 +1,18 @@
 #Blocks
-tile.miningdimension:mindimPortal.name=Portal Block
-tile.miningdimension:portalController.name=Portal Controller
-tile.miningdimension:portalFrame.name=Portal Frame
+tile.dangertechportals:mindimPortal.name=Portal Block
+tile.dangertechportals:portalController.name=Portal Controller
+tile.dangertechportals:portalFrame.name=Portal Frame
 
 #Items
-item.miningdimension:destinationCard.name=Destination Card
-item.miningdimension:destinationCardMindim.name=Destination Card Mining Dimension
+item.dangertechportals:destinationCard.name=Destination Card
+item.dangertechportals:destinationCardMindim.name=Destination Card Mining Dimension
 
 #Upgrades
-item.miningdimension:upgrade_reverse.name=Portal Direction Reversing Upgrade
-item.miningdimension:upgrade_disconnect.name=Portal Disconnection Upgrade
+item.dangertechportals:upgrade_reverse.name=Portal Direction Reversing Upgrade
+item.dangertechportals:upgrade_disconnect.name=Portal Disconnection Upgrade
 
 ### unused
-item.miningdimension:upgrade.name=Empty Upgrade
+item.dangertechportals:upgrade.name=Empty Upgrade
 
 #Chat
 chat.mindim.cancelBlockPlacing=Mmh, that didn't work...
@@ -22,7 +22,7 @@ gui.mindim.destinationCard.portalBlocksStored=%d Portal Frame Blocks stored.
 gui.mindim.controller.name=Name:
 gui.mindim.controller.name.unnamed=Unnamed
 gui.mindim.controller.edit.name=Edit Name
-gui.mindim.controller.destination=Destination: %s
+gui.mindim.controller.destination=Dest.: %s
 gui.mindim.controller.destination.unknown=Unknown
 gui.mindim.controller.destination.mindim=Mining Dimension
 gui.mindim.controller.destination.error=Errored!

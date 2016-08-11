@@ -8,19 +8,19 @@ import org.apache.logging.log4j.Level;
 public class LogHelperTM {
 
 	public static void log(Level logLevel, Object object, Object ... param) {
-		FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object), param);
+		FMLLog.log(Reference.MOD_NAME_SHORT, logLevel, String.valueOf(object), param);
 	}
 
 	public static void log(Level logLevel, Throwable t,  Object object, Object ... param) {
-		FMLLog.log(Reference.MOD_NAME, logLevel, t, String.valueOf(object), param);
+		FMLLog.log(Reference.MOD_NAME_SHORT, logLevel, t, String.valueOf(object), param);
 	}
 
 	public static void log(Level logLevel, Throwable t, Object object) {
-		FMLLog.log(Reference.MOD_NAME, logLevel, t, String.valueOf(object));
+		FMLLog.log(Reference.MOD_NAME_SHORT, logLevel, t, String.valueOf(object));
 	}
 
 	public static void log(Level logLevel, Object object) {
-		FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));
+		FMLLog.log(Reference.MOD_NAME_SHORT, logLevel, String.valueOf(object));
 	}
 
 	public static void all(Object object) {

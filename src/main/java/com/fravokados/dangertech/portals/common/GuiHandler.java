@@ -36,7 +36,7 @@ public class GuiHandler implements IGuiHandler {
 			case GUIIDs.DESTINATION_CARD_MIN_DIM:
 			{
 				//noinspection ConstantConditions
-				ItemStack item = PlayerUtils.getCurrentUsablePlayerItem(player,(ItemStack o) -> o.getItem() == ModItems.itemDestinationCard && o.getItemDamage() == ItemDestinationCard.META_MIN_DIM);
+				ItemStack item = PlayerUtils.getCurrentUsablePlayerItem(player,(ItemStack o) -> o.getItem() == ModItems.itemDestinationCard && o.getItemDamage() == ItemDestinationCard.META_GENERATING);
 				if(item == null) return null;
 				return new ContainerDestinationCardMinDim(player.inventory, item);
 			}
@@ -58,7 +58,7 @@ public class GuiHandler implements IGuiHandler {
 			case GUIIDs.DESTINATION_CARD_MIN_DIM:
 			{
 				//noinspection ConstantConditions
-				ItemStack item = PlayerUtils.getCurrentUsablePlayerItem(player, (ItemStack o) -> o.getItem() == ModItems.itemDestinationCard && o.getItemDamage() == ItemDestinationCard.META_MIN_DIM);
+				ItemStack item = PlayerUtils.getCurrentUsablePlayerItem(player, (ItemStack o) -> o.getItem() == ModItems.itemDestinationCard && o.getItemDamage() == ItemDestinationCard.META_GENERATING);
 				if(item == null) return null;
 				return new GuiDestinationCardMinDim(player.inventory, item);
 			}

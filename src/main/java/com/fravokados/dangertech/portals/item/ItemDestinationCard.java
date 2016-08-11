@@ -1,6 +1,8 @@
 package com.fravokados.dangertech.portals.item;
 
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
+import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
+import com.fravokados.dangertech.core.plugin.energy.EnergyType;
 import com.fravokados.dangertech.portals.ModMiningDimension;
 import com.fravokados.dangertech.portals.lib.GUIIDs;
 import com.fravokados.dangertech.portals.lib.Strings;
@@ -27,32 +29,30 @@ import java.util.List;
 public class ItemDestinationCard extends ItemMDMultiType {
 
 	public static final int META_NORMAL = 0;
-	public static final int META_MIN_DIM = 1; //this might get moved to another item
+	public static final int META_GENERATING = 1; //card that generates a portal (doesn't need an existing target portal)
 
 	public ItemDestinationCard() {
 		super(Strings.Item.destinationCard);
 	}
 
-	@SuppressWarnings(value = {"unchecked"})
 	@Override
-	public void getSubItems(Item item, CreativeTabs creativeTab, List list) {
+	public void getSubItems(Item item, CreativeTabs creativeTab, List<ItemStack> list) {
 		list.add(new ItemStack(item, 1, 0));
-		list.add(new ItemStack(item, 1, 1));
+		EnergyManager.createItemVariantsForEnergyTypes(list, item, 1, EnergyManager.getAvailableEnergyTypes());
 	}
 
 	@Override
 	protected String getNameForItemStack(ItemStack s) {
-		if(s.getItemDamage() == META_MIN_DIM) {
+		if(s.getItemDamage() == META_GENERATING) {
 			return "destinationCardMindim";
 		}
 		return Strings.Item.destinationCard;
 	}
 
-	@SuppressWarnings(value = {"unchecked"})
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean b) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean b) {
 		super.addInformation(stack, player, info, b);
-		if(stack.getItemDamage() != META_MIN_DIM) {
+		if(stack.getItemDamage() != META_GENERATING) {
 				if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("destinationPortalType") && stack.getTagCompound().hasKey("destinationPortalName")) {
 					int type = stack.getTagCompound().getInteger("destinationPortalType");
 					String dest = stack.getTagCompound().getString("destinationPortalName");
@@ -62,7 +62,9 @@ public class ItemDestinationCard extends ItemMDMultiType {
 					info.add(TextFormatting.ITALIC + Strings.translate(Strings.Tooltip.ITEM_DESTINATION_CARD_EMPTY) + TextFormatting.RESET);
 				}
 		} else {
-			int count = ItemUtils.getNBTTagCompound(stack).getInteger("frame_blocks");
+			NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
+			info.add(Strings.translate(EnergyType.readFromNBT(nbt).getUnlocalizedName()));
+			int count = nbt.getInteger("frame_blocks");
 			info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_MINDIM, count));
 			if(GuiScreen.isShiftKeyDown()) {
 				info.add(Strings.translate(Strings.Tooltip.ITEM_DESTINATION_CARD_MINDIM_INFO_1));
@@ -72,7 +74,7 @@ public class ItemDestinationCard extends ItemMDMultiType {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
-		if(!world.isRemote && itemStack.getItemDamage() == META_MIN_DIM && player.isSneaking()) {
+		if(!world.isRemote && itemStack.getItemDamage() == META_GENERATING && player.isSneaking()) {
 			player.openGui(ModMiningDimension.instance, GUIIDs.DESTINATION_CARD_MIN_DIM, world, (int) player.posX, (int) player.posY, (int) player.posZ);
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
@@ -85,7 +87,7 @@ public class ItemDestinationCard extends ItemMDMultiType {
 
 	@Override
 	public int getItemStackLimit(ItemStack stack) {
-		return stack.getItemDamage() == META_MIN_DIM ? 1 : 64;
+		return stack.getItemDamage() == META_GENERATING ? 1 : 64;
 	}
 
 	public static ItemStack fromDestination(int id, String name) {
@@ -106,6 +108,6 @@ public class ItemDestinationCard extends ItemMDMultiType {
 	@Override
 	public void registerModels() {
 		registerItemModel(Textures.ITEM_DESTINATION_CARD, META_NORMAL);
-		registerItemModel(Textures.ITEM_DESTINATION_CARD_MINDIM, META_MIN_DIM);
+		registerItemModel(Textures.ITEM_DESTINATION_CARD_MINDIM, META_GENERATING);
 	}
 }

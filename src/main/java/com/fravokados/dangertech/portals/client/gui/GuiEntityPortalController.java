@@ -69,6 +69,7 @@ public class GuiEntityPortalController extends GuiContainer {
 		txtName = new GuiTextField(BUTTON_ID_TEXT_FIELD, this.fontRendererObj, 58 + fontRendererObj.getStringWidth(Strings.translate(Strings.Gui.CONTROLLER_NAME) + " "), 18, 90, 20);
 		txtName.setTextColor(0x00FF00);
 		txtName.setText(te.getDisplayName().getUnformattedText());
+		txtName.setCursorPositionZero();
 		txtName.setEnableBackgroundDrawing(false);
 		txtName.setCanLoseFocus(false);
 	}
@@ -92,6 +93,7 @@ public class GuiEntityPortalController extends GuiContainer {
 						txtName.setText("");
 					}
 					txtName.setFocused(true);
+					txtName.setCursorPositionEnd();
 				}
 				return;
 		}
@@ -225,5 +227,6 @@ public class GuiEntityPortalController extends GuiContainer {
 			te.setName(text);
 		}
 		txtName.setText(te.getDisplayName().getUnformattedText());
+		txtName.setCursorPositionZero();
 	}
 }

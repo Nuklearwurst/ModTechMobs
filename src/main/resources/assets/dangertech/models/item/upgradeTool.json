@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "nwcore:items/upgradeTool"
+        "layer0": "dangertech:items/upgradeTool"
     }
 }

@@ -4,6 +4,9 @@ public class Reference {
 	
 	public static final String MOD_ID = "dangertechmobs";
 	public static final String MOD_NAME = "Dangerous Technology - Monsters";
+
+	public static final String MOD_NAME_SHORT = "DT-Monsters";
+
 	public static final String VERSION = "@VERSION@";
 
 	public static final String PROXY_CLIENT = "com.fravokados.dangertech.monsters.client.ClientProxy";
