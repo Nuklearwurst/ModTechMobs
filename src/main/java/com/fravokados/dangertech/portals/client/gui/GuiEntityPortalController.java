@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -194,12 +195,12 @@ public class GuiEntityPortalController extends GuiContainer {
 	protected void keyTyped(char c, int keyCode) throws IOException {
 		if (txtName.isFocused()) {
 			switch (keyCode) {
-				case 28:
-				case 156:
+				case Keyboard.KEY_RETURN:
+				case Keyboard.KEY_NUMPADENTER:
 					txtName.setFocused(false);
 					updateNameText();
 					return;
-				case 1:
+				case Keyboard.KEY_ESCAPE:
 					txtName.setFocused(false);
 					txtName.setText(te.getDisplayName().getUnformattedText());
 					return;
