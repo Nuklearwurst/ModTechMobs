@@ -7,7 +7,7 @@ import com.fravokados.dangertech.core.lib.util.GeneralUtils;
  */
 public class Strings {
 
-	public static final String CREATIVE_TAB = "creativeTabMindim";
+	public static final String CREATIVE_TAB = "mindim";
 
 	public static final class Block {
 		public static final String portalMachineBase = "portalComponent";

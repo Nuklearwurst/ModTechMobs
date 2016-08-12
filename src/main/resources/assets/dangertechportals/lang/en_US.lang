@@ -1,3 +1,6 @@
+#CreativeTab
+itemGroup.mindim=DT - Portals
+
 #Blocks
 tile.dangertechportals:mindimPortal.name=Portal Block
 tile.dangertechportals:portalController.name=Portal Controller
@@ -64,9 +67,6 @@ gui.controller.state.short.incomingConnection=Connection found
 gui.controller.state.detail.incomingConnection=Incoming connection, awaiting Portal activation.
 gui.controller.state.short.incomingPortal=Portal (I)
 gui.controller.state.detail.incomingPortal=There is an open incoming Portal.
-
-#CreativeTab
-itemGroup.mindim=Mining Dimension
 
 #Tooltip
 tooltip.item.destinationCard.type=Portal Type: %s

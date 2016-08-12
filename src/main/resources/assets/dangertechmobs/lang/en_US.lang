@@ -1,5 +1,5 @@
 #Creativetab
-itemGroup.dangertechmobs=Dangerous Technology - Monster
+itemGroup.techmobs=DT - Monsters
 
 # Chat
 chat.mobTargetingWarning.exact.1=A
