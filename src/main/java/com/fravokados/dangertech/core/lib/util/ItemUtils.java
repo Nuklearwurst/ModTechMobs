@@ -1,13 +1,17 @@
 package com.fravokados.dangertech.core.lib.util;
 
 import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
+import com.google.common.collect.Maps;
+import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * @author Nuklearwurst
@@ -115,5 +119,60 @@ public class ItemUtils {
 		} else {
 			return null;
 		}
+	}
+
+	public static ItemStack[] createInputs(int width, int height, Object... recipeComponents) {
+		String inputList = "";
+		int index = 0;
+
+		if (recipeComponents[index] instanceof String[]) {
+			String[] recipeLayout = (String[]) recipeComponents[index];
+			index++;
+
+			assert recipeLayout.length == height;
+
+			for (String line : recipeLayout) {
+				assert width == line.length();
+				inputList = inputList + line;
+			}
+		} else {
+			for(int i = 0; i < 3; i++) {
+				String line = (String) recipeComponents[i];
+				inputList = inputList + line;
+			}
+			index = 3;
+		}
+
+		Map<Character, ItemStack> map = Maps.<Character, ItemStack>newHashMap();
+
+		while (index < recipeComponents.length) {
+			Character character = (Character) recipeComponents[index];
+			ItemStack itemstack = null;
+
+			if (recipeComponents[index + 1] instanceof Item) {
+				itemstack = new ItemStack((Item) recipeComponents[index + 1]);
+			} else if (recipeComponents[index + 1] instanceof Block) {
+				itemstack = new ItemStack((Block) recipeComponents[index + 1], 1, 32767);
+			} else if (recipeComponents[index + 1] instanceof ItemStack) {
+				itemstack = (ItemStack) recipeComponents[index + 1];
+			}
+
+			map.put(character, itemstack);
+			index += 2;
+		}
+
+		ItemStack[] outputStacks = new ItemStack[width * height];
+
+		for (int i = 0; i < width * height; ++i) {
+			char character = inputList.charAt(i);
+
+			if (map.containsKey(Character.valueOf(character))) {
+				outputStacks[i] = map.get(Character.valueOf(character)).copy();
+			} else {
+				outputStacks[i] = null;
+			}
+		}
+
+		return outputStacks;
 	}
 }
