@@ -1,5 +1,6 @@
-package com.fravokados.dangertech.core.common.init;
+package com.fravokados.dangertech.core.recipes;
 
+import com.fravokados.dangertech.core.common.init.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;

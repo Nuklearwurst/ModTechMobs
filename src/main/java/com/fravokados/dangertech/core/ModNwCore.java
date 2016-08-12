@@ -5,7 +5,7 @@ import com.fravokados.dangertech.api.DangerousTechnologyAPI;
 import com.fravokados.dangertech.core.common.CommonProxy;
 import com.fravokados.dangertech.core.common.handler.GuiHandler;
 import com.fravokados.dangertech.core.common.init.ModItems;
-import com.fravokados.dangertech.core.common.init.ModRecipes;
+import com.fravokados.dangertech.core.recipes.ModRecipes;
 import com.fravokados.dangertech.core.configuration.ConfigHandler;
 import com.fravokados.dangertech.core.lib.Reference;
 import com.fravokados.dangertech.core.lib.Strings;

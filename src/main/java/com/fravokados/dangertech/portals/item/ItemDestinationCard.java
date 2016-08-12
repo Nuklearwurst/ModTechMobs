@@ -43,8 +43,8 @@ public class ItemDestinationCard extends ItemMDMultiType {
 
 	@Override
 	protected String getNameForItemStack(ItemStack s) {
-		if(s.getItemDamage() == META_GENERATING) {
-			return "destinationCardMindim";
+		if (s.getItemDamage() == META_GENERATING) {
+			return Strings.Item.destinationCardMinDim;
 		}
 		return Strings.Item.destinationCard;
 	}
@@ -52,21 +52,24 @@ public class ItemDestinationCard extends ItemMDMultiType {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean b) {
 		super.addInformation(stack, player, info, b);
-		if(stack.getItemDamage() != META_GENERATING) {
-				if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("destinationPortalType") && stack.getTagCompound().hasKey("destinationPortalName")) {
-					int type = stack.getTagCompound().getInteger("destinationPortalType");
-					String dest = stack.getTagCompound().getString("destinationPortalName");
-					info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_TYPE, PortalMetrics.Type.getLocalizedName(type)));
-					info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_DESTINATION, dest));
-				} else {
-					info.add(TextFormatting.ITALIC + Strings.translate(Strings.Tooltip.ITEM_DESTINATION_CARD_EMPTY) + TextFormatting.RESET);
-				}
+		if (stack.getItemDamage() != META_GENERATING) {
+			if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("destinationPortalType") && stack.getTagCompound().hasKey("destinationPortalName")) {
+				int type = stack.getTagCompound().getInteger("destinationPortalType");
+				String dest = stack.getTagCompound().getString("destinationPortalName");
+				info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_TYPE, PortalMetrics.Type.getLocalizedName(type)));
+				info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_DESTINATION, dest));
+			} else {
+				info.add(TextFormatting.ITALIC + Strings.translate(Strings.Tooltip.ITEM_DESTINATION_CARD_EMPTY) + TextFormatting.RESET);
+			}
 		} else {
 			NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
-			info.add(Strings.translate(EnergyType.readFromNBT(nbt).getUnlocalizedName()));
+			EnergyType type = EnergyType.readFromNBT(nbt);
+			if (type != EnergyType.INVALID) {
+				info.add(Strings.translate(type.getUnlocalizedName()));
+			}
 			int count = nbt.getInteger("frame_blocks");
 			info.add(Strings.translateWithFormat(Strings.Tooltip.ITEM_DESTINATION_CARD_MINDIM, count));
-			if(GuiScreen.isShiftKeyDown()) {
+			if (GuiScreen.isShiftKeyDown()) {
 				info.add(Strings.translate(Strings.Tooltip.ITEM_DESTINATION_CARD_MINDIM_INFO_1));
 			}
 		}
@@ -74,7 +77,7 @@ public class ItemDestinationCard extends ItemMDMultiType {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
-		if(!world.isRemote && itemStack.getItemDamage() == META_GENERATING && player.isSneaking()) {
+		if (!world.isRemote && itemStack.getItemDamage() == META_GENERATING && player.isSneaking()) {
 			player.openGui(ModMiningDimension.instance, GUIIDs.DESTINATION_CARD_MIN_DIM, world, (int) player.posX, (int) player.posY, (int) player.posZ);
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
@@ -99,7 +102,7 @@ public class ItemDestinationCard extends ItemMDMultiType {
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
 		nbt.setInteger("destinationPortalType", PortalMetrics.Type.ENTITY_PORTAL.ordinal());
 		nbt.setInteger("destinationPortal", id);
-		if(name != null) {
+		if (name != null) {
 			nbt.setString("destinationPortalName", name);
 		}
 		return stack;

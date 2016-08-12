@@ -1,23 +1,18 @@
 package com.fravokados.dangertech.portals.recipes;
 
-import com.fravokados.dangertech.core.plugin.energy.ShapedRecipeEnergyType;
+import com.fravokados.dangertech.core.recipes.ShapedRecipeEnergyType;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.core.plugin.energy.EnergyType;
 import com.fravokados.dangertech.portals.block.ModBlocks;
 import com.fravokados.dangertech.portals.block.types.PortalFrameType;
 import com.fravokados.dangertech.portals.item.ItemDestinationCard;
 import com.fravokados.dangertech.portals.item.ModItems;
-import com.google.common.collect.Maps;
 import ic2.api.item.IC2Items;
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import java.util.Map;
 
 /**
  * Recipes

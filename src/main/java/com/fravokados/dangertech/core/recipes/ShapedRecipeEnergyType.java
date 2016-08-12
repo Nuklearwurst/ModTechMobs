@@ -1,17 +1,19 @@
-package com.fravokados.dangertech.core.plugin.energy;
+package com.fravokados.dangertech.core.recipes;
 
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
+import com.fravokados.dangertech.core.plugin.energy.EnergyType;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
  */
-public class ShapedRecipeEnergyType implements IRecipe {
+public class ShapedRecipeEnergyType implements ICraftingRecipe {
 
 	private ItemStack[] inputs;
 	private ItemStack output;
@@ -103,5 +105,10 @@ public class ShapedRecipeEnergyType implements IRecipe {
 		}
 
 		return itemStacks;
+	}
+
+	@Override
+	public List<ItemStack> getInputs() {
+		return Arrays.asList(inputs);
 	}
 }
