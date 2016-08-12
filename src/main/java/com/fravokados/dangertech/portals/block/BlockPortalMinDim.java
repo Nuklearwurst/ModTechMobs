@@ -40,6 +40,8 @@ public class BlockPortalMinDim extends BlockMD implements ITileEntityProvider{
 	public BlockPortalMinDim() {
 		super(Material.PORTAL, Strings.Block.portal);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(AXIS_PROPERTY, EnumFacing.Axis.X));
+		//noinspection ConstantConditions
+		this.setCreativeTab(null);
 	}
 
 	@Override
