@@ -3,6 +3,7 @@ package com.fravokados.dangertech.portals.block;
 import com.fravokados.dangertech.api.block.IBlockPlacedListener;
 import com.fravokados.dangertech.api.block.IFacingSix;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
+import com.fravokados.dangertech.core.plugin.PluginManager;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.core.plugin.energy.IEnergyTypeAware;
 import com.fravokados.dangertech.portals.ModMiningDimension;
@@ -15,9 +16,7 @@ import com.fravokados.dangertech.portals.item.ItemBlockPortalFrame;
 import com.fravokados.dangertech.portals.lib.GUIIDs;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.RotationUtils;
-import com.fravokados.dangertech.portals.plugin.PluginIC2;
 import com.fravokados.dangertech.portals.portal.PortalManager;
-import com.fravokados.dangertech.monsters.lib.util.PlayerUtils;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -40,6 +39,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
+
+import static com.fravokados.dangertech.portals.block.types.PortalFrameType.BASIC_CONTROLLER;
 
 /**
  * @author Nuklearwurst
@@ -68,9 +69,16 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if(PluginIC2.isItemWrench(PlayerUtils.getCurrentUsablePlayerItem(player, (ItemStack o) -> o.getItem() == Item.getItemFromBlock(this) && o.getItemDamage() == PortalFrameType.BASIC_FRAME.getID()))) {
-			return true;
+//		if(PluginIC2.isItemWrench(PlayerUtils.getCurrentUsablePlayerItem(player, (ItemStack o) -> o.getItem() == Item.getItemFromBlock(this) && o.getItemDamage() == PortalFrameType.BASIC_FRAME.getID()))) {
+//			return true;
+//		}
+
+		if(heldItem != null) {
+			if (PluginManager.isItemWrench(heldItem) || (heldItem.getItem() == Item.getItemFromBlock(this) && heldItem.getItemDamage() == PortalFrameType.BASIC_FRAME.getID())) {
+				return true;
+			}
 		}
+
 		switch (state.getValue(TYPE_PROPERTY)) {
 			case BASIC_CONTROLLER:
 				player.openGui(ModMiningDimension.instance, GUIIDs.ENTITY_PORTAL_CONTROLLER, world, pos.getX(), pos.getY(), pos.getZ());
@@ -136,10 +144,10 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		PortalFrameType type = state.getValue(TYPE_PROPERTY);
-		if(type == PortalFrameType.BASIC_CONTROLLER) {
+		if(type == BASIC_CONTROLLER) {
 			TileEntity te = world.getTileEntity(pos);
 			if(te instanceof IEnergyTypeAware) {
-				return EnergyManager.createItemStackWithEnergyType(this, 1, PortalFrameType.BASIC_CONTROLLER.getID(), ((IEnergyTypeAware) te).getEnergyType());
+				return EnergyManager.createItemStackWithEnergyType(this, 1, BASIC_CONTROLLER.getID(), ((IEnergyTypeAware) te).getEnergyType());
 			}
 		}
 		return new ItemStack(this, 1, type.ordinal());

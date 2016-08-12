@@ -36,16 +36,14 @@ public class IC2UpgradeIntegration {
 
 	public static IUpgradeDefinition getUpgrade(ItemStack item) {
 		if(PluginManager.ic2Activated()) {
-			if(item != null) {
-				if(upgradeEjector != null && item.isItemEqual(upgradeEjector)) {
-					//TODO: Ejector Upgrade
-				} else if(upgradeOverclocker != null && item.isItemEqual(upgradeOverclocker)) {
-					return new UpgradeOverclocker(item.stackSize);
-				} else if(upgradeEnergyTier != null && item.isItemEqual(upgradeEnergyTier)) {
-					return new SimpleIntegerUpgrade(item.stackSize, 1, UpgradeTypes.ENERGY_TIER.id);
-				} else if(upgradeEnergyStorage != null && item.isItemEqual(upgradeEnergyStorage)) {
-					return new SimpleIntegerUpgrade(item.stackSize, 10000, UpgradeTypes.ENERGY_STORAGE.id);
-				}
+			if(upgradeEjector != null && item.isItemEqual(upgradeEjector)) {
+				//TODO: Ejector Upgrade
+			} else if(upgradeOverclocker != null && item.isItemEqual(upgradeOverclocker)) {
+				return new UpgradeOverclocker(item.stackSize);
+			} else if(upgradeEnergyTier != null && item.isItemEqual(upgradeEnergyTier)) {
+				return new SimpleIntegerUpgrade(item.stackSize, 1, UpgradeTypes.ENERGY_TIER.id);
+			} else if(upgradeEnergyStorage != null && item.isItemEqual(upgradeEnergyStorage)) {
+				return new SimpleIntegerUpgrade(item.stackSize, 10000, UpgradeTypes.ENERGY_STORAGE.id);
 			}
 		}
 		return null;

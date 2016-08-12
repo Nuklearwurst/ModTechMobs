@@ -2,8 +2,12 @@ package com.fravokados.dangertech.core.plugin;
 
 import com.fravokados.dangertech.core.lib.util.LogHelperCore;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
+import com.fravokados.dangertech.core.plugin.ic2.IC2Plugin;
 import com.fravokados.dangertech.core.plugin.ic2.IC2UpgradeIntegration;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
+
+import javax.annotation.Nullable;
 
 public class PluginManager {
 
@@ -44,6 +48,16 @@ public class PluginManager {
 		} catch (Exception e) {
 			LogHelperCore.error(e, "IC2 Upgrade Integration Errored!");
 		}
+	}
+
+	public static boolean isItemWrench(@Nullable ItemStack stack) {
+		if(stack == null) {
+			return false;
+		}
+		if(ic2Activated()) {
+			IC2Plugin.isItemWrench(stack);
+		}
+		return false;
 	}
 
 }

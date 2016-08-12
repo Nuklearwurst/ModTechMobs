@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.portals.plugin;
+package com.fravokados.dangertech.portals.plugin.ic2;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
