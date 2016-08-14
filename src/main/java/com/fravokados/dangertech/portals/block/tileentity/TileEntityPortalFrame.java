@@ -4,6 +4,7 @@ import com.fravokados.dangertech.api.block.IBlockPlacedListener;
 import com.fravokados.dangertech.api.block.IFacingSix;
 import com.fravokados.dangertech.api.portal.IEntityPortalMandatoryComponent;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
+import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.portals.block.types.IPortalFrameWithState;
 import com.fravokados.dangertech.portals.block.types.PortalFrameState;
 import com.fravokados.dangertech.portals.client.ClientPortalInfo;
@@ -14,8 +15,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -104,27 +105,8 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 	@Override
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
+		WorldUtils.notifyBlockUpdateAtTile(this);
 	}
-
-//	@Override
-//	public boolean wrenchCanRemove(EntityPlayer entityPlayer) {
-//		return true;
-//	}
-//
-//	@Override
-//	public float getWrenchDropRate() {
-//		return 1;
-//	}
-//
-//	@Override
-//	public ItemStack getWrenchDrop(EntityPlayer entityPlayer) {
-//		return new ItemStack(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_FRAME.ordinal());
-//	}
-//
-//	@Override
-//	public boolean wrenchCanSetFacing(EntityPlayer entityPlayer, int side) {
-//		return side != facing;
-//	}
 
 	@Override
 	public EnumFacing getFacing() {

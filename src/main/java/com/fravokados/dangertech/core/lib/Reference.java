@@ -1,5 +1,7 @@
 package com.fravokados.dangertech.core.lib;
 
+import com.fravokados.dangertech.core.plugin.PluginManager;
+
 public class Reference {
 
 	public static final String MOD_ID = "dangertech";
@@ -16,6 +18,7 @@ public class Reference {
 
 	public static final String ASSET_DIR = MOD_ID;
 
-	public static final String DEPENDENCIES = "";
+	public static final String DEPENDENCIES = "after:" + PluginManager.IC2;
+
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.10,1.10.2]";
 }

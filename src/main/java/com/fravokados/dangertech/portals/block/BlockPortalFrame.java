@@ -17,6 +17,7 @@ import com.fravokados.dangertech.portals.lib.GUIIDs;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.RotationUtils;
 import com.fravokados.dangertech.portals.portal.PortalManager;
+import ic2.api.tile.IWrenchable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -35,8 +36,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -45,7 +48,8 @@ import static com.fravokados.dangertech.portals.block.types.PortalFrameType.BASI
 /**
  * @author Nuklearwurst
  */
-public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
+@Optional.Interface(iface = "ic2.api.tile.IWrenchable", modid = PluginManager.IC2)
+public class BlockPortalFrame extends BlockMD implements ITileEntityProvider, IWrenchable {
 
 	public static final PropertyEnum<PortalFrameType> TYPE_PROPERTY = PropertyEnum.create("type", PortalFrameType.class);
 	public static final PropertyEnum<PortalFrameState> STATE_PROPERTY = PropertyEnum.create("state", PortalFrameState.class);
@@ -69,14 +73,8 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-//		if(PluginIC2.isItemWrench(PlayerUtils.getCurrentUsablePlayerItem(player, (ItemStack o) -> o.getItem() == Item.getItemFromBlock(this) && o.getItemDamage() == PortalFrameType.BASIC_FRAME.getID()))) {
-//			return true;
-//		}
-
-		if(heldItem != null) {
-			if (PluginManager.isItemWrench(heldItem) || (heldItem.getItem() == Item.getItemFromBlock(this) && heldItem.getItemDamage() == PortalFrameType.BASIC_FRAME.getID())) {
-				return true;
-			}
+		if (heldItem != null && PluginManager.isItemWrench(heldItem)) {
+			return true;
 		}
 
 		switch (state.getValue(TYPE_PROPERTY)) {
@@ -186,5 +184,48 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider {
 	@Override
 	public Item createItemBlock() {
 		return new ItemBlockPortalFrame(this);
+	}
+
+
+	@Deprecated
+	@Optional.Method(modid = PluginManager.IC2)
+	@Override
+	public List<ItemStack> getWrenchDrops(World world, BlockPos pos, IBlockState state, TileEntity te, EntityPlayer player, int fortune) {
+		//noinspection ConstantConditions
+		ItemStack out = new ItemStack(ModBlocks.blockPortalFrame, 1, state.getValue(TYPE_PROPERTY).ordinal());
+		if(te instanceof TileEntityPortalControllerEntity) {
+			((TileEntityPortalControllerEntity) te).writeDataToStack(out);
+		}
+		return Collections.singletonList(out);
+	}
+
+	@Deprecated
+	@Optional.Method(modid = PluginManager.IC2)
+	@Override
+	public EnumFacing getFacing(World world, BlockPos pos) {
+		TileEntity te = world.getTileEntity(pos);
+		if(te != null && te instanceof IFacingSix) {
+			return ((IFacingSix) te).getFacing();
+		}
+		return EnumFacing.DOWN;
+	}
+
+	@Deprecated
+	@Optional.Method(modid = PluginManager.IC2)
+	@Override
+	public boolean setFacing(World world, BlockPos pos, EnumFacing newDirection, EntityPlayer player) {
+		TileEntity te = world.getTileEntity(pos);
+		if(te != null && te instanceof IFacingSix) {
+			((IFacingSix) te).setFacing(newDirection);
+			return true;
+		}
+		return false;
+	}
+
+	@Deprecated
+	@Optional.Method(modid = PluginManager.IC2)
+	@Override
+	public boolean wrenchCanRemove(World world, BlockPos pos, EntityPlayer player) {
+		return true;
 	}
 }

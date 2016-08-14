@@ -8,7 +8,7 @@ tile.dangertechportals:portalFrame.name=Portal Frame
 
 #Items
 item.dangertechportals:destinationCard.name=Destination Card
-item.dangertechportals:destinationCardMindim.name=Destination Card Mining Dimension
+item.dangertechportals:destinationCardMinDim.name=Destination Card Mining Dimension
 
 #Upgrades
 item.dangertechportals:upgrade_reverse.name=Portal Direction Reversing Upgrade

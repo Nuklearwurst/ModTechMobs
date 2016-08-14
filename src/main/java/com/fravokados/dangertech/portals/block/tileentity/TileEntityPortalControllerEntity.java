@@ -11,14 +11,11 @@ import com.fravokados.dangertech.core.inventory.InventoryUpgrade;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.lib.util.WorldUtils;
-import com.fravokados.dangertech.core.plugin.PluginManager;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.core.plugin.energy.TileEntityEnergyReceiver;
 import com.fravokados.dangertech.portals.ModMiningDimension;
-import com.fravokados.dangertech.portals.block.ModBlocks;
 import com.fravokados.dangertech.portals.block.types.IPortalFrameWithState;
 import com.fravokados.dangertech.portals.block.types.PortalFrameState;
-import com.fravokados.dangertech.portals.block.types.PortalFrameType;
 import com.fravokados.dangertech.portals.client.ClientPortalInfo;
 import com.fravokados.dangertech.portals.configuration.Settings;
 import com.fravokados.dangertech.portals.inventory.ContainerEntityPortalController;
@@ -31,7 +28,6 @@ import com.fravokados.dangertech.portals.portal.BlockPositionDim;
 import com.fravokados.dangertech.portals.portal.PortalConstructor;
 import com.fravokados.dangertech.portals.portal.PortalManager;
 import com.fravokados.dangertech.portals.portal.PortalMetrics;
-import ic2.api.tile.IWrenchable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -56,22 +52,18 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Nuklearwurst
  */
-@Optional.Interface(iface = "ic2.api.tile.IWrenchable", modid = PluginManager.IC2)
 public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		implements ISidedInventory, IBlockPlacedListener, IEntityPortalController,
-		IFacingSix, IUpgradable, IWrenchable,
+		IFacingSix, IUpgradable,
 		IPortalFrameWithState {
 
 	public static final int SLOT_DESTINATION = 0;
@@ -888,8 +880,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	@Override
 	public void setFacing(EnumFacing f) {
 		this.facing = f;
-		final IBlockState blockState = worldObj.getBlockState(getPos());
-		this.worldObj.notifyBlockUpdate(getPos(), blockState, blockState, 3);
+		WorldUtils.notifyBlockUpdateAtTile(this);
 	}
 
 	@Override
@@ -897,44 +888,6 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		return facing;
 	}
 
-
-	@Deprecated
-	@Optional.Method(modid = PluginManager.IC2)
-	@Override
-	public List<ItemStack> getWrenchDrops(World world, BlockPos pos, IBlockState state, TileEntity te, EntityPlayer player, int fortune) {
-		//noinspection ConstantConditions
-		ItemStack out = new ItemStack(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_CONTROLLER.ordinal());
-		ItemUtils.writeUpgradesToItemStack(getUpgradeInventory(), out);
-		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(out);
-		nbt.setInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID, id);
-		if(hasCustomName()) {
-			nbt.setString(NBTKeys.DESTINATION_CARD_PORTAL_NAME, getDisplayName().getFormattedText());
-		}
-		upgrades = null; //Hack to prevent droping of upgrades when removing using a wrench
-		return Arrays.asList(out);
-	}
-
-	@Deprecated
-	@Optional.Method(modid = PluginManager.IC2)
-	@Override
-	public EnumFacing getFacing(World world, BlockPos pos) {
-		return getFacing();
-	}
-
-	@Deprecated
-	@Optional.Method(modid = PluginManager.IC2)
-	@Override
-	public boolean setFacing(World world, BlockPos pos, EnumFacing newDirection, EntityPlayer player) {
-		setFacing(newDirection);
-		return true;
-	}
-
-	@Deprecated
-	@Optional.Method(modid = PluginManager.IC2)
-	@Override
-	public boolean wrenchCanRemove(World world, BlockPos pos, EntityPlayer player) {
-		return true;
-	}
 
 	/**
 	 * sets an error message and resets state to default
@@ -973,6 +926,17 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	@Nonnull
 	public ITextComponent getDisplayName() {
 		return hasCustomName() ? new TextComponentString(name) : new TextComponentTranslation(Strings.Gui.CONTROLLER_NAME_UNNAMED);
+	}
+
+	public void writeDataToStack(ItemStack stack) {
+		//noinspection ConstantConditions
+		ItemUtils.writeUpgradesToItemStack(getUpgradeInventory(), stack);
+		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
+		nbt.setInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID, id);
+		if (hasCustomName()) {
+			nbt.setString(NBTKeys.DESTINATION_CARD_PORTAL_NAME, getDisplayName().getFormattedText());
+		}
+		upgrades = null; //Hack to prevent droping of upgrades when removing using a wrench
 	}
 
 

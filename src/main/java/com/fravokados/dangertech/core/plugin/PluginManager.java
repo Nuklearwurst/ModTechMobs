@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 public class PluginManager {
 
-	public final static String IC2 = "ic2";
+	public final static String IC2 = "IC2";
 	public final static String TESLA = "tesla";
 
 	private static boolean ic2Available = false;
@@ -45,6 +45,9 @@ public class PluginManager {
 	private static void loadIC2() {
 		try {
 			ic2Available = IC2UpgradeIntegration.init();
+			if(ic2Available) {
+				ic2Available = IC2Plugin.init();
+			}
 		} catch (Exception e) {
 			LogHelperCore.error(e, "IC2 Upgrade Integration Errored!");
 		}
@@ -55,7 +58,7 @@ public class PluginManager {
 			return false;
 		}
 		if(ic2Activated()) {
-			IC2Plugin.isItemWrench(stack);
+			return IC2Plugin.isItemWrench(stack);
 		}
 		return false;
 	}
