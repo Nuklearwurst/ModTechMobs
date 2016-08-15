@@ -54,13 +54,12 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
 		if(nbt.hasKey(EnergyType.getNBTKey())) {
 			EnergyType types = EnergyType.readFromNBT(nbt);
-			//TODO translation
 			list.add(Strings.translate(types.getUnlocalizedName()));
 		}
 		if(nbt.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_NAME)) {
 			list.add(Strings.translate(Strings.Tooltip.NAME) + " " + nbt.getString(NBTKeys.DESTINATION_CARD_PORTAL_NAME));
 		} else if(nbt.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_ID)) {
-			list.add(Strings.translate(Strings.Tooltip.NAME + " " + Strings.Gui.CONTROLLER_NAME_UNNAMED));
+			list.add(Strings.translate(Strings.Tooltip.NAME) + " " + Strings.translate(Strings.Gui.CONTROLLER_NAME_UNNAMED));
 		}
 		if(nbt.hasKey("Upgrades")) {
 			NBTTagList nbttaglist = nbt.getTagList("Upgrades", Constants.NBT.TAG_COMPOUND);
