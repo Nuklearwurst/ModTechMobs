@@ -67,18 +67,11 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 	}
 
 
-// TODO: remove
-//	@Override
-//	public void onCraftGuiOpened(IContainerListener listener) {
-//		super.onCraftGuiOpened(listener);
-//		int newCount = ItemUtils.getNBTTagCompound(heldInventory).getInteger("frame_blocks");
-//		listener.sendProgressBarUpdate(this, 0, newCount);
-//	}
-
 	@Override
 	public void handleElementButtonClick(String elementName, int mouseButton) {
 		if (elementName.equals(NETWORK_ID_ADD)) {
 			//add frame blocks
+			//noinspection ConstantConditions
 			if (inventory.getStackInSlot(0) == null || inventory.getStackInSlot(0).stackSize == 0) {
 				return;
 			}

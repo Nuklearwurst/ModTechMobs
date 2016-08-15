@@ -75,6 +75,8 @@ public class Strings {
 
 		public static final String NAME = "tooltip.name";
 		public static final String CONTROLLER_UPGRADES_INSTALLED = "tooltip.controller.upgrades.installed";
+
+		public static final String UNKNOWN_DESTINATION = "tooltip.unknown_destination";
 	}
 
 	public static final class Sounds {

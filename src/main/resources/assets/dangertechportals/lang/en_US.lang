@@ -78,5 +78,7 @@ tooltip.item.destinationCard.mindim.info_1=Sneak and Rightclick to open GUI!
 tooltip.name=Name:
 tooltip.controller.upgrades.installed=%s Upgrades installed.
 
+tooltip.unknown_destination=Unknown
+
 #Portal
 portal.entity=Entity Portal

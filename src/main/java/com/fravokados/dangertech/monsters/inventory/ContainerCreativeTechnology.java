@@ -7,6 +7,7 @@ import com.fravokados.dangertech.monsters.network.message.MessageContainerIntege
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -21,20 +22,11 @@ public class ContainerCreativeTechnology extends Container implements IContainer
 		this.te = te;
 	}
 
-// TODO: remove
-//	@Override
-//	public void onCraftGuiOpened(IContainerListener crafter) {
-//		super.onCraftGuiOpened(crafter);
-//		if (crafter instanceof EntityPlayerMP) {
-//			ModTDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdateClient((byte) 0, te.getTechData()), (EntityPlayerMP) crafter);
-//		}
-//	}
-
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		if(oldValue != te.getTechData()) {
-			for (Object crafter : this.listeners) {
+			for (IContainerListener crafter : this.listeners) {
 				if (crafter instanceof EntityPlayerMP) {
 					ModTDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdateClient((byte) 0, te.getTechData()), (EntityPlayerMP) crafter);
 				}

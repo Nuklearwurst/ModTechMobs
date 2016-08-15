@@ -2,13 +2,14 @@ package com.fravokados.dangertech.core.inventory;
 
 import com.fravokados.dangertech.api.upgrade.IUpgradeDefinition;
 import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
+import com.fravokados.dangertech.core.lib.Strings;
 import com.fravokados.dangertech.core.upgrade.UpgradeHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class InventoryUpgrade implements IUpgradeInventory {
 
-	ItemStack[] inventory;
+	private ItemStack[] inventory;
 
 	public InventoryUpgrade(int size) {
 		inventory = new ItemStack[size];
@@ -79,7 +80,7 @@ public class InventoryUpgrade implements IUpgradeInventory {
 
 	@Override
 	public String getName() {
-		return "Upgrades"; //TODO: localize
+		return Strings.Gui.INVENTORY_UPGRADES;
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class InventoryUpgrade implements IUpgradeInventory {
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return new TextComponentString(getName());
+		return new TextComponentTranslation(getName());
 	}
 
 	@Override

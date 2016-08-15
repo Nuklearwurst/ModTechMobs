@@ -497,14 +497,17 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		}
 	}
 
+	/**
+	 * Creates the Portal (frame+contoller) for a miningdimension card
+	 */
 	private void createMiningDimensionPortal() {
 		int count = ItemUtils.getNBTTagCompound(inventory[0]).getInteger("frame_blocks");
 		if (count >= metrics.getFrameBlockCount()) {
 			if (useEnergy(Settings.ENERGY_USAGE_CREATE_PORTAL)) {
 				portalDestination = PortalManager.getInstance().createPortal(id, metrics, this);
 				if (portalDestination >= 0) {
-					//create destination card, TODO: localization
-					inventory[0] = ItemDestinationCard.fromDestination(portalDestination, "Unknown");
+					//create destination card
+					inventory[0] = ItemDestinationCard.fromDestination(portalDestination, Strings.translate(Strings.Tooltip.UNKNOWN_DESTINATION));
 				} else {
 					resetOnError(Error.INVALID_DESTINATION);
 				}

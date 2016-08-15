@@ -56,7 +56,7 @@ public class PortalCameraAnimator /*implements ICameraAnimator*/ {
 		double dx = player.posX - x;
 		double dy = player.posY - (y + player.getYOffset());
 		double dz = player.posZ - z;
-		double length = Math.sqrt(dx * dx + dz * dz + dy * dy); //TODO: Needs Go Faster
+		double length = Math.sqrt(dx * dx + dz * dz + dy * dy);
 		float yaw = -(float) Math.atan2(dx, dz);
 		yaw *= 180 / Math.PI;
 		float pitch = (float) Math.asin(dy / length);

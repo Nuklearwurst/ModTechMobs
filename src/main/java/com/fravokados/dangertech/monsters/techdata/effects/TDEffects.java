@@ -118,7 +118,7 @@ public class TDEffects implements TDEffectRegistry {
 	}
 	
 	/**
-	 * used to get a List containing all WorldEffects that are applicable for the given Chunk TODO:params
+	 * used to get a List containing all WorldEffects that are applicable for the given world
 	 */
 	@Override
 	public List<TDChunkEffect> getUsableWorldEffects(int level, World world) {

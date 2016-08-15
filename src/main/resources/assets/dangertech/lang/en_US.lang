@@ -14,3 +14,5 @@ tooltip.item.energyType.short.vanilla=Fuel
 tooltip.item.energyType.short.ic2=EU
 tooltip.item.energyType.short.redstoneflux=RF
 tooltip.item.energyType.short.tesla=Tesla
+
+gui.inventory.upgrades=Upgrades

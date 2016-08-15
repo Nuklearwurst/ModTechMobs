@@ -18,4 +18,8 @@ public class Strings {
 			public static final String DEBUG_TESTING = "debug_testing";
 		}
 	}
+
+	public static final class Gui {
+		public static final String INVENTORY_UPGRADES = "gui.inventory.upgrades";
+	}
 }
