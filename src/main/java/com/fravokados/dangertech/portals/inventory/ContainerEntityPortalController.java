@@ -88,9 +88,9 @@ public class ContainerEntityPortalController extends Container implements IEleme
 			if (this.lastFlags != te.getUpgradeTrackerFlags()) {
 				crafter.sendProgressBarUpdate(this, 3, te.getUpgradeTrackerFlags());
 			}
-//			if(this.lastType != te.getEnergyType()) {
-//				icrafting.sendProgressBarUpdate(this, 4, te.getEnergyType().getId());
-//			}
+			if(this.lastType != te.getEnergyType()) {
+				crafter.sendProgressBarUpdate(this, 4, te.getEnergyType().getId());
+			}
 
 			if (nameChanged && crafter instanceof EntityPlayerMP) {
 				ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerStringUpdate("controllerName", te.hasCustomName() ? te.getDisplayName().getUnformattedText() : ""), (EntityPlayerMP) crafter);
@@ -101,7 +101,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 		this.lastEnergyStored = (int) te.getEnergyStored();
 		this.lastMaxEnergyStored = te.getMaxEnergyStored();
 		this.lastFlags = te.getUpgradeTrackerFlags();
-//		this.lastType = te.getEnergyType();
+		this.lastType = te.getEnergyType();
 		nameChanged = false;
 	}
 
