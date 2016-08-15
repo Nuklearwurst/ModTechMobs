@@ -20,10 +20,10 @@ public class IC2UpgradeIntegration {
 
 	public static boolean init() {
 		if(Info.isIc2Available()) {
-			upgradeEnergyStorage = IC2Items.getItem("energyStorageUpgrade");
-			upgradeEnergyTier = IC2Items.getItem("transformerUpgrade");
-			upgradeOverclocker = IC2Items.getItem("overclockerUpgrade");
-			upgradeEjector = IC2Items.getItem("ejectorUpgrade");
+			upgradeEnergyStorage = IC2Items.getItem("upgrade", "energy_storage");
+			upgradeEnergyTier = IC2Items.getItem("upgrade", "transformer");
+			upgradeOverclocker = IC2Items.getItem("upgrade", "overclocker");
+			upgradeEjector = IC2Items.getItem("upgrade", "ejector");
 			return true;
 		}
 		return false;
