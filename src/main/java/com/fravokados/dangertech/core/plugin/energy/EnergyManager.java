@@ -18,20 +18,21 @@ import java.util.*;
  */
 public class EnergyManager {
 
-	private static final Map<EnergyType, IEnergyPlugin> plugins = new HashMap<>();
-	private static final Set<EnergyType> availableEnergyTypes = new HashSet<>();
+	private static final Map<EnergyType, IEnergyPlugin> plugins = new EnumMap<>(EnergyType.class);
+	private static final Set<EnergyType> availableEnergyTypes = EnumSet.noneOf(EnergyType.class);
 
 	/**
 	 * checks whether this item can provide energy to the specified energy type
 	 * @param item the itemstack to test
 	 * @param type the energy type
+	 * @param sinkTier sink tier
 	 * @return true if the given item can provide energy to the specified energy type
 	 */
-	public static boolean canItemProvideEnergy(@Nullable ItemStack item, EnergyType type) {
+	public static boolean canItemProvideEnergy(@Nullable ItemStack item, EnergyType type, int sinkTier) {
 		if(item == null) return false;
 
 		if(plugins.containsKey(type)) {
-			return plugins.get(type).canItemProvideEnergy(item, type);
+			return plugins.get(type).canItemProvideEnergy(item, type, sinkTier);
 		}
 		return false;
 	}

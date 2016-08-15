@@ -31,6 +31,7 @@ public class ItemMDDebugger extends ItemMD {
 			if(tileEntity instanceof TileEntityPortalControllerEntity) {
 				final TileEntityPortalControllerEntity te = (TileEntityPortalControllerEntity) tileEntity;
 				player.addChatComponentMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", state: " + te.getState() + ", portalState: " + te.getPortalFrameState()));
+				player.addChatComponentMessage(new TextComponentString("Sink tier: " + te.getSinkTier() + ", ID: " + te.getId()));
 			} else if(tileEntity instanceof TileEntityPortalFrame) {
 				final TileEntityPortalFrame te = (TileEntityPortalFrame) tileEntity;
 				player.addChatComponentMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", active: " + te.isActive() + ", portalState: " + te.getPortalFrameState()));

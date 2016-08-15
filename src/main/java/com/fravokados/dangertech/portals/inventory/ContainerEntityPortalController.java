@@ -149,7 +149,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 					return null;
 				}
 			} else { //from player:
-				if (EnergyManager.canItemProvideEnergy(stackSlot, te.getEnergyType())) {
+				if (EnergyManager.canItemProvideEnergy(stackSlot, te.getEnergyType(), te.getSinkTier())) {
 					//Fuel Item
 					if (!this.mergeItemStack(stackSlot, 1, 2, false)) {
 						return null;

@@ -193,7 +193,8 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 		if(energyType != EnergyType.IC2) {
 			return amount;
 		}
-		return amount - energyStorage.receiveEnergyAll(amount, false);
+		energyStorage.receiveEnergyAll(amount, false);
+		return 0;
 	}
 
 	@Optional.Method(modid = PluginManager.IC2)

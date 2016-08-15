@@ -22,6 +22,6 @@ public class SlotEnergyFuel extends Slot {
 
 	@Override
 	public boolean isItemValid(@Nullable ItemStack stack) {
-		return EnergyManager.canItemProvideEnergy(stack, type.getEnergyType());
+		return EnergyManager.canItemProvideEnergy(stack, type.getEnergyType(), type.getSinkTier());
 	}
 }

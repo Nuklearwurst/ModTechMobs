@@ -94,6 +94,25 @@ public class PortalManager extends WorldSavedData {
 		return entityPortals.containsKey(portal);
 	}
 
+	/**
+	 * tries to find a controller registered under the given id
+	 *
+	 * note: this might load unloaded worlds
+	 * @param portal id that will be checked
+	 * @return true when no controller could be found
+	 */
+	public boolean entityPortalIdValidForUse(int portal) {
+		if(entityPortalExists(portal)) {
+			BlockPositionDim pos = getEntityPortalForId(portal);
+			if(pos != null) {
+				if(pos.getControllerEntity() != null) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	public void registerEntityPortal(int portal, BlockPositionDim pos) {
 		entityPortals.put(portal, pos);
 		this.markDirty();

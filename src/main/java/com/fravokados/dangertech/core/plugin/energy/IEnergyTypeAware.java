@@ -8,4 +8,6 @@ public interface IEnergyTypeAware {
 	EnergyType getEnergyType();
 
 	void setEnergyType(EnergyType types);
+
+	int getSinkTier();
 }

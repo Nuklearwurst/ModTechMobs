@@ -334,7 +334,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 */
 	@Override
 	public void onBlockPostPlaced(World world, BlockPos pos, IBlockState state) {
-		if (id >= 0) {
+		if (id >= 0 && PortalManager.getInstance().entityPortalIdValidForUse(id)) {
 			PortalManager.getInstance().registerEntityPortal(id, new BlockPositionDim(this));
 		} else {
 			id = ModMiningDimension.instance.portalManager.registerNewEntityPortal(new BlockPositionDim(this));
@@ -593,6 +593,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 
 	@Override
 	public int getSinkTier() {
+		//FIXME: IC2: if energy tier is > 62 machine explodes! (happens for ic2 machines too)
 		return energyTier;
 	}
 
@@ -657,7 +658,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			case SLOT_WRITER_IN:
 				return stack.getItem() instanceof ItemDestinationCard;
 			case SLOT_FUEL:
-				return EnergyManager.canItemProvideEnergy(stack, getEnergyType());
+				return EnergyManager.canItemProvideEnergy(stack, getEnergyType(), getSinkTier());
 			case SLOT_WRITER_OUT:
 				return false;
 		}
@@ -932,9 +933,10 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		//noinspection ConstantConditions
 		ItemUtils.writeUpgradesToItemStack(getUpgradeInventory(), stack);
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
+		getEnergyType().writeToNBT(nbt);
 		nbt.setInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID, id);
 		if (hasCustomName()) {
-			nbt.setString(NBTKeys.DESTINATION_CARD_PORTAL_NAME, getDisplayName().getFormattedText());
+			nbt.setString(NBTKeys.DESTINATION_CARD_PORTAL_NAME, getDisplayName().getUnformattedText());
 		}
 		upgrades = null; //Hack to prevent droping of upgrades when removing using a wrench
 	}

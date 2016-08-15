@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 public class VanillaEnergyPlugin implements IEnergyPlugin {
 
 	@Override
-	public boolean canItemProvideEnergy(ItemStack item, EnergyType type) {
+	public boolean canItemProvideEnergy(ItemStack item, EnergyType type, int sinkTier) {
 		return TileEntityFurnace.getItemBurnTime(item) > 0;
 	}
 
