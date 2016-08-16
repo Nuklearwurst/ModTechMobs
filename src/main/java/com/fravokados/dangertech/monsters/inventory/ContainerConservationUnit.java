@@ -4,7 +4,6 @@ import com.fravokados.dangertech.monsters.entity.EntityConservationUnit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -45,9 +44,6 @@ public class ContainerConservationUnit extends Container {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (IContainerListener crafter : this.listeners) {
-
-		}
 	}
 
 	@Override
@@ -101,5 +97,10 @@ public class ContainerConservationUnit extends Container {
 		}
 
 		return stackCopy;
+	}
+
+	@Override
+	public void onContainerClosed(EntityPlayer playerIn) {
+		conservationUnit.closeInventory(playerIn);
 	}
 }

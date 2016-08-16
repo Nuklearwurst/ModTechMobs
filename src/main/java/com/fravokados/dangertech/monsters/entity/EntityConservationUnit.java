@@ -10,6 +10,7 @@ import com.fravokados.dangertech.monsters.lib.GUIIDs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +36,6 @@ import java.util.List;
 public class EntityConservationUnit extends Entity implements IEmpHandler, IInventory {
 
 
-
 	private static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityConservationUnit.class, DataSerializers.FLOAT);
 	private static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityConservationUnit.class, DataSerializers.VARINT);
 
@@ -51,6 +51,8 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	private ArrayList<ItemStack> mainInventory = new ArrayList<ItemStack>();
 
 	public static final int LIFE_SPAN = 48000;
+	public static final int DYING = 47900;
+
 	public static final int IMMUNITY = 100;
 
 	public EntityConservationUnit(World world) {
@@ -117,11 +119,9 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		if (!list.isEmpty()) {
 			for (Entity entity : list) {
 
-				if (!this.isRidingSameEntity(entity))
-				{
-					if (!entity.noClip && !this.noClip)
-					{
-						if(entity.getEntityBoundingBox().minY < this.getEntityBoundingBox().maxY - 1D) {
+				if (!this.isRidingSameEntity(entity)) {
+					if (!entity.noClip && !this.noClip) {
+						if (entity.getEntityBoundingBox().minY < this.getEntityBoundingBox().maxY - 1D) {
 							double deltaX = entity.posX - this.posX;
 							double deltaZ = entity.posZ - this.posZ;
 							double abs_max = MathHelper.abs_max(deltaX, deltaZ);
@@ -198,7 +198,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 							itemStack.stackSize = 0;
 						}
 					}
-					if(empCounter > 0) {
+					if (empCounter > 0) {
 						EMPExplosion emp = new EMPExplosion(worldObj, posX, posY + getYOffset(), posZ, empCounter / 10, empCounter / 2);
 						emp.doExplosionWithEffects();
 					}
@@ -219,7 +219,24 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	public void onUpdate() {
 		super.onUpdate();
 
+
+		if (worldObj.isRemote) {
+			if(age < dataManager.get(AGE)) {
+				age = dataManager.get(AGE);
+			}
+			if (age >= DYING) {
+				for (int k = 0; k < 4; ++k)
+				{
+					double d2 = this.rand.nextGaussian() * 0.02D;
+					double d0 = this.rand.nextGaussian() * 0.02D;
+					double d1 = this.rand.nextGaussian() * 0.02D;
+					this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d2, d0, d1, new int[0]);
+				}
+			}
+		}
+
 		if (age >= LIFE_SPAN) {
+			onDeath();
 			this.setDead();
 		}
 
@@ -231,7 +248,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 			this.setDamage(this.getDamage() - 1.0F);
 		}
 
-		if(empCounter > 0) {
+		if (empCounter > 0) {
 			empCounter--;
 		}
 
@@ -247,7 +264,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		this.motionY *= drag;
 		this.motionZ *= drag;
 
-		if (!worldObj.isRemote) {
+		if (worldObj.isRemote) {
 			if (age < IMMUNITY) {
 				if (age % 10 == 0) {
 					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 5, rand.nextDouble(), rand.nextDouble() * 5);
@@ -335,7 +352,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
-		while(slot >= mainInventory.size()) {
+		while (slot >= mainInventory.size()) {
 			mainInventory.add(null);
 		}
 		mainInventory.set(slot, stack);
@@ -373,7 +390,21 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public void closeInventory(EntityPlayer player) {
+		if (!player.getEntityWorld().isRemote) {
+			boolean empty = true;
+			for (ItemStack item : mainInventory) {
+				if (item != null) {
+					empty = false;
+				}
+			}
+			if (empty) {
+				this.setAge(DYING);
+			}
+		}
+	}
 
+	private void onDeath() {
+		playSound(SoundEvents.ENTITY_BLAZE_DEATH, 0.5F, 0.5F);
 	}
 
 	@Override
@@ -422,7 +453,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public void handleEMP(World world, double x, double y, double z, float strength, int radius, float factor) {
-		this.empCounter = (int) (factor  * 20 * strength);
+		this.empCounter = (int) (factor * 20 * strength);
 		this.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, factor * 20 * strength);
 	}
 
