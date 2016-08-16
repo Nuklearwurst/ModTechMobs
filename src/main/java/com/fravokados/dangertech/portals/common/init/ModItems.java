@@ -1,6 +1,10 @@
-package com.fravokados.dangertech.portals.item;
+package com.fravokados.dangertech.portals.common.init;
 
 import com.fravokados.dangertech.core.ModNwCore;
+import com.fravokados.dangertech.portals.item.ItemDestinationCard;
+import com.fravokados.dangertech.portals.item.ItemMD;
+import com.fravokados.dangertech.portals.item.ItemMDDebugger;
+import com.fravokados.dangertech.portals.item.ItemMindDimUpgrade;
 import com.fravokados.dangertech.portals.lib.Reference;
 import com.fravokados.dangertech.portals.lib.Strings;
 import net.minecraftforge.fml.common.registry.GameRegistry;

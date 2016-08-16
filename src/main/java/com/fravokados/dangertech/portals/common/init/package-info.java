@@ -3,7 +3,7 @@
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package com.fravokados.dangertech.portals.recipes;
+package com.fravokados.dangertech.portals.common.init;
 
 import mcp.MethodsReturnNonnullByDefault;
 

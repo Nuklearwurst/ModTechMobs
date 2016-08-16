@@ -5,14 +5,13 @@ import com.fravokados.dangertech.api.DangerousTechnologyAPI;
 import com.fravokados.dangertech.core.common.CommonProxy;
 import com.fravokados.dangertech.core.common.handler.GuiHandler;
 import com.fravokados.dangertech.core.common.init.ModItems;
-import com.fravokados.dangertech.core.recipes.ModRecipes;
 import com.fravokados.dangertech.core.configuration.ConfigHandler;
 import com.fravokados.dangertech.core.lib.Reference;
 import com.fravokados.dangertech.core.lib.Strings;
 import com.fravokados.dangertech.core.lib.util.LogHelperCore;
 import com.fravokados.dangertech.core.network.ModNetworkManager;
 import com.fravokados.dangertech.core.plugin.PluginManager;
-import com.fravokados.dangertech.core.plugin.ic2.IC2RecipeIntegrationCore;
+import com.fravokados.dangertech.core.common.init.ModRecipes;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
@@ -88,11 +87,6 @@ public class ModNwCore {
 
 
 		//load recipes
-		try {
-			IC2RecipeIntegrationCore.init();
-		} catch (Exception e) {
-			LogHelperCore.error(e, "Critical error loading ic2 recipes!");
-		}
 		ModRecipes.init();
 	}
 

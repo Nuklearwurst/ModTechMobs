@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.portals;
 
-import com.fravokados.dangertech.portals.block.ModBlocks;
+import com.fravokados.dangertech.portals.common.init.ModBlocks;
 import com.fravokados.dangertech.portals.command.CommandEnterDimension;
 import com.fravokados.dangertech.portals.common.ChunkLoaderCallback;
 import com.fravokados.dangertech.portals.common.CommonProxy;
@@ -8,14 +8,14 @@ import com.fravokados.dangertech.portals.common.GuiHandler;
 import com.fravokados.dangertech.portals.configuration.ConfigHandler;
 import com.fravokados.dangertech.portals.dimension.ModDimensions;
 import com.fravokados.dangertech.portals.event.ModEventHandler;
-import com.fravokados.dangertech.portals.item.ModItems;
+import com.fravokados.dangertech.portals.common.init.ModItems;
 import com.fravokados.dangertech.portals.lib.Reference;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;
 import com.fravokados.dangertech.portals.network.ModMDNetworkManager;
 import com.fravokados.dangertech.portals.plugin.PluginTechMobs;
 import com.fravokados.dangertech.portals.portal.PortalManager;
-import com.fravokados.dangertech.portals.recipes.ModRecipes;
+import com.fravokados.dangertech.portals.common.init.ModRecipes;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -97,7 +97,7 @@ public class ModMiningDimension {
 		proxy.initRendering();
 
 		//register recipes
-		ModRecipes.initRecipes();
+		ModRecipes.init();
 	}
 
 	@Mod.EventHandler

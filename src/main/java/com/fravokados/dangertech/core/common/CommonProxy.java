@@ -11,18 +11,20 @@ public class CommonProxy {
 	/**
 	 * Register's the given block and any needed ItemBlock models
 	 */
-	public void registerBlock(BlockNW block) {
+	public BlockNW registerBlock(BlockNW block) {
 		GameRegistry.register(block);
 		Item item = block.createItemBlock();
 		if(item != null) {
 			registerItem(item);
 		}
+		return block;
 	}
 
 	/**
 	 * Register's the given item and any needed models
 	 */
-	public void registerItem(Item item) {
+	public Item registerItem(Item item) {
 		GameRegistry.register(item);
+		return item;
 	}
 }

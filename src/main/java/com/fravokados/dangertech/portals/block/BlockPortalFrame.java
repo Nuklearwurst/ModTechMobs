@@ -14,6 +14,7 @@ import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalFrame;
 import com.fravokados.dangertech.portals.block.types.IPortalFrameWithState;
 import com.fravokados.dangertech.portals.block.types.PortalFrameState;
 import com.fravokados.dangertech.portals.block.types.PortalFrameType;
+import com.fravokados.dangertech.portals.common.init.ModBlocks;
 import com.fravokados.dangertech.portals.item.ItemBlockPortalFrame;
 import com.fravokados.dangertech.portals.lib.GUIIDs;
 import com.fravokados.dangertech.portals.lib.NBTKeys;

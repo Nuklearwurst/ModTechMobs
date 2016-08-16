@@ -9,10 +9,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ClientProxy extends CommonProxy {
 
 	@Override
-	public void registerItem(Item item) {
+	public Item registerItem(Item item) {
 		super.registerItem(item);
 		if(item instanceof IModelProvider) {
 			((IModelProvider)item).registerModels();
 		}
+		return item;
 	}
 }

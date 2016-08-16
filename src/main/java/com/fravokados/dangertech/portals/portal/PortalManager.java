@@ -3,7 +3,7 @@ package com.fravokados.dangertech.portals.portal;
 import com.fravokados.dangertech.api.block.IFacingSix;
 import com.fravokados.dangertech.portals.ModMiningDimension;
 import com.fravokados.dangertech.portals.block.BlockPortalFrame;
-import com.fravokados.dangertech.portals.block.ModBlocks;
+import com.fravokados.dangertech.portals.common.init.ModBlocks;
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.portals.block.types.PortalFrameType;
 import com.fravokados.dangertech.portals.configuration.Settings;

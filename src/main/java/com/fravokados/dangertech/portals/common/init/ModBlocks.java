@@ -1,6 +1,9 @@
-package com.fravokados.dangertech.portals.block;
+package com.fravokados.dangertech.portals.common.init;
 
 import com.fravokados.dangertech.core.ModNwCore;
+import com.fravokados.dangertech.portals.block.BlockMD;
+import com.fravokados.dangertech.portals.block.BlockPortalFrame;
+import com.fravokados.dangertech.portals.block.BlockPortalMinDim;
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortal;
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalFrame;

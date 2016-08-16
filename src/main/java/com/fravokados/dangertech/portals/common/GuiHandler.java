@@ -6,7 +6,7 @@ import com.fravokados.dangertech.portals.client.gui.GuiEntityPortalController;
 import com.fravokados.dangertech.portals.inventory.ContainerDestinationCardMinDim;
 import com.fravokados.dangertech.portals.inventory.ContainerEntityPortalController;
 import com.fravokados.dangertech.portals.item.ItemDestinationCard;
-import com.fravokados.dangertech.portals.item.ModItems;
+import com.fravokados.dangertech.portals.common.init.ModItems;
 import com.fravokados.dangertech.portals.lib.GUIIDs;
 import com.fravokados.dangertech.monsters.lib.util.PlayerUtils;
 import net.minecraft.entity.player.EntityPlayer;

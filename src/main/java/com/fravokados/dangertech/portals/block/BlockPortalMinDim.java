@@ -1,6 +1,7 @@
 package com.fravokados.dangertech.portals.block;
 
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortal;
+import com.fravokados.dangertech.portals.common.init.ModBlocks;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;
 import net.minecraft.block.Block;

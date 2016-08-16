@@ -5,6 +5,7 @@ import com.fravokados.dangertech.core.plugin.energy.EnergyType;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -44,7 +45,7 @@ public class ShapedRecipeEnergyType implements ICraftingRecipe {
 					return false;
 				}
 
-				if (expectedStack.getMetadata() != 32767 && craftingStack.getMetadata() != expectedStack.getMetadata()) {
+				if (expectedStack.getMetadata() != OreDictionary.WILDCARD_VALUE && craftingStack.getMetadata() != expectedStack.getMetadata()) {
 					return false;
 				}
 

@@ -14,7 +14,6 @@ import com.fravokados.dangertech.monsters.lib.Strings;
 import com.fravokados.dangertech.monsters.lib.util.LogHelperTM;
 import com.fravokados.dangertech.monsters.network.ModTDNetworkManager;
 import com.fravokados.dangertech.monsters.plugin.PluginManager;
-import com.fravokados.dangertech.monsters.plugin.ic2.IC2RecipeIntegration;
 import com.fravokados.dangertech.monsters.techdata.effects.TDEffects;
 import com.fravokados.dangertech.monsters.techdata.values.TDValues;
 import net.minecraft.creativetab.CreativeTabs;
@@ -106,11 +105,6 @@ public class ModTechMobs {
 
 
 		//load recipes
-		try {
-			IC2RecipeIntegration.init();
-		} catch (Exception e) {
-			LogHelperTM.error(e, "Critical error loading ic2 recipes!");
-		}
 		ModRecipes.init();
 
 		//init networking

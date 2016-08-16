@@ -4,6 +4,7 @@ import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.core.plugin.energy.EnergyType;
 import com.fravokados.dangertech.portals.ModMiningDimension;
+import com.fravokados.dangertech.portals.common.init.ModItems;
 import com.fravokados.dangertech.portals.lib.GUIIDs;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.Textures;

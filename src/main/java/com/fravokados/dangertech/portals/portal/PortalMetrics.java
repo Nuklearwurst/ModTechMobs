@@ -6,7 +6,7 @@ import com.fravokados.dangertech.api.portal.IEntityPortalMandatoryComponent;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.portals.block.BlockPortalFrame;
 import com.fravokados.dangertech.portals.block.BlockPortalMinDim;
-import com.fravokados.dangertech.portals.block.ModBlocks;
+import com.fravokados.dangertech.portals.common.init.ModBlocks;
 import com.fravokados.dangertech.portals.block.types.PortalFrameType;
 import com.fravokados.dangertech.portals.lib.Strings;
 import net.minecraft.block.Block;
