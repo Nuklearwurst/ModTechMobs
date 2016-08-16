@@ -23,7 +23,7 @@ import com.fravokados.dangertech.portals.item.ItemDestinationCard;
 import com.fravokados.dangertech.portals.lib.NBTKeys;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;
-import com.fravokados.dangertech.portals.plugin.PluginLookingGlass;
+import com.fravokados.dangertech.portals.plugin.lookingglass.PluginLookingGlass;
 import com.fravokados.dangertech.portals.portal.BlockPositionDim;
 import com.fravokados.dangertech.portals.portal.PortalConstructor;
 import com.fravokados.dangertech.portals.portal.PortalManager;

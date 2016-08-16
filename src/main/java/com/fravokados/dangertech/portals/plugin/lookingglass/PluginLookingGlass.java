@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.portals.plugin;
+package com.fravokados.dangertech.portals.plugin.lookingglass;
 
 import com.fravokados.dangertech.portals.client.ClientPortalInfo;
 

@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.monsters.plugin;
+package com.fravokados.dangertech.monsters.plugin.forestry;
 
 /**
  * @author Nuklearwurst

@@ -13,7 +13,7 @@ import com.fravokados.dangertech.portals.lib.Reference;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;
 import com.fravokados.dangertech.portals.network.ModMDNetworkManager;
-import com.fravokados.dangertech.portals.plugin.PluginTechMobs;
+import com.fravokados.dangertech.portals.plugin.techmobs.PluginTechMobs;
 import com.fravokados.dangertech.portals.portal.PortalManager;
 import com.fravokados.dangertech.portals.common.init.ModRecipes;
 import net.minecraft.creativetab.CreativeTabs;

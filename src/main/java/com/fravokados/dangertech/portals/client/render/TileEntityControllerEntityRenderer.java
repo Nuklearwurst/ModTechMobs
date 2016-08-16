@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.portals.client.render;
 
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalControllerEntity;
-import com.fravokados.dangertech.portals.plugin.PluginLookingGlass;
+import com.fravokados.dangertech.portals.plugin.lookingglass.PluginLookingGlass;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 /**

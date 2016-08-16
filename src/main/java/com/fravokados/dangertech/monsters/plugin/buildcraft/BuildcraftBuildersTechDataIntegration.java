@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.monsters.plugin;
+package com.fravokados.dangertech.monsters.plugin.buildcraft;
 
 import com.fravokados.dangertech.monsters.lib.util.LogHelperTM;
 import com.fravokados.dangertech.monsters.techdata.values.TDValues;

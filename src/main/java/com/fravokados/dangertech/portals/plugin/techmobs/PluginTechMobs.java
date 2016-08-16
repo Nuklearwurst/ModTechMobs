@@ -1,4 +1,4 @@
-package com.fravokados.dangertech.portals.plugin;
+package com.fravokados.dangertech.portals.plugin.techmobs;
 
 import com.fravokados.dangertech.api.DangerousTechnologyAPI;
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalControllerEntity;
