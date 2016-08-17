@@ -21,22 +21,6 @@ public enum EnergyType {
 		this.conversionFromEU = conversionFromEU;
 	}
 
-	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger(ENERGY_TYPE, getId());
-	}
-
-	public static EnergyType readFromNBT(NBTTagCompound nbt) {
-		int value = nbt.getInteger(ENERGY_TYPE);
-		return getEnergyType(value);
-	}
-
-	public static EnergyType getEnergyType(int value) {
-		if(value < 0 || value >= values().length) {
-			return INVALID;
-		}
-		return values()[value];
-	}
-
 	public int getId() {
 		return ordinal();
 	}
@@ -53,11 +37,27 @@ public enum EnergyType {
 		 return UNLOCALIZED_NAME_SHORT_PREFIX + name;
 	}
 
-	public static String getNBTKey() {
-		return ENERGY_TYPE;
-	}
-
 	public float getConversionFromEU() {
 		return conversionFromEU;
+	}
+
+	public void writeToNBT(NBTTagCompound nbt) {
+		nbt.setInteger(ENERGY_TYPE, getId());
+	}
+
+	public static EnergyType readFromNBT(NBTTagCompound nbt) {
+		int value = nbt.getInteger(ENERGY_TYPE);
+		return getEnergyType(value);
+	}
+
+	public static EnergyType getEnergyType(int value) {
+		if(value < 0 || value >= values().length) {
+			return INVALID;
+		}
+		return values()[value];
+	}
+
+	public static String getNBTKey() {
+		return ENERGY_TYPE;
 	}
 }

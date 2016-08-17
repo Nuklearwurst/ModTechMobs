@@ -69,6 +69,53 @@ public class EnergyManager {
 		}
 	}
 
+	/**
+	 * searches an inventory for Items with an EnergyType
+	 * @param inv inventory that is to be searched
+	 * @return returns the first energytype found. Null if none.
+	 */
+	public static EnergyType getFirstEnergyTypeOfInventory(IInventory inv) {
+		for (int i = 0; i < inv.getSizeInventory(); i++) {
+			ItemStack stack = inv.getStackInSlot(i);
+			if (stack != null && stack.hasTagCompound()) {
+				//noinspection ConstantConditions
+				EnergyType type = EnergyType.readFromNBT(stack.getTagCompound());
+				if (type != EnergyType.INVALID) {
+					return type;
+				}
+			}
+
+		}
+		return null;
+	}
+
+	/**
+	 * searches an inventory for Items with an EnergyType
+	 * @param inv inventory that is to be searched
+	 * @return null if none of the items have an EnergyType or different ones were found. Otherwise this will return the EnergyType found.
+	 */
+	public static EnergyType getEnergyTypeOfInventory(IInventory inv) {
+		EnergyType typeFound = null;
+		for (int i = 0; i < inv.getSizeInventory(); i++) {
+			ItemStack currentStack = inv.getStackInSlot(i);
+			if (currentStack != null) {
+				//make sure energy types line up
+				if (currentStack.hasTagCompound()) {
+					//noinspection ConstantConditions
+					EnergyType type = EnergyType.readFromNBT(currentStack.getTagCompound());
+					if (type != EnergyType.INVALID) {
+						if (typeFound == null) {
+							typeFound = type;
+						} else if (typeFound != type) {
+							return null;
+						}
+					}
+				}
+			}
+		}
+		return typeFound;
+	}
+
 	public static void rechargeEnergyStorageFromInventory(EnergyStorage storage, EnergyType type, IInventory inventory, int slot, int sinkTier) {
 		if (!storage.isFull()) {
 			final ItemStack stack = inventory.getStackInSlot(slot);

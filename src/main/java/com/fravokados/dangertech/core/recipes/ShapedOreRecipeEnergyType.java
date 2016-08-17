@@ -3,39 +3,39 @@ package com.fravokados.dangertech.core.recipes;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.plugin.energy.EnergyManager;
 import com.fravokados.dangertech.core.plugin.energy.EnergyType;
+import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
+ * ShapedOreRecipe that keeps EnergyType of input to output
  *
+ * note: output should be something that can have an EnergyType
  */
-public class ShapedRecipeEnergyType extends ShapedRecipes {
+public class ShapedOreRecipeEnergyType extends ShapedOreRecipe {
 
-	public static final String NAME = "shaped_energytype";
+	public static final String NAME = "shapedore_energytype";
 
-	public ShapedRecipeEnergyType(ItemStack output, Object... inputs) {
-		this(3, 3, output, inputs);
+	public ShapedOreRecipeEnergyType(Block result, Object... recipe) {
+		super(result, recipe);
 	}
 
-	public ShapedRecipeEnergyType(int width, int height, ItemStack output, Object... inputs) {
-		this(width, height, output, ItemUtils.createInputs(width, height, inputs));
+	public ShapedOreRecipeEnergyType(Item result, Object... recipe) {
+		super(result, recipe);
 	}
 
-	private ShapedRecipeEnergyType(int width, int height, ItemStack output, ItemStack[] inputs) {
-		super(width, height, inputs, output);
+	public ShapedOreRecipeEnergyType(ItemStack result, Object... recipe) {
+		super(result, recipe);
 	}
-
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World world) {
 		return super.matches(inv, world) && EnergyManager.getEnergyTypeOfInventory(inv) != null;
 	}
 
-	@Nullable
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		ItemStack stackOut = super.getCraftingResult(inv);
