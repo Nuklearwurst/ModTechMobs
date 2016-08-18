@@ -149,14 +149,14 @@ public class ContainerEntityPortalController extends Container implements IEleme
 					return null;
 				}
 			} else { //from player:
-				if (EnergyManager.canItemProvideEnergy(stackSlot, te.getEnergyType(), te.getSinkTier())) {
-					//Fuel Item
-					if (!this.mergeItemStack(stackSlot, 1, 2, false)) {
-						return null;
-					}
-				} else if (stackSlot.getItem() instanceof ItemDestinationCard) {
+				if (stackSlot.getItem() instanceof ItemDestinationCard) {
 					//Destination Card
 					if (!this.mergeItemStack(stackSlot, 0, 1, false)) {
+						return null;
+					}
+				} else if (EnergyManager.canItemProvideEnergy(stackSlot, te.getEnergyType(), te.getSinkTier())) {
+					//Fuel Item
+					if (!this.mergeItemStack(stackSlot, 1, 2, false)) {
 						return null;
 					}
 				} else if (slotId >= 4 && slotId < 31) {
