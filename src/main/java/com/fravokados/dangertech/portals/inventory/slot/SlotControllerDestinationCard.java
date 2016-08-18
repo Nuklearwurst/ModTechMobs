@@ -1,9 +1,12 @@
 package com.fravokados.dangertech.portals.inventory.slot;
 
 import com.fravokados.dangertech.portals.item.ItemDestinationCard;
+import com.fravokados.dangertech.portals.lib.Textures;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
@@ -18,6 +21,13 @@ public class SlotControllerDestinationCard extends Slot {
 
 	@Override
 	public boolean isItemValid(@Nullable ItemStack stack) {
-		return stack.getItem() instanceof ItemDestinationCard;
+		return stack == null || stack.getItem() instanceof ItemDestinationCard;
+	}
+
+	@Nullable
+	@SideOnly(Side.CLIENT)
+	@Override
+	public String getSlotTexture() {
+		return Textures.GUI_SLOT_DESTINATION_CARD.toString();
 	}
 }

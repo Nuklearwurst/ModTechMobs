@@ -13,6 +13,7 @@ public class Textures {
 	public static final ResourceLocation GUI_DESTINATION_CARD_MIN_DIM = getResourceLocation(GUI_LOCATION + "GuiDestinationCardMinDim.png");
 	public static final ResourceLocation GUI_BUTTON_EDIT = getResourceLocation(GUI_LOCATION + "GuiButtonEdit.png");
 
+
 	public static final String TEXTURE_PREFIX = Reference.ASSET_DIR + ":";
 
 	/*
@@ -39,6 +40,9 @@ public class Textures {
 	public static final String ITEM_UPGRADE_DUMMY = Strings.Item.upgrade;
 	public static final String ITEM_BLOCK_PORTAL_FRAME = Strings.Block.portalMachineFrame;
 	public static final String ITEM_BLOCK_PORTAL_CONTROLLER = Strings.Block.portalMachineController;
+
+	//Other
+	public static final ResourceLocation GUI_SLOT_DESTINATION_CARD = getResourceLocation("gui/slot_destination_card");
 
 
 	public static ResourceLocation getResourceLocation(String path) {
