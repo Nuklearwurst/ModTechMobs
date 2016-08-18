@@ -174,7 +174,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 *
 	 * @return success
 	 */
-	public boolean placePortalBlocks() {
+	private boolean placePortalBlocks() {
 		return metrics != null && metrics.placePortalsInsideFrame(worldObj, getPos());
 	}
 
@@ -201,10 +201,10 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		energyTier = 2 + col.getInt(UpgradeTypes.ENERGY_TIER.id, 0);
 		upgradeTrackerFlags = 0;
 		if (col.hasKey(UpgradeTypes.DISCONNECT_INCOMING)) {
-			upgradeTrackerFlags += FLAG_CAN_DISCONNECT_INCOMING;
+			upgradeTrackerFlags |= FLAG_CAN_DISCONNECT_INCOMING;
 		}
 		if (col.hasKey(UpgradeTypes.REVERSE_DIRECTION)) {
-			upgradeTrackerFlags += FLAG_CAN_REVERSE_PORTAL;
+			upgradeTrackerFlags |= FLAG_CAN_REVERSE_PORTAL;
 		}
 	}
 
@@ -214,6 +214,10 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 
 	public void setUpgradeTrackerFlags(int upgradeTrackerFlags) {
 		this.upgradeTrackerFlags = upgradeTrackerFlags;
+	}
+
+	public boolean hasUpgrade(int upgrade) {
+		return (upgradeTrackerFlags & upgrade) == upgrade;
 	}
 
 	@Nullable
@@ -478,7 +482,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 							te.portalDestination = id;
 							setState(State.OUTGOING_PORTAL);
 							lastError = Error.NO_ERROR;
-							worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 1.9F);
+							createFXForPortalOpen();
 						} else {
 							//reset destination if power fails
 							te.setState(State.READY);
@@ -496,6 +500,14 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 				}
 			}
 		}
+	}
+
+	private void createFXForPortalOpen() {
+		worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 1.9F);
+		//TODO particles
+//		if (worldObj instanceof WorldServer) {
+//			((WorldServer) worldObj).spawnParticle(EnumParticleTypes.PORTAL, metrics.originX, metrics.originY, metrics.originZ, 10 + worldObj.rand.nextInt(4), 0.1F, 0, 0.1F, 0.2F);
+//		}
 	}
 
 	/**
@@ -804,7 +816,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	/**
 	 * connects portal with destination
 	 */
-	public void initializeConnection() {
+	private void initializeConnection() {
 		//update state and tick
 		setState(State.CONNECTING);
 		lastError = Error.NO_ERROR;
@@ -817,24 +829,28 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		}
 	}
 
-	@SuppressWarnings({"unchecked", "UnusedParameters"})
+	@SuppressWarnings("UnusedParameters")
 	public void handleStartButton(ContainerEntityPortalController containerEntityPortalController) {
 		switch (state) {
 			case READY:
 				initializeConnection();
 				break;
 			case INCOMING_PORTAL: {
-				BlockPositionDim pos = PortalManager.getInstance().getEntityPortalForId(portalDestination);
-				if (pos != null) {
-					TileEntityPortalControllerEntity te = pos.getControllerEntity();
-					if (te != null) {
-						te.setState(State.INCOMING_PORTAL);
-						this.setState(State.OUTGOING_PORTAL);
+				if (hasUpgrade(FLAG_CAN_REVERSE_PORTAL)) {
+					BlockPositionDim pos = PortalManager.getInstance().getEntityPortalForId(portalDestination);
+					if (pos != null) {
+						TileEntityPortalControllerEntity te = pos.getControllerEntity();
+						if (te != null) {
+							te.setState(State.INCOMING_PORTAL);
+							this.setState(State.OUTGOING_PORTAL);
+							this.tick = connectionTime;
+							createFXForPortalOpen();
+						} else {
+							closePortal(true);
+						}
 					} else {
 						closePortal(true);
 					}
-				} else {
-					closePortal(true);
 				}
 				break;
 			}
@@ -849,7 +865,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 				closePortal(true);
 				break;
 			case INCOMING_PORTAL:
-				if ((upgradeTrackerFlags & FLAG_CAN_DISCONNECT_INCOMING) != 0) {
+				if (hasUpgrade(FLAG_CAN_DISCONNECT_INCOMING)) {
 					closePortal(true);
 				}
 				break;
@@ -901,7 +917,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	/**
 	 * sets an error message and resets state to default
 	 */
-	public void resetOnError(Error error) {
+	private void resetOnError(Error error) {
 		setState(State.READY);
 		lastError = error;
 	}
@@ -966,7 +982,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	/**
-	 * posible errors when connecting to a portal
+	 * possible errors when connecting to a portal
 	 */
 	public enum Error {
 		NO_ERROR, INVALID_DESTINATION,

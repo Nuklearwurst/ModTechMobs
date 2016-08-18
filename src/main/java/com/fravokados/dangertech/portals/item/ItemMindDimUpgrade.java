@@ -18,7 +18,6 @@ import java.util.List;
  */
 public class ItemMindDimUpgrade extends ItemMDMultiType implements IUpgrade {
 
-    //FIXME: REVERSE upgrade not working
     public static final int META_EMPTY = 0;
     public static final int META_REVERSE_DIRECTION = 1;
     public static final int META_CLOSE_INCOMING_PORTAL = 2;
