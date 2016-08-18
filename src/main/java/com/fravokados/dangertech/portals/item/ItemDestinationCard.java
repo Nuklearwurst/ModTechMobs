@@ -77,7 +77,7 @@ public class ItemDestinationCard extends ItemMDMultiType {
 			//EnergyType
 			EnergyType type = EnergyType.readFromNBT(nbt);
 			if (type != EnergyType.INVALID) {
-				info.add(Strings.translate(type.getUnlocalizedName()));
+				info.add(type.getColorString() + Strings.translate(type.getUnlocalizedName()) + TextFormatting.RESET);
 			}
 			//FrameBlock Count
 			final int count = nbt.getInteger(NBTKeys.DESTINATION_CARD_FRAME_BLOCKS);

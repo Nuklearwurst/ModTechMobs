@@ -1,13 +1,14 @@
 package com.fravokados.dangertech.core.plugin.energy;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * @author Nuklearwurst
  */
 public enum EnergyType {
 
-	INVALID("invalid", 1), IC2("ic2", 1), VANILLA("vanilla", 1), RF("redstoneflux", 0.25F), TESLA("tesla", 0.25F);
+	INVALID("invalid", 1), IC2("ic2", 1), VANILLA("vanilla", 1), RF("redstoneflux", 0.25F), TESLA("tesla", 0.25F), CREATIVE("creative", 1, TextFormatting.LIGHT_PURPLE);
 
 	public static final String ENERGY_TYPE = "EnergyType";
 	public static final String UNLOCALIZED_NAME_PREFIX = "tooltip.item.energyType.";
@@ -15,10 +16,18 @@ public enum EnergyType {
 
 	private String name;
 	private float conversionFromEU;
+	private TextFormatting color;
 
 	EnergyType(String name, float conversionFromEU) {
 		this.name = name;
 		this.conversionFromEU = conversionFromEU;
+		color = null;
+	}
+
+	EnergyType(String name, float conversionFromEU, TextFormatting color) {
+		this.name = name;
+		this.conversionFromEU = conversionFromEU;
+		this.color = color;
 	}
 
 	public int getId() {
@@ -39,6 +48,18 @@ public enum EnergyType {
 
 	public float getConversionFromEU() {
 		return conversionFromEU;
+	}
+
+	public TextFormatting getColor() {
+		return color;
+	}
+
+	public boolean hasColor() {
+		return color != null;
+	}
+
+	public String getColorString() {
+		return color == null ? "" : color.toString();
 	}
 
 	public void writeToNBT(NBTTagCompound nbt) {

@@ -148,7 +148,7 @@ public class GuiEntityPortalController extends GuiContainer {
 	private void drawTooltips(int x, int y) {
 		if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 199, guiLeft + 199 + 16, guiTop + 15, guiTop + 15 + 55)) {
 			List<String> list = new ArrayList<String>();
-			final String energyTypeShort = Strings.translate(te.getEnergyType().getUnlocalizedNameShort());
+			final String energyTypeShort = te.getEnergyType().getColorString() + Strings.translate(te.getEnergyType().getUnlocalizedNameShort());
 			list.add(TextFormatting.GRAY + "" + (int) te.getEnergyStored() + " / " + te.getMaxEnergyStored() + " " + energyTypeShort + TextFormatting.RESET);
 			drawHoveringText(list, x, y, fontRendererObj);
 		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 55, guiLeft + 190, guiTop + 40, guiTop + 50)) {

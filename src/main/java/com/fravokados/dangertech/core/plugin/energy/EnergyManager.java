@@ -3,6 +3,7 @@ package com.fravokados.dangertech.core.plugin.energy;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.plugin.PluginManager;
 import com.fravokados.dangertech.core.plugin.ic2.IC2EnergyPlugin;
+import com.fravokados.dangertech.core.plugin.vanilla.CreativeEnergyPlugin;
 import com.fravokados.dangertech.core.plugin.vanilla.VanillaEnergyPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
@@ -125,7 +126,9 @@ public class EnergyManager {
 	public static void rechargeEnergyStorageFromInventory(EnergyStorage storage, EnergyType type, IInventory inventory, int slot, int sinkTier) {
 		if (!storage.isFull()) {
 			final ItemStack stack = inventory.getStackInSlot(slot);
-			if (stack != null) {
+			if(type == EnergyType.CREATIVE) {
+				storage.receiveEnergy(storage.getRoomForEnergy(), false);
+			} else if (stack != null) {
 				if(plugins.containsKey(type)) {
 					plugins.get(type).rechargeEnergyStorageFromInventory(stack, storage, type, inventory, slot, sinkTier);
 				}
@@ -136,6 +139,9 @@ public class EnergyManager {
 	public static void init() {
 		plugins.clear();
 		availableEnergyTypes.clear();
+
+		plugins.put(EnergyType.CREATIVE, new CreativeEnergyPlugin());
+		availableEnergyTypes.add(EnergyType.CREATIVE);
 
 		plugins.put(EnergyType.VANILLA, new VanillaEnergyPlugin());
 		availableEnergyTypes.add(EnergyType.VANILLA);

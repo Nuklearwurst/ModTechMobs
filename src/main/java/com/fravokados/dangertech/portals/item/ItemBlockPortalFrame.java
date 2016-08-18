@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -49,7 +50,7 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(stack);
 		if(nbt.hasKey(EnergyType.getNBTKey())) {
 			EnergyType types = EnergyType.readFromNBT(nbt);
-			list.add(Strings.translate(types.getUnlocalizedName()));
+			list.add(types.getColorString() + Strings.translate(types.getUnlocalizedName()) + TextFormatting.RESET);
 		}
 		if(nbt.hasKey(NBTKeys.DESTINATION_CARD_PORTAL_NAME)) {
 			list.add(Strings.translate(Strings.Tooltip.NAME) + " " + nbt.getString(NBTKeys.DESTINATION_CARD_PORTAL_NAME));
