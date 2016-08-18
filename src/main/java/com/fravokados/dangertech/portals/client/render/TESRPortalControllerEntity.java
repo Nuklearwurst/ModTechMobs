@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 /**
  * @author Nuklearwurst
  */
-public class TileEntityControllerEntityRenderer extends TileEntitySpecialRenderer<TileEntityPortalControllerEntity> {
+public class TESRPortalControllerEntity extends TileEntitySpecialRenderer<TileEntityPortalControllerEntity> {
 
 	@Override
 	public void renderTileEntityAt(TileEntityPortalControllerEntity tileEntity, double x, double y, double z, float delta, int destroyStage) {
