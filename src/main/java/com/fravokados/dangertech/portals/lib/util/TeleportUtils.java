@@ -10,6 +10,7 @@ import net.minecraft.network.play.server.SPacketSetExperience;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
@@ -124,6 +125,17 @@ public class TeleportUtils {
 		}
 
 		entity.setWorld(worldServerDestination);
+	}
+
+	/**
+	 * @param id dimension id
+	 * @return the name of the given dimension (null if it is not registered)
+	 */
+	public static String getNameForDimension(int id) {
+		if(!DimensionManager.isDimensionRegistered(id)) {
+			return null;
+		}
+		return DimensionManager.getProviderType(id).getName();
 	}
 
 }

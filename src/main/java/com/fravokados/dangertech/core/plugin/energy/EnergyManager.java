@@ -43,6 +43,12 @@ public class EnergyManager {
 		}
 	}
 
+	public static void createItemVariantsForEnergyTypes(List<ItemStack> list, ItemStack item, Collection<EnergyType> types) {
+		for (EnergyType type : types) {
+			list.add(addEnergyTypeInformationToItem(item.copy(), type));
+		}
+	}
+
 	public static ItemStack createItemStackWithEnergyType(Block block, int amount, int damage, EnergyType type) {
 		Item item = Item.getItemFromBlock(block);
 		assert item != null;

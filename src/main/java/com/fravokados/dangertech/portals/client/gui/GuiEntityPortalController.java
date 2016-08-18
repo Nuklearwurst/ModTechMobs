@@ -132,7 +132,7 @@ public class GuiEntityPortalController extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_) {
 		super.drawGuiContainerForegroundLayer(p_146979_1_, p_146979_2_);
 		drawString(this.fontRendererObj, Strings.translate(Strings.Gui.CONTROLLER_NAME), 58, 18, 0xa2cc42);
-		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_DESTINATION, getDestinationString(te.getDestination(), te.getStackInSlot(0))), 58, 30, 0xa2cc42);
+		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_DESTINATION, getDestinationString(te.readDestinationCard(), te.getStackInSlot(0))), 58, 30, 0xa2cc42);
 		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_STATE, te.getState().getTranslationShort()), 58, 40, 0xa2cc42);
 		drawString(this.fontRendererObj, Strings.translateWithFormat(Strings.Gui.CONTROLLER_ERROR, te.getLastError() == TileEntityPortalControllerEntity.Error.NO_ERROR ? te.getLastError().getTranslationShort() : (TextFormatting.RED + te.getLastError().getTranslationShort() + TextFormatting.RESET)), 58, 50, 0xa2cc42);
 
@@ -174,7 +174,7 @@ public class GuiEntityPortalController extends GuiContainer {
 
 	private String getDestinationString(int dest, @Nullable ItemStack stack) {
 		switch (dest) {
-			case PortalManager.PORTAL_MINING_DIMENSION:
+			case PortalManager.PORTAL_GENERATING:
 				return Strings.translate(Strings.Gui.CONTROLLER_DESTINATION_MINDIM);
 			case PortalManager.PORTAL_NOT_CONNECTED:
 				return Strings.translate(Strings.Gui.CONTROLLER_DESTINATION_NONE);

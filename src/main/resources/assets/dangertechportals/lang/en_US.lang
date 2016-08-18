@@ -71,6 +71,7 @@ gui.controller.state.detail.incomingPortal=There is an open incoming Portal.
 #Tooltip
 tooltip.item.destinationCard.type=Portal Type: %s
 tooltip.item.destinationCard.destination=Portal Destination: %s
+tooltip.item.destinationCard.dimension=Dimension: %s
 tooltip.item.destinationCard.empty=<empty>
 tooltip.item.destinationCard.mindim=Contains %s Portal Frames
 tooltip.item.destinationCard.mindim.info_1=Sneak and Rightclick to open GUI!

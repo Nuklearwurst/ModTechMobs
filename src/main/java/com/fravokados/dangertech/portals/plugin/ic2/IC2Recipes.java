@@ -6,6 +6,7 @@ import com.fravokados.dangertech.core.recipes.ShapedRecipeEnergyType;
 import com.fravokados.dangertech.portals.block.types.PortalFrameType;
 import com.fravokados.dangertech.portals.common.init.ModBlocks;
 import com.fravokados.dangertech.portals.common.init.ModItems;
+import com.fravokados.dangertech.portals.configuration.Settings;
 import com.fravokados.dangertech.portals.item.ItemDestinationCard;
 import com.fravokados.dangertech.portals.item.ItemMindDimUpgrade;
 import ic2.api.item.IC2Items;
@@ -91,7 +92,7 @@ public class IC2Recipes {
 		);
 
 		// DestinationCard - Mining Dimension
-		GameRegistry.addRecipe(new ShapedRecipeEnergyType(new ItemStack(ModItems.itemDestinationCard, 1, ItemDestinationCard.META_GENERATING),
+		GameRegistry.addRecipe(new ShapedRecipeEnergyType(ItemDestinationCard.writeDimensionToStack(new ItemStack(ModItems.itemDestinationCard, 1, ItemDestinationCard.META_GENERATING), Settings.dimensionId),
 				"ede",
 				"oco",
 				"ege",

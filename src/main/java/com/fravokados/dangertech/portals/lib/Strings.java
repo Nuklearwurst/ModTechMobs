@@ -68,6 +68,7 @@ public class Strings {
 	public static final class Tooltip {
 		public static final String ITEM_DESTINATION_CARD_TYPE = "tooltip.item.destinationCard.type";
 		public static final String ITEM_DESTINATION_CARD_DESTINATION = "tooltip.item.destinationCard.destination";
+		public static final String ITEM_DESTINATION_CARD_DIMENSION = "tooltip.item.destinationCard.dimension";
 		public static final String ITEM_DESTINATION_CARD_EMPTY = "tooltip.item.destinationCard.empty";
 		public static final String ITEM_DESTINATION_CARD_MINDIM = "tooltip.item.destinationCard.mindim";
 		public static final String ITEM_DESTINATION_CARD_MINDIM_INFO_1 = "tooltip.item.destinationCard.mindim.info_1";

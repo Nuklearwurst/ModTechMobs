@@ -34,7 +34,7 @@ public class PortalManager extends WorldSavedData {
 
 	//Destination numbers
 	public static final int PORTAL_NOT_CONNECTED = -1;
-	public static final int PORTAL_MINING_DIMENSION = -2;
+	public static final int PORTAL_GENERATING = -2;
 	public static final int PORTAL_INVALID_ITEM = -3;
 	public static final int PORTAL_WRONG_TYPE = -4;
 	public static final int PORTAL_INVALID_DIMENSION = -5;
@@ -254,16 +254,27 @@ public class PortalManager extends WorldSavedData {
 		return false;
 	}
 
-	public int createPortal(int parent, PortalMetrics metrics, TileEntity parentTile) {
+	/**
+	 * Generates an entity portal in the target dimension
+	 * <br/>
+	 * note: different behaviour (config) when targeting the same dimension the origin is in
+	 * <br/>
+	 * also portals, when configured, must origin from the overworld
+	 * @param targetDimension target dimension id
+	 * @param parent origin portal id
+	 * @param metrics metrics of the portal that should get generated (will get modified, to make sure portals don't spawn mid air or underground)
+	 * @param parentTile gets used to create the controller
+	 * @return the new target portal id
+	 */
+	public int createPortal(int targetDimension, int parent, PortalMetrics metrics, TileEntity parentTile) {
 		BlockPositionDim pos = entityPortals.get(parent);
 		if (pos == null) {
 			return PORTAL_NOT_CONNECTED;
 		}
-
-		int dim = Settings.dimensionId;
-		if(pos.dimension == Settings.dimensionId) {
+		//Generate in overworld if needed
+		if(pos.dimension == targetDimension) {
 			if(Settings.CAN_CREATE_PORTAL_BACK_TO_OVERWORLD) {
-				dim = 0;
+				targetDimension = 0;
 			} else {
 				return PORTAL_INVALID_DIMENSION;
 			}
@@ -273,7 +284,7 @@ public class PortalManager extends WorldSavedData {
 
 		//get the destination world server
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		WorldServer worldServer = server.worldServerForDimension(dim);
+		WorldServer worldServer = server.worldServerForDimension(targetDimension);
 
 		//create the portal frame
 		int yOffset = 0;

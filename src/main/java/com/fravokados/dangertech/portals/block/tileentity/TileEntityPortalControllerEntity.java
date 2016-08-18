@@ -102,10 +102,12 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 * last portal metrics
 	 */
 	private PortalMetrics metrics;
+
 	/**
 	 * current destination (if open portal)
 	 */
 	private int portalDestination = PortalManager.PORTAL_NOT_CONNECTED;
+
 
 	/**
 	 * block facing
@@ -289,19 +291,18 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 *
 	 * @return the destination id of the current destination card
 	 */
-	public int getDestination() {
-		if (inventory[0] == null) {
+	public int readDestinationCard() {
+		final ItemStack stack = inventory[0];
+		if (stack == null) {
 			return PortalManager.PORTAL_NOT_CONNECTED;
 		}
-		if (inventory[0].getItem() instanceof ItemDestinationCard) {
-			if (inventory[0].getItemDamage() == ItemDestinationCard.META_GENERATING) {
-				return PortalManager.PORTAL_MINING_DIMENSION;
-			} else if (inventory[0].getTagCompound() != null && inventory[0].getTagCompound().hasKey(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) && inventory[0].getTagCompound().hasKey(NBTKeys.DESTINATION_CARD_PORTAL_ID)) {
-				if (inventory[0].getTagCompound().getInteger(NBTKeys.DESTINATION_CARD_PORTAL_TYPE) == PortalMetrics.Type.ENTITY_PORTAL.ordinal()) {
-					return inventory[0].getTagCompound().getInteger(NBTKeys.DESTINATION_CARD_PORTAL_ID);
-				} else {
+		if (stack.getItem() instanceof ItemDestinationCard) {
+			if (ItemDestinationCard.hasDestination(stack)) {
+				if (stack.getItemDamage() != ItemDestinationCard.META_GENERATING
+						&& (ItemDestinationCard.getTypeFromStack(stack) != PortalMetrics.Type.ENTITY_PORTAL.ordinal())) {
 					return PortalManager.PORTAL_WRONG_TYPE;
 				}
+				return ItemDestinationCard.getPortalIDFromStack(inventory[0]);
 			}
 		}
 		return PortalManager.PORTAL_INVALID_ITEM;
@@ -315,7 +316,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	public void teleportEntity(Entity entity) {
 		if (state == State.OUTGOING_PORTAL && metrics != null) {
 			if (metrics.isEntityInsidePortal(entity, 1)) {
-				if (!ModMiningDimension.instance.portalManager.teleportEntityToEntityPortal(entity, getDestination(), id, metrics)) {
+				if (!ModMiningDimension.instance.portalManager.teleportEntityToEntityPortal(entity, readDestinationCard(), id, metrics)) {
 					closePortal(true);
 					resetOnError(Error.CONNECTION_INTERRUPTED);
 				}
@@ -369,7 +370,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			if (inventory[2].getItem() instanceof ItemDestinationCard && inventory[2].getItemDamage() != ItemDestinationCard.META_GENERATING) {
 				inventory[3] = inventory[2];
 				inventory[2] = null;
-				ItemDestinationCard.writeDestination(inventory[3], id, getDisplayName().getUnformattedText());
+				ItemDestinationCard.writeDestinationToStack(inventory[3], id, getDisplayName().getUnformattedText());
 				markDirty();
 			}
 		}
@@ -390,16 +391,16 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 
 					//check destination
 					int oldDestination = portalDestination;
-					portalDestination = getDestination();
+					portalDestination = readDestinationCard();
 					if (oldDestination != portalDestination) {
 						//destination changed --> abort
 						resetOnError(Error.DESTINATION_CHANGED);
 					} else if (updateMetrics()) {
 						//Check whether we created a successful multiblock
 						//create portal if necessary
-						if (portalDestination == PortalManager.PORTAL_MINING_DIMENSION) {
+						if (portalDestination == PortalManager.PORTAL_GENERATING) {
 							//create mining dimension portal and update destination
-							createMiningDimensionPortal();
+							generatePortal();
 						}
 						if (portalDestination >= 0) { //if destination is valid
 							openPortalToDestination();
@@ -499,12 +500,16 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 
 	/**
 	 * Creates the Portal (frame+contoller) for a miningdimension card
+	 * <br/>
+	 * ItemDestinationCard stored in slot 0 has to be {@link ItemDestinationCard#META_GENERATING}
 	 */
-	private void createMiningDimensionPortal() {
-		int count = ItemUtils.getNBTTagCompound(inventory[0]).getInteger("frame_blocks");
+	private void generatePortal() {
+		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(inventory[0]);
+		final int dim = ItemDestinationCard.getDimensionFromStack(inventory[0]);
+		final int count = nbt.getInteger(NBTKeys.DESTINATION_CARD_FRAME_BLOCKS);
 		if (count >= metrics.getFrameBlockCount()) {
 			if (useEnergy(Settings.ENERGY_USAGE_CREATE_PORTAL)) {
-				portalDestination = PortalManager.getInstance().createPortal(id, metrics, this);
+				portalDestination = PortalManager.getInstance().createPortal(dim, id, metrics, this);
 				if (portalDestination >= 0) {
 					//create destination card
 					inventory[0] = ItemDestinationCard.fromDestination(portalDestination, Strings.translate(Strings.Tooltip.UNKNOWN_DESTINATION));
@@ -520,7 +525,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	private void connectToDestinationPortal() {
-		portalDestination = getDestination();
+		portalDestination = readDestinationCard();
 		if (portalDestination >= 0) {
 			BlockPositionDim pos = PortalManager.getInstance().getEntityPortalForId(portalDestination);
 			if (pos == null || portalDestination == id) {
@@ -538,7 +543,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 					resetOnError(Error.CONNECTION_INTERRUPTED);
 				}
 			}
-		} else if (portalDestination != PortalManager.PORTAL_MINING_DIMENSION) {
+		} else if (portalDestination != PortalManager.PORTAL_GENERATING) {
 			//Invalid destination
 			resetOnError(Error.INVALID_DESTINATION);
 		}
