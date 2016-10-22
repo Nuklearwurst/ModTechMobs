@@ -6,13 +6,16 @@ import com.fravokados.dangertech.monsters.lib.Strings.Keys;
 import com.fravokados.dangertech.monsters.lib.Strings.Keys.TechData;
 import com.fravokados.dangertech.monsters.lib.Strings.Keys.TechScanning;
 import com.fravokados.dangertech.monsters.lib.util.LogHelperTM;
+import com.fravokados.dangertech.monsters.techdata.TDTickManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 
+@Mod.EventBusSubscriber
 public class ConfigHandler {
 
 	public Configuration config; 
@@ -93,13 +96,16 @@ public class ConfigHandler {
 		if(config.hasChanged()) {
 			config.save();
 		}
+
+		//recalculate scanning steps
+		TDTickManager.calculateScanningSteps();
 	}
 
 
 	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
+	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
 		if(eventArgs.getModID().equalsIgnoreCase(Reference.MOD_ID)) {
-			load(false);
+			ModTechMobs.config.load(false);
 			LogHelperTM.info("Reloading config!");
 		}
 	}

@@ -10,6 +10,7 @@ import com.fravokados.dangertech.portals.block.types.PortalFrameState;
 import com.fravokados.dangertech.portals.client.ClientPortalInfo;
 import com.fravokados.dangertech.portals.lib.NBTKeys;
 import com.fravokados.dangertech.portals.portal.PortalConstructor;
+import com.fravokados.dangertech.portals.portal.PortalMetrics;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -32,10 +33,15 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 	private EnumFacing facing = EnumFacing.DOWN;
 
 	@Override
-	public void setPortalController(BlockPos controllerPos) {
+	public void setPortalController(BlockPos controllerPos, PortalMetrics metrics) {
 		this.controllerPos = controllerPos;
-		IBlockState blockState = worldObj.getBlockState(getPos());
-		this.worldObj.notifyBlockUpdate(getPos(), blockState, blockState, 3);
+		facing = metrics.front;
+		WorldUtils.notifyBlockUpdateAtTile(this);
+	}
+
+	@Override
+	public void disconnectController() {
+		this.controllerPos = null;
 	}
 
 	@Override
@@ -85,8 +91,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 			facing = EnumFacing.getFront(nbt.getByte(NBTKeys.TILE_FACING));
 			controllerPos = BlockUtils.readBlockPosFromNBT(nbt.getCompoundTag("controllerPos"));
 
-			IBlockState blockState = worldObj.getBlockState(getPos());
-			this.worldObj.notifyBlockUpdate(getPos(), blockState, blockState, 3);
+			WorldUtils.notifyBlockUpdateAtTile(this);
 		}
 	}
 
@@ -98,6 +103,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 					worldObj.createExplosion(null, getPos().getX(), getPos().getY(), getPos().getZ(), 2.0F, false);
 					((TileEntityPortalControllerEntity) te).closePortal(true);
 				}
+				((TileEntityPortalControllerEntity) te).setState(TileEntityPortalControllerEntity.State.NO_MULTIBLOCK);
 			}
 		}
 	}
@@ -142,6 +148,6 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 				return ((TileEntityPortalControllerEntity) te).getPortalFrameState();
 			}
 		}
-		return PortalFrameState.DISABLED;
+		return PortalFrameState.DISCONNECTED;
 	}
 }

@@ -34,12 +34,12 @@ public class TechDataStorage extends WorldSavedData {
 	/**
 	 * the world techdata
 	 */
-	private final Map<Integer, TDWorld> worldData = new HashMap<Integer, TDWorld>();
+	private final Map<Integer, TDWorld> worldData = new HashMap<>();
 
 	/**
 	 * chunks that have a high techvalue
 	 */
-	private final List<ChunkLocation> techChunks = new ArrayList<ChunkLocation>();
+	private final List<ChunkLocation> techChunks = new ArrayList<>();
 
 	/**
 	 * techvalue of the highest chunk (not exact)
@@ -49,18 +49,18 @@ public class TechDataStorage extends WorldSavedData {
 	/**
 	 * players with high techvalue
 	 */
-	private final List<String> techPlayers = new ArrayList<String>();
+	private final List<UUID> techPlayers = new ArrayList<>();
 
 	/**
 	 * techvalue of the best player (not exact)
 	 */
 	private int highestPlayerValue = 0;
 
-	//SAVING
-	public TechDataStorage(String name) {
+	private TechDataStorage(String name) {
 		super(name);
 	}
 
+	//SAVING
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		//saving highest techValues not really needed
@@ -116,7 +116,7 @@ public class TechDataStorage extends WorldSavedData {
 		}
 	}
 
-	public void addDangerousPlayer(String player, int level) {
+	public void addDangerousPlayer(UUID player, int level) {
 		if (!techPlayers.contains(player)) {
 			techPlayers.add(player);
 			if (level > highestChunkValue) {
@@ -144,7 +144,7 @@ public class TechDataStorage extends WorldSavedData {
 		}
 	}
 
-	public void removeDangerousPlayer(String player) {
+	public void removeDangerousPlayer(UUID player) {
 		int index = techPlayers.indexOf(player);
 		if (index != -1) {
 			//if this was the last element of this list (--> the newest)
@@ -154,8 +154,8 @@ public class TechDataStorage extends WorldSavedData {
 				highestPlayerValue = 0;
 			} else if (techPlayers.size() == index + 1) {
 				//insert the player techvalue of the most recent player added to the dangerousPlayer list
-				String name = techPlayers.get(index - 1);
-				highestPlayerValue = TDManager.getPlayerTechLevel(PlayerUtils.getPlayerFromName(name));
+				UUID uuid = techPlayers.get(index - 1);
+				highestPlayerValue = TDManager.getPlayerTechLevel(PlayerUtils.getPlayerFromUUID(uuid));
 			}
 			//remove the chunk
 			techPlayers.remove(index);
@@ -173,7 +173,7 @@ public class TechDataStorage extends WorldSavedData {
 		}
 	}
 
-	public void updateDangerousPlayerList(String name, int level) {
+	public void updateDangerousPlayerList(UUID name, int level) {
 		if (techPlayers.contains(name)) {
 			if (level < getDangerousPlayerLevel()) {
 				removeDangerousPlayer(name);
@@ -190,14 +190,14 @@ public class TechDataStorage extends WorldSavedData {
 		}
 	}
 
-	public void addDangerousPlayerIfNeeded(String player, int level) {
+	public void addDangerousPlayerIfNeeded(UUID player, int level) {
 		if (level > getDangerousPlayerLevel()) {
 			addDangerousPlayer(player, level);
 		}
 	}
 
 	@Nullable
-	public String getRandomDangerousPlayer(Random rand) {
+	public UUID getRandomDangerousPlayer(Random rand) {
 		if (techPlayers.isEmpty()) {
 			return null;
 		}
@@ -307,7 +307,7 @@ public class TechDataStorage extends WorldSavedData {
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent evt) {
 		//add player to techPlayersList if necessary
 		if(!evt.player.worldObj.isRemote) {
-			getInstance().addDangerousPlayerIfNeeded(evt.player.getName(), TDManager.getPlayerScoutedTechLevel(evt.player));
+			getInstance().addDangerousPlayerIfNeeded(evt.player.getUniqueID(), TDManager.getPlayerScoutedTechLevel(evt.player));
 		}
 	}
 
@@ -318,7 +318,7 @@ public class TechDataStorage extends WorldSavedData {
 	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent evt) {
 		//remove player from techPlayers list
 		if(!evt.player.worldObj.isRemote) {
-			getInstance().removeDangerousPlayer(evt.player.getName());
+			getInstance().removeDangerousPlayer(evt.player.getUniqueID());
 		}
 	}
 

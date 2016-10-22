@@ -20,6 +20,7 @@ import com.fravokados.dangertech.portals.lib.GUIIDs;
 import com.fravokados.dangertech.portals.lib.NBTKeys;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.RotationUtils;
+import com.fravokados.dangertech.portals.portal.PortalConstructor;
 import com.fravokados.dangertech.portals.portal.PortalManager;
 import ic2.api.tile.IWrenchable;
 import net.minecraft.block.ITileEntityProvider;
@@ -37,6 +38,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -49,6 +51,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.fravokados.dangertech.portals.block.types.PortalFrameType.BASIC_CONTROLLER;
+import static com.fravokados.dangertech.portals.block.types.PortalFrameType.BASIC_FRAME;
 
 /**
  * @author Nuklearwurst
@@ -71,7 +74,7 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider, IW
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileEntity te = world.getTileEntity(pos);
 		if(te == null || !(te instanceof IPortalFrameWithState)) {
-			return state.withProperty(STATE_PROPERTY, PortalFrameState.DISABLED).withProperty(FACING_PROPERTY, EnumFacing.UP);
+			return state.withProperty(STATE_PROPERTY, PortalFrameState.DISCONNECTED).withProperty(FACING_PROPERTY, EnumFacing.UP);
 		}
 		return state.withProperty(STATE_PROPERTY, ((IPortalFrameWithState) te).getPortalFrameState()).withProperty(FACING_PROPERTY, ((IPortalFrameWithState) te).getFacing());
 	}
@@ -186,16 +189,24 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider, IW
 			case BASIC_CONTROLLER:
 				if (te != null && te instanceof TileEntityPortalControllerEntity) {
 					PortalManager.getInstance().removeEntityPortal(((TileEntityPortalControllerEntity) te).getId());
+					if(((TileEntityPortalControllerEntity) te).getPortalFrameState() == PortalFrameState.DISCONNECTED) {
+						PortalConstructor.createPortalsAround(world, pos);
+					}
 				}
 				break;
 			case BASIC_FRAME:
 				if(te != null && te instanceof TileEntityPortalFrame) {
-					((TileEntityPortalFrame) te).onDestroy();
+					if(((TileEntityPortalFrame) te).getPortalFrameState() == PortalFrameState.DISCONNECTED) {
+						PortalConstructor.createPortalsAround(world, pos);
+					} else {
+						((TileEntityPortalFrame) te).onDestroy();
+					}
 				}
 				break;
 		}
 		BlockUtils.dropInventory(world, pos);
 		BlockUtils.dropUpgrades(world, pos);
+
 		super.breakBlock(world, pos, state);
 	}
 
@@ -245,5 +256,46 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider, IW
 	@Override
 	public boolean wrenchCanRemove(World world, BlockPos pos, EntityPlayer player) {
 		return true;
+	}
+
+	@Override
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		if(state.getValue(TYPE_PROPERTY) == BASIC_FRAME && state.getActualState(world, pos).getValue(STATE_PROPERTY) == PortalFrameState.ACTIVE) {
+			Random random = world.rand;
+
+
+			for(EnumFacing facing : EnumFacing.VALUES) {
+				double x = (double)((float)pos.getX() + random.nextFloat());
+				double y = (double)((float)pos.getY() + random.nextFloat());
+				double z = (double)((float)pos.getZ() + random.nextFloat());
+
+				if(!world.getBlockState(pos.offset(facing)).isOpaqueCube()) {
+					switch (facing) {
+						case DOWN:
+							y = (double)pos.getY() - 0.0625D - 1;
+							break;
+						case UP:
+							y = (double)pos.getY() + 0.0625D;
+							break;
+						case NORTH:
+							z = (double)pos.getZ() - 0.0625D;
+							break;
+						case SOUTH:
+							z = (double)pos.getZ() + 0.0625D + 1.0D;
+							break;
+						case WEST:
+							x = (double)pos.getX() - 0.0625D;
+							break;
+						case EAST:
+							x = (double)pos.getX() + 0.0625D + 1.0D;
+							break;
+					}
+					if (x < (double)pos.getX() || x > (double)(pos.getX() + 1) || y < (double) pos.getY() || y > (double)(pos.getY()) || z < (double)pos.getZ() || z > (double)(pos.getZ() + 1))
+					{
+						world.spawnParticle(EnumParticleTypes.PORTAL, x, y, z, 0.0D, 0.0D, 0.0D);
+					}
+				}
+			}
+		}
 	}
 }

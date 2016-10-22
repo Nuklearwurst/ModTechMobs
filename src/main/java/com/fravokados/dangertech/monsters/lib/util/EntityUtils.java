@@ -38,7 +38,7 @@ public class EntityUtils {
 	@Nullable
 	public static Entity rayTraceEntity(EntityPlayer player) {
 		float reach = 5F;
-		Vec3d vecPos = player.getPositionVector();
+		Vec3d vecPos = player.getPositionEyes(1);
 		Vec3d vecLook = player.getLook(1);
 		Vec3d vecEnd = vecPos.addVector(vecLook.xCoord * reach, vecLook.yCoord * reach, vecLook.zCoord * reach);
 		Entity pointedEntity = null;
@@ -47,7 +47,7 @@ public class EntityUtils {
 		double lastDistance = reach;
 
 		for (Entity entity : list) {
-			float collisionBorderSize = entity.getCollisionBorderSize();
+			float collisionBorderSize = entity.getCollisionBorderSize() + 0.1F;
 			AxisAlignedBB bounds = entity.getEntityBoundingBox().expand((double) collisionBorderSize, (double) collisionBorderSize, (double) collisionBorderSize);
 			RayTraceResult movingobjectposition = bounds.calculateIntercept(vecPos, vecEnd);
 

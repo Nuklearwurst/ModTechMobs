@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Nuklearwurst
@@ -21,7 +22,7 @@ public interface TDEffectRegistry {
 
 	List<TDMobEffect> getUsableMobEffects(int techData, EntityLivingBase entityLiving);
 
-	List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, String username, EntityPlayer entity);
+	List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, UUID uuid, EntityPlayer entity);
 
 	List<TDChunkEffect> getUsableWorldEffects(int level, World world);
 }

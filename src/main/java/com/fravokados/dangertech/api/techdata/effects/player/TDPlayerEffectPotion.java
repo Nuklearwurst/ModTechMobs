@@ -5,6 +5,8 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.ITextComponent;
 
+import java.util.UUID;
+
 public class TDPlayerEffectPotion extends TDPlayerEffect {
 
 	private final int value;
@@ -41,12 +43,12 @@ public class TDPlayerEffectPotion extends TDPlayerEffect {
 
 
 	@Override
-	public boolean isUsable(int techvalue, String username, EntityPlayer entity) {
+	public boolean isUsable(int techvalue, UUID uuid, EntityPlayer entity) {
 		return techvalue >= value && !entity.isPotionActive(potion);
 	}
 
 	@Override
-	public int applyEffect(int techvalue, String username, EntityPlayer entity) {
+	public int applyEffect(int techvalue, UUID uuid, EntityPlayer entity) {
 		entity.addPotionEffect(new PotionEffect(potion, duration, multiplier));
 		if(chatMessage != null) {
 			chatMessage.getStyle().setItalic(true);

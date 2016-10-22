@@ -18,17 +18,12 @@ import java.util.*;
 
 public class CommandTechMobs extends CommandBase implements IModCommand {
 
-	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(new Comparator<SubCommand>() {
-		@Override
-		public int compare(SubCommand o1, SubCommand o2) {
-			return o1.compareTo(o2);
-		}
-	});
+	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(SubCommand::compareTo);
 
 	private final List<String> aliases;
 
 	public CommandTechMobs() {
-		this.aliases = new ArrayList<String>();
+		this.aliases = new ArrayList<>();
 		this.aliases.add("techmobs");
 		this.aliases.add("tmobs");
 		addChildCommand(new Effect());
@@ -104,9 +99,9 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 			public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 				if (sender instanceof EntityPlayer && args.length == 1) {
 					int effectStrength = CommandBase.parseInt(args[0]);
-					List<TDPlayerEffect> list = TDEffects.getInstance().getUsablePlayerEffects(effectStrength, sender.getName(), (EntityPlayer) sender);
+					List<TDPlayerEffect> list = TDEffects.getInstance().getUsablePlayerEffects(effectStrength, ((EntityPlayer) sender).getUniqueID(), (EntityPlayer) sender);
 					int index = GeneralUtils.random.nextInt(list.size());
-					int result = list.get(index).applyEffect(effectStrength, sender.getName(), (EntityPlayer) sender);
+					int result = list.get(index).applyEffect(effectStrength, ((EntityPlayer) sender).getUniqueID(), (EntityPlayer) sender);
 					sender.addChatMessage(new TextComponentString("Needed TechValue: " + result));
 				} else {
 					CommandHelpers.throwWrongUsage(sender, this);

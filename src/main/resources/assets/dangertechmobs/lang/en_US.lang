@@ -61,8 +61,8 @@ item.dangertechmobs:monsterDetector.name=Monster Detector
 item.dangertechmobs:upgradeTool.name=Upgrade Tool
 item.dangertechmobs:tdAnalyzer.name=TechData Analyzer
 item.dangertechmobs:quantumSword.name=Quantum Sword
-item.dangertechmobs:conservationUnit.name=Conservation Unit
-item.dangertechmobs:item_cot.name=Cot
+item.dangertechmobs:conservationUnit.name=Flying Coffin
+item.dangertechmobs:item_cot.name=Camp Bed
 item.dangertechmobs:tdDebugger.name=TM Debug Tool
 
 item.dangertechmobs:monsterDrop_common.name=Weird Flesh

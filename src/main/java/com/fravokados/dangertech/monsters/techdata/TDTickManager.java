@@ -14,41 +14,39 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * controls techdata scanning
  *
  * @author Nuklearwurst
  */
+@Mod.EventBusSubscriber
 public class TDTickManager {
 
-	private final int[] scanningSteps;
+	private static int[] scanningSteps;
 
-	private static List<ChunkLocation> scanningTasks;
+	private static Queue<ChunkLocation> scanningTasks;
 
 	private static final Random random = new Random();
 
-	private int tick = 100;
+	private static int tick = 100;
 
-
-	public TDTickManager() {
+	public static void calculateScanningSteps() {
 		scanningSteps = new int[Settings.TechScanning.SPLIT_STEPS_KEY.length];
 		if (Settings.TechScanning.SPLIT_SCANS) {
 			for (int i = 0; i < Settings.TechScanning.SPLIT_STEPS_KEY.length; i++) {
-				//compute scanning values 
+				//compute scanning values
 				//(scans per tick at low values)
 				//TODO tweaking, this needs to be recomputed when config changes
 				scanningSteps[i] = (int) Math.ceil(Settings.TechScanning.SPLIT_STEPS_KEY[i] * Settings.TechScanning.MAX_SCANS_PER_TICK);
 			}
 		}
-		scanningTasks = new ArrayList<ChunkLocation>();
+		scanningTasks = new LinkedList<>();
 	}
 
 	/**
@@ -56,7 +54,7 @@ public class TDTickManager {
 	 * depends on the size of the current scanning queue
 	 * @return the amount of scans that are to be done in the next tick
 	 */
-	private int getScansToPerform() {
+	private static int getScansToPerform() {
 		if (scanningTasks.isEmpty()) {
 			return 0;
 		}
@@ -73,13 +71,13 @@ public class TDTickManager {
 	}
 
 	@SubscribeEvent
-	public void onServerTick(TickEvent.ServerTickEvent evt) {
+	public static void onServerTick(TickEvent.ServerTickEvent evt) {
 		//tick once
 		if (evt.phase != TickEvent.Phase.END) return;
 
 		//start scanning
 		for (int i = 0; i < getScansToPerform(); i++) {
-			ChunkLocation task = scanningTasks.get(0);
+			ChunkLocation task = scanningTasks.poll();
 			World world = DimensionManager.getWorld(task.dimension);
 			if (world != null) {
 				Chunk chunk = world.getChunkFromChunkCoords(task.x, task.z);
@@ -90,7 +88,6 @@ public class TDTickManager {
 				}
 				TDManager.setTechLevel(task.dimension, task.getChunkCoordIntPair(), value);
 			}
-			scanningTasks.remove(0);
 		}
 
 		//start special effects
@@ -98,10 +95,12 @@ public class TDTickManager {
 			tick = Settings.TechData.TD_RANDOM_TICKS;
 
 			if (Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE > 0 && (Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE == 1 || random.nextInt(Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE) == 0)) {
-				String username = TechDataStorage.getInstance().getRandomDangerousPlayer(random);
+				UUID username = TechDataStorage.getInstance().getRandomDangerousPlayer(random);
 				if (username != null) {
-					EntityPlayer entity = PlayerUtils.getPlayerFromName(username);
-					TDEffectHandler.applyRandomEffectOnPlayer(entity, username, random);
+					EntityPlayer entity = PlayerUtils.getPlayerFromUUID(username);
+					if(entity != null) {
+						TDEffectHandler.applyRandomEffectOnPlayer(entity, username, random);
+					}
 				}
 			}
 		} else if (tick == Settings.TechData.TD_RANDOM_TICKS / 2) { //chunk

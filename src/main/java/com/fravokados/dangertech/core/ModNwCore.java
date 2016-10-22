@@ -5,22 +5,24 @@ import com.fravokados.dangertech.api.DangerousTechnologyAPI;
 import com.fravokados.dangertech.core.common.CommonProxy;
 import com.fravokados.dangertech.core.common.handler.GuiHandler;
 import com.fravokados.dangertech.core.common.init.ModItems;
+import com.fravokados.dangertech.core.common.init.ModRecipes;
 import com.fravokados.dangertech.core.configuration.ConfigHandler;
 import com.fravokados.dangertech.core.lib.Reference;
 import com.fravokados.dangertech.core.lib.Strings;
 import com.fravokados.dangertech.core.lib.util.LogHelperCore;
 import com.fravokados.dangertech.core.network.ModNetworkManager;
 import com.fravokados.dangertech.core.plugin.PluginManager;
-import com.fravokados.dangertech.core.common.init.ModRecipes;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 
@@ -34,6 +36,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 		guiFactory = Reference.GUI_FACTORY,
 		dependencies = Reference.DEPENDENCIES,
 		acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSIONS)
+@Mod.EventBusSubscriber
 public class ModNwCore {
 
 	@Mod.Instance(value = Reference.MOD_ID)
@@ -51,9 +54,12 @@ public class ModNwCore {
 		//load config
 		config = new ConfigHandler(evt.getSuggestedConfigurationFile());
 		config.load(true);
+
+
+		//register EventHandlers
+
 		//init networking
 		ModNetworkManager.init();
-		//init keybindings
 
 		//init CreativeTab
 		CREATIVE_TABS = new CreativeTabs(Strings.CREATIVE_TAB) {
@@ -66,9 +72,6 @@ public class ModNwCore {
 
 		//init API
 		DangerousTechnologyAPI.creativeTab = CREATIVE_TABS;
-
-		//registerItems items
-		ModItems.registerItems();
 	}
 
 	@Mod.EventHandler
@@ -78,13 +81,6 @@ public class ModNwCore {
 
 		//register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-
-		//register EventHandlers
-		proxy.registerEvents();
-
-		//Config handler
-		MinecraftForge.EVENT_BUS.register(config);
-
 
 		//load recipes
 		ModRecipes.init();
@@ -100,4 +96,13 @@ public class ModNwCore {
 		LogHelperCore.info("Disabled " + Reference.MOD_NAME + " version: " + Reference.VERSION + "!");
 	}
 
+
+	@SubscribeEvent
+	public static void registerItems(RegistryEvent.Register<Item> evt) {
+		ModItems.registerItems();
+	}
+
+	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> evt) {
+	}
 }

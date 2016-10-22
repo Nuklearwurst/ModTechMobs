@@ -56,7 +56,7 @@ public class TDValues implements TDValueRegistry {
 			LogHelperTM.error("Overwriting existing data!");
 		}
 		itemEntries.put(item, entry);
-		LogHelperTM.info("Registered item: " + item.getUnlocalizedName() + "with entry: " + entry);
+		LogHelperTM.info("Registered item: " + item.getUnlocalizedName() + " with entry: " + entry);
 	}
 
 	/**

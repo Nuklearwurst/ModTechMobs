@@ -17,7 +17,7 @@ import net.minecraft.util.text.TextComponentString;
 public class CommandTechDataScan extends SubCommand {
 
 	public CommandTechDataScan() {
-		super("read");
+		super("scan");
 		addChildCommand(new TechLevel());
 		addChildCommand(new ScoutedLevel());
 	}

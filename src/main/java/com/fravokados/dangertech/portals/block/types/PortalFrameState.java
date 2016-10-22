@@ -6,7 +6,7 @@ import net.minecraft.util.IStringSerializable;
  * @author Nuklearwurst
  */
 public enum PortalFrameState implements IStringSerializable {
-	ACTIVE("active"), CONNECTING("connecting"), DISABLED("disabled");
+	ACTIVE("active"), CONNECTING("connecting"), DISABLED("disabled"), DISCONNECTED("disconnected");
 
 	private String name;
 

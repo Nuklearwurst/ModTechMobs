@@ -233,6 +233,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	public PortalFrameState getPortalFrameState() {
 		switch (state) {
 			case NO_MULTIBLOCK:
+				return PortalFrameState.DISCONNECTED;
 			case READY:
 				return PortalFrameState.DISABLED;
 			case INCOMING_PORTAL:
@@ -356,6 +357,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 
 	public void setMetrics(PortalMetrics metrics) {
 		this.metrics = metrics;
+		setState(State.READY);
 	}
 
 	@Override
@@ -504,9 +506,17 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 
 	private void createFXForPortalOpen() {
 		worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 1.9F);
-		//TODO particles
 //		if (worldObj instanceof WorldServer) {
-//			((WorldServer) worldObj).spawnParticle(EnumParticleTypes.PORTAL, metrics.originX, metrics.originY, metrics.originZ, 10 + worldObj.rand.nextInt(4), 0.1F, 0, 0.1F, 0.2F);
+//			((WorldServer) worldObj).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
+//					60 + worldObj.rand.nextInt(10), 0, 0, 0, 0.1F);
+//		}
+	}
+
+	private void createFXForPortalClose() {
+		worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 1.0F, worldObj.rand.nextFloat() * 0.1F + 2.9F);
+//		if (worldObj instanceof WorldServer) {
+//			((WorldServer) worldObj).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
+//					60 + worldObj.rand.nextInt(10), 0, 0, 0, 0.1F);
 //		}
 	}
 
@@ -895,11 +905,13 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			metrics.removePortalsInsideFrame(worldObj);
 			if (state != State.READY) {
 				//Play closing sound effect
-				worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 1.0F, worldObj.rand.nextFloat() * 0.1F + 2.9F);
+				createFXForPortalClose();
 			}
 		}
 		//reset state
-		setState(State.READY);
+		if(state != State.NO_MULTIBLOCK) {
+			setState(State.READY);
+		}
 	}
 
 	@Override

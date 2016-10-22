@@ -32,65 +32,67 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
+@Mod.EventBusSubscriber
 public class TMEventHandler {
 
 	@SubscribeEvent
-	public void onWorldLoad(WorldEvent.Load evt) {
+	public static void onWorldLoad(WorldEvent.Load evt) {
 		TechDataStorage.onWorldLoad(evt);
 	}
 
 	@SubscribeEvent
-	public void onWorldUnload(WorldEvent.Unload evt) {
+	public static void onWorldUnload(WorldEvent.Unload evt) {
 		TechDataStorage.onWorldUnload(evt);
 	}
 
 	@SubscribeEvent
-	public void onChunkUnload(ChunkEvent.Unload evt) {
+	public static void onChunkUnload(ChunkEvent.Unload evt) {
 		TechDataStorage.onChunkUnload(evt);
 	}
 
 	@SubscribeEvent
-	public void onChunkDataSave(ChunkDataEvent.Save evt) {
+	public static void onChunkDataSave(ChunkDataEvent.Save evt) {
 		TechDataStorage.onChunkDataSave(evt);
 	}
 
 	@SubscribeEvent
-	public void onChunkDataLoad(ChunkDataEvent.Load evt) {
+	public static void onChunkDataLoad(ChunkDataEvent.Load evt) {
 		TechDataStorage.onChunkDataLoad(evt);
 	}
 
 	@SubscribeEvent
-	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent evt) {
+	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent evt) {
 		TechDataStorage.onPlayerLogin(evt);
 	}
 
 	@SubscribeEvent
-	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent evt) {
+	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent evt) {
 		TechDataStorage.onPlayerLogout(evt);
 		//cleanup
 		SleepingManager.removePlayer(evt.player);
 	}
 
 	@SubscribeEvent
-	public void onPlayerWakeUp(PlayerWakeUpEvent evt) {
+	public static void onPlayerWakeUp(PlayerWakeUpEvent evt) {
 		SleepingManager.onPlayerWakeUp(evt);
 	}
 
 	@SubscribeEvent
-	public void onPlayerSetSpawn(PlayerSetSpawnEvent evt) {
+	public static void onPlayerSetSpawn(PlayerSetSpawnEvent evt) {
 		SleepingManager.onPlayerSetSpawn(evt);
 	}
 
 	@SubscribeEvent
-	public void onEntitySpawn(LivingSpawnEvent.CheckSpawn evt) {
+	public static void onEntitySpawn(LivingSpawnEvent.CheckSpawn evt) {
 		TDEffectHandler.onLivingSpawn(evt);
 	}
 
 	@SubscribeEvent
-	public void onEntityJoinWorld(EntityJoinWorldEvent evt) {
+	public static void onEntityJoinWorld(EntityJoinWorldEvent evt) {
 		if (evt.getWorld().isRemote) {
 			return;
 		}
@@ -104,7 +106,7 @@ public class TMEventHandler {
 
 
 	@SubscribeEvent
-	public void onEntitySetAttackTarget(LivingSetAttackTargetEvent evt) {
+	public static void onEntitySetAttackTarget(LivingSetAttackTargetEvent evt) {
 		if (!evt.getEntity().worldObj.isRemote && evt.getTarget() instanceof EntityPlayer && (evt.getEntityLiving() instanceof IMob || evt.getEntityLiving() instanceof EntityTameable)) {
 			EntityPlayer player = (EntityPlayer) evt.getTarget();
 			for (ItemStack stack : player.inventory.mainInventory) {
@@ -117,7 +119,7 @@ public class TMEventHandler {
 	}
 
 	@SubscribeEvent
-	public void onEntityAttack(LivingAttackEvent evt) {
+	public static void onEntityAttack(LivingAttackEvent evt) {
 		if (!evt.getEntity().worldObj.isRemote && evt.getEntity() instanceof EntityPlayer) {
 			if (evt.getSource().getEntity() instanceof IMob) {
 				TDManager.scanAndUpdatePlayerTD((EntityPlayer) evt.getEntity());
@@ -126,7 +128,7 @@ public class TMEventHandler {
 	}
 
 	@SubscribeEvent
-	public void onPlayerDropsOnDeath(PlayerDropsEvent evt) {
+	public static void onPlayerDropsOnDeath(PlayerDropsEvent evt) {
 		World world = evt.getEntityPlayer().getEntityWorld();
 		if (!world.isRemote && !world.getGameRules().getBoolean("keepInventory")) {
 			for (EntityItem entityItem : evt.getDrops()) {

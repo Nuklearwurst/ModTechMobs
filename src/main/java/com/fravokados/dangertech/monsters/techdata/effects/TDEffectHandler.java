@@ -12,6 +12,7 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 
 /**
@@ -50,13 +51,13 @@ public class TDEffectHandler {
 		}
 	}
 	
-	public static void applyRandomEffectOnPlayer(EntityPlayer entity, String username, Random rand) {
+	public static void applyRandomEffectOnPlayer(EntityPlayer entity, UUID uuid, Random rand) {
 		int level = TDManager.getPlayerScoutedTechLevel(entity);
 		int i = 0;
-		List<TDPlayerEffect> effects = TDEffects.getInstance().getUsablePlayerEffects(level, username, entity);
+		List<TDPlayerEffect> effects = TDEffects.getInstance().getUsablePlayerEffects(level, uuid, entity);
 		while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS_PLAYER) {
-			level -= effects.get(rand.nextInt(effects.size())).applyEffect(level, username, entity);
-			effects = TDEffects.getInstance().getUsablePlayerEffects(level, username, entity);
+			level -= effects.get(rand.nextInt(effects.size())).applyEffect(level, uuid, entity);
+			effects = TDEffects.getInstance().getUsablePlayerEffects(level, uuid, entity);
 			i++;
 		}
 		TDManager.setPlayerScoutedTechLevel(entity, level);

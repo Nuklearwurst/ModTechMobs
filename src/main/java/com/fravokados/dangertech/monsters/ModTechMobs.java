@@ -16,13 +16,16 @@ import com.fravokados.dangertech.monsters.network.ModTDNetworkManager;
 import com.fravokados.dangertech.monsters.plugin.PluginManager;
 import com.fravokados.dangertech.monsters.techdata.effects.TDEffects;
 import com.fravokados.dangertech.monsters.techdata.values.TDValues;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -32,6 +35,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		version = Reference.VERSION,
 		guiFactory = Reference.GUI_FACTORY,
 		dependencies = Reference.DEPENDENCIES)
+@Mod.EventBusSubscriber
 public class ModTechMobs {
 
 	@Mod.Instance(value = Reference.MOD_ID)
@@ -52,6 +56,10 @@ public class ModTechMobs {
 		//load config
 		config = new ConfigHandler(evt.getSuggestedConfigurationFile());
 		config.load(true);
+
+
+		//register EventHandlers
+
 		//init networking
 
 		//init keybindings
@@ -70,16 +78,8 @@ public class ModTechMobs {
 			}
 		};
 
-		//registerItems items
-		ModItems.registerItems();
-		//registerBlocks blocks
-		ModBlocks.registerBlocks();
-
 		//init rendering
 		proxy.registerRenderer();
-
-		//init sounds
-		ModSounds.registerSounds();
 	}
 
 	@Mod.EventHandler
@@ -90,19 +90,8 @@ public class ModTechMobs {
 		//register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
-		//register TileEntities
-		ModBlocks.registerTileEntities();
-
 		//load Entities
 		ModEntities.init();
-
-
-		//register EventHandlers
-		proxy.registerEvents();
-
-		//Config handler
-		MinecraftForge.EVENT_BUS.register(config);
-
 
 		//load recipes
 		ModRecipes.init();
@@ -176,4 +165,19 @@ public class ModTechMobs {
 		SleepingManager.clear();
 	}
 
+	@SubscribeEvent
+	public static void registerItems(RegistryEvent.Register<Item> evt) {
+		ModItems.registerItems();
+	}
+
+	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> evt) {
+		ModBlocks.registerBlocks();
+		ModBlocks.registerTileEntities();
+	}
+
+	@SubscribeEvent
+	public static void registerSounds(RegistryEvent.Register<SoundEvent> evt) {
+		ModSounds.registerSounds();
+	}
 }

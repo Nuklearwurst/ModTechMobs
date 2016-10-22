@@ -10,20 +10,22 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author Nuklearwurst
  */
+@Mod.EventBusSubscriber
 public class ModEventHandler {
 
 	@SubscribeEvent
-	public void registerOtherTextures(TextureStitchEvent.Pre evt) {
+	public static void registerOtherTextures(TextureStitchEvent.Pre evt) {
 		evt.getMap().registerSprite(Textures.GUI_SLOT_DESTINATION_CARD);
 	}
 
 	@SubscribeEvent
-	public void onBlockPlaced(BlockEvent.PlaceEvent evt) {
+	public static void onBlockPlaced(BlockEvent.PlaceEvent evt) {
 		if (evt.getPlayer().dimension != Settings.dimensionId) {
 //			GameRegistry.UniqueIdentifier block = GameRegistry.findUniqueIdentifierFor(evt.block);
 //			if (block != null && block.modId.contains("BuildCraft")) {
@@ -38,7 +40,7 @@ public class ModEventHandler {
 	}
 
 	@SubscribeEvent
-	public void loadWorld(WorldEvent.Load evt) {
+	public static void loadWorld(WorldEvent.Load evt) {
 		if (!evt.getWorld().isRemote && evt.getWorld().provider.getDimension() == 0) {
 			WorldServer world = (WorldServer) evt.getWorld();
 			PortalManager saveData = (PortalManager) world.getPerWorldStorage().getOrLoadData(PortalManager.class, "PortalManager");
@@ -56,7 +58,7 @@ public class ModEventHandler {
 	}
 
 	@SubscribeEvent
-	public void unloadWorld(WorldEvent.Unload evt) {
+	public static void unloadWorld(WorldEvent.Unload evt) {
 		if (!evt.getWorld().isRemote && evt.getWorld().provider.getDimension() == 0) {
 			LogHelperMD.trace("Unloading PortalManager...");
 			ModMiningDimension.instance.portalManager = null;

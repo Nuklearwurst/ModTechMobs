@@ -71,7 +71,7 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 			} else {
 				return new ActionResult<>(EnumActionResult.PASS, stack);
 			}
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 	}
 

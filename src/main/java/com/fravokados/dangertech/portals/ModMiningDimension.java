@@ -1,31 +1,32 @@
 package com.fravokados.dangertech.portals;
 
-import com.fravokados.dangertech.portals.common.init.ModBlocks;
 import com.fravokados.dangertech.portals.command.CommandEnterDimension;
 import com.fravokados.dangertech.portals.common.ChunkLoaderCallback;
 import com.fravokados.dangertech.portals.common.CommonProxy;
 import com.fravokados.dangertech.portals.common.GuiHandler;
+import com.fravokados.dangertech.portals.common.init.ModBlocks;
+import com.fravokados.dangertech.portals.common.init.ModItems;
+import com.fravokados.dangertech.portals.common.init.ModRecipes;
 import com.fravokados.dangertech.portals.configuration.ConfigHandler;
 import com.fravokados.dangertech.portals.dimension.ModDimensions;
-import com.fravokados.dangertech.portals.event.ModEventHandler;
-import com.fravokados.dangertech.portals.common.init.ModItems;
 import com.fravokados.dangertech.portals.lib.Reference;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;
 import com.fravokados.dangertech.portals.network.ModMDNetworkManager;
 import com.fravokados.dangertech.portals.plugin.techmobs.PluginTechMobs;
 import com.fravokados.dangertech.portals.portal.PortalManager;
-import com.fravokados.dangertech.portals.common.init.ModRecipes;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 
@@ -34,6 +35,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 		version = Reference.VERSION,
 		guiFactory = Reference.GUI_FACTORY,
 		dependencies = Reference.DEPENDENCIES)
+@Mod.EventBusSubscriber
 public class ModMiningDimension {
 
 	public static CreativeTabs TAB_MD;
@@ -64,15 +66,7 @@ public class ModMiningDimension {
 		};
 
 		//register blocks and tileentities
-		ModBlocks.registerBlocks();
-		ModBlocks.registerTileEntities();
 
-		//register items
-		ModItems.registerItems();
-
-		//register event handlers
-		MinecraftForge.EVENT_BUS.register(new ModEventHandler());
-		MinecraftForge.EVENT_BUS.register(config);
 	}
 
 	@Mod.EventHandler
@@ -109,5 +103,16 @@ public class ModMiningDimension {
 	public void serverStarting(FMLServerStartingEvent evt) {
 		//register server commands
 		evt.registerServerCommand(new CommandEnterDimension());
+	}
+
+	@SubscribeEvent
+	public static void registerItems(RegistryEvent.Register<Item> evt) {
+		ModItems.registerItems();
+	}
+
+	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> evt) {
+		ModBlocks.registerBlocks();
+		ModBlocks.registerTileEntities();
 	}
 }

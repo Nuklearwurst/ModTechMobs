@@ -1,14 +1,17 @@
 package com.fravokados.dangertech.portals.configuration;
 
+import com.fravokados.dangertech.portals.ModMiningDimension;
 import com.fravokados.dangertech.portals.lib.Reference;
 import com.fravokados.dangertech.portals.lib.Strings.Keys;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 
+@Mod.EventBusSubscriber
 public class ConfigHandler {
 
 	public final Configuration config;
@@ -56,11 +59,10 @@ public class ConfigHandler {
 		}
 	}
 
-
 	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
+	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
 		if(eventArgs.getModID().equalsIgnoreCase(Reference.MOD_ID)) {
-			load(false);
+			ModMiningDimension.config.load(false);
 			LogHelperMD.info("Reloading config!");
 		}
 	}

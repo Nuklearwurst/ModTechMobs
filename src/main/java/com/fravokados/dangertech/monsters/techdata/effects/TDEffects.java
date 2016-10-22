@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * contains  information of the techdata effects
@@ -107,10 +108,10 @@ public class TDEffects implements TDEffectRegistry {
 	 * used to get a List containing all PlayerEffects that are applicable for the given Player
 	 */
 	@Override
-	public List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, String username, EntityPlayer entity) {
-		List<TDPlayerEffect> out = new ArrayList<TDPlayerEffect>();
+	public List<TDPlayerEffect> getUsablePlayerEffects(int techvalue, UUID uuid, EntityPlayer entity) {
+		List<TDPlayerEffect> out = new ArrayList<>();
 		for(TDPlayerEffect eff : playerEffects) {
-			if(eff.isUsable(techvalue, username, entity)) {
+			if(eff.isUsable(techvalue, uuid, entity)) {
 				out.add(eff);
 			}
 		}

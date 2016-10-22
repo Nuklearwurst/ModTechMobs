@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -76,12 +77,38 @@ public class PortalMetrics {
 		init = true;
 	}
 
+	public boolean isBlockPartOfFrame(@Nullable BlockPos pos) {
+		if(pos == null) {
+			return false;
+		}
+		if(pos.getX() == minX || pos.getX() == maxX) {
+			if(pos.getY() == minY || pos.getY() == maxY) {
+				if(pos.getZ() == minZ || pos.getZ() == maxZ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public boolean isBlockInsideFrame(int x, int y, int z) {
 		return x >= minX + 1 && x <= maxX - 1 && y >= minY + 1 && y <= maxY - 1 && z >= minZ + 1 && z <= maxZ - 1;
 	}
 
 	public boolean isBlockInside(int x, int y, int z) {
 		return x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ;
+	}
+
+	public int getSizeX() {
+		return maxX - minX;
+	}
+
+	public int getSizeY() {
+		return maxY - minY;
+	}
+
+	public int getSizeZ() {
+		return maxZ - minZ;
 	}
 
 	public boolean isHorizontal() {
@@ -456,12 +483,24 @@ public class PortalMetrics {
 					flagZ = k == minZ || k == maxZ;
 					if(flagX == flagY ? flagX : flagZ) {
 						final BlockPos pos = new BlockPos(i, j, k);
-						final IBlockState blockState= worldObj.getBlockState(pos);
+						final IBlockState blockState = worldObj.getBlockState(pos);
 						worldObj.notifyBlockUpdate(pos, blockState, blockState, 3);
 					}
 				}
 			}
 		}
+	}
+
+	public double getCenterX() {
+		return minX + (double) getSizeX() / 2D + 0.5D;
+	}
+
+	public double getCenterY() {
+		return minY + (double) getSizeY() / 2D + 0.5D;
+	}
+
+	public double getCenterZ() {
+		return minZ + (double) getSizeZ() / 2D + 0.5D;
 	}
 }
 

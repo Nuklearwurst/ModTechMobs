@@ -6,8 +6,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
 
-	public void registerEvents() {}
-
 	/**
 	 * Register's the given block and any needed ItemBlock models
 	 */

@@ -120,7 +120,7 @@ public class TDManager {
 	
 	public static void setPlayerScoutedTechLevel(EntityPlayer player, int scoutedLevel) {
 		getPlayerData(player).setInteger(NBT_PLAYER_TECHDATA_SCOUTED, scoutedLevel);
-		TechDataStorage.getInstance().updateDangerousPlayerList(player.getName(), scoutedLevel);
+		TechDataStorage.getInstance().updateDangerousPlayerList(player.getUniqueID(), scoutedLevel);
 	}
 	
 	public static int getPlayerTechLevel(EntityPlayer player) {
