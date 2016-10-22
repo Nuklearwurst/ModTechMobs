@@ -15,9 +15,7 @@ public class CommandTechPlayer extends CommandBase implements IModCommand {
 	
 	private final List<String> aliases;
 	
-	private final SortedSet<SubCommand> children = new TreeSet<>((o1, o2) -> {
-		return o1.compareTo(o2);
-	});
+	private final SortedSet<SubCommand> children = new TreeSet<>(SubCommand::compareTo);
 
 	public CommandTechPlayer() {
 		this.aliases = new ArrayList<>();

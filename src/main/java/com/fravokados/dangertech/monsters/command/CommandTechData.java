@@ -17,18 +17,13 @@ import java.util.*;
 
 public class CommandTechData extends CommandBase implements IModCommand {
 
-	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(new Comparator<SubCommand>() {
-		@Override
-		public int compare(SubCommand o1, SubCommand o2) {
-			return o1.compareTo(o2);
-		}
-	});
+	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(SubCommand::compareTo);
 
 	private final List<String> aliases;
 
 
 	public CommandTechData() {
-		this.aliases = new ArrayList<String>();
+		this.aliases = new ArrayList<>();
 		this.aliases.add("techdata");
 		this.aliases.add("td");
 		addChildCommand(new CommandTechDataItem());
