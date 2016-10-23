@@ -28,20 +28,24 @@ chat.effect.miningFatigue=Why does it take so long?
 chat.effect.slow=You feel like you are waking against the current
 chat.effect.slow_2=Probably better to wait some time...
 
-chat.debugger.tileentity=TechValue of this Block is: %s
-chat.debugger.tileentity.no_tile=This is not a TileEntity and has not TechValue!
-chat.debugger.player.techlevel=Your TechLevel is: %s
-chat.debugger.player.scouted=Your scouted TechLevel is: %s
+chat.debugger.tileentity=Potential pollution of this Block is: %s
+chat.debugger.tileentity.no_tile=This is not a very interesting block and does not pollute the environment!
+chat.debugger.player.techlevel=Your potential pollution is: %s
+chat.debugger.player.scouted=Your actual pollution is: %s
 
-chat.analyzer.tileentity=TechValue of this Block is: %s
-chat.analyzer.tileentity.no_tile=This is not a TileEntity and has not TechValue!
-chat.analyzer.player=The TechLevel of %s is: %s
+chat.analyzer.tileentity=Potential pollution of this Block is: %s
+chat.analyzer.tileentity.no_tile=This is not a very interesting block and does not pollute the environment!
+chat.analyzer.player=The potential pollution of %s is: %s
 chat.analyzer.player.no_player=You can only use this Tool on Players!
-chat.analyzer.chunk=The current TechLevel of this Chunk is: %s
-chat.analyzer.item=This Item has a potential TechValue of: %s
+chat.analyzer.chunk=The current Pollution in this Area is: %s
+chat.analyzer.item=This Item has a potential pollution of: %s
 
-chat.command.analyze.item=The TechLevel of this item is: %s
+chat.command.analyze.item=The potential pollution of this item is: %s
 chat.command.analyze.item.noitem=You have to hold the item you want to analyze!
+chat.command.techdata.scouted=Current pollution in this chunk is: %s
+chat.command.techdata.level=Potential pollution in this chunk is: %s
+chat.command.techdata.scanning=Scanning...
+chat.command.techdata.queue=%s scans in queue!
 
 chat.quantumSword=You notice that your sword is getting quite rusty
 
@@ -49,7 +53,115 @@ chat.quantumSword=You notice that your sword is getting quite rusty
 command.dangertechmobs.aliases=Aliases: %s
 command.dangertechmobs.permlevel=Permission Level: %s
 command.dangertechmobs.list=Available Subcommands:
-command.dangertechmobs.help=Command Usage: %s
+
+command.dangertechmobs.techmobs.format=Information about: %s
+command.dangertechmobs.techmobs.help=Some random commands to test some aspects of the mod.
+
+command.dangertechmobs.techmobs.effect.desc=%s player <strength>
+command.dangertechmobs.techmobs.effect.format=Information about: %s
+command.dangertechmobs.techmobs.effect.help=Apply random effect on player.
+
+command.dangertechmobs.techmobs.effect.player.desc=%s <strength>
+command.dangertechmobs.techmobs.effect.format=Information about: %s <strength>
+command.dangertechmobs.techmobs.effect.help=Apply random effect on player.
+
+command.dangertechmobs.techmobs.emp.desc=%s - Create EMP explosion
+command.dangertechmobs.techmobs.emp.format=Information about: %s
+command.dangertechmobs.techmobs.emp.help=Creates an EMP explosion at the position of the player.
+
+command.dangertechmobs.techdata.format=Information about: %s
+command.dangertechmobs.techdata.help=Commands to manage local area pollution.
+
+command.dangertechmobs.techdata.add.desc=%s <value>
+command.dangertechmobs.techdata.add.format=Information about: %s
+command.dangertechmobs.techdata.add.help=Add to the pollution in this chunk
+
+command.dangertechmobs.techdata.add.level.desc=%s <value>
+command.dangertechmobs.techdata.add.level.format=Information about: %s
+command.dangertechmobs.techdata.add.level.help=Add to the potential pollution in this chunk
+
+command.dangertechmobs.techdata.add.scouted.desc=%s <value>
+command.dangertechmobs.techdata.add.scouted.format=Information about: %s
+command.dangertechmobs.techdata.add.scouted.help=Add to the current pollution in this chunk
+
+command.dangertechmobs.techdata.info.desc=%s
+command.dangertechmobs.techdata.info.format=Information about: %s
+command.dangertechmobs.techdata.info.help=Displays currently queued scans.
+
+command.dangertechmobs.techdata.item.desc=%s
+command.dangertechmobs.techdata.item.format=Information about: %s
+command.dangertechmobs.techdata.item.help=Displays pollution info about the currently held item.
+
+command.dangertechmobs.techdata.read.desc=%s
+command.dangertechmobs.techdata.read.format=Information about: %s
+command.dangertechmobs.techdata.read.help=Displays pollution info about the chunk you are in.
+
+command.dangertechmobs.techdata.scan.desc=%s
+command.dangertechmobs.techdata.scan.format=Information about: %s
+command.dangertechmobs.techdata.scan.help=Scans the chunk you are in and updates pollution.
+
+command.dangertechmobs.techdata.scan.level.desc=%s
+command.dangertechmobs.techdata.scan.level.format=Information about: %s
+command.dangertechmobs.techdata.scan.level.help=Scans the chunk you are in and updates potential pollution.
+
+command.dangertechmobs.techdata.scan.scouted.desc=%s
+command.dangertechmobs.techdata.scan.scouted.format=Information about: %s
+command.dangertechmobs.techdata.scan.scouted.help=Scans the chunk you are in and updates current pollution.
+
+command.dangertechmobs.techdata.set.desc=%s <value>
+command.dangertechmobs.techdata.set.format=Information about: %s
+command.dangertechmobs.techdata.set.help=Sets the current pollution of the chunk you are in.
+
+command.dangertechmobs.techdata.set.level.desc=%s <value>
+command.dangertechmobs.techdata.set.level.format=Information about: %s <value>
+command.dangertechmobs.techdata.set.level.help=Sets the potential pollution of the chunk you are in.
+
+command.dangertechmobs.techdata.set.scouted.desc=%s <value>
+command.dangertechmobs.techdata.set.scouted.format=Information about: %s <value>
+command.dangertechmobs.techdata.set.scouted.help=Sets the current pollution of the chunk you are in.
+
+command.dangertechmobs.techplayer.format=Information about: %s
+command.dangertechmobs.techplayer.help=Commands to manage player pollution.
+
+command.dangertechmobs.techplayer.add.desc=%s [player] <value>
+command.dangertechmobs.techplayer.add.format=Information about: %s
+command.dangertechmobs.techplayer.add.help=Add to the pollution of a player
+
+command.dangertechmobs.techplayer.add.level.desc=%s [player] <value>
+command.dangertechmobs.techplayer.add.level.format=Information about: %s [player] <value>
+command.dangertechmobs.techplayer.add.level.help=Add to the potential pollution of a player
+
+command.dangertechmobs.techplayer.add.scouted.desc=%s [player] <value>
+command.dangertechmobs.techplayer.add.scouted.format=Information about: %s [player] <value>
+command.dangertechmobs.techplayer.add.scouted.help=Add to the current pollution of a player
+
+command.dangertechmobs.techplayer.read.desc=%s [player]
+command.dangertechmobs.techplayer.read.format=Information about: %s [player]
+command.dangertechmobs.techplayer.read.help=Displays pollution info about a player
+
+command.dangertechmobs.techplayer.scan.desc=%s [player]
+command.dangertechmobs.techplayer.scan.format=Information about: %s
+command.dangertechmobs.techplayer.scan.help=Scans a player and updates pollution.
+
+command.dangertechmobs.techplayer.scan.level.desc=%s [player]
+command.dangertechmobs.techplayer.scan.level.format=Information about: %s [player]
+command.dangertechmobs.techplayer.scan.level.help=Scans a player and updates potential pollution.
+
+command.dangertechmobs.techplayer.scan.scouted.desc=%s [player]
+command.dangertechmobs.techplayer.scan.scouted.format=Information about: %s [player]
+command.dangertechmobs.techplayer.scan.scouted.help=Scans a player and updates current pollution.
+
+command.dangertechmobs.techplayer.set.desc=%s [player] <value>
+command.dangertechmobs.techplayer.set.format=Information about: %s
+command.dangertechmobs.techplayer.set.help=Sets the current pollution of a player.
+
+command.dangertechmobs.techplayer.set.level.desc=%s [player] <value>
+command.dangertechmobs.techplayer.set.level.format=Information about: %s [player] <value>
+command.dangertechmobs.techplayer.set.level.help=Sets the potential pollution of a player.
+
+command.dangertechmobs.techplayer.set.scouted.desc=%s [player] <value>
+command.dangertechmobs.techplayer.set.scouted.format=Information about: %s [player] <value>
+command.dangertechmobs.techplayer.set.scouted.help=Sets the current pollution of a player.
 
 #Entity
 entity.con_unit.name=Flying Coffin
@@ -59,7 +171,7 @@ entity.cyber_zombie.name=Cyber Zombie
 #Items
 item.dangertechmobs:monsterDetector.name=Monster Detector
 item.dangertechmobs:upgradeTool.name=Upgrade Tool
-item.dangertechmobs:tdAnalyzer.name=TechData Analyzer
+item.dangertechmobs:tdAnalyzer.name=Environmental Analyzer
 item.dangertechmobs:quantumSword.name=Quantum Sword
 item.dangertechmobs:conservationUnit.name=Flying Coffin
 item.dangertechmobs:item_cot.name=Camp Bed
@@ -75,7 +187,7 @@ item.tdAnalyzer.mode.chunk=Area
 
 #Blocks
 tile.dangertechmobs:gateExtender.name=Gate Extender
-tile.dangertechmobs:creativeTechnology.name=Creative Technology Block
+tile.dangertechmobs:creativeTechnology.name=Creative Pollution Block
 
 #Entities
 entity.cyber_zombie.name=Cyber Zombie

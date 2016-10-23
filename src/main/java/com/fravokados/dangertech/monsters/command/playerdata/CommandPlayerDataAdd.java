@@ -28,7 +28,7 @@ public class CommandPlayerDataAdd extends SubCommand {
 
 	@Override
 	public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if(!CommandHelpers.processDefaultStandardCommands(server, sender, this, args, "level")) {
+		if(!CommandHelpers.processDefaultStandardCommands(server, sender, this, args, "scouted")) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}

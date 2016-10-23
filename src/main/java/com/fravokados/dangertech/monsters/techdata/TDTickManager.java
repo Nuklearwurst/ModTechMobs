@@ -95,11 +95,11 @@ public class TDTickManager {
 			tick = Settings.TechData.TD_RANDOM_TICKS;
 
 			if (Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE > 0 && (Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE == 1 || random.nextInt(Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE) == 0)) {
-				UUID username = TechDataStorage.getInstance().getRandomDangerousPlayer(random);
-				if (username != null) {
-					EntityPlayer entity = PlayerUtils.getPlayerFromUUID(username);
+				UUID uuid = TechDataStorage.getInstance().getRandomDangerousPlayer(random);
+				if (uuid != null) {
+					EntityPlayer entity = PlayerUtils.getPlayerFromUUID(uuid);
 					if(entity != null) {
-						TDEffectHandler.applyRandomEffectOnPlayer(entity, username, random);
+						TDEffectHandler.applyRandomEffectOnPlayer(entity, uuid, random);
 					}
 				}
 			}

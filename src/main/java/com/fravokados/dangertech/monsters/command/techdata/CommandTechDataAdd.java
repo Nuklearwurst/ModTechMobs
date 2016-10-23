@@ -8,7 +8,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 /**
  * @author Nuklearwurst
@@ -23,7 +23,7 @@ public class CommandTechDataAdd extends SubCommand {
 
 	@Override
 	public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if(!CommandHelpers.processDefaultStandardCommands(server, sender, this, args, "level")) {
+		if(!CommandHelpers.processDefaultStandardCommands(server, sender, this, args, "scouted")) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}
@@ -40,8 +40,8 @@ public class CommandTechDataAdd extends SubCommand {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
 				TDChunk chunk = CommandTechData.getChunkData(sender);
-				chunk.techLevel += CommandBase.parseInt(args[1]);
-				sender.addChatMessage(new TextComponentString("TechLevel in this Chunk: " + chunk.techLevel));
+				chunk.techLevel += CommandBase.parseInt(args[0]);
+				sender.addChatMessage(new TextComponentTranslation("chat.command.techdata.level ", chunk.techLevel));
 			}
 		}
 	}
@@ -58,8 +58,8 @@ public class CommandTechDataAdd extends SubCommand {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
 				TDChunk chunk = CommandTechData.getChunkData(sender);
-				chunk.scoutedTechLevel += CommandBase.parseInt(args[1]);
-				sender.addChatMessage(new TextComponentString("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
+				chunk.scoutedTechLevel += CommandBase.parseInt(args[0]);
+				sender.addChatMessage(new TextComponentTranslation("chat.command.techdata.scouted", chunk.scoutedTechLevel));
 			}
 		}
 	}

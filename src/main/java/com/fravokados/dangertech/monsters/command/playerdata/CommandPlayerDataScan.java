@@ -21,7 +21,7 @@ import java.util.List;
 public class CommandPlayerDataScan extends SubCommand {
 
 	public CommandPlayerDataScan() {
-		super("read");
+		super("scan");
 		addChildCommand(new TechLevel());
 		addChildCommand(new Scouted());
 	}

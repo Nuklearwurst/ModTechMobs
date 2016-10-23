@@ -60,7 +60,7 @@ public class CommandHelpers {
 	}
 
 	public static void throwWrongUsage(ICommandSender sender, IModCommand command) throws WrongUsageException {
-		throw new WrongUsageException((GeneralUtils.translateWithFormat("command.dangertechmobs.help", command.getCommandUsage(sender))));
+		throw new WrongUsageException(command.getCommandUsage(sender));
 	}
 
 	public static void processChildCommand(MinecraftServer server, ICommandSender sender, SubCommand child, String[] args) throws CommandException {
@@ -74,16 +74,19 @@ public class CommandHelpers {
 	public static void printHelp(ICommandSender sender, IModCommand command) {
 		Style header = new Style();
 		header.setColor(TextFormatting.BLUE);
-		sendLocalizedChatMessage(sender, header, "command.dangertechmobs." + command.getFullCommandString().replace(" ", ".") + ".format", command.getFullCommandString());
+		sendLocalizedChatMessage(sender, header, "command.dangertechmobs." + command.getFullCommandString().replace(" ", ".") + ".format", "/" + command.getFullCommandString());
 		Style body = new Style();
 		body.setColor(TextFormatting.GRAY);
-		sendLocalizedChatMessage(sender, body, "command.dangertechmobs.aliases", command.getCommandAliases().toString().replace("[", "").replace("]", ""));
+		List<String> aliasList = command.getCommandAliases();
+		if(aliasList.isEmpty()) {
+			sendLocalizedChatMessage(sender, body, "command.dangertechmobs.aliases", aliasList.toString().replace("[", "").replace("]", ""));
+		}
 		sendLocalizedChatMessage(sender, body, "command.dangertechmobs.permlevel", command.getPermissionLevel());
 		sendLocalizedChatMessage(sender, body, "command.dangertechmobs." + command.getFullCommandString().replace(" ", ".") + ".help");
 		if (!command.getChildren().isEmpty()) {
 			sendLocalizedChatMessage(sender, "command.dangertechmobs.list");
 			for (SubCommand child : command.getChildren()) {
-				sendLocalizedChatMessage(sender, "command.dangertechmobs." + child.getFullCommandString().replace(" ", ".") + ".desc", child.getCommandName());
+				sendLocalizedChatMessage(sender, "command.dangertechmobs." + child.getFullCommandString().replace(" ", ".") + ".desc", "/" + child.getCommandName());
 			}
 		}
 	}
