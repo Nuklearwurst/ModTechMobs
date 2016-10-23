@@ -1,5 +1,6 @@
 package com.fravokados.dangertech.monsters.entity.ai;
 
+import com.fravokados.dangertech.monsters.techdata.TDManager;
 import com.fravokados.dangertech.monsters.techdata.TDTickManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -36,7 +37,6 @@ public class EntityAIScanArea extends EntityAIBase {
 	public void startExecuting() {
 		super.startExecuting();
 		if (timer == 0) {
-//			LogHelperTM.logDev("Mob is scanning chunk!");
 			scanChunk();
 			timer = maxTimer;
 		}
@@ -52,7 +52,14 @@ public class EntityAIScanArea extends EntityAIBase {
 		super.updateTask();
 		timer--;
 		if (timer > scoutTimer && timer % scanOffset == 0) {
-			scanChunk();
+			scanChunkScouted();
+		}
+	}
+
+	private void scanChunkScouted() {
+		TDManager.updateScoutedTechLevel(e.worldObj.getChunkFromBlockCoords(new BlockPos((int) (e.posX), (int) e.posY, (int) (e.posZ))));
+		for (int i = 2; i < 6; i++) {
+			TDManager.updateScoutedTechLevel(e.worldObj.getChunkFromBlockCoords(new BlockPos((int) (e.posX + EnumFacing.getFront(i).getFrontOffsetX() * 16), 0, (int) (e.posZ + EnumFacing.getFront(i).getFrontOffsetX() * 16))));
 		}
 	}
 
