@@ -179,10 +179,19 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	/**
-	 * Used to update portal structure metrics
+	 * Recreate portal metrics, this will reset Controller state
 	 */
 	public boolean updateMetrics() {
+		metrics = null;
+		setState(State.NO_MULTIBLOCK);
 		return PortalConstructor.createPortalMultiBlock(worldObj, getPos()) == PortalConstructor.Result.SUCCESS;
+	}
+
+	/**
+	 * Checks whether current portal metrics are valid
+	 */
+	public boolean checkMetrics() {
+		return metrics != null && metrics.isFrameComplete(worldObj) && metrics.isFrameEmpty(worldObj);
 	}
 
 
@@ -248,16 +257,22 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		return lastError;
 	}
 
+	public void onPortalFrameModified() {
+		if(!isActive() && state != State.NO_MULTIBLOCK) {
+			closePortal(true);
+			setState(State.NO_MULTIBLOCK);
+		}
+	}
+
 	public void setState(State state) {
 		if (worldObj.isRemote && PluginLookingGlass.isAvailable()) {
 			if (state == State.OUTGOING_PORTAL || state == State.INCOMING_PORTAL) {
 				if (state != this.state) {
 					if (renderInfo != null) {
-						if (metrics == null) {
-							updateMetrics();
-						}
-						if (metrics != null) {
+						if(metrics != null) {
 							renderInfo.createLookingGlass(metrics, this.worldObj);
+						} else {
+							LogHelperMD.error("Invalid portal state! Portal bounds are not available!");
 						}
 					}
 				}
@@ -268,8 +283,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			}
 		}
 		this.state = state;
-		IBlockState blockState = worldObj.getBlockState(getPos());
-		this.worldObj.notifyBlockUpdate(getPos(), blockState, blockState, 3);
+		WorldUtils.notifyBlockUpdateAtTile(this);
 		if (metrics != null) {
 			metrics.updatePortalFrames(worldObj);
 		}
@@ -476,7 +490,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 						//Portal already has an open connection
 						closePortal(false);
 						resetOnError(Error.CONNECTION_INTERRUPTED);
-					} else if (te.updateMetrics() && te.placePortalBlocks()) {
+					} else if (te.checkMetrics() && te.placePortalBlocks()) {
 						if (useEnergy(baseEnergyUseInit)) { //use initial energy
 							loadNeededChunks(pos);
 							//update controller states
@@ -558,8 +572,13 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 				WorldServer world = server.worldServerForDimension(pos.dimension);
 				TileEntity te = world.getTileEntity(pos.getPosition());
 				if (te != null && te instanceof TileEntityPortalControllerEntity) {
-					//inform target of our connection
-					((TileEntityPortalControllerEntity) te).setState(State.INCOMING_CONNECTION);
+					State remoteState = ((TileEntityPortalControllerEntity) te).getState();
+					if(((TileEntityPortalControllerEntity) te).isActive() || remoteState == State.INCOMING_CONNECTION || remoteState == State.CONNECTING) {
+						resetOnError(Error.CONNECTION_INTERRUPTED);
+					} else {
+						//inform target of our connection
+						((TileEntityPortalControllerEntity) te).setState(State.INCOMING_CONNECTION);
+					}
 				} else { //invalid controller
 					LogHelperMD.warn("Could not find registered controller with id: " + portalDestination);
 					resetOnError(Error.CONNECTION_INTERRUPTED);
@@ -888,8 +907,6 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 * @param closeRemote should remote also be closed?
 	 */
 	public void closePortal(boolean closeRemote) {
-		//release loaded chunks
-		unloadChunks();
 		//close remote portal if needed
 		if (closeRemote) {
 			BlockPositionDim pos = PortalManager.getInstance().getEntityPortalForId(portalDestination);
@@ -903,7 +920,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		//remove portal
 		if (metrics != null) {
 			metrics.removePortalsInsideFrame(worldObj);
-			if (state != State.READY) {
+			if (state != State.READY && state != State.NO_MULTIBLOCK) {
 				//Play closing sound effect
 				createFXForPortalClose();
 			}
@@ -912,6 +929,8 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		if(state != State.NO_MULTIBLOCK) {
 			setState(State.READY);
 		}
+		//release loaded chunks
+		unloadChunks();
 	}
 
 	@Override

@@ -62,6 +62,7 @@ public class PortalConstructor {
 			LogHelperMD.logDev("MultiBlock is missing a controller!");
 			return Result.ERROR_MISSING_CONTOLLER;
 		}
+
 		if (result != Result.SUCCESS) {
 			LogHelperMD.logDev("MultiBlock forming failed: " + result);
 			return result;
@@ -131,7 +132,7 @@ public class PortalConstructor {
 				metrics.addCoord(te);
 				frames.add((IEntityPortalMandatoryComponent) te);
 			} else if (te instanceof TileEntityPortalControllerEntity) {
-				((TileEntityPortalControllerEntity) te).setState(TileEntityPortalControllerEntity.State.NO_MULTIBLOCK);
+				((TileEntityPortalControllerEntity) te).onPortalFrameModified();
 				if (controller.isNull()) {
 					controller.set((TileEntityPortalControllerEntity) te);
 				} else {
