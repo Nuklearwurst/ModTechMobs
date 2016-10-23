@@ -1,0 +1,15 @@
+{
+    "textures": {
+        "particle": "dangertechportals:blocks/mindimPortal",
+        "portal": "dangertechportals:blocks/mindimPortal"
+    },
+    "elements": [
+        {   "from": [ 0, 4, 0 ],
+            "to": [ 16, 12, 16 ],
+            "faces": {
+                "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#portal" },
+                "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#portal" }
+            }
+        }
+    ]
+}

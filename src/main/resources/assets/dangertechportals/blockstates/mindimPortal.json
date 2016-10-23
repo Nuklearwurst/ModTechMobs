@@ -3,7 +3,7 @@
 	"variants": {
 		"axis=z": { "model": "dangertechportals:portal", "y": 90},
         "axis=x": { "model": "dangertechportals:portal"},
-		"axis=y": { "model": "dangertechportals:portal", "x": 90},
+		"axis=y": { "model": "dangertechportals:portal_horizontal"},
 		"inventory": { "model": "dangertechportals:portal"}
 	}
 }
