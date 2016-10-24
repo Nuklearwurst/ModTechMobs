@@ -335,7 +335,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	public void teleportEntity(Entity entity) {
 		if (state == State.OUTGOING_PORTAL && metrics != null) {
 			if (metrics.isEntityInsidePortal(entity, 1)) {
-				if (!ModMiningDimension.instance.portalManager.teleportEntityToEntityPortal(entity, readDestinationCard(), id, metrics)) {
+				if (!ModMiningDimension.instance.portalManager.teleportEntityToEntityPortal(entity, portalDestination, id, metrics)) {
 					closePortal(true);
 					resetOnError(Error.CONNECTION_INTERRUPTED);
 				}
@@ -410,28 +410,33 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 					tick = 0;
 
 					//check destination
-					int oldDestination = portalDestination;
-					portalDestination = readDestinationCard();
-					if (oldDestination != portalDestination) {
+					int newDestination = readDestinationCard();
+					if (newDestination != portalDestination) {
 						//destination changed --> abort
+						closePortal(true);
 						resetOnError(Error.DESTINATION_CHANGED);
-					} else if (updateMetrics()) {
-						//Check whether we created a successful multiblock
-						//create portal if necessary
-						if (portalDestination == PortalManager.PORTAL_GENERATING) {
-							//create mining dimension portal and update destination
-							generatePortal();
-						}
-						if (portalDestination >= 0) { //if destination is valid
-							openPortalToDestination();
-						} else {
-							//connection failed (invalid destination card or failed creating portal)
-							if (state != State.READY) {
-								resetOnError(Error.UNKNOWN);
-							}
-						}
 					} else {
-						resetOnError(Error.INVALID_PORTAL_STRUCTURE);
+						portalDestination = newDestination;
+						if (updateMetrics()) {
+							//Check whether we created a successful multiblock
+							//create portal if necessary
+							if (portalDestination == PortalManager.PORTAL_GENERATING) {
+								//create mining dimension portal and update destination
+								generatePortal();
+							}
+							if (portalDestination >= 0) { //if destination is valid
+								openPortalToDestination();
+							} else {
+								//connection failed (invalid destination card or failed creating portal)
+								if (state != State.READY) {
+									closePortal(true);
+									resetOnError(Error.UNKNOWN);
+								}
+							}
+						} else {
+							closePortal(true);
+							resetOnError(Error.INVALID_PORTAL_STRUCTURE);
+						}
 					}
 				} else {
 					//update progress
