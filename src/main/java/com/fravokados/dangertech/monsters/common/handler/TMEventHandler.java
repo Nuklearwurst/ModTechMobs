@@ -170,6 +170,7 @@ public class TMEventHandler {
 					}
 					EntityConservationUnit entity = new EntityConservationUnit(world, x, y + 1, z);
 					entity.addCapturedDrops(evt.getDrops());
+					entity.setShouldDrop(world.rand.nextInt(2) == 0);
 					world.spawnEntityInWorld(entity);
 					evt.setCanceled(true);
 					break;

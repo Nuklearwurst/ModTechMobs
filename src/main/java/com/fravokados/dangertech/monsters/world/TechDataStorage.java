@@ -216,8 +216,8 @@ public class TechDataStorage extends WorldSavedData {
 		return techChunks.contains(chunk);
 	}
 
-	public boolean isDangerousPlayer(String username) {
-		return techPlayers.contains(username);
+	public boolean isDangerousPlayer(UUID uuid) {
+		return techPlayers.contains(uuid);
 	}
 
 	/**

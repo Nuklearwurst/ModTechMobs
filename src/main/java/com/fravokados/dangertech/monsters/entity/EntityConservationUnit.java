@@ -12,6 +12,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -39,6 +40,11 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	private static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityConservationUnit.class, DataSerializers.FLOAT);
 	private static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityConservationUnit.class, DataSerializers.VARINT);
 
+	public static final int LIFE_SPAN = 48000;
+	public static final int DYING = 47900;
+
+	public static final int IMMUNITY = 100;
+
 	public final float hoverStart = (float) (Math.random() * Math.PI * 2.0D);
 
 	private String entityName;
@@ -50,10 +56,8 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	private ArrayList<ItemStack> mainInventory = new ArrayList<ItemStack>();
 
-	public static final int LIFE_SPAN = 48000;
-	public static final int DYING = 47900;
+	private boolean shouldDrop = false;
 
-	public static final int IMMUNITY = 100;
 
 	public EntityConservationUnit(World world) {
 		super(world);
@@ -405,6 +409,18 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	private void onDeath() {
 		playSound(SoundEvents.ENTITY_BLAZE_DEATH, 0.5F, 0.5F);
+		if(!worldObj.isRemote) {
+			if(shouldDrop) {
+				//noinspection ConstantConditions
+				InventoryHelper.spawnItemStack(worldObj, posX, posY + 0.5F, posZ, new ItemStack(ModItems.conservationUnit, 1));
+			}
+			InventoryHelper.dropInventoryItems(worldObj, this, this);
+		}
+	}
+
+	@Override
+	public void setDead() {
+		super.setDead();
 	}
 
 	@Override
@@ -459,7 +475,15 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-		player.openGui(ModTechMobs.instance, GUIIDs.CONSERVATION_UNIT, worldObj, (int) posX, (int) posY, (int) posZ);
+		player.openGui(ModTechMobs.instance, GUIIDs.CONSERVATION_UNIT, worldObj, getEntityId(), 0, 0);
 		return true;
+	}
+
+	public boolean isShouldDrop() {
+		return shouldDrop;
+	}
+
+	public void setShouldDrop(boolean shouldDrop) {
+		this.shouldDrop = shouldDrop;
 	}
 }
