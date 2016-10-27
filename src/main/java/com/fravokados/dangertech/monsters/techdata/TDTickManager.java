@@ -28,6 +28,9 @@ import java.util.*;
 @Mod.EventBusSubscriber
 public class TDTickManager {
 
+	/**
+	 * hold at which steps the amount of scanned chunks per tick increases
+	 */
 	private static int[] scanningSteps;
 
 	private static Queue<ChunkLocation> scanningTasks;
@@ -36,13 +39,15 @@ public class TDTickManager {
 
 	private static int tick = 100;
 
+	/**
+	 * recalculate at which thresholds scanning frequency increases
+	 */
 	public static void calculateScanningSteps() {
 		scanningSteps = new int[Settings.TechScanning.SPLIT_STEPS_KEY.length];
 		if (Settings.TechScanning.SPLIT_SCANS) {
 			for (int i = 0; i < Settings.TechScanning.SPLIT_STEPS_KEY.length; i++) {
 				//compute scanning values
 				//(scans per tick at low values)
-				//TODO tweaking, this needs to be recomputed when config changes
 				scanningSteps[i] = (int) Math.ceil(Settings.TechScanning.SPLIT_STEPS_KEY[i] * Settings.TechScanning.MAX_SCANS_PER_TICK);
 			}
 		}
@@ -93,34 +98,42 @@ public class TDTickManager {
 		//start special effects
 		if (tick == 0) { //player
 			tick = Settings.TechData.TD_RANDOM_TICKS;
+			applyRandomPlayerEffect();
 
-			if (Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE > 0 && (Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE == 1 || random.nextInt(Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE) == 0)) {
-				UUID uuid = TechDataStorage.getInstance().getRandomDangerousPlayer(random);
-				if (uuid != null) {
-					EntityPlayer entity = PlayerUtils.getPlayerFromUUID(uuid);
-					if(entity != null) {
-						TDEffectHandler.applyRandomEffectOnPlayer(entity, uuid, random);
-					}
-				}
-			}
 		} else if (tick == Settings.TechData.TD_RANDOM_TICKS / 2) { //chunk
-			if (Settings.TechData.TD_RANDOM_CHUNK_EVENT_CHANCE > 0 && (Settings.TechData.TD_RANDOM_CHUNK_EVENT_CHANCE == 1 || random.nextInt(Settings.TechData.TD_RANDOM_CHUNK_EVENT_CHANCE) == 0)) {
-				ChunkLocation chunk = TechDataStorage.getInstance().getRandomDangerousChunk(random);
-				if (chunk != null) {
-					int level = TDManager.getScoutedTechLevel(chunk.dimension, chunk.getChunkCoordIntPair());
-					World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(chunk.dimension);
-					int i = 0;
-					List<TDChunkEffect> effects = TDEffects.getInstance().getUsableWorldEffects(level, world);
-					while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS_CHUNK) {
-						level -= effects.get(random.nextInt(effects.size())).applyEffect(level, chunk, world);
-						i++;
-						TDEffects.getInstance().getUsableWorldEffects(level, world);
-					}
-					TDManager.setScoutedTechLevel(chunk.dimension, chunk.getChunkCoordIntPair(), level);
+			applyRandomChunkEffect();
+		}
+		tick--;
+	}
+
+	private static void applyRandomPlayerEffect() {
+		if (Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE > 0 && (Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE == 1 || random.nextInt(Settings.TechData.TD_RANDOM_PLAYER_EVENT_CHANCE) == 0)) {
+			UUID uuid = TechDataStorage.getInstance().getRandomDangerousPlayer(random);
+			if (uuid != null) {
+				EntityPlayer entity = PlayerUtils.getPlayerFromUUID(uuid);
+				if(entity != null) {
+					TDEffectHandler.applyRandomEffectOnPlayer(entity, uuid, random);
 				}
 			}
 		}
-		tick--;
+	}
+
+	private static void applyRandomChunkEffect() {
+		if (Settings.TechData.TD_RANDOM_CHUNK_EVENT_CHANCE > 0 && (Settings.TechData.TD_RANDOM_CHUNK_EVENT_CHANCE == 1 || random.nextInt(Settings.TechData.TD_RANDOM_CHUNK_EVENT_CHANCE) == 0)) {
+			ChunkLocation chunk = TechDataStorage.getInstance().getRandomDangerousChunk(random);
+			if (chunk != null) {
+				int level = TDManager.getScoutedTechLevel(chunk.dimension, chunk.getChunkCoordIntPair());
+				World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(chunk.dimension);
+				int i = 0;
+				List<TDChunkEffect> effects = TDEffects.getInstance().getUsableWorldEffects(level, world);
+				while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS_CHUNK) {
+					level -= effects.get(random.nextInt(effects.size())).applyEffect(level, chunk, world);
+					i++;
+					TDEffects.getInstance().getUsableWorldEffects(level, world);
+				}
+				TDManager.setScoutedTechLevel(chunk.dimension, chunk.getChunkCoordIntPair(), level);
+			}
+		}
 	}
 
 	/**

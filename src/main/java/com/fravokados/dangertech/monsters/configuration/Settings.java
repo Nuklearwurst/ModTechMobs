@@ -79,7 +79,7 @@ public class Settings {
 		 * this will make sure that when there are many chunks to scan more chunks will get scanned to decrease the queue<br>
 		 * on the other hand it spreads the scanning on more ticks if only few scans are scheduled to be scanned<br><br>
 		 *
-		 * This value defines how many chunks get scanned in which step;
+		 * This value defines how many chunks get scanned in which step (in percent)
 		 */
 		public static double[] SPLIT_STEPS_VALUE = new double[] {0.1, 0.2, 0.4, 0.7, 1};
 
@@ -88,7 +88,7 @@ public class Settings {
 		 * this will make sure that when there are many chunks to scan more chunks will get scanned to decrease the queue<br>
 		 * on the other hand it spreads the scanning on more ticks if only few scans are scheduled to be scanned<br><br>
 		 *
-		 * This value defines the steps
+		 * This value defines the steps (value * {@link #MAX_SCANS_PER_TICK}
 		 */
 		public static double[] SPLIT_STEPS_KEY = new double[] {0.4, 0.8, 1.3, 2.1, 2.7}; 
 		
