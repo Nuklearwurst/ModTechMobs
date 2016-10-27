@@ -40,7 +40,7 @@ public class CommandTechDataSet extends SubCommand {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
 				TDChunk chunk = CommandTechData.getChunkData(sender);
-				chunk.techLevel = CommandBase.parseInt(args[1]);
+				chunk.techLevel = CommandBase.parseInt(args[0]);
 				sender.addChatMessage(new TextComponentString("TechLevel in this Chunk: " + chunk.techLevel));
 			}
 		}
@@ -58,7 +58,7 @@ public class CommandTechDataSet extends SubCommand {
 				CommandHelpers.throwWrongUsage(sender, this);
 			} else {
 				TDChunk chunk = CommandTechData.getChunkData(sender);
-				chunk.scoutedTechLevel = CommandBase.parseInt(args[1]);
+				chunk.scoutedTechLevel = CommandBase.parseInt(args[0]);
 				sender.addChatMessage(new TextComponentString("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 			}
 		}
