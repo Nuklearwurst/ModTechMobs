@@ -20,7 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class IC2EnergyPlugin implements IEnergyPlugin {
 
 	@Override
-	public boolean canItemProvideEnergy(ItemStack item, EnergyType type, int sinkTier) {
+	public boolean canItemProvideEnergy(ItemStack item, int sinkTier) {
 		if(Info.itemInfo.getEnergyValue(item) > 0) {
 			return true;
 		}
@@ -34,9 +34,9 @@ public class IC2EnergyPlugin implements IEnergyPlugin {
 	}
 
 	@Override
-	public void rechargeEnergyStorageFromInventory(ItemStack stack, EnergyStorage storage, EnergyType type, IInventory inventory, int slot, int sinkTier) {
+	public void rechargeEnergyStorageFromInventory(ItemStack stack, EnergyStorage storage, IInventory inventory, int slot, int sinkTier) {
 		if (EnergyManager.canItemProvideEnergy(stack, EnergyType.IC2, sinkTier)) {
-			storage.receiveEnergy(ElectricItem.manager.discharge(stack, storage.getRoomForEnergy(), sinkTier, false, true, false), false);
+			storage.receiveEnergy((int) ElectricItem.manager.discharge(stack, storage.getRoomForEnergy(), sinkTier, false, true, false), false);
 		}
 	}
 

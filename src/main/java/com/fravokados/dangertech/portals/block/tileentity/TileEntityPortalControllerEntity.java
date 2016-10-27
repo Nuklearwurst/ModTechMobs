@@ -155,12 +155,12 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	/**
 	 * base energy usage after applying upgrades
 	 */
-	private double baseEnergyUse = Settings.ENERGY_USAGE;
+	private int baseEnergyUse = Settings.ENERGY_USAGE;
 
 	/**
 	 * base energy usage (init) after applying upgrades, note: MinDim - portal creation is currently unaffected by upgrades
 	 */
-	private double baseEnergyUseInit = Settings.ENERGY_USAGE_INIT;
+	private int baseEnergyUseInit = Settings.ENERGY_USAGE_INIT;
 
 	private int energyTier = 2;
 

@@ -13,12 +13,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 
 /**
  * Base {@link TileEntity} for machines that accept energy
  * <p>
- *     This will handle all inworld interaction with energy-apis and is {@link IEnergyTypeAware}
+ * This will handle all inworld interaction with energy-apis and is {@link IEnergyTypeAware}
  * </p>
  */
 @Optional.InterfaceList({
@@ -26,7 +27,8 @@ import net.minecraftforge.fml.common.Optional;
 		@Optional.Interface(iface = "net.darkhax.tesla.api.ITeslaHolder", modid = PluginManager.TESLA),
 		@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = PluginManager.IC2)
 })
-public abstract class TileEntityEnergyReceiver extends TileEntity implements IEnergyTypeAware, ITickable, IEnergySink, IEnergyReceiver, ITeslaConsumer, ITeslaHolder {
+public abstract class TileEntityEnergyReceiver extends TileEntity
+		implements IEnergyTypeAware, ITickable,	IEnergySink, IEnergyReceiver, ITeslaConsumer, ITeslaHolder {
 	@CapabilityInject(ITeslaConsumer.class)
 	public static Capability<ITeslaConsumer> TESLA_CONSUMER = null;
 
@@ -39,7 +41,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	protected boolean init = false;
 
 	public TileEntityEnergyReceiver(int capacity) {
-		energyStorage = new EnergyStorage(capacity);
+		energyStorage = new EnergyStorage(capacity, false, true);
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	public void onChunkUnload() {
 		super.onChunkUnload();
 		if (worldObj == null || !worldObj.isRemote) {
-			if(init) {
+			if (init) {
 				init = false;
 				unloadMachine();
 			}
@@ -82,7 +84,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	public void invalidate() {
 		super.invalidate();
 		if (worldObj == null || !worldObj.isRemote) {
-			if(init) {
+			if (init) {
 				init = false;
 				unloadMachine();
 			}
@@ -91,22 +93,24 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 
 	@Override
 	public final void update() {
-		if(!init) {
+		if (!init) {
 			init = true;
-			if(!worldObj.isRemote) {
+			if (!worldObj.isRemote) {
 				loadMachine();
 			}
 		}
-		if(worldObj.isRemote) {
+		if (worldObj.isRemote) {
 			updateMachineClient();
 		} else {
 			updateMachineServer();
 		}
 	}
 
-	protected void updateMachineServer() {}
+	protected void updateMachineServer() {
+	}
 
-	protected void updateMachineClient() {}
+	protected void updateMachineClient() {
+	}
 
 	/**
 	 * gets called only on the server on the first update tick
@@ -128,9 +132,9 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	}
 
 	/**
-	 * forwarding call to {@link EnergyStorage#useEnergy(double, EnergyType)} using the tiles EnergyType
+	 * forwarding call to {@link EnergyStorage#useEnergy(int, EnergyType)} using the tiles EnergyType
 	 */
-	public boolean useEnergy(double amount) {
+	public boolean useEnergy(int amount) {
 		return energyStorage.useEnergy(amount, energyType);
 	}
 
@@ -138,7 +142,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 		return energyStorage;
 	}
 
-	public double getEnergyStored() {
+	public int getEnergyStored() {
 		return energyStorage.getEnergyStored();
 	}
 
@@ -149,16 +153,16 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		//Redstone-Flux
-		if(energyType != EnergyType.RF) {
+		if (energyType != EnergyType.RF) {
 			return 0;
 		}
-		return (int) energyStorage.receiveEnergy(maxReceive, simulate);
+		return energyStorage.receiveEnergy(maxReceive, simulate);
 	}
 
 	@Override
 	public int getEnergyStored(EnumFacing from) {
 		//Redstone-Flux
-		return (int) energyStorage.getEnergyStored();
+		return energyStorage.getEnergyStored();
 	}
 
 	@Override
@@ -177,7 +181,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	@Override
 	public double getDemandedEnergy() {
 		//EU - IC2
-		if(energyType != EnergyType.IC2) {
+		if (energyType != EnergyType.IC2) {
 			return 0;
 		}
 		return energyStorage.getRoomForEnergy();
@@ -190,11 +194,12 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	@Override
 	public double injectEnergy(EnumFacing from, double amount, double voltage) {
 		//EU - IC2
-		if(energyType != EnergyType.IC2) {
+		if (energyType != EnergyType.IC2) {
 			return amount;
 		}
-		energyStorage.receiveEnergyAll(amount, false);
-		return 0;
+		int received = (int) amount;
+		energyStorage.receiveEnergyAll(received, false);
+		return amount - received;
 	}
 
 	@Optional.Method(modid = PluginManager.IC2)
@@ -206,22 +211,35 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(energyType == EnergyType.TESLA) {
-			if(capability == TESLA_CONSUMER || capability == TESLA_HOLDER) {
-				return true;
-			}
+		switch (energyType) {
+			case TESLA:
+				if (capability == TESLA_CONSUMER || capability == TESLA_HOLDER) {
+					return true;
+				}
+				break;
+			case FORGE:
+				if(capability == CapabilityEnergy.ENERGY) {
+					return true;
+				}
 		}
 		return super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(energyType == EnergyType.TESLA) {
-			if(capability == TESLA_CONSUMER) {
-				return TESLA_CONSUMER.cast(this);
-			} else if(capability == TESLA_HOLDER) {
-				return TESLA_HOLDER.cast(this);
-			}
+		switch (energyType) {
+			case TESLA:
+				if (capability == TESLA_CONSUMER) {
+					return TESLA_CONSUMER.cast(this);
+				} else if (capability == TESLA_HOLDER) {
+					return TESLA_HOLDER.cast(this);
+				}
+				break;
+			case FORGE:
+				if (capability == CapabilityEnergy.ENERGY) {
+					return CapabilityEnergy.ENERGY.cast(energyStorage);
+				}
+				break;
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -230,17 +248,17 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	@Override
 	public long givePower(long power, boolean simulated) {
 		//Tesla
-		if(energyType != EnergyType.TESLA) {
+		if (energyType != EnergyType.TESLA) {
 			return 0;
 		}
-		return (long) energyStorage.receiveEnergy(power, simulated);
+		return (long) energyStorage.receiveEnergy((int) power, simulated);
 	}
 
 	@Optional.Method(modid = PluginManager.TESLA)
 	@Override
 	public long getStoredPower() {
 		//Tesla
-		if(energyType != EnergyType.TESLA) {
+		if (energyType != EnergyType.TESLA) {
 			return 0;
 		}
 		return (long) energyStorage.getEnergyStored();
@@ -250,7 +268,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity implements IEn
 	@Override
 	public long getCapacity() {
 		//Tesla
-		if(energyType != EnergyType.TESLA) {
+		if (energyType != EnergyType.TESLA) {
 			return 0;
 		}
 		return energyStorage.getMaxEnergyStored();

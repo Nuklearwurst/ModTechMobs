@@ -8,7 +8,7 @@ import net.minecraft.util.text.TextFormatting;
  */
 public enum EnergyType {
 
-	INVALID("invalid", 1), IC2("ic2", 1), VANILLA("vanilla", 1), RF("redstoneflux", 0.25F), TESLA("tesla", 0.25F), CREATIVE("creative", 1, TextFormatting.LIGHT_PURPLE);
+	INVALID("invalid", 1), IC2("ic2", 1), VANILLA("vanilla", 1), RF("redstoneflux", 0.25F), TESLA("tesla", 0.25F), CREATIVE("creative", 1, TextFormatting.LIGHT_PURPLE), FORGE("forgeenergy", 0.25F);
 
 	public static final String ENERGY_TYPE = "EnergyType";
 	public static final String UNLOCALIZED_NAME_PREFIX = "tooltip.item.energyType.";

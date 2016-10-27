@@ -4,6 +4,7 @@ import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.plugin.PluginManager;
 import com.fravokados.dangertech.core.plugin.ic2.IC2EnergyPlugin;
 import com.fravokados.dangertech.core.plugin.vanilla.CreativeEnergyPlugin;
+import com.fravokados.dangertech.core.plugin.vanilla.ForgeEnergyPlugin;
 import com.fravokados.dangertech.core.plugin.vanilla.VanillaEnergyPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
@@ -33,7 +34,7 @@ public class EnergyManager {
 		if(item == null) return false;
 
 		if(plugins.containsKey(type)) {
-			return plugins.get(type).canItemProvideEnergy(item, type, sinkTier);
+			return plugins.get(type).canItemProvideEnergy(item, sinkTier);
 		}
 		return false;
 	}
@@ -130,7 +131,7 @@ public class EnergyManager {
 				storage.receiveEnergy(storage.getRoomForEnergy(), false);
 			} else if (stack != null) {
 				if(plugins.containsKey(type)) {
-					plugins.get(type).rechargeEnergyStorageFromInventory(stack, storage, type, inventory, slot, sinkTier);
+					plugins.get(type).rechargeEnergyStorageFromInventory(stack, storage, inventory, slot, sinkTier);
 				}
 			}
 		}
@@ -140,15 +141,14 @@ public class EnergyManager {
 		plugins.clear();
 		availableEnergyTypes.clear();
 
-		plugins.put(EnergyType.CREATIVE, new CreativeEnergyPlugin());
-		availableEnergyTypes.add(EnergyType.CREATIVE);
+		registerEnergyPlugin(EnergyType.CREATIVE, new CreativeEnergyPlugin());
 
-		plugins.put(EnergyType.VANILLA, new VanillaEnergyPlugin());
-		availableEnergyTypes.add(EnergyType.VANILLA);
+		registerEnergyPlugin(EnergyType.VANILLA, new VanillaEnergyPlugin());
+
+		registerEnergyPlugin(EnergyType.FORGE, new ForgeEnergyPlugin());
 
 		if(PluginManager.ic2Activated()) {
-			plugins.put(EnergyType.IC2, new IC2EnergyPlugin());
-			availableEnergyTypes.add(EnergyType.IC2);
+			registerEnergyPlugin(EnergyType.IC2, new IC2EnergyPlugin());
 		}
 
 		if(PluginManager.teslaActivated()) {

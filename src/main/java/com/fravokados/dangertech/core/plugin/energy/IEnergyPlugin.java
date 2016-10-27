@@ -11,12 +11,11 @@ public interface IEnergyPlugin {
 	/**
 	 * checks whether this item can provide energy to the specified energy type
 	 * @param item the itemstack to test
-	 * @param type the energy type
 	 * @param sinkTier sink tier of the object that wishes to discharge the item
 	 * @return true if the given item can provide energy to the specified energy type
 	 */
-	boolean canItemProvideEnergy(ItemStack item, EnergyType type, int sinkTier);
+	boolean canItemProvideEnergy(ItemStack item, int sinkTier);
 
-	void rechargeEnergyStorageFromInventory(ItemStack stack, EnergyStorage storage, EnergyType type, IInventory inventory, int slot, int sinkTier);
+	void rechargeEnergyStorageFromInventory(ItemStack stack, EnergyStorage storage, IInventory inventory, int slot, int sinkTier);
 
 }

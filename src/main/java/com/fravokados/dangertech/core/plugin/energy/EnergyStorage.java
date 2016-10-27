@@ -1,19 +1,24 @@
 package com.fravokados.dangertech.core.plugin.energy;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.energy.IEnergyStorage;
 
 /**
  * Helper energy storage class
  * based on COFH-Redstone Flux API @link{cofh.api.energy.EnergyStorage}
- * modified to use double as energy stored, to support ic2
  */
-public class EnergyStorage {
+public class EnergyStorage implements IEnergyStorage {
 
 	private int capacity;
-	protected double energy;
+	protected int energy;
 
-	public EnergyStorage(int capacity) {
+	private boolean allowExtract;
+	private boolean allowInsert;
+
+	public EnergyStorage(int capacity, boolean allowExtract, boolean allowInsert) {
 		this.capacity = capacity;
+		this.allowExtract = allowExtract;
+		this.allowInsert = allowInsert;
 		this.energy = 0;
 	}
 
@@ -24,8 +29,9 @@ public class EnergyStorage {
 	 * @param simulate If TRUE, the insertion will only be simulated.
 	 * @return Amount of energy that was (or would have been, if simulated) accepted by the storage.
 	 */
-	public double receiveEnergy(double maxReceive, boolean simulate) {
-		double energyReceived = Math.min(this.capacity - this.energy, maxReceive);
+	@Override
+	public int receiveEnergy(int maxReceive, boolean simulate) {
+		int energyReceived = Math.min(this.capacity - this.energy, maxReceive);
 		return receiveEnergyAll(energyReceived, simulate);
 	}
 
@@ -35,7 +41,7 @@ public class EnergyStorage {
 	 * @param simulate If TRUE, the insertion will only be simulated.
 	 * @return Amount of energy that was (or would have been, if simulated) accepted by the storage.
 	 */
-	public double receiveEnergyAll(double amount, boolean simulate) {
+	public int receiveEnergyAll(int amount, boolean simulate) {
 		if(!simulate) {
 			this.energy += amount;
 		}
@@ -49,8 +55,9 @@ public class EnergyStorage {
 	 * @param simulate  If TRUE, the extraction will only be simulated.
 	 * @return Amount of energy that was (or would have been, if simulated) extracted from the storage.
 	 */
-	public double extractEnergy(double maxExtract, boolean simulate) {
-		double energyExtracted = Math.min(this.energy, maxExtract);
+	@Override
+	public int extractEnergy(int maxExtract, boolean simulate) {
+		int energyExtracted = Math.min(this.energy, maxExtract);
 		if(!simulate) {
 			this.energy -= energyExtracted;
 		}
@@ -61,17 +68,36 @@ public class EnergyStorage {
 	/**
 	 * Returns the amount of energy currently stored.
 	 */
-	public double getEnergyStored() {
+	@Override
+	public int getEnergyStored() {
 		return this.energy;
 	}
 
 	/**
 	 * Returns the maximum amount of energy that can be stored.
 	 */
+	@Override
 	public int getMaxEnergyStored() {
 		return capacity;
 	}
 
+	@Override
+	public boolean canExtract() {
+		return allowExtract;
+	}
+
+	@Override
+	public boolean canReceive() {
+		return allowInsert;
+	}
+
+	public void setAllowExtract(boolean allowExtract) {
+		this.allowExtract = allowExtract;
+	}
+
+	public void setAllowInsert(boolean allowInsert) {
+		this.allowInsert = allowInsert;
+	}
 
 	/**
 	 * sets the new capacity (if EnergyStorage contains more energy than the new capacity excess energy gets lost)
@@ -94,7 +120,7 @@ public class EnergyStorage {
 	 *     this will ensure that the stored energy does not exceed the maximum capacity
 	 * </p>
 	 */
-	public void setEnergyStored(double energy) {
+	public void setEnergyStored(int energy) {
 		this.energy = energy;
 		if(this.energy > this.capacity) {
 			this.energy = this.capacity;
@@ -104,17 +130,17 @@ public class EnergyStorage {
 	}
 
 	/**
-	 * same as {@link #setEnergyStored(double)} but converts energy parameter from EU to the given {@link EnergyType}
+	 * same as {@link #setEnergyStored(int)} but converts energy parameter from EU to the given {@link EnergyType}
 	 */
-	public void setEnergyStored(double energy, EnergyType type) {
-		setEnergyStored(energy * type.getConversionFromEU());
+	public void setEnergyStored(int energy, EnergyType type) {
+		setEnergyStored((int) (energy * type.getConversionFromEU()));
 	}
 
 	/**
 	 * Read energy from the given {@link NBTTagCompound}
 	 */
 	public void readFromNBT(NBTTagCompound nbt) {
-		this.energy = nbt.getDouble("Energy");
+		this.energy = nbt.getInteger("Energy");
 	}
 
 	/**
@@ -126,7 +152,7 @@ public class EnergyStorage {
 			this.energy = 0;
 		}
 
-		nbt.setDouble("Energy", this.energy);
+		nbt.setInteger("Energy", this.energy);
 		return nbt;
 	}
 
@@ -134,24 +160,18 @@ public class EnergyStorage {
 	/**
 	 * @return returns true if this EnergyStorage the given amount of energy is available
 	 */
-	public boolean canUse(double energy) {
+	public boolean canUse(int energy) {
 		return energy <= this.energy;
 	}
 
 	/**
-	 * same as {@link #canUse(double)} but converts energy parameter from EU to the given {@link EnergyType}
+	 * same as {@link #canUse(int)} but converts energy parameter from EU to the given {@link EnergyType}
 	 */
-	public boolean canUse(double energy, EnergyType type) {
-		return canUse(energy * type.getConversionFromEU());
+	public boolean canUse(int energy, EnergyType type) {
+		return canUse((int) (energy * type.getConversionFromEU()));
 	}
 
-	/**
-	 * removes the given amount of energy if possible
-	 * @return true if energy was used (false means there is not enough energy available)
-	 * @deprecated use {@link #useEnergy(double, EnergyType)}
-	 */
-	@Deprecated
-	public boolean useEnergy(double energy) {
+	private boolean useEnergyDo(int energy) {
 		if(canUse(energy)) {
 			this.energy -= energy;
 			return true;
@@ -160,28 +180,32 @@ public class EnergyStorage {
 		}
 	}
 
-	public boolean useEnergy(double energy, EnergyType type) {
-		return useEnergy(energy * type.getConversionFromEU());
+	/**
+	 * removes the given amount of energy if possible
+	 * @return true if energy was used (false means there is not enough energy available)
+	 */
+	public boolean useEnergy(int energy, EnergyType type) {
+		return useEnergyDo((int) (energy * type.getConversionFromEU()));
 	}
 
 	/**
 	 * @return the capacity remaining until this EnergyStorage is full
 	 */
-	public double getRoomForEnergy() {
+	public int getRoomForEnergy() {
 		return capacity - energy;
 	}
 
 	/**
-	 * same as {@link #hasRoomForEnergy(double)} but converts given energy parameter from EU to the given EnergyType
+	 * same as {@link #hasRoomForEnergy(int)} but converts given energy parameter from EU to the given EnergyType
 	 */
-	public boolean hasRoomForEnergy(double energy, EnergyType type) {
+	public boolean hasRoomForEnergy(int energy, EnergyType type) {
 		return hasRoomForEnergy(energy);
 	}
 
 	/**
 	 * @return returns true if this EnergyStorage has enough space for the given amount of energy
 	 */
-	public boolean hasRoomForEnergy(double energy) {
+	public boolean hasRoomForEnergy(int energy) {
 		return energy <= getRoomForEnergy();
 	}
 
