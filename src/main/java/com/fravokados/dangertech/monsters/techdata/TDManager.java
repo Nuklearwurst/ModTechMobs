@@ -49,14 +49,18 @@ public class TDManager {
 	 */
 	public static void updateScoutedTechLevel(int dimension, ChunkPos coord) {
 		TDChunk data = getChunkData(dimension, coord);
-		if(data.scoutedTechLevel > data.techLevel) {
-			data.scoutedTechLevel = data.techLevel;
-			return;
-		}
-		int step =  (int) (data.techLevel * Settings.TechScanning.SCOUTING_STEP_FACTOR_WORLD);
+		int step = 0;
 		int dif = data.techLevel - data.scoutedTechLevel;
-		if(dif < step) {
-			step = dif;
+		if(dif < 0) {
+			step = -(int) (data.scoutedTechLevel * Settings.TechScanning.SCOUTING_STEP_FACTOR_WORLD);
+			if(dif > step) {
+				step = dif;
+			}
+		} else {
+			step = (int) (data.techLevel * Settings.TechScanning.SCOUTING_STEP_FACTOR_WORLD);
+			if (dif < step) {
+				step = dif;
+			}
 		}
 		setScoutedTechLevel(dimension, coord, data.scoutedTechLevel + step);
 	}
