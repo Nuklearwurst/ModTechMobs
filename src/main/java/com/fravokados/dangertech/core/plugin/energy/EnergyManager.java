@@ -21,6 +21,10 @@ import java.util.*;
 public class EnergyManager {
 
 	private static final Map<EnergyType, IEnergyPlugin> plugins = new EnumMap<>(EnergyType.class);
+
+	/**
+	 * This Set tracks which energy types should ba available. Not every energy type will have an {@link IEnergyPlugin}
+	 */
 	private static final Set<EnergyType> availableEnergyTypes = EnumSet.noneOf(EnergyType.class);
 
 	/**
@@ -31,12 +35,9 @@ public class EnergyManager {
 	 * @return true if the given item can provide energy to the specified energy type
 	 */
 	public static boolean canItemProvideEnergy(@Nullable ItemStack item, EnergyType type, int sinkTier) {
-		if(item == null) return false;
+		if (item == null) return false;
 
-		if(plugins.containsKey(type)) {
-			return plugins.get(type).canItemProvideEnergy(item, sinkTier);
-		}
-		return false;
+		return plugins.containsKey(type) && plugins.get(type).canItemProvideEnergy(item, sinkTier);
 	}
 
 	public static void createItemVariantsForEnergyTypes(List<ItemStack> list, Item item, int meta, Collection<EnergyType> types) {
@@ -149,6 +150,7 @@ public class EnergyManager {
 
 		if(PluginManager.ic2Activated()) {
 			registerEnergyPlugin(EnergyType.IC2, new IC2EnergyPlugin());
+			disableVanillaEnergyType();
 		}
 
 		if(PluginManager.teslaActivated()) {
