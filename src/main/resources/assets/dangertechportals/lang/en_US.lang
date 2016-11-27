@@ -2,13 +2,13 @@
 itemGroup.mindim=DT - Portals
 
 #Blocks
-tile.dangertechportals:mindimPortal.name=Portal Block
-tile.dangertechportals:portalController.name=Portal Controller
-tile.dangertechportals:portalFrame.name=Portal Frame
+tile.dangertechportals:mindim_portal.name=Portal Block
+tile.dangertechportals:portal_controller.name=Portal Controller
+tile.dangertechportals:portal_frame.name=Portal Frame
 
 #Items
-item.dangertechportals:destinationCard.name=Destination Card
-item.dangertechportals:destinationCardMinDim.name=Destination Card Mining Dimension
+item.dangertechportals:destination_card.name=Destination Card
+item.dangertechportals:destination_card_mindim.name=Destination Card Mining Dimension
 
 #Upgrades
 item.dangertechportals:upgrade_reverse.name=Portal Direction Reversing Upgrade

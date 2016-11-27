@@ -1,0 +1,8 @@
+{
+    "parent": "dangertechportals:block/portal_frame",
+	"textures": {
+		"front": "dangertechportals:blocks/portal_frame_front_disabled",
+		"back": "dangertechportals:blocks/portal_frame_back_disabled",
+		"side": "dangertechportals:blocks/portal_frame_side_disabled"
+	}
+}

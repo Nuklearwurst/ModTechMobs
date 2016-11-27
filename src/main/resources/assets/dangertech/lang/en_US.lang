@@ -2,7 +2,7 @@
 itemGroup.nwcore=Dangerous Technology
 
 #Items
-item.dangertech:upgradeTool.name=Upgrade Tool
+item.dangertech:upgrade_tool.name=Upgrade Tool
 
 #EnergyTypes
 tooltip.item.energyType.vanilla=Solid Fuel
@@ -11,6 +11,7 @@ tooltip.item.energyType.ic2=EU Electricity
 tooltip.item.energyType.redstoneflux=Redstone Flux
 tooltip.item.energyType.tesla=Tesla
 tooltip.item.energyType.creative=Creative
+tooltip.item.energyType.forgeenergy=Forge Energy
 
 tooltip.item.energyType.short.vanilla=Fuel
 tooltip.item.energyType.short.invalid=Invalid
@@ -18,5 +19,6 @@ tooltip.item.energyType.short.ic2=EU
 tooltip.item.energyType.short.redstoneflux=RF
 tooltip.item.energyType.short.tesla=Tesla
 tooltip.item.energyType.short.creative=Creativity
+tooltip.item.energyType.short.forgeenergy=Energy
 
 gui.inventory.upgrades=Upgrades

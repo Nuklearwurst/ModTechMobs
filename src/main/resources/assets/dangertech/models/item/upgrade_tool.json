@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "dangertechmobs:items/tdDebugger"
+        "layer0": "dangertech:items/upgrade_tool"
     }
 }

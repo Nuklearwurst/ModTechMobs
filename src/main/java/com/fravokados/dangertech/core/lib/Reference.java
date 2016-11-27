@@ -20,5 +20,5 @@ public class Reference {
 
 	public static final String DEPENDENCIES = "after:" + PluginManager.IC2;
 
-	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.10,1.10.2]";
+	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.11-]";
 }

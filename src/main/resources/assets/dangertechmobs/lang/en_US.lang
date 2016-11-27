@@ -169,25 +169,25 @@ entity.emp_creeper.name=EMP Creeper
 entity.cyber_zombie.name=Cyber Zombie
 
 #Items
-item.dangertechmobs:monsterDetector.name=Monster Detector
-item.dangertechmobs:upgradeTool.name=Upgrade Tool
-item.dangertechmobs:tdAnalyzer.name=Environmental Analyzer
-item.dangertechmobs:quantumSword.name=Corrosive Sword
-item.dangertechmobs:conservationUnit.name=Flying Coffin
+item.dangertechmobs:monster_detector.name=Monster Detector
+item.dangertechmobs:upgrade_tool.name=Upgrade Tool
+item.dangertechmobs:td_analyzer.name=Environmental Analyzer
+item.dangertechmobs:quantum_sword.name=Corrosive Sword
+item.dangertechmobs:conservation_unit.name=Flying Coffin
 item.dangertechmobs:item_cot.name=Camp Bed
-item.dangertechmobs:tdDebugger.name=TM Debug Tool
+item.dangertechmobs:td_debugger.name=TM Debug Tool
 
-item.dangertechmobs:monsterDrop_common.name=Weird Flesh
+item.dangertechmobs:monster_drop_common.name=Weird Flesh
 
 #Analyzer Modes
-item.tdAnalyzer.mode.block=Block
-item.tdAnalyzer.mode.item=Item
-item.tdAnalyzer.mode.player=Player
-item.tdAnalyzer.mode.chunk=Area
+item.td_analyzer.mode.block=Block
+item.td_analyzer.mode.item=Item
+item.td_analyzer.mode.player=Player
+item.td_analyzer.mode.chunk=Area
 
 #Blocks
-tile.dangertechmobs:gateExtender.name=Gate Extender
-tile.dangertechmobs:creativeTechnology.name=Creative Pollution Block
+tile.dangertechmobs:gate_extender.name=Gate Extender
+tile.dangertechmobs:creative_technology.name=Creative Pollution Block
 
 #Entities
 entity.cyber_zombie.name=Cyber Zombie

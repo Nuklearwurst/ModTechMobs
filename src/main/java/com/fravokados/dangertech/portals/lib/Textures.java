@@ -9,9 +9,9 @@ public class Textures {
 
 	public static final String GUI_LOCATION = "textures/gui/";
 
-	public static final ResourceLocation GUI_ENTITY_PORTAL_CONTROLLER = getResourceLocation(GUI_LOCATION + "GuiEntityPortalController.png");
-	public static final ResourceLocation GUI_DESTINATION_CARD_MIN_DIM = getResourceLocation(GUI_LOCATION + "GuiDestinationCardMinDim.png");
-	public static final ResourceLocation GUI_BUTTON_EDIT = getResourceLocation(GUI_LOCATION + "GuiButtonEdit.png");
+	public static final ResourceLocation GUI_ENTITY_PORTAL_CONTROLLER = getResourceLocation(GUI_LOCATION + "gui_entity_portal_controller.png");
+	public static final ResourceLocation GUI_DESTINATION_CARD_MIN_DIM = getResourceLocation(GUI_LOCATION + "gui_destination_card_mindim.png");
+	public static final ResourceLocation GUI_BUTTON_EDIT = getResourceLocation(GUI_LOCATION + "gui_button_edit.png");
 
 
 	public static final String TEXTURE_PREFIX = Reference.ASSET_DIR + ":";
