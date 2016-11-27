@@ -21,7 +21,7 @@ public class GuiModConfigurataion extends GuiConfig {
 
     @SuppressWarnings({ "rawtypes" })
     private static List<IConfigElement> getConfigElements() {
-        List<IConfigElement> list = new ArrayList<IConfigElement>();
+        List<IConfigElement> list = new ArrayList<>();
         list.add(new ConfigElement(ModMiningDimension.config.config.getCategory(Configuration.CATEGORY_GENERAL)));
         return list;
     }

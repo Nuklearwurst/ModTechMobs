@@ -5,14 +5,13 @@ import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
 import com.fravokados.dangertech.core.lib.Strings;
 import com.fravokados.dangertech.core.upgrade.UpgradeHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -20,61 +19,41 @@ import java.util.List;
  */
 public class InventoryUpgrade implements IUpgradeInventory {
 
-	private ItemStack[] inventory;
+	private NonNullList<ItemStack> inventory;
 
 	public InventoryUpgrade(int size) {
-		inventory = new ItemStack[size];
+		inventory = NonNullList.withSize(size, ItemStack.EMPTY);
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return inventory.length;
+		return inventory.size();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		if (slot < inventory.length) {
-			return inventory[slot];
+		if (slot < inventory.size()) {
+			return inventory.get(slot);
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (this.inventory[slot] != null) {
-			ItemStack itemstack;
-
-			if (this.inventory[slot].stackSize <= amount) {
-				itemstack = this.inventory[slot];
-				this.inventory[slot] = null;
-				return itemstack;
-			} else {
-				itemstack = this.inventory[slot].splitStack(amount);
-
-				if (this.inventory[slot].stackSize == 0) {
-					this.inventory[slot] = null;
-				}
-
-				return itemstack;
-			}
-		} else {
-			return null;
-		}
+		return ItemStackHelper.getAndSplit(this.inventory, slot, amount);
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
-		ItemStack itemstack = this.inventory[slot];
-		this.inventory[slot] = null;
-		return itemstack;
+		return ItemStackHelper.getAndRemove(this.inventory, slot);
 	}
 
 	@Override
-	public void setInventorySlotContents(int slot, @Nullable ItemStack itemStack) {
-		this.inventory[slot] = itemStack;
+	public void setInventorySlotContents(int slot, ItemStack itemStack) {
+		this.inventory.set(slot, itemStack);
 
-		if (itemStack != null && itemStack.stackSize > this.getInventoryStackLimit()) {
-			itemStack.stackSize = this.getInventoryStackLimit();
+		if (itemStack.getCount() > this.getInventoryStackLimit()) {
+			itemStack.setCount(this.getInventoryStackLimit());
 		}
 	}
 
@@ -104,11 +83,6 @@ public class InventoryUpgrade implements IUpgradeInventory {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return true;
-	}
-
-	@Override
 	public void openInventory(EntityPlayer player) {
 
 	}
@@ -116,6 +90,11 @@ public class InventoryUpgrade implements IUpgradeInventory {
 	@Override
 	public void closeInventory(EntityPlayer player) {
 
+	}
+
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return true;
 	}
 
 	@Override
@@ -140,9 +119,7 @@ public class InventoryUpgrade implements IUpgradeInventory {
 
 	@Override
 	public void clear() {
-		for(int i = 0; i < inventory.length; i++) {
-			inventory[i] = null;
-		}
+		inventory.replaceAll((x) -> ItemStack.EMPTY);
 	}
 
 	@Override
@@ -151,30 +128,20 @@ public class InventoryUpgrade implements IUpgradeInventory {
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		NBTTagList nbttaglist = new NBTTagList();
+		NBTTagCompound nbtWrapper = new NBTTagCompound();
 
-		for (int i = 0; i < this.inventory.length; ++i) {
-			if (this.inventory[i] != null) {
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setByte("Slot", (byte) i);
-				this.inventory[i].writeToNBT(tag);
-				nbttaglist.appendTag(tag);
-			}
-		}
-		nbt.setTag("ItemsUpgrade", nbttaglist);
+		ItemStackHelper.saveAllItems(nbtWrapper, inventory);
+
+		nbt.setTag("ItemsUpgrade", nbtWrapper);
 		return nbt;
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
-		NBTTagList nbttaglist = nbt.getTagList("ItemsUpgrade", Constants.NBT.TAG_COMPOUND);
-		this.inventory = new ItemStack[this.getSizeInventory()];
+		ItemStackHelper.loadAllItems(nbt.getCompoundTag("ItemsUpgrade"), inventory);
+	}
 
-		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-			NBTTagCompound tag = nbttaglist.getCompoundTagAt(i);
-			byte slot = tag.getByte("Slot");
-			if (slot >= 0 && slot < this.inventory.length) {
-				this.inventory[slot] = ItemStack.loadItemStackFromNBT(tag);
-			}
-		}
+	@Override
+	public boolean isEmpty() {
+		return inventory.stream().allMatch(ItemStack::isEmpty);
 	}
 }

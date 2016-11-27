@@ -39,7 +39,7 @@ public class ShapedOreRecipeEnergyType extends ShapedOreRecipe {
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		ItemStack stackOut = super.getCraftingResult(inv);
-		if(stackOut != null) {
+		if(!stackOut.isEmpty()) {
 			EnergyType type = EnergyManager.getFirstEnergyTypeOfInventory(inv);
 			if(type != null) {
 				type.writeToNBT(ItemUtils.getNBTTagCompound(stackOut));

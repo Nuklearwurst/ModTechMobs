@@ -6,8 +6,9 @@ import com.fravokados.dangertech.core.plugin.ic2.IC2UpgradeIntegration;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Nuklearwurst
@@ -19,8 +20,8 @@ public class UpgradeHelper {
 	}
 
 	@Nullable
-	public static IUpgradeDefinition getUpgradeDefinition(@Nullable ItemStack item) {
-		if(item != null) {
+	public static IUpgradeDefinition getUpgradeDefinition(ItemStack item) {
+		if (!item.isEmpty()) {
 			if (item.getItem() instanceof IUpgrade) {
 				return ((IUpgrade) item.getItem()).getUpgradeDefinition(item);
 			} else if (IC2UpgradeIntegration.isUpgrade(item)) {
@@ -30,17 +31,13 @@ public class UpgradeHelper {
 		return null;
 	}
 
-	public static List<IUpgradeDefinition> getUpgradesFromItems(ItemStack[] items) {
-		List<IUpgradeDefinition> out = new ArrayList<IUpgradeDefinition>();
-		for(ItemStack stack : items) {
-			IUpgradeDefinition def = getUpgradeDefinition(stack);
-			if(def != null) {
-				//always add the UpgradeDefinition
-				//duplicates should stack accorddingly
-				//we can't easily check for equality
-				out.add(def);
-			}
-		}
-		return out;
+	public static List<IUpgradeDefinition> getUpgradesFromItems(List<ItemStack> items) {
+		//always add the UpgradeDefinition
+		//duplicates should stack accorddingly
+		//we can't easily check for equality
+		return items.stream()
+				.map(UpgradeHelper::getUpgradeDefinition)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
 	}
 }

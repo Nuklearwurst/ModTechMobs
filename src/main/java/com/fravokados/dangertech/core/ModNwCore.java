@@ -15,6 +15,7 @@ import com.fravokados.dangertech.core.plugin.PluginManager;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -64,9 +65,9 @@ public class ModNwCore {
 		//init CreativeTab
 		CREATIVE_TABS = new CreativeTabs(Strings.CREATIVE_TAB) {
 			@Override
-			public Item getTabIconItem() {
+			public ItemStack getTabIconItem() {
 				//noinspection ConstantConditions
-				return ModItems.upgradeTool;
+				return new ItemStack(ModItems.upgradeTool);
 			}
 		};
 

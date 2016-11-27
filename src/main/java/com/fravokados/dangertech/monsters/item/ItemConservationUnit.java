@@ -3,7 +3,6 @@ package com.fravokados.dangertech.monsters.item;
 import com.fravokados.dangertech.monsters.entity.EntityConservationUnit;
 import com.fravokados.dangertech.monsters.lib.Strings;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -20,12 +19,13 @@ public class ItemConservationUnit extends ItemTM {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			EntityConservationUnit entity = new EntityConservationUnit(world);
 			entity.setShouldDrop(true); // manually placed units should drop when destroyed
 			entity.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 0, 0);
-			world.spawnEntityInWorld(entity);
+			world.spawnEntity(entity);
+			player.getHeldItem(hand).shrink(1);
 		}
 		return EnumActionResult.SUCCESS;
 	}

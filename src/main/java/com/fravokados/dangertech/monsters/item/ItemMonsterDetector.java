@@ -48,12 +48,12 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 					if (data > TechDataStorage.getInstance().getDangerousPlayerLevel()) { //very nasty
 						TDEffectHandler.applyRandomEffectOnPlayer(player, player.getUniqueID(), itemRand);
 						stack.damageItem(20, player);
-						player.worldObj.createExplosion(null, player.posX, player.posY + 1, player.posZ, 0.4F, false);
+						player.world.createExplosion(null, player.posX, player.posY + 1, player.posZ, 0.4F, false);
 					} else if (data > 0.8 * TechDataStorage.getInstance().getDangerousPlayerLevel()) { //normal effects
 						TDEffectHandler.applyRandomEffectOnPlayer(player, player.getUniqueID(), itemRand);
 						stack.damageItem(10, player);
 					} else { //simple effects
-						int i = evt.getEntity().worldObj.rand.nextInt(4);
+						int i = evt.getEntity().world.rand.nextInt(4);
 						switch (i) {
 							case 0:
 								sendExactWarningMessage(player, CREEPER);
@@ -84,7 +84,7 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 	 */
 	private String getSpecialEntityName(EntityLivingBase e) {
 		String name = e.getName();
-		if (e.worldObj.rand.nextBoolean()) {
+		if (e.world.rand.nextBoolean()) {
 			if (e instanceof EntityCreeper) {
 				name = CREEPER;
 			} else if (e instanceof EntityZombie) {
@@ -97,18 +97,18 @@ public class ItemMonsterDetector extends ItemTM implements IItemAttackTargetList
 	}
 
 	public void sendGenericWarningMessage(EntityPlayer player) {
-		player.addChatMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_generic).setStyle(new Style().setColor(TextFormatting.RED)));
+		player.sendMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_generic).setStyle(new Style().setColor(TextFormatting.RED)));
 	}
 
 	public void sendExactWarningMessage(EntityPlayer player, @Nullable String name) {
 		if (name == null) {
 			sendGenericWarningMessage(player);
 		} else if (CREEPER.equals(name)) {
-			player.addChatMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_creeper, GeneralUtils.random)));
+			player.sendMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_creeper, GeneralUtils.random)));
 		} else if (ZOMBIE_BABY.equals(name)) {
-			player.addChatMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_babyZombie, GeneralUtils.random)));
+			player.sendMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_babyZombie, GeneralUtils.random)));
 		} else {
-			player.addChatMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_1)
+			player.sendMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_1)
 					.appendSibling(new TextComponentString(" " + name + " ")
 							.setStyle(new Style().setColor(TextFormatting.RED)))
 					.appendSibling(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_2)));

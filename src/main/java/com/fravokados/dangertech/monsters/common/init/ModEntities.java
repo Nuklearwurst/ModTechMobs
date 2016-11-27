@@ -1,5 +1,6 @@
 package com.fravokados.dangertech.monsters.common.init;
 
+import com.fravokados.dangertech.core.lib.Reference;
 import com.fravokados.dangertech.monsters.ModTechMobs;
 import com.fravokados.dangertech.monsters.entity.EntityConservationUnit;
 import com.fravokados.dangertech.monsters.entity.EntityCyberZombie;
@@ -7,6 +8,7 @@ import com.fravokados.dangertech.monsters.entity.EntityEMPCreeper;
 import com.fravokados.dangertech.monsters.lib.Strings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -61,11 +63,11 @@ public class ModEntities {
 
 
 	private static void registerCreature(Class<? extends Entity> entity, String name, int back, int fore) {
-		EntityRegistry.registerModEntity(entity, name, getNextLocalId(), ModTechMobs.instance, 80, 3, true, back, fore);
+		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, name), entity, name, getNextLocalId(), ModTechMobs.instance, 80, 3, true, back, fore);
 	}
 
 	private static void registerEntity(Class<? extends Entity> entity, String name) {
-		EntityRegistry.registerModEntity(entity, name, getNextLocalId(), ModTechMobs.instance, 80, 3, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, name), entity, name, getNextLocalId(), ModTechMobs.instance, 80, 3, true);
 	}
 
 	private static int getNextLocalId() {

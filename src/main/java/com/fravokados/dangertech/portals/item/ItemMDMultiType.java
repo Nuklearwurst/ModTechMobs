@@ -4,8 +4,7 @@ import com.fravokados.dangertech.portals.lib.Textures;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
+import net.minecraft.util.NonNullList;
 
 /**
  * @author Nuklearwurst
@@ -17,7 +16,7 @@ public abstract class ItemMDMultiType extends ItemMD {
 	}
 
 	@Override
-	public abstract void getSubItems(Item item, CreativeTabs tabs, List<ItemStack> list);
+	public abstract void getSubItems(Item item, CreativeTabs tabs, NonNullList<ItemStack> list);
 
 	@Override
 	public abstract void registerModels();

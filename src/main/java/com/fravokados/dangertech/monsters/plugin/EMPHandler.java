@@ -35,7 +35,7 @@ public class EMPHandler {
 	public static void applyEMPOnEntity(Entity entity, double x, double y, double z, float strength, int radius) {
 		float factor = (float) (1 / Math.max(1, entity.getDistance(x, y, z)));
 		if (entity instanceof IEmpHandler) {
-			((IEmpHandler) entity).handleEMP(entity.worldObj, x, y, z, strength, radius, factor);
+			((IEmpHandler) entity).handleEMP(entity.world, x, y, z, strength, radius, factor);
 		} else if(entity instanceof EntityPlayer) {
 			for(ItemStack stack : ((EntityPlayer) entity).inventory.mainInventory) {
 				handleItemEMP(stack, entity, x, y, z, strength, radius, factor);

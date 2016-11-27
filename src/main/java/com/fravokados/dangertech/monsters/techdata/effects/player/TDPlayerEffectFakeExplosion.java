@@ -21,7 +21,7 @@ public class TDPlayerEffectFakeExplosion extends TDPlayerEffect {
 	public int applyEffect(int techvalue, UUID uuid, EntityPlayer entity) {
 		//TODO move this to the client
 //		entity.worldObj.spawnParticle("largeexplode", entity.posX, entity.posY, entity.posZ, 0, 0, 0);
-		entity.worldObj.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 4.0F, (1.0F + (entity.worldObj.rand.nextFloat() - entity.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
+		entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 4.0F, (1.0F + (entity.world.rand.nextFloat() - entity.world.rand.nextFloat()) * 0.2F) * 0.7F);
 		return Settings.TDPlayerEffects.FAKE_EXPLOSION_VALUE;
 	}
 }

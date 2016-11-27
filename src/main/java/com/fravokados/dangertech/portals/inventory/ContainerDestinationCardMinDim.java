@@ -30,7 +30,7 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 		super();
 		this.playerInventory = playerInventory;
 		this.heldInventory = heldInventory;
-		this.inventory = new InventoryDestinationCardMinDim(null, "Destination Card");
+		this.inventory = new InventoryDestinationCardMinDim(ItemStack.EMPTY, "Destination Card");
 
 		this.addSlotToContainer(new SlotDestinationCardMinDim(inventory, 0, 56, 46));
 
@@ -72,18 +72,18 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 		if (elementName.equals(NETWORK_ID_ADD)) {
 			//add frame blocks
 			//noinspection ConstantConditions
-			if (inventory.getStackInSlot(0) == null || inventory.getStackInSlot(0).stackSize == 0) {
+			if (inventory.getStackInSlot(0).isEmpty()) {
 				return;
 			}
 			NBTTagCompound tag = ItemUtils.getNBTTagCompound(heldInventory);
 			int count = tag.getInteger("frame_blocks");
 			int maxCount = Settings.MAX_PORTAL_SIZE * 4 - 4;
-			ItemStack items = inventory.decrStackSize(0, Math.max(0, maxCount - count));
-			if (items != null) {
-				if (!(items.getItem() instanceof ItemBlockPortalFrame) || items.getItemDamage() != PortalFrameType.BASIC_FRAME.ordinal()) {
-					this.mergeItemStack(items, 0, 1, false); //error, put items back where they came from
+			ItemStack stack = inventory.decrStackSize(0, Math.max(0, maxCount - count));
+			if (!stack.isEmpty()) {
+				if (!(stack.getItem() instanceof ItemBlockPortalFrame) || stack.getItemDamage() != PortalFrameType.BASIC_FRAME.ordinal()) {
+					this.mergeItemStack(stack, 0, 1, false); //error, put items back where they came from
 				} else {
-					count += items.stackSize;
+					count += stack.getCount();
 					tag.setInteger("frame_blocks", count);
 					//update inventory
 					playerInventory.setInventorySlotContents(playerInventory.currentItem, heldInventory);
@@ -106,7 +106,7 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotId) {
-		ItemStack stackCopy = null;
+		ItemStack stackCopy = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(slotId);
 
 		if (slot != null && slot.getHasStack()) {
@@ -116,34 +116,34 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 
 			if (slotId == 0) { //Our item
 				if (!this.mergeItemStack(stackSlot, 1, this.inventorySlots.size(), true)) { //(inverted merge direction)
-					return null;
+					return ItemStack.EMPTY;
 				}
 				slot.onSlotChange(stackSlot, stackCopy);
 			} else {
 				if (stackSlot.getItem() instanceof ItemBlockPortalFrame && stackSlot.getItemDamage() == PortalFrameType.BASIC_FRAME.ordinal()) {
 					if (!this.mergeItemStack(stackSlot, 0, 1, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				} else if (slotId >= 1 && slotId < 28) {
 					if (!this.mergeItemStack(stackSlot, 28, 37, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				} else if (slotId >= 28 && slotId < 37 && !this.mergeItemStack(stackSlot, 1, 28, false)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 
-			if (stackSlot.stackSize == 0) {
-				slot.putStack(null);
+			if (stackSlot.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
 
-			if (stackSlot.stackSize == stackCopy.stackSize) {
-				return null;
+			if (stackSlot.getCount() == stackCopy.getCount()) {
+				return ItemStack.EMPTY;
 			}
 
-			slot.onPickupFromSlot(player, stackSlot);
+			slot.onTake(player, stackSlot);
 		}
 		return stackCopy;
 	}
@@ -151,7 +151,7 @@ public class ContainerDestinationCardMinDim extends Container implements IElemen
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		if (inventory.getStackInSlot(0) != null) {
+		if (!inventory.getStackInSlot(0).isEmpty()) {
 			player.dropItem(inventory.removeStackFromSlot(0), false);
 		}
 	}

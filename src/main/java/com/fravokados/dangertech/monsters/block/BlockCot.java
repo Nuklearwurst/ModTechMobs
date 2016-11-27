@@ -17,6 +17,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Biomes;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
@@ -53,7 +54,7 @@ public class BlockCot extends BlockTM {
 
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (world.isRemote) {
 			return true;
 		} else {
@@ -66,13 +67,13 @@ public class BlockCot extends BlockTM {
 				}
 			}
 
-			if (world.provider.canRespawnHere() && world.getBiomeGenForCoords(pos) != Biomes.HELL) {
+			if (world.provider.canRespawnHere() && world.getBiome(pos) != Biomes.HELL) {
 				//Look for already sleeping players
 				if (state.getValue(OCCUPIED)) {
 					EntityPlayer entityplayer = this.getPlayerInBed(world, pos);
 
 					if (entityplayer != null) {
-						player.addChatComponentMessage(new TextComponentTranslation("tile.bed.occupied"));
+						player.sendMessage(new TextComponentTranslation("tile.bed.occupied"));
 						return true;
 					}
 					//in case the bed is in an invalid state (no player found)
@@ -89,9 +90,9 @@ public class BlockCot extends BlockTM {
 					return true;
 				} else {
 					if (result == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW) {
-						player.addChatComponentMessage(new TextComponentTranslation("tile.bed.noSleep"));
+						player.sendMessage(new TextComponentTranslation("tile.bed.noSleep"));
 					} else if (result == EntityPlayer.SleepResult.NOT_SAFE) {
-						player.addChatComponentMessage(new TextComponentTranslation("tile.bed.notSafe"));
+						player.sendMessage(new TextComponentTranslation("tile.bed.notSafe"));
 					}
 
 					return true;
@@ -112,13 +113,14 @@ public class BlockCot extends BlockTM {
 	}
 
 	@Override
-	public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, Entity player) {
+	public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity player) {
 		return true;
 	}
 
+	@Nullable
 	private EntityPlayer getPlayerInBed(World worldIn, BlockPos pos) {
 		for (EntityPlayer entityplayer : worldIn.playerEntities) {
-			if (entityplayer.isPlayerSleeping() && entityplayer.playerLocation.equals(pos)) {
+			if (entityplayer.isPlayerSleeping() && entityplayer.bedLocation.equals(pos)) {
 				return entityplayer;
 			}
 		}
@@ -139,18 +141,18 @@ public class BlockCot extends BlockTM {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos p_189540_5_) {
 		EnumFacing enumfacing = state.getValue(FACING);
 
 		if (state.getValue(PART) == BlockBed.EnumPartType.HEAD) {
-			if (worldIn.getBlockState(pos.offset(enumfacing.getOpposite())).getBlock() != this) {
-				worldIn.setBlockToAir(pos);
+			if (world.getBlockState(pos.offset(enumfacing.getOpposite())).getBlock() != this) {
+				world.setBlockToAir(pos);
 			}
-		} else if (worldIn.getBlockState(pos.offset(enumfacing)).getBlock() != this) {
-			worldIn.setBlockToAir(pos);
+		} else if (world.getBlockState(pos.offset(enumfacing)).getBlock() != this) {
+			world.setBlockToAir(pos);
 
-			if (!worldIn.isRemote) {
-				this.dropBlockAsItem(worldIn, pos, state, 0);
+			if (!world.isRemote) {
+				this.dropBlockAsItem(world, pos, state, 0);
 			}
 		}
 	}
@@ -160,7 +162,9 @@ public class BlockCot extends BlockTM {
 	 */
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return state.getValue(PART) == BlockBed.EnumPartType.HEAD ? null : ModItems.item_cot;
+		//ModItems.item_cot is null
+		//noinspection ConstantConditions
+		return state.getValue(PART) == BlockBed.EnumPartType.HEAD ? Items.AIR : ModItems.item_cot;
 	}
 
 	/**

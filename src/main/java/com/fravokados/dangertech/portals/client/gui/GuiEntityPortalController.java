@@ -125,7 +125,7 @@ public class GuiEntityPortalController extends GuiContainer {
 	}
 
 	private int getEnergyScaled() {
-		return (int) (te.getEnergyStored() * 55 / te.getMaxEnergyStored());
+		return te.getEnergyStored() * 55 / te.getMaxEnergyStored();
 	}
 
 	@Override
@@ -147,20 +147,20 @@ public class GuiEntityPortalController extends GuiContainer {
 	 */
 	private void drawTooltips(int x, int y) {
 		if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 199, guiLeft + 199 + 16, guiTop + 15, guiTop + 15 + 55)) {
-			List<String> list = new ArrayList<String>();
+			List<String> list = new ArrayList<>();
 			final String energyTypeShort = te.getEnergyType().getColorString() + Strings.translate(te.getEnergyType().getUnlocalizedNameShort());
-			list.add(TextFormatting.GRAY + "" + (int) te.getEnergyStored() + " / " + te.getMaxEnergyStored() + " " + energyTypeShort + TextFormatting.RESET);
+			list.add(TextFormatting.GRAY + "" + te.getEnergyStored() + " / " + te.getMaxEnergyStored() + " " + energyTypeShort + TextFormatting.RESET);
 			drawHoveringText(list, x, y, fontRendererObj);
 		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 55, guiLeft + 190, guiTop + 40, guiTop + 50)) {
-			List<String> list = new ArrayList<String>();
+			List<String> list = new ArrayList<>();
 			list.add(Strings.translate(te.getState().getTranslationDetail()));
 			drawHoveringText(list, x, y, fontRendererObj);
 		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 55, guiLeft + 190, guiTop + 50, guiTop + 60)) {
-			List<String> list = new ArrayList<String>();
+			List<String> list = new ArrayList<>();
 			list.add((te.getLastError() == TileEntityPortalControllerEntity.Error.NO_ERROR ? TextFormatting.GREEN : TextFormatting.RED) + te.getLastError().getTranslationDetail() + TextFormatting.RESET);
 			drawHoveringText(list, x, y, fontRendererObj);
 		} else if (GeneralUtils.are2DCoordinatesInsideArea(x, y, guiLeft + 179, guiLeft + 187, guiTop + 18, guiTop + 26)) {
-			List<String> list = new ArrayList<String>();
+			List<String> list = new ArrayList<>();
 			list.add(Strings.translate(Strings.Gui.CONTROLLER_EDIT_NAME_HOVER));
 			drawHoveringText(list, x, y, fontRendererObj);
 		}

@@ -45,7 +45,7 @@ public class PortalCameraAnimator /*implements ICameraAnimator*/ {
 		// This animator is incomplete and broken. It's a rough approximation I made at 4AM one night.
 		// However, it's also pretty cool looking, so I'm not going to bother fixing it. :P
 		// Note: Needs base yaw and pitch of view
-		if (dimId != player.worldObj.provider.getDimension()) return;
+		if (dimId != player.world.provider.getDimension()) return;
 
 		// A standard accumulator trick to force periodic rechecks of the y position. Probably superfluous.
 		if ((accum += dt) >= 1000) {

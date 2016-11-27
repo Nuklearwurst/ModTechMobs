@@ -79,14 +79,14 @@ public class BlockUtils {
 
 	/**
 	 * drops all items contained in the given inventory into the world
-	 * @param pos the position the items get sppawned at
+	 * @param pos the position the items get spawned at
 	 */
 	public static void dropInventory(World world, IInventory inventory, BlockPos pos) {
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack itemStack = inventory.getStackInSlot(i);
 
-			if (itemStack != null && itemStack.stackSize > 0) {
+			if (!itemStack.isEmpty()) {
 				Random rand = new Random();
 
 				float dX = rand.nextFloat() * 0.8F + 0.1F;
@@ -97,15 +97,15 @@ public class BlockUtils {
 
 				if (itemStack.hasTagCompound()) {
 					//noinspection ConstantConditions
-					entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
+					entityItem.getEntityItem().setTagCompound(itemStack.getTagCompound().copy());
 				}
 
 				float factor = 0.05F;
 				entityItem.motionX = rand.nextGaussian() * factor;
 				entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 				entityItem.motionZ = rand.nextGaussian() * factor;
-				world.spawnEntityInWorld(entityItem);
-				itemStack.stackSize = 0;
+				world.spawnEntity(entityItem);
+				itemStack.setCount(0);
 			}
 		}
 	}
@@ -114,7 +114,7 @@ public class BlockUtils {
 		if(inv != null) {
 			for (int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
-				if (stack != null) {
+				if (!stack.isEmpty()) {
 					list.add(stack);
 				}
 			}

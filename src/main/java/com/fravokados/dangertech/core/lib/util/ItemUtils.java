@@ -8,15 +8,41 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author Nuklearwurst
  */
 public class ItemUtils {
+
+	/**
+	 * Creates a {@link NonNullList} containing the given items.
+	 * <br/>
+	 * These must not be {@code null}
+	 * @param stacks Items to be inserted
+	 * @return new {@link NonNullList}
+	 */
+	public static NonNullList<ItemStack> createNonNullList(ItemStack ... stacks)
+	{
+		NonNullList<ItemStack> list = NonNullList.create();
+		Collections.addAll(list, stacks);
+		return list;
+	}
+
+	/**
+	 * Checks whether the given inventory is empty
+	 * @param inventory itemstack list
+	 * @return true if the given inventory contains no items
+	 */
+	public static boolean isEmpty(NonNullList<ItemStack> inventory) {
+		return inventory.stream().allMatch(ItemStack::isEmpty);
+	}
 
 	/**
 	 * gets the {@link NBTTagCompound} of an {@link ItemStack}, generates one if not available
@@ -70,13 +96,16 @@ public class ItemUtils {
 	 * reads the content of an inventory from the given NBTTagList
 	 * @param inventory the inventory the items should get added to
 	 * @param nbtTagList the Taglist containing the saved itemstacks
+	 *
+	 * @deprecated use {@link net.minecraft.inventory.ItemStackHelper#loadAllItems(NBTTagCompound, NonNullList)} instead
 	 */
+	@Deprecated
 	public static void readInventoryContentsFromNBT(IInventory inventory, NBTTagList nbtTagList) {
 		for (int i = 0; i < nbtTagList.tagCount(); ++i) {
 			NBTTagCompound tag = nbtTagList.getCompoundTagAt(i);
 			byte slot = tag.getByte("Slot");
 			if (slot >= 0 && slot < inventory.getSizeInventory()) {
-				inventory.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(tag));
+				inventory.setInventorySlotContents(slot, new ItemStack(tag));
 			}
 		}
 	}
@@ -85,10 +114,13 @@ public class ItemUtils {
 	 * saves the content of an inventory to the given NBTTagList
 	 * @param inventory the inventory to be saved
 	 * @param nbtTagList the taglist the itemstacks get saved to
+	 *
+	 * @deprecated use {@link net.minecraft.inventory.ItemStackHelper#saveAllItems(NBTTagCompound, NonNullList)} instead
 	 */
+	@Deprecated
 	public static void writeInventoryContentsToNBT(IInventory inventory, NBTTagList nbtTagList) {
 		for (int i = 0; i < inventory.getSizeInventory(); ++i) {
-			if (inventory.getStackInSlot(i) != null) {
+			if (!inventory.getStackInSlot(i).isEmpty()) {
 				NBTTagCompound tag = new NBTTagCompound();
 				tag.setByte("Slot", (byte) i);
 				//noinspection ConstantConditions
@@ -100,24 +132,27 @@ public class ItemUtils {
 
 	/**
 	 * a default implementation for decrStackSize of IInventory
+	 *
+	 * @deprecated use {@link net.minecraft.inventory.ItemStackHelper#getAndSplit(List, int, int)} instead
 	 */
+	@Deprecated
 	public static ItemStack decrStackSize(IInventory inventory, int slot, int amount) {
 		ItemStack stackInSlot = inventory.getStackInSlot(slot);
-		if (stackInSlot != null) {
+		if (!stackInSlot.isEmpty()) {
 			ItemStack itemstack;
-			if (stackInSlot.stackSize <= amount) {
+			if (stackInSlot.getCount() <= amount) {
 				itemstack = stackInSlot;
-				inventory.setInventorySlotContents(slot, null);
+				inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
 				return itemstack;
 			} else {
 				itemstack = stackInSlot.splitStack(amount);
-				if (stackInSlot.stackSize == 0) {
-					inventory.setInventorySlotContents(slot, null);
+				if (stackInSlot.getCount() == 0) {
+					inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
 				}
 				return itemstack;
 			}
 		} else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -143,7 +178,7 @@ public class ItemUtils {
 			index = 3;
 		}
 
-		Map<Character, ItemStack> map = Maps.<Character, ItemStack>newHashMap();
+		Map<Character, ItemStack> map = Maps.newHashMap();
 
 		while (index < recipeComponents.length) {
 			Character character = (Character) recipeComponents[index];
@@ -166,8 +201,8 @@ public class ItemUtils {
 		for (int i = 0; i < width * height; ++i) {
 			char character = inputList.charAt(i);
 
-			if (map.containsKey(Character.valueOf(character))) {
-				outputStacks[i] = map.get(Character.valueOf(character)).copy();
+			if (map.containsKey(character)) {
+				outputStacks[i] = map.get(character).copy();
 			} else {
 				outputStacks[i] = null;
 			}

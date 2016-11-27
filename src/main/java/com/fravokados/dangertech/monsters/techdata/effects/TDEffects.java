@@ -9,6 +9,7 @@ import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffectPotion;
 import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffectPotion;
 import com.fravokados.dangertech.core.lib.util.ChatUtils;
+import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.monsters.lib.Strings;
 import com.fravokados.dangertech.monsters.lib.util.LogHelperTM;
 import com.fravokados.dangertech.monsters.techdata.effects.chunk.TDChunkEffectRain;
@@ -39,17 +40,17 @@ public class TDEffects implements TDEffectRegistry {
 	/**
 	 * effects that are applied to mods on spawn
 	 */
-	private final List<TDMobEffect> mobEffects = new ArrayList<TDMobEffect>();
+	private final List<TDMobEffect> mobEffects = new ArrayList<>();
 	
 	/**
 	 * effects that are applied randomly to players with high techvalue
 	 */
-	private final List<TDPlayerEffect> playerEffects = new ArrayList<TDPlayerEffect>();
+	private final List<TDPlayerEffect> playerEffects = new ArrayList<>();
 	
 	/**
 	 * effects that are applied randomly to chunks with high techvalues
 	 */
-	private final List<TDChunkEffect> worldEffects = new ArrayList<TDChunkEffect>();
+	private final List<TDChunkEffect> worldEffects = new ArrayList<>();
 
 
 	/**
@@ -95,7 +96,7 @@ public class TDEffects implements TDEffectRegistry {
 	 */
 	@Override
 	public List<TDMobEffect> getUsableMobEffects(int techData, EntityLivingBase entityLiving) {
-		List<TDMobEffect> out = new ArrayList<TDMobEffect>();
+		List<TDMobEffect> out = new ArrayList<>();
 		for(TDMobEffect eff : mobEffects) {
 			if(eff.isUsable(techData, entityLiving)) {
 				out.add(eff);
@@ -123,7 +124,7 @@ public class TDEffects implements TDEffectRegistry {
 	 */
 	@Override
 	public List<TDChunkEffect> getUsableWorldEffects(int level, World world) {
-		List<TDChunkEffect> out = new ArrayList<TDChunkEffect>();
+		List<TDChunkEffect> out = new ArrayList<>();
 		for(TDChunkEffect eff : worldEffects) {
 			if(eff.isUsable(level, world)) {
 				out.add(eff);
@@ -136,14 +137,14 @@ public class TDEffects implements TDEffectRegistry {
 	 * registers mod effects
 	 */
 	public static void init() {
-		getInstance().addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
+		getInstance().addMobEffect(new TDMobEffectEquipment(ItemUtils.createNonNullList(
 				new ItemStack(Items.DIAMOND_SWORD),
 				new ItemStack(Items.SHIELD),
 				new ItemStack(Items.DIAMOND_HELMET),
 				new ItemStack(Items.DIAMOND_CHESTPLATE),
 				new ItemStack(Items.DIAMOND_LEGGINGS),
 				new ItemStack(Items.DIAMOND_BOOTS)
-		}, false, false, new int[]{400, 50, 100, 400, 200, 200}).setDoesArmorDrop(false));
+		), false, false, new int[]{400, 50, 100, 400, 200, 200}).setDoesArmorDrop(false));
 		getInstance().addMobEffect(new TDMobEffectChargedCreeper());
 		getInstance().addMobEffect(new TDMobEffectPotion(300, 5, 1500, 1));
 		getInstance().addMobEffect(new TDMobEffectPotion(100, 8, 1500, 1));

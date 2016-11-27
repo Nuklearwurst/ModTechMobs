@@ -24,17 +24,17 @@ public class CommandTechDataItem extends SubCommand {
 	public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if(sender instanceof EntityPlayer) {
 			ItemStack mainHand = ((EntityPlayer) sender).getHeldItemMainhand();
-			if(mainHand != null) {
-				sender.addChatMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItem, TDValues.getInstance().getTechDataForItem(mainHand)));
+			if(!mainHand.isEmpty()) {
+				sender.sendMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItem, TDValues.getInstance().getTechDataForItem(mainHand)));
 			} else {
-				sender.addChatMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItemNoItem));
+				sender.sendMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItemNoItem));
 			}
 
 			ItemStack offHand = ((EntityPlayer) sender).getHeldItemOffhand();
-			if(offHand != null) {
-				sender.addChatMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItem, TDValues.getInstance().getTechDataForItem(offHand)));
+			if(!offHand.isEmpty()) {
+				sender.sendMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItem, TDValues.getInstance().getTechDataForItem(offHand)));
 			} else {
-				sender.addChatMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItemNoItem));
+				sender.sendMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItemNoItem));
 			}
 		} else {
 			CommandHelpers.throwWrongUsage(sender, this);

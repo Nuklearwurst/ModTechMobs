@@ -306,7 +306,7 @@ public class TechDataStorage extends WorldSavedData {
 	 */
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent evt) {
 		//add player to techPlayersList if necessary
-		if(!evt.player.worldObj.isRemote) {
+		if(!evt.player.world.isRemote) {
 			getInstance().addDangerousPlayerIfNeeded(evt.player.getUniqueID(), TDManager.getPlayerScoutedTechLevel(evt.player));
 		}
 	}
@@ -317,7 +317,7 @@ public class TechDataStorage extends WorldSavedData {
 	 */
 	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent evt) {
 		//remove player from techPlayers list
-		if(!evt.player.worldObj.isRemote) {
+		if(!evt.player.world.isRemote) {
 			getInstance().removeDangerousPlayer(evt.player.getUniqueID());
 		}
 	}

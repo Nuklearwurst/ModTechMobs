@@ -75,9 +75,9 @@ public class ContainerEntityPortalController extends Container implements IEleme
 			if (this.lastError != te.getLastError()) {
 				crafter.sendProgressBarUpdate(this, 2, te.getLastError().ordinal());
 			}
-			if (this.lastEnergyStored != (int) te.getEnergyStored()) {
+			if (this.lastEnergyStored != te.getEnergyStored()) {
 				if (crafter instanceof EntityPlayerMP) {
-					ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, (int) te.getEnergyStored()), (EntityPlayerMP) crafter);
+					ModMDNetworkManager.INSTANCE.sendTo(new MessageContainerIntegerUpdate((byte) 0, te.getEnergyStored()), (EntityPlayerMP) crafter);
 				}
 			}
 			if (this.lastMaxEnergyStored != te.getMaxEnergyStored()) {
@@ -98,7 +98,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 		}
 		this.lastState = te.getState();
 		this.lastError = te.getLastError();
-		this.lastEnergyStored = (int) te.getEnergyStored();
+		this.lastEnergyStored = te.getEnergyStored();
 		this.lastMaxEnergyStored = te.getMaxEnergyStored();
 		this.lastFlags = te.getUpgradeTrackerFlags();
 		this.lastType = te.getEnergyType();
@@ -131,7 +131,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotId) {
-		ItemStack stackCopy = null;
+		ItemStack stackCopy = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(slotId);
 
 		if (slot != null && slot.getHasStack()) {
@@ -141,46 +141,46 @@ public class ContainerEntityPortalController extends Container implements IEleme
 
 			if (slotId == 3) { //Destination Card Output
 				if (!this.mergeItemStack(stackSlot, 4, this.inventorySlots.size(), true)) { //(inverted merge direction)
-					return null;
+					return ItemStack.EMPTY;
 				}
 				slot.onSlotChange(stackSlot, stackCopy);
 			} else if (slotId < 4) { //all other machine inventory slots
 				if (!this.mergeItemStack(stackSlot, 4, this.inventorySlots.size(), false)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			} else { //from player:
 				if (stackSlot.getItem() instanceof ItemDestinationCard) {
 					//Destination Card
 					if (!this.mergeItemStack(stackSlot, 0, 1, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				} else if (EnergyManager.canItemProvideEnergy(stackSlot, te.getEnergyType(), te.getSinkTier())) {
 					//Fuel Item
 					if (!this.mergeItemStack(stackSlot, 1, 2, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				} else if (slotId >= 4 && slotId < 31) {
 					//To Hotbar
 					if (!this.mergeItemStack(stackSlot, 31, 40, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				} else if (slotId >= 31 && slotId < 40 && !this.mergeItemStack(stackSlot, 4, 31, false)) {
 					//From hotbar to player main inventory
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 
-			if (stackSlot.stackSize == 0) {
-				slot.putStack(null);
+			if (stackSlot.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
 
-			if (stackSlot.stackSize == stackCopy.stackSize) {
-				return null;
+			if (stackSlot.getCount() == stackCopy.getCount()) {
+				return ItemStack.EMPTY;
 			}
 
-			slot.onPickupFromSlot(player, stackSlot);
+			slot.onTake(player, stackSlot);
 		}
 
 		return stackCopy;
@@ -188,7 +188,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return this.te.isUseableByPlayer(player);
+		return this.te.isUsableByPlayer(player);
 	}
 
 	@Override

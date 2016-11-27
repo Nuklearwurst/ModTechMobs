@@ -19,7 +19,7 @@ public class CommandTechDataRead extends SubCommand {
 	@Override
 	public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) {
 		TDChunk chunk = CommandTechData.getChunkData(sender);
-		sender.addChatMessage(new TextComponentTranslation("chat.command.techdata.level", chunk.techLevel));
-		sender.addChatMessage(new TextComponentTranslation("chat.command.techdata.scouted", chunk.scoutedTechLevel));
+		sender.sendMessage(new TextComponentTranslation("chat.command.techdata.level", chunk.techLevel));
+		sender.sendMessage(new TextComponentTranslation("chat.command.techdata.scouted", chunk.scoutedTechLevel));
 	}
 }

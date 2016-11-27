@@ -37,12 +37,12 @@ public class PortalConstructor {
 	}
 
 	public static Result createPortalMultiBlock(World world, BlockPos pos) {
-		List<IEntityPortalMandatoryComponent> frames = new ArrayList<IEntityPortalMandatoryComponent>();
+		List<IEntityPortalMandatoryComponent> frames = new ArrayList<>();
 		return createPortalMultiBlock(world, pos, frames, null);
 	}
 
 	public static Result createPortalMultiBlock(World world, BlockPos pos, @Nullable BlockPos excluding) {
-		List<IEntityPortalMandatoryComponent> frames = new ArrayList<IEntityPortalMandatoryComponent>();
+		List<IEntityPortalMandatoryComponent> frames = new ArrayList<>();
 		return createPortalMultiBlock(world, pos, frames, excluding);
 	}
 
@@ -53,7 +53,7 @@ public class PortalConstructor {
 	public static Result createPortalMultiBlock(World world, BlockPos pos, List<IEntityPortalMandatoryComponent> frames, @Nullable BlockPos excluding) {
 		LogHelperMD.logDev("Searching for Portal MultiBlock");
 		//settings up
-		SimpleObjectReference<TileEntityPortalControllerEntity> controller = new SimpleObjectReference<TileEntityPortalControllerEntity>();
+		SimpleObjectReference<TileEntityPortalControllerEntity> controller = new SimpleObjectReference<>();
 		PortalMetrics metrics = new PortalMetrics();
 		//Finding connected Blocks
 		Result result = createPortalMultiBlock(world, pos, frames, controller, metrics, excluding);
@@ -120,7 +120,7 @@ public class PortalConstructor {
 	private static Result createPortalMultiBlock(World world, BlockPos pos, List<IEntityPortalMandatoryComponent> frames, SimpleObjectReference<TileEntityPortalControllerEntity> controller, PortalMetrics metrics, @Nullable BlockPos excluding) {
 		assert pos != excluding;
 
-		Stack<TileEntity> blocksToScan = new Stack<TileEntity>();
+		Stack<TileEntity> blocksToScan = new Stack<>();
 		TileEntity te = world.getTileEntity(pos);
 		if (te == null || !(te instanceof IEntityPortalComponent)) {
 			return Result.ERROR_NO_PORTAL_BLOCK;

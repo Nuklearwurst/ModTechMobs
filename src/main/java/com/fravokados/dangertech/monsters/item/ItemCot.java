@@ -24,7 +24,8 @@ public class ItemCot extends ItemTM {
 
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos blockPosFeet, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos blockPosFeet, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (world.isRemote) {
 			return EnumActionResult.SUCCESS;
 		} else if (side != EnumFacing.UP) {
@@ -36,7 +37,7 @@ public class ItemCot extends ItemTM {
 				blockPosFeet = blockPosFeet.up();
 			}
 
-			int fourWayRotationInt = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			int fourWayRotationInt = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			EnumFacing rotation = EnumFacing.getHorizontal(fourWayRotationInt);
 			BlockPos blockPosHead = blockPosFeet.offset(rotation);
 
@@ -54,7 +55,7 @@ public class ItemCot extends ItemTM {
 						world.setBlockState(blockPosHead, blockStateHead, 3);
 					}
 
-					--stack.stackSize;
+					stack.shrink(1);
 					return EnumActionResult.SUCCESS;
 				} else {
 					return EnumActionResult.FAIL;

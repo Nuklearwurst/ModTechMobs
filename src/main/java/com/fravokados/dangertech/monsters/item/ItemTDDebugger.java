@@ -26,31 +26,31 @@ public class ItemTDDebugger extends ItemTM {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
 		TileEntity te = world.getTileEntity(pos);
 		if(te != null) {
 			if(te instanceof IFacingSix) {
-				player.addChatComponentMessage(new TextComponentString("IFacingSixTile. Facing: " + ((IFacingSix) te).getFacing() + ", isClient=" + world.isRemote));
+				player.sendMessage(new TextComponentString("IFacingSixTile. Facing: " + ((IFacingSix) te).getFacing() + ", isClient=" + world.isRemote));
 			}
 			if(!world.isRemote) {
-				player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.debuggerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
+				player.sendMessage(new TextComponentTranslation(Strings.Chat.debuggerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
 			}
 		} else {
 			if(!world.isRemote) {
-				player.addChatMessage(new TextComponentTranslation(Strings.Chat.debuggerTileEntityNotFound));
+				player.sendMessage(new TextComponentTranslation(Strings.Chat.debuggerTileEntityNotFound));
 			}
 		}
 		return EnumActionResult.SUCCESS;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) {
-			player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.debuggerPlayerTechLevel, TDManager.getPlayerTechLevel(player)));
-			player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.debuggerPlayerScouted, TDManager.getPlayerScoutedTechLevel(player)));
-			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+			player.sendMessage(new TextComponentTranslation(Strings.Chat.debuggerPlayerTechLevel, TDManager.getPlayerTechLevel(player)));
+			player.sendMessage(new TextComponentTranslation(Strings.Chat.debuggerPlayerScouted, TDManager.getPlayerScoutedTechLevel(player)));
+			return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 		}
-		return new ActionResult<>(EnumActionResult.PASS, stack);
+		return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
 	}
 }

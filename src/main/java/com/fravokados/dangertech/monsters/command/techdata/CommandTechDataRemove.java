@@ -41,7 +41,7 @@ public class CommandTechDataRemove extends SubCommand {
 			} else {
 				TDChunk chunk = CommandTechData.getChunkData(sender);
 				chunk.techLevel -= CommandBase.parseInt(args[1]);
-				sender.addChatMessage(new TextComponentString("TechLevel in this Chunk: " + chunk.techLevel));
+				sender.sendMessage(new TextComponentString("TechLevel in this Chunk: " + chunk.techLevel));
 			}
 		}
 	}
@@ -59,7 +59,7 @@ public class CommandTechDataRemove extends SubCommand {
 			} else {
 				TDChunk chunk = CommandTechData.getChunkData(sender);
 				chunk.scoutedTechLevel -= CommandBase.parseInt(args[1]);
-				sender.addChatMessage(new TextComponentString("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
+				sender.sendMessage(new TextComponentString("Scouted TechLevel in this Chunk: " + chunk.scoutedTechLevel));
 			}
 		}
 	}

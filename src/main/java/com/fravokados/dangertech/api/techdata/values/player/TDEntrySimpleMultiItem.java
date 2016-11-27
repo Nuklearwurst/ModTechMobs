@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class TDEntrySimpleMultiItem extends TDEntryItem {
 
-	private Map<Integer, Integer> items = new HashMap<Integer, Integer>();
+	private Map<Integer, Integer> items = new HashMap<>();
 
 	public TDEntrySimpleMultiItem() {
 

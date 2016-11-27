@@ -8,6 +8,7 @@ import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalContro
 import com.fravokados.dangertech.portals.block.types.PortalFrameType;
 import com.fravokados.dangertech.portals.configuration.Settings;
 import com.fravokados.dangertech.portals.item.ItemDestinationCard;
+import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;
 import com.fravokados.dangertech.portals.lib.util.RotationUtils;
 import com.fravokados.dangertech.portals.lib.util.TeleportUtils;
@@ -41,7 +42,7 @@ public class PortalManager extends WorldSavedData {
 	public static final int PORTAL_NO_SPAWN_FOUND = -6;
 
 
-	private final Map<Integer, BlockPositionDim> entityPortals = new HashMap<Integer, BlockPositionDim>();
+	private final Map<Integer, BlockPositionDim> entityPortals = new HashMap<>();
 	private int entityPortalCounter = 0;
 
 	public PortalManager(String s) {
@@ -169,12 +170,12 @@ public class PortalManager extends WorldSavedData {
 
 				if (!targetMetrics.isHorizontal()) {
 					//prevent player spawning with head inside portal frame
-					posTop = MathHelper.clamp_double(posTop, minUp, maxUp - entity.height); //"Top" Axis
+					posTop = MathHelper.clamp(posTop, minUp, maxUp - entity.height); //"Top" Axis
 				} else {
 					//compensate problems with max/minUp on horizontal portals
-					posTop = MathHelper.clamp_double(posTop, minUp + 1.5, maxUp - 0.5); //"Top" Axis
+					posTop = MathHelper.clamp(posTop, minUp + 1.5, maxUp - 0.5); //"Top" Axis
 				}
-				posSide = MathHelper.clamp_double(posSide, minSide, maxSide); //"Side" Axis
+				posSide = MathHelper.clamp(posSide, minSide, maxSide); //"Side" Axis
 
 				//target coordinate system
 				double x = targetMetrics.originX + targetMetrics.top.getFrontOffsetX() * posTop + sideAxisTarget.getFrontOffsetX() * posSide;
@@ -306,7 +307,7 @@ public class PortalManager extends WorldSavedData {
 		TileEntity te = worldServer.getTileEntity(controllerPos);
 		if (te != null && te instanceof TileEntityPortalControllerEntity) {
 			if (Settings.PORTAL_SPAWN_WITH_CARD) {
-				((TileEntityPortalControllerEntity) te).setInventorySlotContents(0, ItemDestinationCard.fromDestination(parent, ((TileEntityPortalControllerEntity) te).getDisplayName().getUnformattedText()));
+				((TileEntityPortalControllerEntity) te).setInventorySlotContents(0, ItemDestinationCard.fromDestination(parent, te.getDisplayName() != null ? te.getDisplayName().getUnformattedText() : Strings.Tooltip.UNKNOWN_DESTINATION));
 			}
 			((TileEntityPortalControllerEntity) te).onBlockPostPlaced(te.getWorld(), controllerPos, worldServer.getBlockState(controllerPos));
 			if (parentTile instanceof IFacingSix) {

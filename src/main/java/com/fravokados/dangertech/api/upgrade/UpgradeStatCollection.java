@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class UpgradeStatCollection {
 
-	private Map<String, Object> upgrades = new HashMap<String, Object>();
+	private Map<String, Object> upgrades = new HashMap<>();
 
 	public UpgradeStatCollection() {
 

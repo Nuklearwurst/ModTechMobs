@@ -34,7 +34,7 @@ public class IC2EMPIntegration {
 	 * @param factor 1 / distance to entity
 	 */
 	public static boolean handleItemEMP(ItemStack stack, Entity entity, double x, double y, double z, float strength, int radius, float factor) {
-		if(PluginManager.ic2Activated() && stack != null) {
+		if(PluginManager.ic2Activated() && !stack.isEmpty()) {
 			/*
 			if(stack.getItem() instanceof IElectricItem) {
 				ElectricItem.manager.discharge(stack, (factor * strength / 10) * ElectricItem.manager.getCharge(stack) + factor * strength * 100, 4, true, false, false);

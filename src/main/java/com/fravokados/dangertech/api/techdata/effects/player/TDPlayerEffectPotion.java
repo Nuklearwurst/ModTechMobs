@@ -52,7 +52,7 @@ public class TDPlayerEffectPotion extends TDPlayerEffect {
 		entity.addPotionEffect(new PotionEffect(potion, duration, multiplier));
 		if(chatMessage != null) {
 			chatMessage.getStyle().setItalic(true);
-			entity.addChatComponentMessage(chatMessage);
+			entity.sendMessage(chatMessage);
 		}
 		return value;
 	}

@@ -35,14 +35,14 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (getItemMode(stack) == Mode.BLOCK) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (getItemMode(player.getHeldItem(hand)) == Mode.BLOCK) {
 			if (!world.isRemote) {
 				TileEntity te = world.getTileEntity(pos);
 				if (te != null) {
-					player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
+					player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
 				} else {
-					player.addChatMessage(new TextComponentTranslation(Strings.Chat.analyzerTileEntityNotFound));
+					player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerTileEntityNotFound));
 				}
 			}
 			return EnumActionResult.SUCCESS;
@@ -51,7 +51,8 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (!world.isRemote && player.isSneaking()) {
 			int mode = getItemModeInt(stack);
 			mode = (mode + 1) % Mode.values().length;
@@ -59,15 +60,15 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		} else {
 			if (!world.isRemote && getItemMode(stack) == Mode.CHUNK) {
-				player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerChunk, TDManager.getScoutedTechLevel(player.getEntityWorld().provider.getDimension(), WorldUtils.convertToChunkCoord(player.getPosition()))));
+				player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerChunk, TDManager.getScoutedTechLevel(player.getEntityWorld().provider.getDimension(), WorldUtils.convertToChunkCoord(player.getPosition()))));
 			} else if (world.isRemote && getItemMode(stack) == Mode.ITEM) {
 				Entity entity = EntityUtils.rayTraceEntity(player);
 				if (entity != null && entity instanceof EntityItem) {
 					ItemStack itemStack = ((EntityItem) entity).getEntityItem();
-					player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerItem, TDValues.getInstance().getTechDataForItem(itemStack)));
+					player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerItem, TDValues.getInstance().getTechDataForItem(itemStack)));
 				}
 			} else if (!world.isRemote && getItemMode(stack) == Mode.PLAYER) {
-				player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, player.getName(), TDManager.getPlayerScoutedTechLevel(player)));
+				player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, player.getName(), TDManager.getPlayerScoutedTechLevel(player)));
 			} else {
 				return new ActionResult<>(EnumActionResult.PASS, stack);
 			}
@@ -80,9 +81,9 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 		if (getItemMode(stack) == Mode.PLAYER) {
 			if (!player.getEntityWorld().isRemote) {
 				if (entity instanceof EntityPlayer) {
-					player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, entity.getName(), TDManager.getPlayerScoutedTechLevel((EntityPlayer) entity)));
+					player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, entity.getName(), TDManager.getPlayerScoutedTechLevel((EntityPlayer) entity)));
 				} else {
-					player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayerNoPlayer));
+					player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayerNoPlayer));
 				}
 			}
 			return true;

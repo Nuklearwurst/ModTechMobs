@@ -64,7 +64,7 @@ public class GuiCreativeTechnology extends GuiContainer {
 		if(btn.id == 0) {
 			try {
 				ModTDNetworkManager.INSTANCE.sendToServer(new MessageContainerIntegerUpdateServer((byte) 0, Integer.parseInt(txtValue.getText())));
-				this.mc.thePlayer.closeScreen();
+				this.mc.player.closeScreen();
 			} catch (NumberFormatException e) {
 				txtValue.setText(String.valueOf(te.getTechData()));
 			}

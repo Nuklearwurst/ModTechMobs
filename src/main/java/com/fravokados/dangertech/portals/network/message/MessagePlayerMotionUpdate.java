@@ -55,7 +55,7 @@ public class MessagePlayerMotionUpdate implements IMessage, IMessageHandler<Mess
 	@Override
 	@Nullable
 	public IMessage onMessage(MessageGuiElementClicked message, MessageContext ctx) {
-		EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer entityPlayer = Minecraft.getMinecraft().player;
 		if (entityPlayer != null)
 		{
 			entityPlayer.setVelocity(xMotion, yMotion, zMotion);

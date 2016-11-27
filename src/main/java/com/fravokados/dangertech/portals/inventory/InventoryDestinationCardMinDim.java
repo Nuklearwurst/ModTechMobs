@@ -18,7 +18,7 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	private ItemStack item;
 	private final String name;
 
-	public InventoryDestinationCardMinDim(@Nullable ItemStack item, String name) {
+	public InventoryDestinationCardMinDim(ItemStack item, String name) {
 		this.item = item;
 		this.name = name;
 	}
@@ -38,19 +38,19 @@ public class InventoryDestinationCardMinDim implements IInventory {
 		if (this.item != null) {
 			ItemStack itemstack;
 
-			if (item.stackSize <= amount) {
+			if (item.getCount() <= amount) {
 				itemstack = item;
 				item = null;
 				return itemstack;
 			} else {
 				itemstack = item.splitStack(amount);
-				if (item.stackSize == 0) {
+				if (item.getCount() == 0) {
 					item = null;
 				}
 				return itemstack;
 			}
 		} else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -77,8 +77,8 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	@Override
 	public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
 		item = stack;
-		if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
-			stack.stackSize = this.getInventoryStackLimit();
+		if (stack != null && stack.getCount() > this.getInventoryStackLimit()) {
+			stack.setCount(this.getInventoryStackLimit());
 		}
 	}
 
@@ -108,7 +108,7 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+	public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
 		return true;
 	}
 
@@ -120,6 +120,11 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	@Override
 	public void closeInventory(EntityPlayer player) {
 
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return item.isEmpty();
 	}
 
 	@Override

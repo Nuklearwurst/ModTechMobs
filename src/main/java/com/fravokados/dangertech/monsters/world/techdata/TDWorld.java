@@ -22,7 +22,7 @@ public class TDWorld {
 	public final Map<ChunkPos, TDChunk> chunkData;
 	
 	public TDWorld() {
-		chunkData = new HashMap<ChunkPos, TDChunk>();
+		chunkData = new HashMap<>();
 	}
 	
 	/**

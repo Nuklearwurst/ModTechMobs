@@ -14,7 +14,7 @@ import java.util.HashSet;
  */
 public class SleepingManager {
 
-	private static HashSet<EntityPlayer> sleepingPlayers = new HashSet<EntityPlayer>();
+	private static HashSet<EntityPlayer> sleepingPlayers = new HashSet<>();
 
 	/**
 	 * removes a player from the tracked players list
@@ -41,7 +41,11 @@ public class SleepingManager {
 				sleepingPlayers.remove(event.getEntityPlayer());
 				return;
 			}
-			IBlockState iblockstate =  event.getEntityPlayer().worldObj.getBlockState(event.getEntityPlayer().playerLocation);
+			if(event.getEntityPlayer().bedLocation == null) {
+				sleepingPlayers.remove(event.getEntityPlayer());
+				return;
+			}
+			IBlockState iblockstate =  event.getEntityPlayer().world.getBlockState(event.getEntityPlayer().bedLocation);
 			//noinspection ConstantConditions
 			if(iblockstate.getBlock() != ModBlocks.block_cot) {
 				sleepingPlayers.remove(event.getEntityPlayer());

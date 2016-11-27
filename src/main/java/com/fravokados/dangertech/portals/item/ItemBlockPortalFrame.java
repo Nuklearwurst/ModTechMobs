@@ -59,17 +59,17 @@ public class ItemBlockPortalFrame extends ItemMDBlockMultiType {
 		}
 		if(nbt.hasKey("Upgrades")) {
 			NBTTagList nbttaglist = nbt.getTagList("Upgrades", Constants.NBT.TAG_COMPOUND);
-			List<ItemStack> inv = new ArrayList<ItemStack>(nbttaglist.tagCount());
+			List<ItemStack> inv = new ArrayList<>(nbttaglist.tagCount());
 			for (int i = 0; i < nbttaglist.tagCount(); ++i) {
 				NBTTagCompound tag = nbttaglist.getCompoundTagAt(i);
 				byte slot = tag.getByte("Slot");
 				if (slot >= 0) {
-					inv.add(ItemStack.loadItemStackFromNBT(tag));
+					inv.add(new ItemStack(tag));
 				}
 			}
 			int upgradeCount = 0;
 			for(ItemStack item : inv) {
-				upgradeCount += item.stackSize;
+				upgradeCount += item.getCount();
 			}
 			list.add(Strings.translateWithFormat(Strings.Tooltip.CONTROLLER_UPGRADES_INSTALLED, upgradeCount));
 		}

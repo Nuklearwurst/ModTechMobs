@@ -8,8 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 /**
  *
  */
@@ -35,11 +33,10 @@ public class ShapedRecipeEnergyType extends ShapedRecipes {
 		return super.matches(inv, world) && EnergyManager.getEnergyTypeOfInventory(inv) != null;
 	}
 
-	@Nullable
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		ItemStack stackOut = super.getCraftingResult(inv);
-		if(stackOut != null) {
+		if(!stackOut.isEmpty()) {
 			EnergyType type = EnergyManager.getFirstEnergyTypeOfInventory(inv);
 			if(type != null) {
 				type.writeToNBT(ItemUtils.getNBTTagCompound(stackOut));

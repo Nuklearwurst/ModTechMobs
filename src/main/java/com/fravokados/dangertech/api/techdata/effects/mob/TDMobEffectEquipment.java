@@ -6,13 +6,14 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 
 public class TDMobEffectEquipment extends TDMobEffect {
 
-	protected ItemStack[] equipment;
+	protected NonNullList<ItemStack> equipment;
 	protected boolean asSet;
 	protected int[] values;
 	protected boolean replaceEquipment;
@@ -35,9 +36,9 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	 * </p>
 	 * @see EntityEquipmentSlot
 	 */
-	public TDMobEffectEquipment(ItemStack[] equipment, boolean asSet, boolean replaceEquipment, int[] values) {
-		if(equipment.length < 6) {
-			throw new InvalidParameterException("The equipment array has to have all 6 equipment pieces! (These can be null)");
+	public TDMobEffectEquipment(NonNullList<ItemStack> equipment, boolean asSet, boolean replaceEquipment, int[] values) {
+		if(equipment.size() < 6) {
+			throw new InvalidParameterException("The equipment array has to have all 6 equipment pieces!");
 		}
 		if(values.length < 6) {
 			throw new InvalidParameterException("The values array has to have all 6 values! (These can be zero)");
@@ -80,9 +81,9 @@ public class TDMobEffectEquipment extends TDMobEffect {
 		int counter = 0;
 		for(int i = 0; i < 5; i++) {
 			ItemStack stack = e.getItemStackFromSlot(EntityEquipmentSlot.values()[i]);
-			if(stack != null && equipment[i] != null) {
+			if(!stack.isEmpty() && !equipment.get(i).isEmpty()) {
 				if(replaceEquipment) {
-					if(stack.isItemEqual(equipment[i])) {
+					if(stack.isItemEqual(equipment.get(i))) {
 						if(asSet) {
 							return false;
 						}
@@ -96,7 +97,7 @@ public class TDMobEffectEquipment extends TDMobEffect {
 					counter++;					
 				}				
 			}
-			if(equipment[i] == null || values[i] > techdata) {
+			if(equipment.get(i).isEmpty() || values[i] > techdata) {
 				//we don't want to place sth in that slot
 				//or it's too costly
 				counter++;
@@ -113,15 +114,15 @@ public class TDMobEffectEquipment extends TDMobEffect {
 		//everthing should be clear for a set
 		if(asSet) {
 			for(int i = 0; i < 5; i++) {
-				e.setItemStackToSlot(EntityEquipmentSlot.values()[i], equipment[i].copy());
+				e.setItemStackToSlot(EntityEquipmentSlot.values()[i], equipment.get(i).copy());
 			}
 			return values[0] + values[1] + values[2] + values[3] + values[4];
 		}
-		int start = e.worldObj.rand.nextInt(5);
+		int start = e.world.rand.nextInt(5);
 		int used = 0;
 		for(int i = 0; i < 5; i++) {
 			int j = (start + i) % 5;
-			if(equipment[j] == null) {
+			if(equipment.get(j).isEmpty()) {
 				continue;
 			}
 			if(values[j] > (techdata - used)) {
@@ -129,10 +130,10 @@ public class TDMobEffectEquipment extends TDMobEffect {
 			}
 			final EntityEquipmentSlot slot = EntityEquipmentSlot.values()[j];
 			final ItemStack stack = e.getItemStackFromSlot(slot);
-			if((!replaceEquipment && stack != null) || (replaceEquipment && stack != null && stack.isItemEqual(equipment[j]))) {
+			if((!replaceEquipment && !stack.isEmpty()) || (replaceEquipment && !stack.isEmpty() && stack.isItemEqual(equipment.get(j)))) {
 				continue;
 			}
-			e.setItemStackToSlot(slot, equipment[j].copy());
+			e.setItemStackToSlot(slot, equipment.get(j).copy());
 			if(dropChances[j] != -1) {
 				e.setDropChance(slot, dropChances[j]);
 			}
@@ -146,7 +147,7 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	 */
 	public TDMobEffectEquipment checkContents() {
 		for(int i = 0; i < 5; i++) {
-			if(equipment[i] == null) {
+			if(equipment.get(i).isEmpty()) {
 				values[i] = 0;
 			}
 		}

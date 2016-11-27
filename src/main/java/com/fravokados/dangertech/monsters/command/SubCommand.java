@@ -25,23 +25,17 @@ public abstract class SubCommand implements IModCommand {
 	}
 
 	private final String name;
-	private final List<String> aliases = new ArrayList<String>();
+	private final List<String> aliases = new ArrayList<>();
 	private PermLevel permLevel = PermLevel.EVERYONE;
 	private IModCommand parent;
-	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(new Comparator<SubCommand>() {
-
-		@Override
-		public int compare(SubCommand o1, SubCommand o2) {
-			return o1.compareTo(o2);
-		}
-	});
+	private final SortedSet<SubCommand> children = new TreeSet<>(SubCommand::compareTo);
 
 	public SubCommand(String name) {
 		this.name = name;
 	}
 
 	@Override
-	public final String getCommandName() {
+	public final String getName() {
 		return name;
 	}
 
@@ -65,12 +59,12 @@ public abstract class SubCommand implements IModCommand {
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 		return aliases;
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		return CommandHelpers.getTabCompletionOptionsForSubCommands(server, this, sender, args, pos);
 	}
 
@@ -98,7 +92,7 @@ public abstract class SubCommand implements IModCommand {
 
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-		return sender.canCommandSenderUseCommand(getPermissionLevel(), getCommandName());
+		return sender.canUseCommand(getPermissionLevel(), getName());
 	}
 
 	@Override
@@ -107,7 +101,7 @@ public abstract class SubCommand implements IModCommand {
 			return false;
 		}
 		for (SubCommand sub : children) {
-			if(sub.getCommandName().toLowerCase().equals(args[0].toLowerCase())) {
+			if(sub.getName().toLowerCase().equals(args[0].toLowerCase())) {
 				return sub.isUsernameIndex(Arrays.copyOfRange(args, 1, args.length), index - 1);
 			}
 		}
@@ -115,7 +109,7 @@ public abstract class SubCommand implements IModCommand {
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "/" + getFullCommandString() + " help";
 	}
 
@@ -126,11 +120,11 @@ public abstract class SubCommand implements IModCommand {
 
 	@Override
 	public String getFullCommandString() {
-		return parent.getFullCommandString() + " " + getCommandName();
+		return parent.getFullCommandString() + " " + getName();
 	}
 
 	@Override
 	public int compareTo(ICommand command) {
-		return this.getCommandName().compareTo(command.getCommandName());
+		return this.getName().compareTo(command.getName());
 	}
 }

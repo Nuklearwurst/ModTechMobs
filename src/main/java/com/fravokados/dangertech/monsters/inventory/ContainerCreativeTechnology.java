@@ -49,6 +49,6 @@ public class ContainerCreativeTechnology extends Container implements IContainer
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int index) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 }

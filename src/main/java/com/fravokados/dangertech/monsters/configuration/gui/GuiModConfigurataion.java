@@ -22,7 +22,7 @@ public class GuiModConfigurataion extends GuiConfig {
 
 	@SuppressWarnings({ "rawtypes" })
 	private static List<IConfigElement> getConfigElements() {
-		List<IConfigElement> list = new ArrayList<IConfigElement>();
+		List<IConfigElement> list = new ArrayList<>();
 		list.add(new ConfigElement(ModTechMobs.config.config.getCategory(Configuration.CATEGORY_GENERAL)));
 		list.add(new ConfigElement(ModTechMobs.config.config.getCategory(Keys.CATEGORY_TECH_DATA)));
 		list.add(new ConfigElement(ModTechMobs.config.config.getCategory(Keys.CATEGORY_TECH_SCANNING)));

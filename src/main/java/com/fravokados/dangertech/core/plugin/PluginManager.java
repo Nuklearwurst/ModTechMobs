@@ -7,8 +7,6 @@ import com.fravokados.dangertech.core.plugin.ic2.IC2UpgradeIntegration;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 
-import javax.annotation.Nullable;
-
 public class PluginManager {
 
 	public final static String IC2 = "IC2";
@@ -53,14 +51,8 @@ public class PluginManager {
 		}
 	}
 
-	public static boolean isItemWrench(@Nullable ItemStack stack) {
-		if(stack == null) {
-			return false;
-		}
-		if(ic2Activated()) {
-			return IC2Plugin.isItemWrench(stack);
-		}
-		return false;
+	public static boolean isItemWrench(ItemStack stack) {
+		return !stack.isEmpty() && ic2Activated() && IC2Plugin.isItemWrench(stack);
 	}
 
 }

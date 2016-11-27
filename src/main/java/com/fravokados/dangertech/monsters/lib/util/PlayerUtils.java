@@ -65,8 +65,8 @@ public class PlayerUtils {
 	 * @return Player entity
 	 * @deprecated use server aware version instead: {@link #getPlayerFromUUID(MinecraftServer, UUID)}
 	 */
-	@Nullable
 	@Deprecated
+	@Nullable
 	public static EntityPlayer getPlayerFromUUID(UUID id) {
 		return getPlayerFromUUID(FMLCommonHandler.instance().getMinecraftServerInstance(), id);
 	}
@@ -84,13 +84,13 @@ public class PlayerUtils {
 
 	public static ItemStack getCurrentUsablePlayerItem(EntityPlayer player, IItemValidator validator) {
 		ItemStack out = player.getHeldItemMainhand();
-		if (out != null && validator.isSearchedItem(out)) {
+		if (!out.isEmpty()&& validator.isSearchedItem(out)) {
 			return out;
 		}
 		out = player.getHeldItemOffhand();
-		if (out != null && validator.isSearchedItem(out)) {
+		if (!out.isEmpty() && validator.isSearchedItem(out)) {
 			return out;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 }

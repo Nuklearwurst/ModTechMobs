@@ -31,12 +31,12 @@ public class TDValues implements TDValueRegistry {
 	/**
 	 * Contains information about Tileentities
 	 */
-	public final Map<Class<? extends TileEntity>, TDEntryTileEntity> tileEntityEntries = new HashMap<Class<? extends TileEntity>, TDEntryTileEntity>();
+	public final Map<Class<? extends TileEntity>, TDEntryTileEntity> tileEntityEntries = new HashMap<>();
 
 	/**
 	 * Contains information about Items
 	 */
-	public final Map<Item, TDEntryItem> itemEntries = new HashMap<Item, TDEntryItem>();
+	public final Map<Item, TDEntryItem> itemEntries = new HashMap<>();
 
 	/**
 	 * registers a new Item Entry

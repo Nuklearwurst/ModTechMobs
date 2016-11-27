@@ -37,7 +37,7 @@ public class GuiHandler implements IGuiHandler {
 			{
 				//noinspection ConstantConditions
 				ItemStack item = PlayerUtils.getCurrentUsablePlayerItem(player,(ItemStack o) -> o.getItem() == ModItems.itemDestinationCard && o.getItemDamage() == ItemDestinationCard.META_GENERATING);
-				if(item == null) return null;
+				if(item.isEmpty()) return null;
 				return new ContainerDestinationCardMinDim(player.inventory, item);
 			}
 		}
@@ -59,7 +59,7 @@ public class GuiHandler implements IGuiHandler {
 			{
 				//noinspection ConstantConditions
 				ItemStack item = PlayerUtils.getCurrentUsablePlayerItem(player, (ItemStack o) -> o.getItem() == ModItems.itemDestinationCard && o.getItemDamage() == ItemDestinationCard.META_GENERATING);
-				if(item == null) return null;
+				if(item.isEmpty()) return null;
 				return new GuiDestinationCardMinDim(player.inventory, item);
 			}
 		}

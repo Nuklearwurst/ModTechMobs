@@ -8,6 +8,8 @@ import ic2.api.info.Info;
 import ic2.api.item.IC2Items;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Nuklearwurst
  */
@@ -34,16 +36,17 @@ public class IC2UpgradeIntegration {
 		return getUpgrade(item) != null;
 	}
 
+	@Nullable
 	public static IUpgradeDefinition getUpgrade(ItemStack item) {
 		if(PluginManager.ic2Activated()) {
 			if(upgradeEjector != null && item.isItemEqual(upgradeEjector)) {
 				//TODO: Ejector Upgrade
 			} else if(upgradeOverclocker != null && item.isItemEqual(upgradeOverclocker)) {
-				return new UpgradeOverclocker(item.stackSize);
+				return new UpgradeOverclocker(item.getCount());
 			} else if(upgradeEnergyTier != null && item.isItemEqual(upgradeEnergyTier)) {
-				return new SimpleIntegerUpgrade(item.stackSize, 1, UpgradeTypes.ENERGY_TIER.id);
+				return new SimpleIntegerUpgrade(item.getCount(), 1, UpgradeTypes.ENERGY_TIER.id);
 			} else if(upgradeEnergyStorage != null && item.isItemEqual(upgradeEnergyStorage)) {
-				return new SimpleIntegerUpgrade(item.stackSize, 10000, UpgradeTypes.ENERGY_STORAGE.id);
+				return new SimpleIntegerUpgrade(item.getCount(), 10000, UpgradeTypes.ENERGY_STORAGE.id);
 			}
 		}
 		return null;

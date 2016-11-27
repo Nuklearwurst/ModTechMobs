@@ -18,6 +18,7 @@ import com.fravokados.dangertech.portals.portal.PortalManager;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -59,9 +60,9 @@ public class ModMiningDimension {
 		//register Creative Tab
 		TAB_MD = new CreativeTabs(Strings.CREATIVE_TAB) {
 			@Override
-			public Item getTabIconItem() {
+			public ItemStack getTabIconItem() {
 				//noinspection ConstantConditions
-				return ModItems.itemDestinationCard;
+				return new ItemStack(ModItems.itemDestinationCard);
 			}
 		};
 

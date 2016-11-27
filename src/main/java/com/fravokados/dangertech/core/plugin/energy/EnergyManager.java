@@ -35,9 +35,8 @@ public class EnergyManager {
 	 * @return true if the given item can provide energy to the specified energy type
 	 */
 	public static boolean canItemProvideEnergy(@Nullable ItemStack item, EnergyType type, int sinkTier) {
-		if (item == null) return false;
+		return item != null && plugins.containsKey(type) && plugins.get(type).canItemProvideEnergy(item, sinkTier);
 
-		return plugins.containsKey(type) && plugins.get(type).canItemProvideEnergy(item, sinkTier);
 	}
 
 	public static void createItemVariantsForEnergyTypes(List<ItemStack> list, Item item, int meta, Collection<EnergyType> types) {
@@ -54,7 +53,6 @@ public class EnergyManager {
 
 	public static ItemStack createItemStackWithEnergyType(Block block, int amount, int damage, EnergyType type) {
 		Item item = Item.getItemFromBlock(block);
-		assert item != null;
 		return createItemStackWithEnergyType(item, amount, damage, type);
 	}
 
@@ -83,10 +81,11 @@ public class EnergyManager {
 	 * @param inv inventory that is to be searched
 	 * @return returns the first energytype found. Null if none.
 	 */
+	@Nullable
 	public static EnergyType getFirstEnergyTypeOfInventory(IInventory inv) {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if (stack != null && stack.hasTagCompound()) {
+			if (!stack.isEmpty() && stack.hasTagCompound()) {
 				//noinspection ConstantConditions
 				EnergyType type = EnergyType.readFromNBT(stack.getTagCompound());
 				if (type != EnergyType.INVALID) {
@@ -103,11 +102,12 @@ public class EnergyManager {
 	 * @param inv inventory that is to be searched
 	 * @return null if none of the items have an EnergyType or different ones were found. Otherwise this will return the EnergyType found.
 	 */
+	@Nullable
 	public static EnergyType getEnergyTypeOfInventory(IInventory inv) {
 		EnergyType typeFound = null;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack currentStack = inv.getStackInSlot(i);
-			if (currentStack != null) {
+			if (!currentStack.isEmpty()) {
 				//make sure energy types line up
 				if (currentStack.hasTagCompound()) {
 					//noinspection ConstantConditions
@@ -130,7 +130,7 @@ public class EnergyManager {
 			final ItemStack stack = inventory.getStackInSlot(slot);
 			if(type == EnergyType.CREATIVE) {
 				storage.receiveEnergy(storage.getRoomForEnergy(), false);
-			} else if (stack != null) {
+			} else if (!stack.isEmpty()) {
 				if(plugins.containsKey(type)) {
 					plugins.get(type).rechargeEnergyStorageFromInventory(stack, storage, inventory, slot, sinkTier);
 				}

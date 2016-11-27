@@ -17,6 +17,7 @@ public class ForgeEnergyPlugin implements IEnergyPlugin {
 	public boolean canItemProvideEnergy(ItemStack item, int sinkTier) {
 		if(item.hasCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN)) {
 			IEnergyStorage capability = item.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+			assert capability != null;
 			return capability.canExtract();
 		}
 		return false;
@@ -26,6 +27,7 @@ public class ForgeEnergyPlugin implements IEnergyPlugin {
 	public void rechargeEnergyStorageFromInventory(ItemStack item, EnergyStorage storage, IInventory inventory, int slot, int sinkTier) {
 		if(item.hasCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN)) {
 			IEnergyStorage capability = item.getCapability(CapabilityEnergy.ENERGY, EnumFacing.DOWN);
+			assert capability != null;
 			if(capability.canExtract()) {
 				storage.receiveEnergy(capability.extractEnergy(storage.getRoomForEnergy(), false), false);
 			}

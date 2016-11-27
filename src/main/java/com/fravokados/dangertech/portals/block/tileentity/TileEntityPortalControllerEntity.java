@@ -33,14 +33,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -50,7 +51,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -96,7 +96,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	/**
 	 * Controller main inventory
 	 */
-	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
+	private NonNullList<ItemStack> inventory = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
 
 	/**
 	 * last portal metrics
@@ -175,7 +175,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 * @return success
 	 */
 	private boolean placePortalBlocks() {
-		return metrics != null && metrics.placePortalsInsideFrame(worldObj, getPos());
+		return metrics != null && metrics.placePortalsInsideFrame(world, getPos());
 	}
 
 	/**
@@ -184,14 +184,14 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	public boolean updateMetrics() {
 		metrics = null;
 		setState(State.NO_MULTIBLOCK);
-		return PortalConstructor.createPortalMultiBlock(worldObj, getPos()) == PortalConstructor.Result.SUCCESS;
+		return PortalConstructor.createPortalMultiBlock(world, getPos()) == PortalConstructor.Result.SUCCESS;
 	}
 
 	/**
 	 * Checks whether current portal metrics are valid
 	 */
 	public boolean checkMetrics() {
-		return metrics != null && metrics.isFrameComplete(worldObj) && metrics.isFrameEmpty(worldObj);
+		return metrics != null && metrics.isFrameComplete(world) && metrics.isFrameEmpty(world);
 	}
 
 
@@ -265,12 +265,12 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	public void setState(State state) {
-		if (worldObj.isRemote && PluginLookingGlass.isAvailable()) {
+		if (world.isRemote && PluginLookingGlass.isAvailable()) {
 			if (state == State.OUTGOING_PORTAL || state == State.INCOMING_PORTAL) {
 				if (state != this.state) {
 					if (renderInfo != null) {
 						if(metrics != null) {
-							renderInfo.createLookingGlass(metrics, this.worldObj);
+							renderInfo.createLookingGlass(metrics, this.world);
 						} else {
 							LogHelperMD.error("Invalid portal state! Portal bounds are not available!");
 						}
@@ -285,7 +285,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		this.state = state;
 		WorldUtils.notifyBlockUpdateAtTile(this);
 		if (metrics != null) {
-			metrics.updatePortalFrames(worldObj);
+			metrics.updatePortalFrames(world);
 		}
 	}
 
@@ -311,8 +311,8 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 * @return the destination id of the current destination card
 	 */
 	public int readDestinationCard() {
-		final ItemStack stack = inventory[0];
-		if (stack == null) {
+		final ItemStack stack = inventory.get(0);
+		if (stack.isEmpty()) {
 			return PortalManager.PORTAL_NOT_CONNECTED;
 		}
 		if (stack.getItem() instanceof ItemDestinationCard) {
@@ -321,7 +321,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 						&& (ItemDestinationCard.getTypeFromStack(stack) != PortalMetrics.Type.ENTITY_PORTAL.ordinal())) {
 					return PortalManager.PORTAL_WRONG_TYPE;
 				}
-				return ItemDestinationCard.getPortalIDFromStack(inventory[0]);
+				return ItemDestinationCard.getPortalIDFromStack(inventory.get(0));
 			}
 		}
 		return PortalManager.PORTAL_INVALID_ITEM;
@@ -386,11 +386,11 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	@Override
 	public void updateMachineServer() {
 		//Write Destination Cards (Side GUI)
-		if (id > -1 && inventory[2] != null && inventory[3] == null) {
-			if (inventory[2].getItem() instanceof ItemDestinationCard && inventory[2].getItemDamage() != ItemDestinationCard.META_GENERATING) {
-				inventory[3] = inventory[2];
-				inventory[2] = null;
-				ItemDestinationCard.writeDestinationToStack(inventory[3], id, getDisplayName().getUnformattedText());
+		if (id > -1 && !inventory.get(2).isEmpty() && !inventory.get(3).isEmpty()) {
+			if (inventory.get(2).getItem() instanceof ItemDestinationCard && inventory.get(2).getItemDamage() != ItemDestinationCard.META_GENERATING) {
+				inventory.set(3, inventory.get(2));
+				inventory.set(2, ItemStack.EMPTY);
+				ItemDestinationCard.writeDestinationToStack(inventory.get(3), id, getDisplayName().getUnformattedText());
 				markDirty();
 			}
 		}
@@ -399,7 +399,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			case CONNECTING:
 				if (tick % 40 == 0 && metrics != null) {
 					//play connecting sound effect
-					worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 1.9F);
+					world.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 1.9F);
 				}
 				if (tick == 0) {
 					//update destination portal
@@ -446,7 +446,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			case INCOMING_CONNECTION:
 				tick++;
 				if (tick % 40 == 0 && metrics != null) {
-					worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 1.9F);
+					world.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 1.9F);
 				}
 				break;
 			case OUTGOING_PORTAL:
@@ -457,14 +457,14 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 				} else {
 					tick++;
 					if (tick % 60 == 0 && metrics != null) {
-						worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F - 1F);
+						world.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F - 1F);
 					}
 				}
 				break;
 			case INCOMING_PORTAL:
 				tick++;
 				if (tick % 60 == 0 && metrics != null) {
-					worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F - 1F);
+					world.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F - 1F);
 				}
 				break;
 		}
@@ -524,18 +524,18 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	private void createFXForPortalOpen() {
-		worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 1.9F);
-//		if (worldObj instanceof WorldServer) {
-//			((WorldServer) worldObj).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
-//					60 + worldObj.rand.nextInt(10), 0, 0, 0, 0.1F);
+		world.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 1.9F);
+//		if (world instanceof WorldServer) {
+//			((WorldServer) world).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
+//					60 + world.rand.nextInt(10), 0, 0, 0, 0.1F);
 //		}
 	}
 
 	private void createFXForPortalClose() {
-		worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 1.0F, worldObj.rand.nextFloat() * 0.1F + 2.9F);
-//		if (worldObj instanceof WorldServer) {
-//			((WorldServer) worldObj).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
-//					60 + worldObj.rand.nextInt(10), 0, 0, 0, 0.1F);
+		world.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 1.0F, world.rand.nextFloat() * 0.1F + 2.9F);
+//		if (world instanceof WorldServer) {
+//			((WorldServer) world).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
+//					60 + world.rand.nextInt(10), 0, 0, 0, 0.1F);
 //		}
 	}
 
@@ -545,15 +545,15 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 * ItemDestinationCard stored in slot 0 has to be {@link ItemDestinationCard#META_GENERATING}
 	 */
 	private void generatePortal() {
-		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(inventory[0]);
-		final int dim = ItemDestinationCard.getDimensionFromStack(inventory[0]);
+		NBTTagCompound nbt = ItemUtils.getNBTTagCompound(inventory.get(0));
+		final int dim = ItemDestinationCard.getDimensionFromStack(inventory.get(0));
 		final int count = nbt.getInteger(NBTKeys.DESTINATION_CARD_FRAME_BLOCKS);
 		if (count >= metrics.getFrameBlockCount()) {
 			if (useEnergy(Settings.ENERGY_USAGE_CREATE_PORTAL)) {
 				portalDestination = PortalManager.getInstance().createPortal(dim, id, metrics, this);
 				if (portalDestination >= 0) {
 					//create destination card
-					inventory[0] = ItemDestinationCard.fromDestination(portalDestination, Strings.translate(Strings.Tooltip.UNKNOWN_DESTINATION));
+					inventory.set(0, ItemDestinationCard.fromDestination(portalDestination, Strings.translate(Strings.Tooltip.UNKNOWN_DESTINATION)));
 				} else {
 					resetOnError(Error.INVALID_DESTINATION);
 				}
@@ -612,7 +612,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			ForgeChunkManager.forceChunk(chunkLoaderTicketDestination, chunkToLoad);
 		}
 		ForgeChunkManager.releaseTicket(chunkLoaderTicketOrigin);
-		chunkLoaderTicketOrigin = ForgeChunkManager.requestTicket(ModMiningDimension.instance, worldObj, ForgeChunkManager.Type.NORMAL);
+		chunkLoaderTicketOrigin = ForgeChunkManager.requestTicket(ModMiningDimension.instance, world, ForgeChunkManager.Type.NORMAL);
 		if (chunkLoaderTicketOrigin == null) {
 			LogHelperMD.warn("Chunkloading Ticket limit reached!");
 		} else {
@@ -658,30 +658,30 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		if (slot < inventory.length) {
-			return inventory[slot];
+		if (slot < inventory.size()) {
+			return inventory.get(slot);
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		return ItemUtils.decrStackSize(this, slot, amount);
+		return ItemStackHelper.getAndSplit(inventory, slot, amount);
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
-		ItemStack stack = this.inventory[slot];
-		this.inventory[slot] = null;
+		ItemStack stack = this.inventory.get(slot);
+		this.inventory.set(slot, ItemStack.EMPTY);
 		return stack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int slot, @Nullable ItemStack itemStack) {
-		this.inventory[slot] = itemStack;
+	public void setInventorySlotContents(int slot, ItemStack itemStack) {
+		this.inventory.set(slot, itemStack);
 
-		if (itemStack != null && itemStack.stackSize > this.getInventoryStackLimit()) {
-			itemStack.stackSize = this.getInventoryStackLimit();
+		if (!itemStack.isEmpty() && itemStack.getCount() > this.getInventoryStackLimit()) {
+			itemStack.setCount(this.getInventoryStackLimit());
 		}
 	}
 
@@ -691,7 +691,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return BlockUtils.isTileEntityUsableByPlayer(this, player);
 	}
 
@@ -703,6 +703,11 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	@Override
 	public void closeInventory(@Nullable EntityPlayer player) {
 
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return ItemUtils.isEmpty(inventory);
 	}
 
 	@Override
@@ -743,10 +748,8 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 
-		NBTTagList nbttaglist = nbt.getTagList(NBTKeys.TILE_MAIN_INVENTORY, Constants.NBT.TAG_COMPOUND);
-		this.inventory = new ItemStack[this.getSizeInventory()];
-
-		ItemUtils.readInventoryContentsFromNBT(this, nbttaglist);
+		this.inventory = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
+		ItemStackHelper.loadAllItems(nbt, inventory);
 
 		if (nbt.hasKey(NBTKeys.TILE_NAME)) {
 			name = nbt.getString(NBTKeys.TILE_NAME);
@@ -768,10 +771,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 
-		NBTTagList nbttaglist = new NBTTagList();
-
-		ItemUtils.writeInventoryContentsToNBT(this, nbttaglist);
-		nbt.setTag(NBTKeys.TILE_MAIN_INVENTORY, nbttaglist);
+		ItemStackHelper.saveAllItems(nbt, inventory);
 
 		if (hasCustomName()) {
 			nbt.setString(NBTKeys.TILE_NAME, name);
@@ -841,8 +841,8 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			State oldState = state;
 			setState(State.values()[nbt.getInteger(NBTKeys.CONTROLLER_STATE)]);
 			if (oldFacing != facing || oldState != state) {
-				final IBlockState blockState = worldObj.getBlockState(getPos());
-				this.worldObj.notifyBlockUpdate(getPos(), blockState, blockState, 3);
+				final IBlockState blockState = world.getBlockState(getPos());
+				this.world.notifyBlockUpdate(getPos(), blockState, blockState, 3);
 			}
 		}
 	}
@@ -858,7 +858,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		//register portal and log warning
 		if (id == PortalManager.PORTAL_NOT_CONNECTED) {
 			LogHelperMD.warn("Invalid Controller found!");
-			LogHelperMD.warn((hasCustomName() ? "Unnamed Controller" : ("Controller " + name)) + " @dim: " + worldObj.provider.getDimension() + ", pos: " + getPos().getX() + "; " + getPos().getY() + "; " + getPos().getZ() + " has no valid id. Registering...");
+			LogHelperMD.warn((hasCustomName() ? "Unnamed Controller" : ("Controller " + name)) + " @dim: " + world.provider.getDimension() + ", pos: " + getPos().getX() + "; " + getPos().getY() + "; " + getPos().getZ() + " has no valid id. Registering...");
 			id = ModMiningDimension.instance.portalManager.registerNewEntityPortal(new BlockPositionDim(this));
 		}
 	}
@@ -924,7 +924,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		}
 		//remove portal
 		if (metrics != null) {
-			metrics.removePortalsInsideFrame(worldObj);
+			metrics.removePortalsInsideFrame(world);
 			if (state != State.READY && state != State.NO_MULTIBLOCK) {
 				//Play closing sound effect
 				createFXForPortalClose();

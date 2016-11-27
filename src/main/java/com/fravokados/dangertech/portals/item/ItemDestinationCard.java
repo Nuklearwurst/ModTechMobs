@@ -22,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -42,7 +43,7 @@ public class ItemDestinationCard extends ItemMDMultiType {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs creativeTab, List<ItemStack> list) {
+	public void getSubItems(Item item, CreativeTabs creativeTab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(item, 1, 0));
 		{
 			ItemStack stack = new ItemStack(item, 1, 1);
@@ -101,7 +102,8 @@ public class ItemDestinationCard extends ItemMDMultiType {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack itemStack = player.getHeldItem(hand);
 		if (!world.isRemote && itemStack.getItemDamage() == META_GENERATING && player.isSneaking()) {
 			player.openGui(ModMiningDimension.instance, GUIIDs.DESTINATION_CARD_MIN_DIM, world, (int) player.posX, (int) player.posY, (int) player.posZ);
 		}

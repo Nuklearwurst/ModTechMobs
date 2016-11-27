@@ -38,8 +38,8 @@ public class CommandTechDataScan extends SubCommand {
 		@Override
 		public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 			TDTickManager.scheduleChunkScan(new ChunkLocation(sender.getEntityWorld().provider.getDimension(), WorldUtils.convertToChunkCoord(sender.getPosition())));
-			sender.addChatMessage(new TextComponentTranslation("chat.command.techdata.scanning"));
-			sender.addChatMessage(new TextComponentTranslation("chat.command.techdata.queue", TDTickManager.getTasksInQueue()));
+			sender.sendMessage(new TextComponentTranslation("chat.command.techdata.scanning"));
+			sender.sendMessage(new TextComponentTranslation("chat.command.techdata.queue", TDTickManager.getTasksInQueue()));
 		}
 	}
 
@@ -52,7 +52,7 @@ public class CommandTechDataScan extends SubCommand {
 		@Override
 		public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 			TDManager.updateScoutedTechLevel(sender.getEntityWorld().provider.getDimension(), WorldUtils.convertToChunkCoord(sender.getPosition()));
-			sender.addChatMessage(new TextComponentTranslation("chat.command.techdata.scouted", TDManager.getScoutedTechLevel(sender.getEntityWorld().provider.getDimension(), WorldUtils.convertToChunkCoord(sender.getPosition()))));
+			sender.sendMessage(new TextComponentTranslation("chat.command.techdata.scouted", TDManager.getScoutedTechLevel(sender.getEntityWorld().provider.getDimension(), WorldUtils.convertToChunkCoord(sender.getPosition()))));
 		}
 	}
 }

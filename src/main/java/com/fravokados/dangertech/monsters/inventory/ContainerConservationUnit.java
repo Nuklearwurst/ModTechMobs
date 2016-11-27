@@ -53,7 +53,7 @@ public class ContainerConservationUnit extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotId) {
-		ItemStack stackCopy = null;
+		ItemStack stackCopy = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(slotId);
 
 		if (slot != null && slot.getHasStack()) {
@@ -63,37 +63,37 @@ public class ContainerConservationUnit extends Container {
 
 			if(slotId < 27) { //machine inventory slots (main-inventory)
 				if (!this.mergeItemStack(stackSlot, 36, this.inventorySlots.size(), false)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			} else if (slotId < 36) { //machine inventory slots (hotbar)
 				if(!this.mergeItemStack(stackSlot, 63, this.inventorySlots.size(), false)) { //prioritize hotbar
 					if (!this.mergeItemStack(stackSlot, 36, 63, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 			} else if(slotId < 63) { //from player (main)
 				if(!this.mergeItemStack(stackSlot, 0, 36, false)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			} else { //from player (hotbar)
 				if(!this.mergeItemStack(stackSlot, 27, 36, false)) { //prioritize hotbar
 					if (!this.mergeItemStack(stackSlot, 0, 27, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 			}
 
-			if (stackSlot.stackSize == 0) {
-				slot.putStack(null);
+			if (stackSlot.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
 
-			if (stackSlot.stackSize == stackCopy.stackSize) {
-				return null;
+			if (stackSlot.getCount() == stackCopy.getCount()) {
+				return ItemStack.EMPTY;
 			}
 
-			slot.onPickupFromSlot(player, stackSlot);
+			slot.onTake(player, stackSlot);
 		}
 
 		return stackCopy;

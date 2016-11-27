@@ -57,16 +57,16 @@ public class EntityAIScanArea extends EntityAIBase {
 	}
 
 	private void scanChunkScouted() {
-		TDManager.updateScoutedTechLevel(e.worldObj.getChunkFromBlockCoords(new BlockPos((int) (e.posX), (int) e.posY, (int) (e.posZ))));
+		TDManager.updateScoutedTechLevel(e.world.getChunkFromBlockCoords(new BlockPos((int) (e.posX), (int) e.posY, (int) (e.posZ))));
 		for (int i = 2; i < 6; i++) {
-			TDManager.updateScoutedTechLevel(e.worldObj.getChunkFromBlockCoords(new BlockPos((int) (e.posX + EnumFacing.getFront(i).getFrontOffsetX() * 16), 0, (int) (e.posZ + EnumFacing.getFront(i).getFrontOffsetX() * 16))));
+			TDManager.updateScoutedTechLevel(e.world.getChunkFromBlockCoords(new BlockPos((int) (e.posX + EnumFacing.getFront(i).getFrontOffsetX() * 16), 0, (int) (e.posZ + EnumFacing.getFront(i).getFrontOffsetX() * 16))));
 		}
 	}
 
 	private void scanChunk() {
-		TDTickManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords(new BlockPos((int) (e.posX), (int) e.posY, (int) (e.posZ))));
+		TDTickManager.scheduleChunkScan(e.world.getChunkFromBlockCoords(new BlockPos((int) (e.posX), (int) e.posY, (int) (e.posZ))));
 		for (int i = 2; i < 6; i++) {
-			TDTickManager.scheduleChunkScan(e.worldObj.getChunkFromBlockCoords(new BlockPos((int) (e.posX + EnumFacing.getFront(i).getFrontOffsetX() * 16), 0, (int) (e.posZ + EnumFacing.getFront(i).getFrontOffsetX() * 16))));
+			TDTickManager.scheduleChunkScan(e.world.getChunkFromBlockCoords(new BlockPos((int) (e.posX + EnumFacing.getFront(i).getFrontOffsetX() * 16), 0, (int) (e.posZ + EnumFacing.getFront(i).getFrontOffsetX() * 16))));
 		}
 	}
 

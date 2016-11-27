@@ -16,6 +16,8 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 
+import javax.annotation.Nullable;
+
 /**
  * Base {@link TileEntity} for machines that accept energy
  * <p>
@@ -72,7 +74,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
-		if (worldObj == null || !worldObj.isRemote) {
+		if (world == null || !world.isRemote) {
 			if (init) {
 				init = false;
 				unloadMachine();
@@ -83,7 +85,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		if (worldObj == null || !worldObj.isRemote) {
+		if (world == null || !world.isRemote) {
 			if (init) {
 				init = false;
 				unloadMachine();
@@ -95,11 +97,11 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	public final void update() {
 		if (!init) {
 			init = true;
-			if (!worldObj.isRemote) {
+			if (!world.isRemote) {
 				loadMachine();
 			}
 		}
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			updateMachineClient();
 		} else {
 			updateMachineServer();
@@ -210,7 +212,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		switch (energyType) {
 			case TESLA:
 				if (capability == TESLA_CONSUMER || capability == TESLA_HOLDER) {
@@ -226,7 +228,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		switch (energyType) {
 			case TESLA:
 				if (capability == TESLA_CONSUMER) {

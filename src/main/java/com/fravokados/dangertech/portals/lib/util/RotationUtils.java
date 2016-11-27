@@ -1,10 +1,9 @@
 package com.fravokados.dangertech.portals.lib.util;
 
 import com.fravokados.dangertech.api.block.IFacingSix;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -13,12 +12,12 @@ import net.minecraft.util.math.MathHelper;
 public class RotationUtils {
 
 	public static EnumFacing getFacingFromEntity(BlockPos pos, EntityLivingBase entity) {
-		return BlockPistonBase.getFacingFromEntity(pos, entity);
+		return EnumFacing.getDirectionFromEntityLiving(pos, entity);
 	}
 
 	public static void updateFacing(IFacingSix te, EntityLivingBase player, BlockPos pos) {
 		//rotate block
-		int rotationSegment = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int rotationSegment = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		if (player.rotationPitch >= 65)
 		{
 			te.setFacing(EnumFacing.UP);

@@ -53,7 +53,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 		if(controllerPos == null) {
 			return false;
 		}
-		TileEntity te = worldObj.getTileEntity(controllerPos);
+		TileEntity te = world.getTileEntity(controllerPos);
 		return te != null && te instanceof TileEntityPortalControllerEntity && ((TileEntityPortalControllerEntity) te).isActive();
 	}
 
@@ -97,10 +97,10 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 
 	public void onDestroy() {
 		if(controllerPos != null) {
-			TileEntity te = worldObj.getTileEntity(controllerPos);
+			TileEntity te = world.getTileEntity(controllerPos);
 			if(te != null && te instanceof TileEntityPortalControllerEntity) {
 				if(((TileEntityPortalControllerEntity) te).isActive()) {
-					worldObj.createExplosion(null, getPos().getX(), getPos().getY(), getPos().getZ(), 2.0F, false);
+					world.createExplosion(null, getPos().getX(), getPos().getY(), getPos().getZ(), 2.0F, false);
 					((TileEntityPortalControllerEntity) te).closePortal(true);
 				}
 				((TileEntityPortalControllerEntity) te).setState(TileEntityPortalControllerEntity.State.NO_MULTIBLOCK);
@@ -121,7 +121,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 
 	public TileEntityPortalControllerEntity.State getControllerState() {
 		if(controllerPos != null) {
-			TileEntity te = worldObj.getTileEntity(controllerPos);
+			TileEntity te = world.getTileEntity(controllerPos);
 			if(te != null && te instanceof TileEntityPortalControllerEntity) {
 				return ((TileEntityPortalControllerEntity) te).getState();
 			}
@@ -132,7 +132,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 	@Nullable
 	public ClientPortalInfo getClientRenderInfo() {
 		if(controllerPos != null) {
-			TileEntity te = worldObj.getTileEntity(controllerPos);
+			TileEntity te = world.getTileEntity(controllerPos);
 			if(te != null && te instanceof TileEntityPortalControllerEntity) {
 				return ((TileEntityPortalControllerEntity) te).renderInfo;
 			}
@@ -143,7 +143,7 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 	@Override
 	public PortalFrameState getPortalFrameState() {
 		if(controllerPos != null) {
-			TileEntity te = worldObj.getTileEntity(controllerPos);
+			TileEntity te = world.getTileEntity(controllerPos);
 			if(te != null && te instanceof TileEntityPortalControllerEntity) {
 				return ((TileEntityPortalControllerEntity) te).getPortalFrameState();
 			}

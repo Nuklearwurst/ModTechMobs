@@ -9,9 +9,9 @@ import com.fravokados.dangertech.portals.lib.Textures;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * @author Nuklearwurst
@@ -39,7 +39,7 @@ public class ItemMindDimUpgrade extends ItemMDMultiType implements IUpgrade {
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tabs, List<ItemStack> list) {
+    public void getSubItems(Item item, CreativeTabs tabs, NonNullList<ItemStack> list) {
 	    list.add(new ItemStack(item, 1, META_EMPTY));
         list.add(new ItemStack(item, 1, META_REVERSE_DIRECTION));
         list.add(new ItemStack(item, 1, META_CLOSE_INCOMING_PORTAL));

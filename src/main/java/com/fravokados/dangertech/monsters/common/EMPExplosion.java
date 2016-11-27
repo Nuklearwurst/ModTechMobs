@@ -101,7 +101,7 @@ public class EMPExplosion {
 	}
 
 	public static void createExplosion(Entity exploder, double x, double y, double z, float strength, int radius) {
-		new EMPExplosion(exploder, exploder.worldObj, x, y, z, strength, radius).doExplosionWithEffects();
+		new EMPExplosion(exploder, exploder.world, x, y, z, strength, radius).doExplosionWithEffects();
 	}
 
 	public static void createExplosion(Entity exploder, float strength, int radius) {

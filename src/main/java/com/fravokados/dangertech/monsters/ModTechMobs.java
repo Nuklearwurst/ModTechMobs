@@ -19,6 +19,7 @@ import com.fravokados.dangertech.monsters.techdata.values.TDValues;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -27,7 +28,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 @Mod(modid = Reference.MOD_ID,
@@ -72,9 +72,9 @@ public class ModTechMobs {
 		//init creative tab
 		TAB_TM = new CreativeTabs(Strings.CREATIVE_TAB) {
 			@Override
-			public Item getTabIconItem() {
+			public ItemStack getTabIconItem() {
 				//noinspection ConstantConditions
-				return ModItems.monsterDetector;
+				return new ItemStack(ModItems.monsterDetector);
 			}
 		};
 
@@ -126,27 +126,28 @@ public class ModTechMobs {
 			}
 		}
 
-		for (String s : cItemValues) {
-			String[] s1 = s.split(":");
-			if (s1.length < 5) {
-				try {
-					Item item = GameRegistry.findItem(s1[0], s1[1]);
-					if (item == null) {
-						LogHelperTM.warn("Custom Item not found! Please check configs! (" + s + ")");
-						continue;
-					}
-					if (s1.length == 4) {
-						TDValues.getInstance().registerItemEntry(item, Integer.parseInt(s1[2]), Integer.parseInt(s1[3]));
-					} else {
-						TDValues.getInstance().registerItemEntry(item, Integer.parseInt(s1[2]));
-					}
-				} catch (NumberFormatException e) {
-					LogHelperTM.warn("Invalid custom Item TechValue! Please check configs! (" + s + ")");
-				}
-			} else {
-				LogHelperTM.warn("Invalid custom Item TechValue! Please check configs! (" + s + ")");
-			}
-		}
+		//TODO decide what to do with this
+//		for (String s : cItemValues) {
+//			String[] s1 = s.split(":");
+//			if (s1.length < 5) {
+//				try {
+//					Item item = GameRegistry.findItem(s1[0], s1[1]);
+//					if (item == null) {
+//						LogHelperTM.warn("Custom Item not found! Please check configs! (" + s + ")");
+//						continue;
+//					}
+//					if (s1.length == 4) {
+//						TDValues.getInstance().registerItemEntry(item, Integer.parseInt(s1[2]), Integer.parseInt(s1[3]));
+//					} else {
+//						TDValues.getInstance().registerItemEntry(item, Integer.parseInt(s1[2]));
+//					}
+//				} catch (NumberFormatException e) {
+//					LogHelperTM.warn("Invalid custom Item TechValue! Please check configs! (" + s + ")");
+//				}
+//			} else {
+//				LogHelperTM.warn("Invalid custom Item TechValue! Please check configs! (" + s + ")");
+//			}
+//		}
 
 		LogHelperTM.info(Reference.MOD_NAME + ", version: " + Reference.VERSION + ", has successfully loaded!");
 	}

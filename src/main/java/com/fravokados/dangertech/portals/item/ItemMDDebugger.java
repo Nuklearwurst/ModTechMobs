@@ -5,7 +5,6 @@ import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalContro
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalFrame;
 import com.fravokados.dangertech.portals.lib.Strings;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -24,25 +23,25 @@ public class ItemMDDebugger extends ItemMD {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity != null) {
 			final String side = world.isRemote ? "CLIENT: " : "SERVER: ";
 			if(tileEntity instanceof TileEntityPortalControllerEntity) {
 				final TileEntityPortalControllerEntity te = (TileEntityPortalControllerEntity) tileEntity;
-				player.addChatComponentMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", state: " + te.getState() + ", portalState: " + te.getPortalFrameState()));
-				player.addChatComponentMessage(new TextComponentString("Sink tier: " + te.getSinkTier() + ", ID: " + te.getId()));
+				player.sendMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", state: " + te.getState() + ", portalState: " + te.getPortalFrameState()));
+				player.sendMessage(new TextComponentString("Sink tier: " + te.getSinkTier() + ", ID: " + te.getId()));
 			} else if(tileEntity instanceof TileEntityPortalFrame) {
 				final TileEntityPortalFrame te = (TileEntityPortalFrame) tileEntity;
-				player.addChatComponentMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", active: " + te.isActive() + ", portalState: " + te.getPortalFrameState()));
+				player.sendMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", active: " + te.isActive() + ", portalState: " + te.getPortalFrameState()));
 
 			} else if(tileEntity instanceof TileEntityPortal && !world.isRemote) {
 				final TileEntityPortal te = (TileEntityPortal) tileEntity;
-				player.addChatComponentMessage(new TextComponentString(side + "controller: " + te.getController()));
+				player.sendMessage(new TextComponentString(side + "controller: " + te.getController()));
 
 			}
 			return EnumActionResult.SUCCESS;
 		}
-		return super.onItemUse(stack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+		return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 	}
 }

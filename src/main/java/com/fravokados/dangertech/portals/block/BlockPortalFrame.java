@@ -39,6 +39,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -47,7 +48,6 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -82,8 +82,8 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider, IW
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null && PluginManager.isItemWrench(heldItem)) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (PluginManager.isItemWrench(player.getHeldItem(hand))) {
 			return true;
 		}
 
@@ -124,7 +124,7 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider, IW
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs creativeTab, List<ItemStack> list) {
+	public void getSubBlocks(Item item, CreativeTabs creativeTab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(item, 1, 0));
 		EnergyManager.createItemVariantsForEnergyTypes(list, item, 1, EnergyManager.getAvailableEnergyTypes());
 	}
