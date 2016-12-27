@@ -56,16 +56,6 @@ public class ModMiningDimension {
 		//load config
 		config = new ConfigHandler(evt.getSuggestedConfigurationFile());
 		config.load(true);
-
-		//register Creative Tab
-		TAB_MD = new CreativeTabs(Strings.CREATIVE_TAB) {
-			@Override
-			public ItemStack getTabIconItem() {
-				//noinspection ConstantConditions
-				return new ItemStack(ModItems.itemDestinationCard);
-			}
-		};
-
 		//register blocks and tileentities
 
 	}
@@ -106,13 +96,26 @@ public class ModMiningDimension {
 		evt.registerServerCommand(new CommandEnterDimension());
 	}
 
+	private static void initCreativeTab() {
+		if(TAB_MD != null) return;
+		TAB_MD = new CreativeTabs(Strings.CREATIVE_TAB) {
+			@Override
+			public ItemStack getTabIconItem() {
+				//noinspection ConstantConditions
+				return new ItemStack(ModItems.itemDestinationCard);
+			}
+		};
+	}
+
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> evt) {
+		initCreativeTab();
 		ModItems.registerItems();
 	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> evt) {
+		initCreativeTab();
 		ModBlocks.registerBlocks();
 		ModBlocks.registerTileEntities();
 	}

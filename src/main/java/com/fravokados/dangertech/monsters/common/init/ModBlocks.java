@@ -19,11 +19,13 @@ public class ModBlocks {
 	////////////////////
 	// General Blocks //
 	////////////////////
+	@GameRegistry.ObjectHolder(Strings.Block.COT)
 	public static final BlockTM block_cot = null;
 
 	//////////////////
 	// Debug Blocks //
 	//////////////////
+	@GameRegistry.ObjectHolder(Strings.Block.CREATIVE_TECHNOLOGY)
 	public static final BlockCreativeTechnology creativeTechnology = null;
 	
 	public static void registerBlocks() {

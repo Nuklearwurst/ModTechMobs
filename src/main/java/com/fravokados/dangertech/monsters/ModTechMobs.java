@@ -69,15 +69,6 @@ public class ModTechMobs {
 		DangerousTechnologyAPI.valueRegistry = new TDValues();
 		DangerousTechnologyAPI.damageSourceEMP = new DamageSource(Strings.DAMAGE_SOURCE_EMP).setDamageBypassesArmor();
 
-		//init creative tab
-		TAB_TM = new CreativeTabs(Strings.CREATIVE_TAB) {
-			@Override
-			public ItemStack getTabIconItem() {
-				//noinspection ConstantConditions
-				return new ItemStack(ModItems.monsterDetector);
-			}
-		};
-
 		//init rendering
 		proxy.registerRenderer();
 	}
@@ -152,6 +143,17 @@ public class ModTechMobs {
 		LogHelperTM.info(Reference.MOD_NAME + ", version: " + Reference.VERSION + ", has successfully loaded!");
 	}
 
+	private static void initCreativeTab() {
+		if(TAB_TM != null) return;
+		TAB_TM = new CreativeTabs(Strings.CREATIVE_TAB) {
+			@Override
+			public ItemStack getTabIconItem() {
+				//noinspection ConstantConditions
+				return new ItemStack(ModItems.monsterDetector);
+			}
+		};
+	}
+
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent evt) {
 		//register events
@@ -168,11 +170,13 @@ public class ModTechMobs {
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> evt) {
+		initCreativeTab();
 		ModItems.registerItems();
 	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> evt) {
+		initCreativeTab();
 		ModBlocks.registerBlocks();
 		ModBlocks.registerTileEntities();
 	}
