@@ -61,15 +61,6 @@ public class ModNwCore {
 		//init networking
 		ModNetworkManager.init();
 
-		//init CreativeTab
-		CREATIVE_TABS = new CreativeTabs(Strings.CREATIVE_TAB) {
-			@Override
-			public Item getTabIconItem() {
-				//noinspection ConstantConditions
-				return ModItems.upgradeTool;
-			}
-		};
-
 		//init API
 		DangerousTechnologyAPI.creativeTab = CREATIVE_TABS;
 	}
@@ -96,13 +87,25 @@ public class ModNwCore {
 		LogHelperCore.info("Disabled " + Reference.MOD_NAME + " version: " + Reference.VERSION + "!");
 	}
 
+	private static void initCreativeTab() {
+		if(CREATIVE_TABS != null) return;
+		CREATIVE_TABS = new CreativeTabs(Strings.CREATIVE_TAB) {
+			@Override
+			public Item getTabIconItem() {
+				//noinspection ConstantConditions
+				return ModItems.upgradeTool;
+			}
+		};
+	}
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> evt) {
+		initCreativeTab();
 		ModItems.registerItems();
 	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> evt) {
+		initCreativeTab();
 	}
 }
