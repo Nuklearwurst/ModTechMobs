@@ -20,24 +20,24 @@ public class Strings {
 	}
 	
 	public static final class Block {
-		public static final String GATE_EXTENDER = "gateExtender";
+		public static final String GATE_EXTENDER = "gate_extender";
 		public static final String REPROCESSOR = "reprocessor";
 		public static final String COT = "block_cot";
-		public static final String CREATIVE_TECHNOLOGY = "creativeTechnology";
+		public static final String CREATIVE_TECHNOLOGY = "creative_technology";
 	}
 	
 	public static final class Item {
-		public static final String MONSTER_DETECTOR = "monsterDetector";
-		public static final String MONSTER_DROP = "monsterDrop";
+		public static final String MONSTER_DETECTOR = "monster_detector";
+		public static final String MONSTER_DROP = "monster_drop";
 		public static final String[] MONSTER_DROP_SUBTYPES = {"common"};
 		public static final String[] MONSTER_DROP_TOOLTIP = {"common"};
 		public static final String COT = "item_cot";
-		public static final String TD_DEBUGGER = "tdDebugger";
-		public static final String TD_ANALYZER = "tdAnalyzer";
-		public static final String TD_ANALYZER_MODE_PREFIX = "item.tdAnalyzer.mode.";
+		public static final String TD_DEBUGGER = "td_debugger";
+		public static final String TD_ANALYZER = "td_analyzer";
+		public static final String TD_ANALYZER_MODE_PREFIX = "item.td_analyzer.mode.";
 		public static final String[] TD_ANALYZER_MODES = new String[] {"block", "item", "player", "chunk"};
-		public static final String CONSERVATION_UNIT = "conservationUnit";
-		public static final String QUANTUM_SWORD = "quantumSword";
+		public static final String CONSERVATION_UNIT = "conservation_unit";
+		public static final String QUANTUM_SWORD = "quantum_sword";
 	}
 	
 	public static final class Chat {

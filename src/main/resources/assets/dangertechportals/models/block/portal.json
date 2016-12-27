@@ -1,7 +1,7 @@
 {
     "textures": {
-        "particle": "dangertechportals:blocks/mindimPortal",
-        "portal": "dangertechportals:blocks/mindimPortal"
+        "particle": "dangertechportals:blocks/mindim_portal",
+        "portal": "dangertechportals:blocks/mindim_portal"
     },
     "elements": [
         {   "from": [ 4, 0, 0 ],

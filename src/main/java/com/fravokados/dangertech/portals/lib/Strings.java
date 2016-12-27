@@ -10,16 +10,16 @@ public class Strings {
 	public static final String CREATIVE_TAB = "mindim";
 
 	public static final class Block {
-		public static final String portalMachineBase = "portalComponent";
-		public static final String portalMachineController = "portalController";
-		public static final String portalMachineFrame = "portalFrame";
+		public static final String portalMachineBase = "portal_component";
+		public static final String portalMachineController = "portal_controller";
+		public static final String portalMachineFrame = "portal_frame";
 
-		public static final String portal = "mindimPortal";
+		public static final String portal = "mindim_portal";
 	}
 
 	public static final class Item {
-		public static final String destinationCard = "destinationCard";
-		public static final String destinationCardMinDim = "destinationCardMinDim";
+		public static final String destinationCard = "destination_card";
+		public static final String destinationCardMinDim = "destination_card_mindim";
 		public static final String debugger = "debugger";
 		public static final String upgrade = "upgrade";
 

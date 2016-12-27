@@ -8,7 +8,7 @@ public class Strings {
 	public static final String CREATIVE_TAB = "nwcore";
 
 	public static final class Item {
-		public static final String UPGRADE_TOOL = "upgradeTool";
+		public static final String UPGRADE_TOOL = "upgrade_tool";
 	}
 
 	public static final class Keys {
