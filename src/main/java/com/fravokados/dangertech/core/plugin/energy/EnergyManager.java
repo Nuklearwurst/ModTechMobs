@@ -83,6 +83,7 @@ public class EnergyManager {
 	 * @param inv inventory that is to be searched
 	 * @return returns the first energytype found. Null if none.
 	 */
+	@Nullable
 	public static EnergyType getFirstEnergyTypeOfInventory(IInventory inv) {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
@@ -103,6 +104,7 @@ public class EnergyManager {
 	 * @param inv inventory that is to be searched
 	 * @return null if none of the items have an EnergyType or different ones were found. Otherwise this will return the EnergyType found.
 	 */
+	@Nullable
 	public static EnergyType getEnergyTypeOfInventory(IInventory inv) {
 		EnergyType typeFound = null;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {

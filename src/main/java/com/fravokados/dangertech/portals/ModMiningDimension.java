@@ -101,7 +101,7 @@ public class ModMiningDimension {
 			@Override
 			public Item getTabIconItem() {
 				//noinspection ConstantConditions
-				return new ModItems.itemDestinationCard;
+				return ModItems.itemDestinationCard;
 			}
 		};
 	}

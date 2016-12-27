@@ -79,7 +79,7 @@ public class IC2Recipes {
 		);
 
 		// PortalController
-		GameRegistry.addRecipe(EnergyManager.createItemStackWithEnergyType(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_CONTROLLER.ordinal(), EnergyType.VANILLA),
+		GameRegistry.addRecipe(EnergyManager.createItemStackWithEnergyType(ModBlocks.blockPortalFrame, 1, PortalFrameType.BASIC_CONTROLLER.ordinal(), EnergyType.IC2),
 				"ded",
 				"afa",
 				"tct",
