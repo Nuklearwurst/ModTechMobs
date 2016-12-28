@@ -7,7 +7,6 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
-import java.security.InvalidParameterException;
 import java.util.Arrays;
 
 public class TDMobEffectEquipment extends TDMobEffect {
@@ -37,10 +36,10 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	 */
 	public TDMobEffectEquipment(ItemStack[] equipment, boolean asSet, boolean replaceEquipment, int[] values) {
 		if(equipment.length < 6) {
-			throw new InvalidParameterException("The equipment array has to have all 6 equipment pieces! (These can be null)");
+			throw new IllegalArgumentException("The equipment array has to have all 6 equipment pieces! (These can be null)");
 		}
 		if(values.length < 6) {
-			throw new InvalidParameterException("The values array has to have all 6 values! (These can be zero)");
+			throw new IllegalArgumentException("The values array has to have all 6 values! (These can be zero)");
 		}
 		this.equipment = equipment;
 		this.asSet = asSet;
@@ -72,13 +71,13 @@ public class TDMobEffectEquipment extends TDMobEffect {
 		}
 
 		if(asSet) {
-			if(values[0] + values[1] + values[2] + values[3] + values[4] > techdata) {
+			if(values[0] + values[1] + values[2] + values[3] + values[4] + values[5] > techdata) {
 				//is to costly
 				return false;
 			}
 		}
 		int counter = 0;
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < 6; i++) {
 			ItemStack stack = e.getItemStackFromSlot(EntityEquipmentSlot.values()[i]);
 			if(stack != null && equipment[i] != null) {
 				if(replaceEquipment) {
@@ -112,15 +111,15 @@ public class TDMobEffectEquipment extends TDMobEffect {
 		EntityLiving e = (EntityLiving) entityLiving;
 		//everthing should be clear for a set
 		if(asSet) {
-			for(int i = 0; i < 5; i++) {
+			for(int i = 0; i < 6; i++) {
 				e.setItemStackToSlot(EntityEquipmentSlot.values()[i], equipment[i].copy());
 			}
-			return values[0] + values[1] + values[2] + values[3] + values[4];
+			return values[0] + values[1] + values[2] + values[3] + values[4] + values[5];
 		}
 		int start = e.worldObj.rand.nextInt(5);
 		int used = 0;
-		for(int i = 0; i < 5; i++) {
-			int j = (start + i) % 5;
+		for(int i = 0; i < 6; i++) {
+			int j = (start + i) % 6;
 			if(equipment[j] == null) {
 				continue;
 			}
@@ -145,12 +144,25 @@ public class TDMobEffectEquipment extends TDMobEffect {
 	 * checks contents and resets costs for equipment that is not available
 	 */
 	public TDMobEffectEquipment checkContents() {
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < 6; i++) {
 			if(equipment[i] == null) {
 				values[i] = 0;
 			}
 		}
 		return this;
+	}
+
+	/**
+	 * @return whether this contains any equipment at all
+	 */
+	@Override
+	public boolean isValid() {
+		for(int i = 0; i < 6; i++) {
+			if(values[i] != 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

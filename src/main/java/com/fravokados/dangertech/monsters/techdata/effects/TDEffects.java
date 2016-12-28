@@ -58,7 +58,11 @@ public class TDEffects implements TDEffectRegistry {
 	@Override
 	public void addMobEffect(TDMobEffect effect) {
 		if(mobEffects.contains(effect)) {
-			LogHelperTM.error("MobEffect " + effect + "already registered!");
+			LogHelperTM.error("MobEffect " + effect + " already registered!");
+			return;
+		}
+		if(!effect.isValid()) {
+			LogHelperTM.info("MobEffect " + effect + " is not valid!");
 			return;
 		}
 		mobEffects.add(effect);

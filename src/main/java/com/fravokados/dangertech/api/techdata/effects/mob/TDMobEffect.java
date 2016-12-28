@@ -19,4 +19,11 @@ public abstract class TDMobEffect {
 	 */
 	public abstract int applyEffect(int techdata, EntityLivingBase entityLiving);
 
+	/**
+	 * @return whether this effect is valid and can be used. return false if there was an error initializing the effect.
+	 */
+	public boolean isValid() {
+		return true;
+	}
+
 }

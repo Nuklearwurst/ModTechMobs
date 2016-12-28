@@ -14,9 +14,7 @@ public class PluginManager {
 	}
 
 	public static boolean ic2Activated() {
-		return false;
-		//FIXME ic2 integration
-//		return Info.isIc2Available();
+		return com.fravokados.dangertech.core.plugin.PluginManager.ic2Activated();
 	}
 
 }

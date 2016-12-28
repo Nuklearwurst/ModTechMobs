@@ -1,9 +1,13 @@
 package com.fravokados.dangertech.monsters.plugin.ic2;
 
 import com.fravokados.dangertech.monsters.plugin.PluginManager;
+import ic2.api.item.ElectricItem;
+import ic2.api.item.IElectricItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Nuklearwurst
@@ -33,14 +37,12 @@ public class IC2EMPIntegration {
 	/**
 	 * @param factor 1 / distance to entity
 	 */
-	public static boolean handleItemEMP(ItemStack stack, Entity entity, double x, double y, double z, float strength, int radius, float factor) {
+	public static boolean handleItemEMP(@Nullable ItemStack stack, Entity entity, double x, double y, double z, float strength, int radius, float factor) {
 		if(PluginManager.ic2Activated() && stack != null) {
-			/*
 			if(stack.getItem() instanceof IElectricItem) {
 				ElectricItem.manager.discharge(stack, (factor * strength / 10) * ElectricItem.manager.getCharge(stack) + factor * strength * 100, 4, true, false, false);
 				return true;
 			}
-			*/
 		}
 		return false;
 	}
