@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "alpha-1.5"
+version = "1.6.0-alpha"
 group= "com.fravokados.dangertech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 archivesBaseName = "DangerousTechnology"
@@ -94,8 +94,8 @@ jar {
 
 task mindimJar(type: Jar, dependsOn: reobfJar) {
     from(zipTree(jar.archivePath)) {
-        include '**/dangertech/mindim/**'
-        include '**/assets/mindim/**'
+        include '**/dangertech/portals/**'
+        include '**/assets/dangertechportals/**'
     }
     from(sourceSets.main.output.resourcesDir) {
         include 'mindim.info'
@@ -106,9 +106,9 @@ task mindimJar(type: Jar, dependsOn: reobfJar) {
 
 task techmobsJar(type: Jar, dependsOn: reobfJar) {
     from(zipTree(jar.archivePath)) {
-        include '**/dangertech/techmobs/**'
+        include '**/dangertech/monsters/**'
 
-        include '**/assets/techmobs/**'
+        include '**/assets/dangertechmobs/**'
     }
     from(sourceSets.main.output.resourcesDir) {
         include 'techmobs.info'
@@ -121,7 +121,7 @@ task nwcoreJar(type: Jar, dependsOn: reobfJar) {
     from(zipTree(jar.archivePath)) {
         include '**/dangertech/core/**'
         include '**/dangertech/api/**'
-        include '**/assets/nwcore/**'
+        include '**/assets/dangertech/**'
 
         include 'ic2/**'
         include 'com/xcompwiz/lookingglass/**'
