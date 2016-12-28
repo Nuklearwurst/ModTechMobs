@@ -50,7 +50,7 @@ public class EntityEMPCreeper extends EntityMob {
 	/**
 	 * Explosion radius for this creeper.
 	 */
-	private int explosionRadius = 3;
+	private int explosionRadius = 5;
 
 	public EntityEMPCreeper(World world) {
 		super(world);
@@ -201,7 +201,7 @@ public class EntityEMPCreeper extends EntityMob {
 
 	@Override
 	protected Item getDropItem() {
-		return Items.GUNPOWDER;
+		return Items.REDSTONE;
 	}
 
 	/**

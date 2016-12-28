@@ -14,8 +14,8 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderEMPCreeper extends RenderLiving<EntityEMPCreeper> {
-	private static final ResourceLocation armoredCreeperTextures = Textures.getResourceLocation("textures/entity/emp_creeper_armor");
-	private static final ResourceLocation creeperTextures = Textures.getResourceLocation("textures/entity/emp_creeper");
+	private static final ResourceLocation armoredCreeperTextures = Textures.getResourceLocation("textures/entity/emp_creeper_armor.png");
+	private static final ResourceLocation creeperTextures = Textures.getResourceLocation("textures/entity/emp_creeper.png");
 
 	/**
 	 * The creeper model.

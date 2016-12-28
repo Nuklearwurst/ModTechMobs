@@ -57,6 +57,21 @@ public class ModEntities {
 		EntityRegistry.removeSpawn(EntityCyberZombie.class, EnumCreatureType.MONSTER, nether);
 		EntityRegistry.removeSpawn(EntityCyberZombie.class, EnumCreatureType.MONSTER, end);
 
+
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, forest);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, hills);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, hot);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, mountain);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, jungle);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, magic);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, plains);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, swamp);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, snowy);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, wasteland);
+//		EntityRegistry.addSpawn(EntityEMPCreeper.class, 10, 1, 5, EnumCreatureType.MONSTER, beach);
+//		EntityRegistry.removeSpawn(EntityEMPCreeper.class, EnumCreatureType.MONSTER, nether);
+//		EntityRegistry.removeSpawn(EntityEMPCreeper.class, EnumCreatureType.MONSTER, end);
+
 	}
 
 
