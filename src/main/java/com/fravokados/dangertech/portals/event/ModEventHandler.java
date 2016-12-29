@@ -12,6 +12,8 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author Nuklearwurst
@@ -19,6 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber
 public class ModEventHandler {
 
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void registerOtherTextures(TextureStitchEvent.Pre evt) {
 		evt.getMap().registerSprite(Textures.GUI_SLOT_DESTINATION_CARD);

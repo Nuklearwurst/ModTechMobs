@@ -28,6 +28,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 @Mod(modid = Reference.MOD_ID,
@@ -98,6 +100,7 @@ public class ModMiningDimension {
 	private static void initCreativeTab() {
 		if(TAB_MD != null) return;
 		TAB_MD = new CreativeTabs(Strings.CREATIVE_TAB) {
+			@SideOnly(Side.CLIENT)
 			@Override
 			public Item getTabIconItem() {
 				//noinspection ConstantConditions

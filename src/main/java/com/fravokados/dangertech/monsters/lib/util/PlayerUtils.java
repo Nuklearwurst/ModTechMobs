@@ -82,6 +82,7 @@ public class PlayerUtils {
 		return nbt;
 	}
 
+	@Nullable
 	public static ItemStack getCurrentUsablePlayerItem(EntityPlayer player, IItemValidator validator) {
 		ItemStack out = player.getHeldItemMainhand();
 		if (out != null && validator.isSearchedItem(out)) {

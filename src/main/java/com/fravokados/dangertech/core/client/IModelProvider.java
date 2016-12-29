@@ -6,8 +6,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author Nuklearwurst
  */
-@SideOnly(Side.CLIENT)
 public interface IModelProvider {
 
+	@SideOnly(Side.CLIENT)
 	void registerModels();
 }

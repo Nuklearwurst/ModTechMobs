@@ -28,6 +28,8 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 @Mod(modid = Reference.MOD_ID,
@@ -146,6 +148,7 @@ public class ModTechMobs {
 		if(TAB_TM != null) return;
 		TAB_TM = new CreativeTabs(Strings.CREATIVE_TAB) {
 			@Override
+			@SideOnly(Side.CLIENT)
 			public Item getTabIconItem() {
 				//noinspection ConstantConditions
 				return ModItems.monsterDetector;

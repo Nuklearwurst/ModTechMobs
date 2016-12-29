@@ -24,6 +24,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 /**
@@ -91,6 +93,7 @@ public class ModNwCore {
 		if(CREATIVE_TABS != null) return;
 		CREATIVE_TABS = new CreativeTabs(Strings.CREATIVE_TAB) {
 			@Override
+			@SideOnly(Side.CLIENT)
 			public Item getTabIconItem() {
 				//noinspection ConstantConditions
 				return ModItems.upgradeTool;
