@@ -188,7 +188,7 @@ public class ContainerEntityPortalController extends Container implements IEleme
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return this.te.isUseableByPlayer(player);
+		return this.te.isUsableByPlayer(player);
 	}
 
 	@Override

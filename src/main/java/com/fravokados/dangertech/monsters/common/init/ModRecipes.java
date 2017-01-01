@@ -20,7 +20,7 @@ public class ModRecipes {
 				'W', new ItemStack(Blocks.WOOL),
 				'C', new ItemStack(Blocks.CARPET)));
 
-		if(PluginManager.ic2Activated()) {
+		if(PluginManager.isIc2Available()) {
 			IC2Recipes.init();
 		} else {
 			initVanillaFallback();

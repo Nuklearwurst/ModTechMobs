@@ -107,7 +107,7 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public static void onEntitySetAttackTarget(LivingSetAttackTargetEvent evt) {
-		if (!evt.getEntity().worldObj.isRemote && evt.getTarget() instanceof EntityPlayer && (evt.getEntityLiving() instanceof IMob || evt.getEntityLiving() instanceof EntityTameable)) {
+		if (!evt.getEntity().getEntityWorld().isRemote && evt.getTarget() instanceof EntityPlayer && (evt.getEntityLiving() instanceof IMob || evt.getEntityLiving() instanceof EntityTameable)) {
 			EntityPlayer player = (EntityPlayer) evt.getTarget();
 			for (ItemStack stack : player.inventory.mainInventory) {
 				if (stack != null && stack.stackSize != 0 && stack.getItem() instanceof IItemAttackTargetListener) {
@@ -120,7 +120,7 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public static void onEntityAttack(LivingAttackEvent evt) {
-		if (!evt.getEntity().worldObj.isRemote && evt.getEntity() instanceof EntityPlayer) {
+		if (!evt.getEntity().getEntityWorld().isRemote && evt.getEntity() instanceof EntityPlayer) {
 			if (evt.getSource().getEntity() instanceof IMob) {
 				TDManager.scanAndUpdatePlayerTD((EntityPlayer) evt.getEntity());
 			}
@@ -171,7 +171,7 @@ public class TMEventHandler {
 					EntityConservationUnit entity = new EntityConservationUnit(world, x, y + 1, z);
 					entity.addCapturedDrops(evt.getDrops());
 					entity.setShouldDrop(world.rand.nextInt(2) == 0);
-					world.spawnEntityInWorld(entity);
+					world.spawnEntity(entity);
 					evt.setCanceled(true);
 					break;
 				}

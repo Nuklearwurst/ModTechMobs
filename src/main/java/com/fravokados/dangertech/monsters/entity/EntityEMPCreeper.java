@@ -230,10 +230,10 @@ public class EntityEMPCreeper extends EntityMob {
 		//FIXME: should EMPCreeper explode when used with flint and steel?
 		if (stack != null && stack.getItem() == Items.FLINT_AND_STEEL)
 		{
-			this.worldObj.playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
+			this.getEntityWorld().playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
 			player.swingArm(hand);
 
-			if (!this.worldObj.isRemote)
+			if (!this.getEntityWorld().isRemote)
 			{
 				this.ignite();
 				stack.damageItem(1, player);
@@ -245,7 +245,7 @@ public class EntityEMPCreeper extends EntityMob {
 	}
 
 	private void explode() {
-		if (!this.worldObj.isRemote) {
+		if (!this.getEntityWorld().isRemote) {
 			if (this.isPowered()) {
 				EMPExplosion.createExplosionWithYOffset(this, 1, explosionRadius * 2);
 			} else {

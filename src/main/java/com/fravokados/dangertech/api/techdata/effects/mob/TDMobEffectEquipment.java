@@ -116,7 +116,7 @@ public class TDMobEffectEquipment extends TDMobEffect {
 			}
 			return values[0] + values[1] + values[2] + values[3] + values[4] + values[5];
 		}
-		int start = e.worldObj.rand.nextInt(5);
+		int start = e.getEntityWorld().rand.nextInt(5);
 		int used = 0;
 		for(int i = 0; i < 6; i++) {
 			int j = (start + i) % 6;

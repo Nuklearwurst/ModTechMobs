@@ -13,9 +13,11 @@ public class PluginManager {
 
 	public final static String IC2 = "IC2";
 	public final static String TESLA = "tesla";
+	public final static String IMMERSIVE_ENGINEERING = "immersiveengineering";
 
 	private static boolean ic2Available = false;
 	private static boolean teslaAvailable = false;
+	private static boolean immersiveEngineeringAvailable = false;
 
 	public static void init() {
 
@@ -27,15 +29,23 @@ public class PluginManager {
 			loadTesla();
 		}
 
+		if(Loader.isModLoaded(IMMERSIVE_ENGINEERING)) {
+			loadImmersiveEngineering();
+		}
+
 		EnergyManager.init();
 	}
 
-	public static boolean ic2Activated() {
+	public static boolean isIc2Available() {
 		return ic2Available;
 	}
 
 	public static boolean teslaActivated() {
 		return teslaAvailable;
+	}
+
+	public static boolean isImmersiveEngineeringAvailable() {
+		return immersiveEngineeringAvailable;
 	}
 
 	private static void loadTesla() {
@@ -53,11 +63,15 @@ public class PluginManager {
 		}
 	}
 
+	private static void loadImmersiveEngineering() {
+		immersiveEngineeringAvailable = true;
+	}
+
 	public static boolean isItemWrench(@Nullable ItemStack stack) {
 		if(stack == null) {
 			return false;
 		}
-		if(ic2Activated()) {
+		if(isIc2Available()) {
 			return IC2Plugin.isItemWrench(stack);
 		}
 		return false;

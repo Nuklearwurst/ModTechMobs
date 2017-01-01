@@ -49,7 +49,7 @@ public class MessageEMP implements IMessage, IMessageHandler<MessageEMP, IMessag
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	public IMessage onMessage(MessageEMP message, MessageContext ctx) {
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		EMPExplosion emp = new EMPExplosion(player.getEntityWorld(), message.x,message.y, message.z, message.strength, message.radius);
 		emp.doEffects();
 		return null;

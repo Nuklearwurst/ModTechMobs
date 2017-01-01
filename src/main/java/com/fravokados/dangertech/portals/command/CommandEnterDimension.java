@@ -15,12 +15,12 @@ import net.minecraft.server.MinecraftServer;
  */
 public class CommandEnterDimension extends CommandBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "tpw";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "tpw";
     }
 

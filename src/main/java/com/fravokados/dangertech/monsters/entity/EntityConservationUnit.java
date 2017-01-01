@@ -118,7 +118,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	protected void collideWithNearbyEntities() {
-		List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(0.2D, -0.01D, 0.2D));
+		List<Entity> list = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(0.2D, -0.01D, 0.2D));
 
 		if (!list.isEmpty()) {
 			for (Entity entity : list) {
@@ -128,10 +128,10 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 						if (entity.getEntityBoundingBox().minY < this.getEntityBoundingBox().maxY - 1D) {
 							double deltaX = entity.posX - this.posX;
 							double deltaZ = entity.posZ - this.posZ;
-							double abs_max = MathHelper.abs_max(deltaX, deltaZ);
+							double abs_max = MathHelper.absMax(deltaX, deltaZ);
 
 							if (abs_max >= 0.001) {
-								abs_max = (double) MathHelper.sqrt_double(abs_max);
+								abs_max = (double) MathHelper.sqrt(abs_max);
 								deltaX /= abs_max;
 								deltaZ /= abs_max;
 								double multiplier = 1.0D / abs_max;
@@ -165,12 +165,12 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public boolean canBePushed() {
-		return age > IMMUNITY || worldObj.isRemote;
+		return age > IMMUNITY || getEntityWorld().isRemote;
 	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (!this.worldObj.isRemote && !this.isDead) {
+		if (!this.getEntityWorld().isRemote && !this.isDead) {
 			if (this.isEntityInvulnerable(source)) {
 				return false;
 			} else {
@@ -187,7 +187,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 							float dY = rand.nextFloat() * 0.8F + 0.1F;
 							float dZ = rand.nextFloat() * 0.8F + 0.1F;
 
-							EntityItem entityItem = new EntityItem(worldObj, posX + dX, posY + dY, posZ + dZ, itemStack.copy());
+							EntityItem entityItem = new EntityItem(getEntityWorld(), posX + dX, posY + dY, posZ + dZ, itemStack.copy());
 
 							if (itemStack.hasTagCompound()) {
 								//noinspection ConstantConditions
@@ -198,12 +198,12 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 							entityItem.motionX = rand.nextGaussian() * factor;
 							entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 							entityItem.motionZ = rand.nextGaussian() * factor;
-							worldObj.spawnEntityInWorld(entityItem);
+							getEntityWorld().spawnEntity(entityItem);
 							itemStack.stackSize = 0;
 						}
 					}
 					if (empCounter > 0) {
-						EMPExplosion emp = new EMPExplosion(worldObj, posX, posY + getYOffset(), posZ, empCounter / 10, empCounter / 2);
+						EMPExplosion emp = new EMPExplosion(getEntityWorld(), posX, posY + getYOffset(), posZ, empCounter / 10, empCounter / 2);
 						emp.doExplosionWithEffects();
 					}
 					this.setDead();
@@ -224,7 +224,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		super.onUpdate();
 
 
-		if (worldObj.isRemote) {
+		if (getEntityWorld().isRemote) {
 			if(age < dataManager.get(AGE)) {
 				age = dataManager.get(AGE);
 			}
@@ -234,7 +234,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 					double d2 = this.rand.nextGaussian() * 0.02D;
 					double d0 = this.rand.nextGaussian() * 0.02D;
 					double d1 = this.rand.nextGaussian() * 0.02D;
-					this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d2, d0, d1, new int[0]);
+					this.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d2, d0, d1, new int[0]);
 				}
 			}
 		}
@@ -262,21 +262,21 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		this.moveEntity(motionX, motionY, motionZ);
+		this.move(motionX, motionY, motionZ);
 		this.motionX *= drag;
 		this.motionY -= 0.04;
 		this.motionY *= drag;
 		this.motionZ *= drag;
 
-		if (worldObj.isRemote) {
+		if (getEntityWorld().isRemote) {
 			if (age < IMMUNITY) {
 				if (age % 10 == 0) {
-					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 5, rand.nextDouble(), rand.nextDouble() * 5);
-					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 4, rand.nextDouble(), rand.nextDouble() * 4);
-					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 3, rand.nextDouble(), rand.nextDouble() * 3);
-					worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
-					worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
-					worldObj.spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+					getEntityWorld().spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 5, rand.nextDouble(), rand.nextDouble() * 5);
+					getEntityWorld().spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 4, rand.nextDouble(), rand.nextDouble() * 4);
+					getEntityWorld().spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, rand.nextDouble() * 3, rand.nextDouble(), rand.nextDouble() * 3);
+					getEntityWorld().spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+					getEntityWorld().spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
+					getEntityWorld().spawnParticle(EnumParticleTypes.LAVA, posX, posY, posZ, rand.nextDouble() * 10, 0, rand.nextDouble() * 10);
 				}
 			}
 		}
@@ -383,7 +383,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 
@@ -409,12 +409,12 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	private void onDeath() {
 		playSound(SoundEvents.ENTITY_BLAZE_DEATH, 0.5F, 0.5F);
-		if(!worldObj.isRemote) {
+		if(!getEntityWorld().isRemote) {
 			if(shouldDrop) {
 				//noinspection ConstantConditions
-				InventoryHelper.spawnItemStack(worldObj, posX, posY + 0.5F, posZ, new ItemStack(ModItems.conservationUnit, 1));
+				InventoryHelper.spawnItemStack(getEntityWorld(), posX, posY + 0.5F, posZ, new ItemStack(ModItems.conservationUnit, 1));
 			}
-			InventoryHelper.dropInventoryItems(worldObj, this, this);
+			InventoryHelper.dropInventoryItems(getEntityWorld(), this, this);
 		}
 	}
 
@@ -475,7 +475,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-		player.openGui(ModTechMobs.instance, GUIIDs.CONSERVATION_UNIT, worldObj, getEntityId(), 0, 0);
+		player.openGui(ModTechMobs.instance, GUIIDs.CONSERVATION_UNIT, getEntityWorld(), getEntityId(), 0, 0);
 		return true;
 	}
 

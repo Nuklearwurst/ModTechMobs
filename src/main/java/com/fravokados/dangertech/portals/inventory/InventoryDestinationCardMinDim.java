@@ -108,7 +108,7 @@ public class InventoryDestinationCardMinDim implements IInventory {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+	public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
 		return true;
 	}
 

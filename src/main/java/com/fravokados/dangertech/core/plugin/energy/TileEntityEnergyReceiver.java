@@ -72,7 +72,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
-		if (worldObj == null || !worldObj.isRemote) {
+		if (world == null || !world.isRemote) {
 			if (init) {
 				init = false;
 				unloadMachine();
@@ -83,7 +83,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		if (worldObj == null || !worldObj.isRemote) {
+		if (world == null || !world.isRemote) {
 			if (init) {
 				init = false;
 				unloadMachine();
@@ -95,11 +95,11 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	public final void update() {
 		if (!init) {
 			init = true;
-			if (!worldObj.isRemote) {
+			if (!world.isRemote) {
 				loadMachine();
 			}
 		}
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			updateMachineClient();
 		} else {
 			updateMachineServer();
@@ -116,7 +116,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	 * gets called only on the server on the first update tick
 	 */
 	protected void loadMachine() {
-		if (energyType == EnergyType.IC2 && PluginManager.ic2Activated()) {
+		if (energyType == EnergyType.IC2 && PluginManager.isIc2Available()) {
 			//init ic2 energy net
 			IC2EnergyPlugin.postIC2TileLoadEvent(this);
 		}
@@ -126,7 +126,7 @@ public abstract class TileEntityEnergyReceiver extends TileEntity
 	 * gets called only on the server when tile is invalidated or unloaded
 	 */
 	protected void unloadMachine() {
-		if (energyType == EnergyType.IC2 && PluginManager.ic2Activated()) {
+		if (energyType == EnergyType.IC2 && PluginManager.isIc2Available()) {
 			IC2EnergyPlugin.postIC2TileUnloadEvent(this);
 		}
 	}

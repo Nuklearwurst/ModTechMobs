@@ -18,7 +18,7 @@ public class RotationUtils {
 
 	public static void updateFacing(IFacingSix te, EntityLivingBase player, BlockPos pos) {
 		//rotate block
-		int rotationSegment = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int rotationSegment = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		if (player.rotationPitch >= 65)
 		{
 			te.setFacing(EnumFacing.UP);

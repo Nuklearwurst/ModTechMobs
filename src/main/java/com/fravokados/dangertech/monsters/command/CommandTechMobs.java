@@ -31,22 +31,22 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "techmobs";
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/" + this.getCommandName() + " help";
+	public String getUsage(ICommandSender sender) {
+		return "/" + this.getName() + " help";
 	}
 
 	@Override
 	public String getFullCommandString() {
-		return getCommandName();
+		return getName();
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 		return aliases;
 	}
 
@@ -73,7 +73,7 @@ public class CommandTechMobs extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		return CommandHelpers.getTabCompletionOptionsForSubCommands(server, this, sender, args, pos);
 	}
 

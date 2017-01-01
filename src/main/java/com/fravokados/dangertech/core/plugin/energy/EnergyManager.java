@@ -150,7 +150,7 @@ public class EnergyManager {
 
 		registerEnergyPlugin(EnergyType.FORGE, new ForgeEnergyPlugin());
 
-		if(PluginManager.ic2Activated()) {
+		if(PluginManager.isIc2Available()) {
 			registerEnergyPlugin(EnergyType.IC2, new IC2EnergyPlugin());
 			disableVanillaEnergyType();
 		}

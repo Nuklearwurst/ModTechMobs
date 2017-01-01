@@ -45,7 +45,7 @@ public class MessageContainerIntegerUpdateClient implements IMessage, IMessageHa
 	@Override
 	@Nullable
 	public IMessage onMessage(MessageContainerIntegerUpdateClient message, MessageContext ctx) {
-		EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer entityPlayer = Minecraft.getMinecraft().player;
 
 		if (entityPlayer != null) {
 			if (entityPlayer.openContainer instanceof IContainerIntegerListener) {

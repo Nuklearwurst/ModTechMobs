@@ -169,12 +169,12 @@ public class PortalManager extends WorldSavedData {
 
 				if (!targetMetrics.isHorizontal()) {
 					//prevent player spawning with head inside portal frame
-					posTop = MathHelper.clamp_double(posTop, minUp, maxUp - entity.height); //"Top" Axis
+					posTop = MathHelper.clamp(posTop, minUp, maxUp - entity.height); //"Top" Axis
 				} else {
 					//compensate problems with max/minUp on horizontal portals
-					posTop = MathHelper.clamp_double(posTop, minUp + 1.5, maxUp - 0.5); //"Top" Axis
+					posTop = MathHelper.clamp(posTop, minUp + 1.5, maxUp - 0.5); //"Top" Axis
 				}
-				posSide = MathHelper.clamp_double(posSide, minSide, maxSide); //"Side" Axis
+				posSide = MathHelper.clamp(posSide, minSide, maxSide); //"Side" Axis
 
 				//target coordinate system
 				double x = targetMetrics.originX + targetMetrics.top.getFrontOffsetX() * posTop + sideAxisTarget.getFrontOffsetX() * posSide;

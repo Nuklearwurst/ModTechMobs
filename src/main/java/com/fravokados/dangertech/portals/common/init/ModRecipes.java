@@ -12,7 +12,7 @@ import com.fravokados.dangertech.portals.plugin.ic2.IC2Recipes;
 public class ModRecipes {
 
 	public static void init() {
-		if (PluginManager.ic2Activated()) {
+		if (PluginManager.isIc2Available()) {
 			IC2Recipes.init();
 		} else {
 			initVanillaFallback();

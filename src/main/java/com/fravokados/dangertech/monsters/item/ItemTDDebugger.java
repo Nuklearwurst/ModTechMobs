@@ -31,14 +31,14 @@ public class ItemTDDebugger extends ItemTM {
 		TileEntity te = world.getTileEntity(pos);
 		if(te != null) {
 			if(te instanceof IFacingSix) {
-				player.addChatComponentMessage(new TextComponentString("IFacingSixTile. Facing: " + ((IFacingSix) te).getFacing() + ", isClient=" + world.isRemote));
+				player.sendMessage(new TextComponentString("IFacingSixTile. Facing: " + ((IFacingSix) te).getFacing() + ", isClient=" + world.isRemote));
 			}
 			if(!world.isRemote) {
-				player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.debuggerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
+				player.sendMessage(new TextComponentTranslation(Strings.Chat.debuggerTileEntity, TDValues.getInstance().getTechDataForTileEntity(te)));
 			}
 		} else {
 			if(!world.isRemote) {
-				player.addChatMessage(new TextComponentTranslation(Strings.Chat.debuggerTileEntityNotFound));
+				player.sendMessage(new TextComponentTranslation(Strings.Chat.debuggerTileEntityNotFound));
 			}
 		}
 		return EnumActionResult.SUCCESS;
@@ -47,8 +47,8 @@ public class ItemTDDebugger extends ItemTM {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) {
-			player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.debuggerPlayerTechLevel, TDManager.getPlayerTechLevel(player)));
-			player.addChatComponentMessage(new TextComponentTranslation(Strings.Chat.debuggerPlayerScouted, TDManager.getPlayerScoutedTechLevel(player)));
+			player.sendMessage(new TextComponentTranslation(Strings.Chat.debuggerPlayerTechLevel, TDManager.getPlayerTechLevel(player)));
+			player.sendMessage(new TextComponentTranslation(Strings.Chat.debuggerPlayerScouted, TDManager.getPlayerScoutedTechLevel(player)));
 			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 		return new ActionResult<>(EnumActionResult.PASS, stack);
