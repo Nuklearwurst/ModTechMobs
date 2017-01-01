@@ -13,7 +13,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.6.1-alpha"
+version = "1.6.2-alpha"
 group= "com.fravokados.dangertech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 archivesBaseName = "DangerousTechnology"
@@ -98,6 +98,8 @@ jar {
 //These tasks build standalone jars
 
 task mindimJar(type: Jar, dependsOn: reobfJar) {
+    group = "build"
+    description = "Builds \"DangerousTechnology - Portals\" jar file"
     from(zipTree(jar.archivePath)) {
         include '**/dangertech/portals/**'
         include '**/assets/dangertechportals/**'
@@ -110,6 +112,8 @@ task mindimJar(type: Jar, dependsOn: reobfJar) {
 }
 
 task techmobsJar(type: Jar, dependsOn: reobfJar) {
+    group = "build"
+    description = "Builds \"DangerousTechnology - Monsters\" jar file"
     from(zipTree(jar.archivePath)) {
         include '**/dangertech/monsters/**'
 
@@ -123,6 +127,8 @@ task techmobsJar(type: Jar, dependsOn: reobfJar) {
 }
 
 task nwcoreJar(type: Jar, dependsOn: reobfJar) {
+    group = "build"
+    description = "Builds \"DangerousTechnology - Core\" jar file"
     from(zipTree(jar.archivePath)) {
         include '**/dangertech/core/**'
         include '**/dangertech/api/**'
