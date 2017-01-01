@@ -83,7 +83,9 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerSetSpawn(PlayerSetSpawnEvent evt) {
-		SleepingManager.onPlayerSetSpawn(evt);
+		if(SleepingManager.onPlayerSetSpawn(evt)) {
+			evt.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent
