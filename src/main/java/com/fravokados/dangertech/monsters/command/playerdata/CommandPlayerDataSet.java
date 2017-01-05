@@ -54,7 +54,7 @@ public class CommandPlayerDataSet extends SubCommand {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}
 			TDManager.setPlayerTechLevel(player, value);
-			sender.addChatMessage(new TextComponentString("TechLevel of " + player.getDisplayNameString() + ": " + TDManager.getPlayerTechLevel(player)));
+			sender.sendMessage(new TextComponentString("TechLevel of " + player.getDisplayNameString() + ": " + TDManager.getPlayerTechLevel(player)));
 		}
 
 		@Override
@@ -63,9 +63,9 @@ public class CommandPlayerDataSet extends SubCommand {
 		}
 
 		@Override
-		public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+		public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 			if(args.length == 1) {
-				return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+				return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 			}
 			return new ArrayList<>();
 		}
@@ -92,7 +92,7 @@ public class CommandPlayerDataSet extends SubCommand {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}
 			TDManager.setPlayerScoutedTechLevel(player, value);
-			sender.addChatMessage(new TextComponentString("Scouted TechLevel of " + player.getDisplayNameString() + ": " + TDManager.getPlayerScoutedTechLevel(player)));
+			sender.sendMessage(new TextComponentString("Scouted TechLevel of " + player.getDisplayNameString() + ": " + TDManager.getPlayerScoutedTechLevel(player)));
 		}
 
 		@Override
@@ -101,9 +101,9 @@ public class CommandPlayerDataSet extends SubCommand {
 		}
 
 		@Override
-		public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+		public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 			if(args.length == 1) {
-				return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+				return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 			}
 			return new ArrayList<>();
 		}

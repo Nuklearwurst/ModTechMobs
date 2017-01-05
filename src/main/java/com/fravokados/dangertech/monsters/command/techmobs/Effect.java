@@ -37,7 +37,7 @@ public class Effect extends SubCommand {
 				List<TDPlayerEffect> list = TDEffects.getInstance().getUsablePlayerEffects(effectStrength, ((EntityPlayer) sender).getUniqueID(), (EntityPlayer) sender);
 				int index = GeneralUtils.random.nextInt(list.size());
 				int result = list.get(index).applyEffect(effectStrength, ((EntityPlayer) sender).getUniqueID(), (EntityPlayer) sender);
-				sender.addChatMessage(new TextComponentString("Needed TechValue: " + result));
+				sender.sendMessage(new TextComponentString("Needed TechValue: " + result));
 			} else {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}

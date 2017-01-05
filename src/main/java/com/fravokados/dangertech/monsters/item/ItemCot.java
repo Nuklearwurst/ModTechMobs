@@ -36,7 +36,7 @@ public class ItemCot extends ItemTM {
 				blockPosFeet = blockPosFeet.up();
 			}
 
-			int fourWayRotationInt = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			int fourWayRotationInt = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			EnumFacing rotation = EnumFacing.getHorizontal(fourWayRotationInt);
 			BlockPos blockPosHead = blockPosFeet.offset(rotation);
 

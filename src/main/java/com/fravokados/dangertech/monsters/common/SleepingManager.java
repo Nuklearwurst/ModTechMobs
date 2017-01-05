@@ -41,7 +41,7 @@ public class SleepingManager {
 				sleepingPlayers.remove(event.getEntityPlayer());
 				return;
 			}
-			IBlockState iblockstate =  event.getEntityPlayer().worldObj.getBlockState(event.getEntityPlayer().playerLocation);
+			IBlockState iblockstate =  event.getEntityPlayer().getEntityWorld().getBlockState(event.getEntityPlayer().bedLocation);
 			//noinspection ConstantConditions
 			if(iblockstate.getBlock() != ModBlocks.block_cot) {
 				sleepingPlayers.remove(event.getEntityPlayer());

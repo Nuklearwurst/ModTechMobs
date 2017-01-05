@@ -17,6 +17,6 @@ public class CommandTechDataInfo extends SubCommand {
 
 	@Override
 	public void processSubCommand(MinecraftServer server, ICommandSender sender, String[] args) {
-		sender.addChatMessage(new TextComponentString(TDTickManager.getTasksInQueue() + " scans in quene!"));
+		sender.sendMessage(new TextComponentString(TDTickManager.getTasksInQueue() + " scans in quene!"));
 	}
 }

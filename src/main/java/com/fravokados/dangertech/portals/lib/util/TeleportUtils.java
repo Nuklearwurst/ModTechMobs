@@ -26,7 +26,7 @@ public class TeleportUtils {
 	@SuppressWarnings(value = "unchecked")
 	public static void transferPlayerToDimension(EntityPlayerMP entityPlayerMP, int targetDimension, double x, double y, double z, float yaw, float pitch)
 	{
-		if(entityPlayerMP.worldObj.isRemote) {return;}
+		if(entityPlayerMP.getEntityWorld().isRemote) {return;}
 
 		//minecraft server instance
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
@@ -67,7 +67,7 @@ public class TeleportUtils {
 
 	public static void transferEntityToDimension(Entity entity, int targetDimension, double posX, double posY, double posZ, float rotationYaw)
 	{
-		if (!entity.worldObj.isRemote && !entity.isDead)
+		if (!entity.getEntityWorld().isRemote && !entity.isDead)
 		{
 			if (!net.minecraftforge.common.ForgeHooks.onTravelToDimension(entity, targetDimension)) return;
 
@@ -85,7 +85,7 @@ public class TeleportUtils {
 
 			entity.dimension = targetDimension;
 
-			entity.worldObj.removeEntity(entity);
+			entity.getEntityWorld().removeEntity(entity);
 			entity.isDead = false;
 
 			transferEntityToWorld(entity, worldServerOrigin, worldServerDestination, posX, posY, posZ, rotationYaw);
@@ -100,7 +100,7 @@ public class TeleportUtils {
 				nbttagcompound.removeTag("Dimension");
 				newEntity.readFromNBT(nbttagcompound);
 
-				worldServerDestination.spawnEntityInWorld(newEntity);
+				worldServerDestination.spawnEntity(newEntity);
 			}
 
 			entity.isDead = true;
@@ -120,7 +120,7 @@ public class TeleportUtils {
 		if (entity.isEntityAlive())
 		{
 			entity.setLocationAndAngles(posX, posY, posZ, rotationYaw, entity.rotationPitch);
-			worldServerDestination.spawnEntityInWorld(entity);
+			worldServerDestination.spawnEntity(entity);
 			worldServerDestination.updateEntityWithOptionalForce(entity, false);
 		}
 

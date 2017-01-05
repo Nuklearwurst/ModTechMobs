@@ -175,7 +175,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 * @return success
 	 */
 	private boolean placePortalBlocks() {
-		return metrics != null && metrics.placePortalsInsideFrame(worldObj, getPos());
+		return metrics != null && metrics.placePortalsInsideFrame(getWorld(), getPos());
 	}
 
 	/**
@@ -184,14 +184,14 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	public boolean updateMetrics() {
 		metrics = null;
 		setState(State.NO_MULTIBLOCK);
-		return PortalConstructor.createPortalMultiBlock(worldObj, getPos()) == PortalConstructor.Result.SUCCESS;
+		return PortalConstructor.createPortalMultiBlock(getWorld(), getPos()) == PortalConstructor.Result.SUCCESS;
 	}
 
 	/**
 	 * Checks whether current portal metrics are valid
 	 */
 	public boolean checkMetrics() {
-		return metrics != null && metrics.isFrameComplete(worldObj) && metrics.isFrameEmpty(worldObj);
+		return metrics != null && metrics.isFrameComplete(getWorld()) && metrics.isFrameEmpty(getWorld());
 	}
 
 
@@ -265,12 +265,12 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	public void setState(State state) {
-		if (worldObj.isRemote && PluginLookingGlass.isAvailable()) {
+		if (getWorld().isRemote && PluginLookingGlass.isAvailable()) {
 			if (state == State.OUTGOING_PORTAL || state == State.INCOMING_PORTAL) {
 				if (state != this.state) {
 					if (renderInfo != null) {
 						if(metrics != null) {
-							renderInfo.createLookingGlass(metrics, this.worldObj);
+							renderInfo.createLookingGlass(metrics, this.getWorld());
 						} else {
 							LogHelperMD.error("Invalid portal state! Portal bounds are not available!");
 						}
@@ -285,7 +285,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		this.state = state;
 		WorldUtils.notifyBlockUpdateAtTile(this);
 		if (metrics != null) {
-			metrics.updatePortalFrames(worldObj);
+			metrics.updatePortalFrames(getWorld());
 		}
 	}
 
@@ -399,7 +399,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			case CONNECTING:
 				if (tick % 40 == 0 && metrics != null) {
 					//play connecting sound effect
-					worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 1.9F);
+					getWorld().playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.1F + 1.9F);
 				}
 				if (tick == 0) {
 					//update destination portal
@@ -446,7 +446,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			case INCOMING_CONNECTION:
 				tick++;
 				if (tick % 40 == 0 && metrics != null) {
-					worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 1.9F);
+					getWorld().playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.1F + 1.9F);
 				}
 				break;
 			case OUTGOING_PORTAL:
@@ -457,14 +457,14 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 				} else {
 					tick++;
 					if (tick % 60 == 0 && metrics != null) {
-						worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F - 1F);
+						getWorld().playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.1F - 1F);
 					}
 				}
 				break;
 			case INCOMING_PORTAL:
 				tick++;
 				if (tick % 60 == 0 && metrics != null) {
-					worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F - 1F);
+					getWorld().playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.1F - 1F);
 				}
 				break;
 		}
@@ -524,18 +524,18 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	private void createFXForPortalOpen() {
-		worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 1.9F);
-//		if (worldObj instanceof WorldServer) {
-//			((WorldServer) worldObj).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
-//					60 + worldObj.rand.nextInt(10), 0, 0, 0, 0.1F);
+		getWorld().playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.1F + 1.9F);
+//		if (getWorld() instanceof WorldServer) {
+//			((WorldServer) getWorld()).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
+//					60 + getWorld().rand.nextInt(10), 0, 0, 0, 0.1F);
 //		}
 	}
 
 	private void createFXForPortalClose() {
-		worldObj.playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 1.0F, worldObj.rand.nextFloat() * 0.1F + 2.9F);
-//		if (worldObj instanceof WorldServer) {
-//			((WorldServer) worldObj).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
-//					60 + worldObj.rand.nextInt(10), 0, 0, 0, 0.1F);
+		getWorld().playSound(null, metrics.originX, metrics.originY, metrics.originZ, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 1.0F, getWorld().rand.nextFloat() * 0.1F + 2.9F);
+//		if (getWorld() instanceof WorldServer) {
+//			((WorldServer) getWorld()).spawnParticle(EnumParticleTypes.DRAGON_BREATH, metrics.getCenterX(), metrics.getCenterY(), metrics.getCenterZ(),
+//					60 + getWorld().rand.nextInt(10), 0, 0, 0, 0.1F);
 //		}
 	}
 
@@ -612,7 +612,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			ForgeChunkManager.forceChunk(chunkLoaderTicketDestination, chunkToLoad);
 		}
 		ForgeChunkManager.releaseTicket(chunkLoaderTicketOrigin);
-		chunkLoaderTicketOrigin = ForgeChunkManager.requestTicket(ModMiningDimension.instance, worldObj, ForgeChunkManager.Type.NORMAL);
+		chunkLoaderTicketOrigin = ForgeChunkManager.requestTicket(ModMiningDimension.instance, getWorld(), ForgeChunkManager.Type.NORMAL);
 		if (chunkLoaderTicketOrigin == null) {
 			LogHelperMD.warn("Chunkloading Ticket limit reached!");
 		} else {
@@ -691,7 +691,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return BlockUtils.isTileEntityUsableByPlayer(this, player);
 	}
 
@@ -841,8 +841,8 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			State oldState = state;
 			setState(State.values()[nbt.getInteger(NBTKeys.CONTROLLER_STATE)]);
 			if (oldFacing != facing || oldState != state) {
-				final IBlockState blockState = worldObj.getBlockState(getPos());
-				this.worldObj.notifyBlockUpdate(getPos(), blockState, blockState, 3);
+				final IBlockState blockState = getWorld().getBlockState(getPos());
+				this.getWorld().notifyBlockUpdate(getPos(), blockState, blockState, 3);
 			}
 		}
 	}
@@ -858,7 +858,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		//register portal and log warning
 		if (id == PortalManager.PORTAL_NOT_CONNECTED) {
 			LogHelperMD.warn("Invalid Controller found!");
-			LogHelperMD.warn((hasCustomName() ? "Unnamed Controller" : ("Controller " + name)) + " @dim: " + worldObj.provider.getDimension() + ", pos: " + getPos().getX() + "; " + getPos().getY() + "; " + getPos().getZ() + " has no valid id. Registering...");
+			LogHelperMD.warn((hasCustomName() ? "Unnamed Controller" : ("Controller " + name)) + " @dim: " + getWorld().provider.getDimension() + ", pos: " + getPos().getX() + "; " + getPos().getY() + "; " + getPos().getZ() + " has no valid id. Registering...");
 			id = ModMiningDimension.instance.portalManager.registerNewEntityPortal(new BlockPositionDim(this));
 		}
 	}
@@ -924,7 +924,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		}
 		//remove portal
 		if (metrics != null) {
-			metrics.removePortalsInsideFrame(worldObj);
+			metrics.removePortalsInsideFrame(getWorld());
 			if (state != State.READY && state != State.NO_MULTIBLOCK) {
 				//Play closing sound effect
 				createFXForPortalClose();

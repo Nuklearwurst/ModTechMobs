@@ -50,7 +50,7 @@ public class MessageContainerIntegerUpdate implements IMessage, IMessageHandler<
 	@Nullable
 	public IMessage onMessage(MessageContainerIntegerUpdate message, MessageContext ctx)
 	{
-		EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer entityPlayer = Minecraft.getMinecraft().player;
 
 		if (entityPlayer != null)
 		{

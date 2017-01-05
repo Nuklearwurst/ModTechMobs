@@ -66,13 +66,13 @@ public class BlockCot extends BlockTM {
 				}
 			}
 
-			if (world.provider.canRespawnHere() && world.getBiomeGenForCoords(pos) != Biomes.HELL) {
+			if (world.provider.canRespawnHere() && world.getBiome(pos) != Biomes.HELL) {
 				//Look for already sleeping players
 				if (state.getValue(OCCUPIED)) {
 					EntityPlayer entityplayer = this.getPlayerInBed(world, pos);
 
 					if (entityplayer != null) {
-						player.addChatComponentMessage(new TextComponentTranslation("tile.bed.occupied"));
+						player.sendMessage(new TextComponentTranslation("tile.bed.occupied"));
 						return true;
 					}
 					//in case the bed is in an invalid state (no player found)
@@ -89,9 +89,9 @@ public class BlockCot extends BlockTM {
 					return true;
 				} else {
 					if (result == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW) {
-						player.addChatComponentMessage(new TextComponentTranslation("tile.bed.noSleep"));
+						player.sendMessage(new TextComponentTranslation("tile.bed.noSleep"));
 					} else if (result == EntityPlayer.SleepResult.NOT_SAFE) {
-						player.addChatComponentMessage(new TextComponentTranslation("tile.bed.notSafe"));
+						player.sendMessage(new TextComponentTranslation("tile.bed.notSafe"));
 					}
 
 					return true;
@@ -116,9 +116,10 @@ public class BlockCot extends BlockTM {
 		return true;
 	}
 
+	@Nullable
 	private EntityPlayer getPlayerInBed(World worldIn, BlockPos pos) {
 		for (EntityPlayer entityplayer : worldIn.playerEntities) {
-			if (entityplayer.isPlayerSleeping() && entityplayer.playerLocation.equals(pos)) {
+			if (entityplayer.isPlayerSleeping() && entityplayer.bedLocation.equals(pos)) {
 				return entityplayer;
 			}
 		}

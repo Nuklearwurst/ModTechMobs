@@ -14,7 +14,7 @@ public class PluginManager {
 	}
 
 	public static boolean ic2Activated() {
-		return com.fravokados.dangertech.core.plugin.PluginManager.ic2Activated();
+		return com.fravokados.dangertech.core.plugin.PluginManager.isIc2Available();
 	}
 
 }

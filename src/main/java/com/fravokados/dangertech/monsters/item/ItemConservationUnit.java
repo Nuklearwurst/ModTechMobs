@@ -25,7 +25,7 @@ public class ItemConservationUnit extends ItemTM {
 			EntityConservationUnit entity = new EntityConservationUnit(world);
 			entity.setShouldDrop(true); // manually placed units should drop when destroyed
 			entity.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 0, 0);
-			world.spawnEntityInWorld(entity);
+			world.spawnEntity(entity);
 		}
 		return EnumActionResult.SUCCESS;
 	}

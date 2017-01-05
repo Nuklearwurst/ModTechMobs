@@ -36,8 +36,8 @@ public class CommandPlayerDataRead extends SubCommand {
 		}
 		int scoutedTechLevel = TDManager.getPlayerScoutedTechLevel(player);
 		int techLevel = TDManager.getPlayerTechLevel(player);
-		sender.addChatMessage(new TextComponentString("TechLevel of this Player: " + techLevel));
-		sender.addChatMessage(new TextComponentString("Scouted TechLevel of this Player: " + scoutedTechLevel));
+		sender.sendMessage(new TextComponentString("TechLevel of this Player: " + techLevel));
+		sender.sendMessage(new TextComponentString("Scouted TechLevel of this Player: " + scoutedTechLevel));
 	}
 
 	@Override
@@ -46,9 +46,9 @@ public class CommandPlayerDataRead extends SubCommand {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		if(args.length == 1) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		}
 		return new ArrayList<>();
 	}

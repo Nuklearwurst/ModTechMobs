@@ -104,7 +104,7 @@ public class BlockUtils {
 				entityItem.motionX = rand.nextGaussian() * factor;
 				entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 				entityItem.motionZ = rand.nextGaussian() * factor;
-				world.spawnEntityInWorld(entityItem);
+				world.spawnEntity(entityItem);
 				itemStack.stackSize = 0;
 			}
 		}

@@ -40,31 +40,31 @@ public class CommandHelpers {
 	public static World getWorld(MinecraftServer server, ICommandSender sender, IModCommand command) {
 		if (sender instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) sender;
-			return player.worldObj;
+			return player.getEntityWorld();
 		}
 		return server.worldServerForDimension(0);
 	}
 
 	public static String[] getPlayersUserNames(MinecraftServer server) {
-		return server.getAllUsernames();
+		return server.getOnlinePlayerNames();
 	}
 
 	public static void sendLocalizedChatMessage(ICommandSender sender, String locTag, Object... args) {
-		sender.addChatMessage(new TextComponentTranslation(locTag, args));
+		sender.sendMessage(new TextComponentTranslation(locTag, args));
 	}
 
 	public static void sendLocalizedChatMessage(ICommandSender sender, Style chatStyle, String locTag, Object... args) {
 		TextComponentTranslation chat = new TextComponentTranslation(locTag, args);
 		chat.setStyle(chatStyle);
-		sender.addChatMessage(chat);
+		sender.sendMessage(chat);
 	}
 
 	public static void throwWrongUsage(ICommandSender sender, IModCommand command) throws WrongUsageException {
-		throw new WrongUsageException(command.getCommandUsage(sender));
+		throw new WrongUsageException(command.getUsage(sender));
 	}
 
 	public static void processChildCommand(MinecraftServer server, ICommandSender sender, SubCommand child, String[] args) throws CommandException {
-		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString()))
+		if (!sender.canUseCommand(child.getPermissionLevel(), child.getFullCommandString()))
 			throw new WrongUsageException(GeneralUtils.translate("command.dangertechmobs.noperms"));
 		String[] newargs = new String[args.length - 1];
 		System.arraycopy(args, 1, newargs, 0, newargs.length);
@@ -77,7 +77,7 @@ public class CommandHelpers {
 		sendLocalizedChatMessage(sender, header, "command.dangertechmobs." + command.getFullCommandString().replace(" ", ".") + ".format", "/" + command.getFullCommandString());
 		Style body = new Style();
 		body.setColor(TextFormatting.GRAY);
-		List<String> aliasList = command.getCommandAliases();
+		List<String> aliasList = command.getAliases();
 		if(aliasList.isEmpty()) {
 			sendLocalizedChatMessage(sender, body, "command.dangertechmobs.aliases", aliasList.toString().replace("[", "").replace("]", ""));
 		}
@@ -86,7 +86,7 @@ public class CommandHelpers {
 		if (!command.getChildren().isEmpty()) {
 			sendLocalizedChatMessage(sender, "command.dangertechmobs.list");
 			for (SubCommand child : command.getChildren()) {
-				sendLocalizedChatMessage(sender, "command.dangertechmobs." + child.getFullCommandString().replace(" ", ".") + ".desc", "/" + child.getCommandName());
+				sendLocalizedChatMessage(sender, "command.dangertechmobs." + child.getFullCommandString().replace(" ", ".") + ".desc", "/" + child.getName());
 			}
 		}
 	}
@@ -115,10 +115,10 @@ public class CommandHelpers {
 	}
 
 	public static boolean matches(String commandName, IModCommand command) {
-		if (commandName.equals(command.getCommandName())) {
+		if (commandName.equals(command.getName())) {
 			return true;
 		} else {
-			for (String alias : command.getCommandAliases()) {
+			for (String alias : command.getAliases()) {
 				if (commandName.equals(alias)) {
 					return true;
 				}
@@ -141,15 +141,15 @@ public class CommandHelpers {
 		if(args.length == 1) {
 			List<String> list = new ArrayList<>();
 			for (SubCommand sub : command.getChildren()) {
-				if(sub.getCommandName().toLowerCase().startsWith(args[0].toLowerCase())) {
-					list.add(sub.getCommandName());
+				if(sub.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
+					list.add(sub.getName());
 				}
 			}
 			return list;
 		} else {
 			for (SubCommand child : command.getChildren()) {
 				if (matches(args[0], child)) {
-					return child.getTabCompletionOptions(server, sender, Arrays.copyOfRange(args, 1, args.length), pos);
+					return child.getTabCompletions(server, sender, Arrays.copyOfRange(args, 1, args.length), pos);
 				}
 			}
 		}

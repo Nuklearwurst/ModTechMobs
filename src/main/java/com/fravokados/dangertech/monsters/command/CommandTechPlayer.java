@@ -34,22 +34,22 @@ public class CommandTechPlayer extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "techplayer";
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/" + this.getCommandName() + " help";
+	public String getUsage(ICommandSender sender) {
+		return "/" + this.getName() + " help";
 	}
 
 	@Override
 	public String getFullCommandString() {
-		return getCommandName();
+		return getName();
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 		return aliases;
 	}
 
@@ -74,7 +74,8 @@ public class CommandTechPlayer extends CommandBase implements IModCommand {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
 	}
-	
+
+	@Nullable
 	private EntityPlayer getPlayer(ICommandSender sender) {
 		if(sender instanceof EntityPlayer) {
 			return (EntityPlayer) sender;
@@ -83,7 +84,7 @@ public class CommandTechPlayer extends CommandBase implements IModCommand {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		return CommandHelpers.getTabCompletionOptionsForSubCommands(server, this, sender, args, pos);
 	}
 
@@ -93,7 +94,7 @@ public class CommandTechPlayer extends CommandBase implements IModCommand {
 			return false;
 		}
 		for (SubCommand sub : children) {
-			if(sub.getCommandName().toLowerCase().equals(args[0].toLowerCase())) {
+			if(sub.getName().toLowerCase().equals(args[0].toLowerCase())) {
 				return sub.isUsernameIndex(Arrays.copyOfRange(args, 1, args.length), index - 1);
 			}
 		}

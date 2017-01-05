@@ -30,15 +30,15 @@ public class ItemMDDebugger extends ItemMD {
 			final String side = world.isRemote ? "CLIENT: " : "SERVER: ";
 			if(tileEntity instanceof TileEntityPortalControllerEntity) {
 				final TileEntityPortalControllerEntity te = (TileEntityPortalControllerEntity) tileEntity;
-				player.addChatComponentMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", state: " + te.getState() + ", portalState: " + te.getPortalFrameState()));
-				player.addChatComponentMessage(new TextComponentString("Sink tier: " + te.getSinkTier() + ", ID: " + te.getId()));
+				player.sendMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", state: " + te.getState() + ", portalState: " + te.getPortalFrameState()));
+				player.sendMessage(new TextComponentString("Sink tier: " + te.getSinkTier() + ", ID: " + te.getId()));
 			} else if(tileEntity instanceof TileEntityPortalFrame) {
 				final TileEntityPortalFrame te = (TileEntityPortalFrame) tileEntity;
-				player.addChatComponentMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", active: " + te.isActive() + ", portalState: " + te.getPortalFrameState()));
+				player.sendMessage(new TextComponentString(side + "facing: " + te.getFacing() + ", active: " + te.isActive() + ", portalState: " + te.getPortalFrameState()));
 
 			} else if(tileEntity instanceof TileEntityPortal && !world.isRemote) {
 				final TileEntityPortal te = (TileEntityPortal) tileEntity;
-				player.addChatComponentMessage(new TextComponentString(side + "controller: " + te.getController()));
+				player.sendMessage(new TextComponentString(side + "controller: " + te.getController()));
 
 			}
 			return EnumActionResult.SUCCESS;

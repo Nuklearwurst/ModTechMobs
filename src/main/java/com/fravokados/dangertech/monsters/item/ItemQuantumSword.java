@@ -47,8 +47,8 @@ public class ItemQuantumSword extends ItemTMSword {
 						float oldHealth = ((EntityLivingBase)target).getHealth();
 
 						target.attackEntityFrom(DamageSource.causePlayerDamage(origin).setDamageBypassesArmor(), (float) Math.max(2, armor * (origin.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / 20)));
-						origin.worldObj.playSound(null, origin.posX, origin.posY, origin.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.0F, origin.getRNG().nextFloat() * 0.1F + 0.9F);
-						if (!origin.worldObj.isRemote) {
+						origin.getEntityWorld().playSound(null, origin.posX, origin.posY, origin.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.0F, origin.getRNG().nextFloat() * 0.1F + 0.9F);
+						if (!origin.getEntityWorld().isRemote) {
 
 							float diff = oldHealth - ((EntityLivingBase)target).getHealth();
 							origin.addStat(StatList.DAMAGE_DEALT, Math.round(diff * 10.0F));
@@ -67,13 +67,13 @@ public class ItemQuantumSword extends ItemTMSword {
 									if (data > TechDataStorage.getInstance().getDangerousPlayerLevel()) { //very nasty
 										TDEffectHandler.applyRandomEffectOnPlayer(origin, origin.getUniqueID(), itemRand);
 										stack.damageItem(20, origin);
-										origin.worldObj.createExplosion(null, origin.posX, origin.posY + 1, origin.posZ, 0.4F, false);
+										origin.getEntityWorld().createExplosion(null, origin.posX, origin.posY + 1, origin.posZ, 0.4F, false);
 									} else if (data > 0.8 * TechDataStorage.getInstance().getDangerousPlayerLevel()) { //normal effects
 										TDEffectHandler.applyRandomEffectOnPlayer(origin, origin.getUniqueID(), itemRand);
 										stack.damageItem(10, origin);
 									} else { //simple effects
-										origin.worldObj.playSound(null, origin.posX, origin.posY, origin.posZ, SoundEvents.ENTITY_ENDERMEN_SCREAM, SoundCategory.PLAYERS, 1.0F, itemRand.nextInt() + 0.5F);
-										origin.addChatMessage(new TextComponentTranslation(Strings.Chat.quantumSword));
+										origin.getEntityWorld().playSound(null, origin.posX, origin.posY, origin.posZ, SoundEvents.ENTITY_ENDERMEN_SCREAM, SoundCategory.PLAYERS, 1.0F, itemRand.nextInt() + 0.5F);
+										origin.sendMessage(new TextComponentTranslation(Strings.Chat.quantumSword));
 										stack.damageItem(4, origin);
 									}
 								} else if (rand >= 0.5 * data) { //generic message

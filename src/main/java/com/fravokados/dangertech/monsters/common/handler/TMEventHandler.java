@@ -85,7 +85,9 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerSetSpawn(PlayerSetSpawnEvent evt) {
-		SleepingManager.onPlayerSetSpawn(evt);
+		if(SleepingManager.onPlayerSetSpawn(evt)) {
+			evt.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent
@@ -109,7 +111,7 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public static void onEntitySetAttackTarget(LivingSetAttackTargetEvent evt) {
-		if (!evt.getEntity().worldObj.isRemote
+		if (!evt.getEntity().getEntityWorld().isRemote
 				&& evt.getTarget() instanceof EntityPlayer
 				&& evt.getEntityLiving() instanceof EntityLiving
 				&& (evt.getEntityLiving() instanceof IMob || evt.getEntityLiving() instanceof EntityTameable)) {
@@ -133,7 +135,7 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public static void onEntityAttack(LivingAttackEvent evt) {
-		if (!evt.getEntity().worldObj.isRemote && evt.getEntity() instanceof EntityPlayer) {
+		if (!evt.getEntity().getEntityWorld().isRemote && evt.getEntity() instanceof EntityPlayer) {
 			if (evt.getSource().getEntity() instanceof IMob) {
 				TDManager.scanAndUpdatePlayerTD((EntityPlayer) evt.getEntity());
 			}
@@ -184,7 +186,7 @@ public class TMEventHandler {
 					EntityConservationUnit entity = new EntityConservationUnit(world, x, y + 1, z);
 					entity.addCapturedDrops(evt.getDrops());
 					entity.setShouldDrop(world.rand.nextInt(2) == 0);
-					world.spawnEntityInWorld(entity);
+					world.spawnEntity(entity);
 					evt.setCanceled(true);
 					break;
 				}

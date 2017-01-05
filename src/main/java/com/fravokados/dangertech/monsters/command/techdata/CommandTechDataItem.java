@@ -25,16 +25,16 @@ public class CommandTechDataItem extends SubCommand {
 		if(sender instanceof EntityPlayer) {
 			ItemStack mainHand = ((EntityPlayer) sender).getHeldItemMainhand();
 			if(mainHand != null) {
-				sender.addChatMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItem, TDValues.getInstance().getTechDataForItem(mainHand)));
+				sender.sendMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItem, TDValues.getInstance().getTechDataForItem(mainHand)));
 			} else {
-				sender.addChatMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItemNoItem));
+				sender.sendMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItemNoItem));
 			}
 
 			ItemStack offHand = ((EntityPlayer) sender).getHeldItemOffhand();
 			if(offHand != null) {
-				sender.addChatMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItem, TDValues.getInstance().getTechDataForItem(offHand)));
+				sender.sendMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItem, TDValues.getInstance().getTechDataForItem(offHand)));
 			} else {
-				sender.addChatMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItemNoItem));
+				sender.sendMessage(new TextComponentTranslation(Strings.Chat.commandAnalyzeItemNoItem));
 			}
 		} else {
 			CommandHelpers.throwWrongUsage(sender, this);

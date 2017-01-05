@@ -38,14 +38,14 @@ public class ItemMonsterDrop extends ItemTM {
 
 	@Override
 	public String getUnlocalizedName(ItemStack s) {
-		return String.format("item.%s%s_%s", Textures.MOD_ASSET_DOMAIN, Strings.Item.MONSTER_DROP, Strings.Item.MONSTER_DROP_SUBTYPES[MathHelper.clamp_int(s.getItemDamage(), 0, Strings.Item.MONSTER_DROP_SUBTYPES.length - 1)]);
+		return String.format("item.%s%s_%s", Textures.MOD_ASSET_DOMAIN, Strings.Item.MONSTER_DROP, Strings.Item.MONSTER_DROP_SUBTYPES[MathHelper.clamp(s.getItemDamage(), 0, Strings.Item.MONSTER_DROP_SUBTYPES.length - 1)]);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player,
 			List tags, boolean b) {
-		tags.add(I18n.translateToLocal(Strings.Item.MONSTER_DROP_TOOLTIP[MathHelper.clamp_int(stack.getItemDamage(), 0, Strings.Item.MONSTER_DROP_TOOLTIP.length)]));
+		tags.add(I18n.translateToLocal(Strings.Item.MONSTER_DROP_TOOLTIP[MathHelper.clamp(stack.getItemDamage(), 0, Strings.Item.MONSTER_DROP_TOOLTIP.length)]));
 	}
 
 }

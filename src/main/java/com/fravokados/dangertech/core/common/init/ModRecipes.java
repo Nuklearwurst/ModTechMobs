@@ -19,7 +19,7 @@ public class ModRecipes {
 		registerRecipeType(ShapedRecipeEnergyType.NAME, ShapedRecipeEnergyType.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped before:minecraft:shapeless");
 		registerRecipeType(ShapedOreRecipeEnergyType.NAME, ShapedOreRecipeEnergyType.class, RecipeSorter.Category.SHAPED, "after:forge:shapedore");
 
-		if(PluginManager.ic2Activated()) {
+		if(PluginManager.isIc2Available()) {
 			IC2Recipes.init();
 		} else {
 			initVanillaFallback();

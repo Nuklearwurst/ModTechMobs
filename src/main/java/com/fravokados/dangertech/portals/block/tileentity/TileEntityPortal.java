@@ -27,7 +27,7 @@ public class TileEntityPortal extends TileEntity {
 
 	public void onEntityEnterPortal(Entity entity) {
 		if(!validPortal) {
-			this.worldObj.setBlockToAir(getPos());
+			this.getWorld().setBlockToAir(getPos());
 			return;
 		}
 		TileEntityPortalControllerEntity controller = getController();
@@ -38,12 +38,12 @@ public class TileEntityPortal extends TileEntity {
 
 	@Nullable
 	public TileEntityPortalControllerEntity getController() {
-		TileEntity controller = this.worldObj.getTileEntity(this.controllerPos);
+		TileEntity controller = this.getWorld().getTileEntity(this.controllerPos);
 		if(controller == null || !(controller instanceof TileEntityPortalControllerEntity)) {
 			LogHelperMD.warn("Invalid Controller Found! portal: ["
 					+ getPos().getX() + "; " + getPos().getY() + "; " + getPos().getZ() + "], controller: ["
 					+ controllerPos.getX() + "; " + controllerPos.getY() + "; " + controllerPos.getZ() + "]");
-			((BlockPortalMinDim)blockType).removePortalAndSurroundingPortals(worldObj, getPos());
+			((BlockPortalMinDim)blockType).removePortalAndSurroundingPortals(getWorld(), getPos());
 			return null;
 		}
 		return (TileEntityPortalControllerEntity) controller;

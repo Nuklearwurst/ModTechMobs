@@ -48,7 +48,7 @@ public class MessageContainerStringUpdate implements IMessage, IMessageHandler<M
 	@SideOnly(Side.CLIENT)
 	@Nullable
 	public IMessage onMessage(MessageContainerStringUpdate message, MessageContext ctx) {
-		EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer entityPlayer = Minecraft.getMinecraft().player;
 
 		if (entityPlayer != null)
 		{

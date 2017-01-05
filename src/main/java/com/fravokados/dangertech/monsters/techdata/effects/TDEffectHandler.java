@@ -23,7 +23,7 @@ import java.util.UUID;
 public class TDEffectHandler {
 	
 	public static void onLivingSpawn(LivingSpawnEvent evt) {
-		if(evt.getEntity().worldObj.isRemote || !(evt.getEntityLiving() instanceof IMob)) {
+		if(evt.getEntity().getEntityWorld().isRemote || !(evt.getEntityLiving() instanceof IMob)) {
 			return;
 		}
 		

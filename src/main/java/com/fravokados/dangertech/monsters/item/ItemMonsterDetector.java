@@ -78,7 +78,7 @@ public class ItemMonsterDetector extends ItemTM {
 	 */
 	private String getSpecialEntityName(EntityLivingBase e) {
 		String name = e.getName();
-		if (e.worldObj.rand.nextBoolean()) {
+		if (e.getEntityWorld().rand.nextBoolean()) {
 			if (e instanceof EntityCreeper) {
 				name = CREEPER;
 			} else if (e instanceof EntityZombie) {
@@ -91,18 +91,18 @@ public class ItemMonsterDetector extends ItemTM {
 	}
 
 	public void sendGenericWarningMessage(EntityPlayer player) {
-		player.addChatMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_generic).setStyle(new Style().setColor(TextFormatting.RED)));
+		player.sendMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_generic).setStyle(new Style().setColor(TextFormatting.RED)));
 	}
 
 	public void sendExactWarningMessage(EntityPlayer player, @Nullable String name) {
 		if (name == null) {
 			sendGenericWarningMessage(player);
 		} else if (CREEPER.equals(name)) {
-			player.addChatMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_creeper, GeneralUtils.random)));
+			player.sendMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_creeper, GeneralUtils.random)));
 		} else if (ZOMBIE_BABY.equals(name)) {
-			player.addChatMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_babyZombie, GeneralUtils.random)));
+			player.sendMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_babyZombie, GeneralUtils.random)));
 		} else {
-			player.addChatMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_1)
+			player.sendMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_1)
 					.appendSibling(new TextComponentString(" " + name + " ")
 							.setStyle(new Style().setColor(TextFormatting.RED)))
 					.appendSibling(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_2)));
