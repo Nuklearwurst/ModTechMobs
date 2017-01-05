@@ -37,8 +37,8 @@ public class ItemMonsterDetector extends ItemTM {
 			sendExactWarningMessage(player, getSpecialEntityName(entity));
 		} else {
 			//randomize effects
-			int rand = itemRand.nextInt(data);
-			if (rand >= 0.8 * data) {
+			int rand = itemRand.nextInt(10);
+			if (rand >= 8) {
 				//special effects happen
 				if (data > TechDataStorage.getInstance().getDangerousPlayerLevel()) { //very nasty
 					TDEffectHandler.applyRandomEffectOnPlayer(player, player.getUniqueID(), itemRand);
@@ -61,7 +61,7 @@ public class ItemMonsterDetector extends ItemTM {
 					}
 					stack.damageItem(4, player);
 				}
-			} else if (rand >= 0.5 * data) { //generic message
+			} else if (rand >= 5) { //generic message
 				sendGenericWarningMessage(player);
 				stack.damageItem(1, player);
 			} else { //exact message

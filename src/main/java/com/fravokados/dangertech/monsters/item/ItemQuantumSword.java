@@ -61,8 +61,8 @@ public class ItemQuantumSword extends ItemTMSword {
 							int data = TDManager.getPlayerTechLevel(origin);
 							if (data > Settings.TechData.SAFE_TECH_VALUE) {
 								//randomize effects
-								int rand = itemRand.nextInt(data);
-								if (rand >= 0.8 * data) {
+								int rand = itemRand.nextInt(10);
+								if (rand >= 8) {
 									//special effects happen
 									if (data > TechDataStorage.getInstance().getDangerousPlayerLevel()) { //very nasty
 										TDEffectHandler.applyRandomEffectOnPlayer(origin, origin.getUniqueID(), itemRand);
@@ -76,7 +76,7 @@ public class ItemQuantumSword extends ItemTMSword {
 										origin.sendMessage(new TextComponentTranslation(Strings.Chat.quantumSword));
 										stack.damageItem(4, origin);
 									}
-								} else if (rand >= 0.5 * data) { //generic message
+								} else if (rand >= 5) { //generic message
 									stack.damageItem(2, origin);
 								}
 							}
