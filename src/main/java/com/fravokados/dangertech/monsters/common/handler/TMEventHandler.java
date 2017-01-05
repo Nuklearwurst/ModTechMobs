@@ -123,9 +123,11 @@ public class TMEventHandler {
 			if(uuid == null || !uuid.equals(player.getUniqueID())) {
 				entity.getEntityData().setUniqueId("dtmobs:lastTarget", player.getUniqueID());
 				//Search inventory
-				for (ItemStack stack : player.inventory.mainInventory) {
+				ItemStack[] mainInventory = player.inventory.mainInventory;
+				for (int i = 0; i < mainInventory.length; i++) {
+					ItemStack stack = mainInventory[i];
 					if (stack != null && stack.stackSize != 0 && stack.getItem() == ModItems.monsterDetector) {
-						((ItemMonsterDetector) stack.getItem()).onSetAttackTarget(player, entity, stack);
+						((ItemMonsterDetector) stack.getItem()).onSetAttackTarget(player, entity, stack, i);
 						break;
 					}
 				}

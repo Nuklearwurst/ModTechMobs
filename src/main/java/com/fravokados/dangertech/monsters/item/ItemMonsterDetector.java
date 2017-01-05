@@ -28,9 +28,10 @@ public class ItemMonsterDetector extends ItemTM {
 	public ItemMonsterDetector() {
 		super(Strings.Item.MONSTER_DETECTOR);
 		this.setMaxDamage(100);
+		this.setMaxStackSize(1);
 	}
 
-	public void onSetAttackTarget(EntityPlayer player, EntityLiving entity, ItemStack stack) {
+	public void onSetAttackTarget(EntityPlayer player, EntityLiving entity, ItemStack stack, int inventorySlot) {
 		int data = TDManager.getPlayerTechLevel(player);
 		//safe techvalue --> good information
 		if (data <= Settings.TechData.SAFE_TECH_VALUE) {
@@ -69,6 +70,9 @@ public class ItemMonsterDetector extends ItemTM {
 				if (itemRand.nextInt(10) == 0) {
 					stack.damageItem(1, player);
 				}
+			}
+			if(stack.stackSize <= 0) {
+				player.inventory.mainInventory[inventorySlot] = null;
 			}
 		}
 	}

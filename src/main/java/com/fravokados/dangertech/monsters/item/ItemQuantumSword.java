@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.DamageSource;
@@ -78,6 +79,9 @@ public class ItemQuantumSword extends ItemTMSword {
 									}
 								} else if (rand >= 5) { //generic message
 									stack.damageItem(2, origin);
+								}
+								if(stack.stackSize <= 0) {
+									origin.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
 								}
 							}
 						}
