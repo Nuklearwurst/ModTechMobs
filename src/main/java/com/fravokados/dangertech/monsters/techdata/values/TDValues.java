@@ -1,12 +1,11 @@
 package com.fravokados.dangertech.monsters.techdata.values;
 
 import com.fravokados.dangertech.api.DangerousTechnologyAPI;
+import com.fravokados.dangertech.api.techdata.values.ITechdataCapability;
 import com.fravokados.dangertech.api.techdata.values.TDValueRegistry;
-import com.fravokados.dangertech.api.techdata.values.player.ITechdataItem;
 import com.fravokados.dangertech.api.techdata.values.player.TDEntryItem;
 import com.fravokados.dangertech.api.techdata.values.player.TDEntrySimpleItem;
 import com.fravokados.dangertech.api.techdata.values.player.TDEntrySimpleMultiItem;
-import com.fravokados.dangertech.api.techdata.values.world.ITechdataTile;
 import com.fravokados.dangertech.api.techdata.values.world.TDEntrySimpleTileEntity;
 import com.fravokados.dangertech.api.techdata.values.world.TDEntryTileEntity;
 import com.fravokados.dangertech.monsters.configuration.Settings;
@@ -31,12 +30,12 @@ public class TDValues implements TDValueRegistry {
 	/**
 	 * Contains information about Tileentities
 	 */
-	public final Map<Class<? extends TileEntity>, TDEntryTileEntity> tileEntityEntries = new HashMap<Class<? extends TileEntity>, TDEntryTileEntity>();
+	public final Map<Class<? extends TileEntity>, TDEntryTileEntity> tileEntityEntries = new HashMap<>();
 
 	/**
 	 * Contains information about Items
 	 */
-	public final Map<Item, TDEntryItem> itemEntries = new HashMap<Item, TDEntryItem>();
+	public final Map<Item, TDEntryItem> itemEntries = new HashMap<>();
 
 	/**
 	 * registers a new Item Entry
@@ -166,8 +165,8 @@ public class TDValues implements TDValueRegistry {
 		TDEntryItem item = TDValues.getInstance().getEntryItem(stack.getItem());
 		if (item != null) {
 			return item.getTechLevelForItem(stack);
-		} else if (stack.getItem() instanceof ITechdataItem) {
-			return ((ITechdataItem) stack.getItem()).getTechValue(stack);
+		} else if (stack.hasCapability(ITechdataCapability.TECHDATA, null)) {
+			return stack.getCapability(ITechdataCapability.TECHDATA, null).getTechData();
 		}
 		return 0;
 	}
@@ -177,8 +176,8 @@ public class TDValues implements TDValueRegistry {
 		TDEntryTileEntity entry = TDValues.getInstance().getEntryTileEntity(te.getClass().asSubclass(TileEntity.class));
 		if (entry != null) {
 			return entry.getTechValueForTileEntity(te);
-		} else if (te instanceof ITechdataTile) {
-			return ((ITechdataTile) te).getTechData();
+		} else if (te.hasCapability(ITechdataCapability.TECHDATA, null)) {
+			return te.getCapability(ITechdataCapability.TECHDATA, null).getTechData();
 		}
 		return 0;
 	}

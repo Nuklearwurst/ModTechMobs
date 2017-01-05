@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.item;
 
-import com.fravokados.dangertech.api.techdata.values.player.ITechdataItem;
+import com.fravokados.dangertech.api.techdata.values.ITechdataCapability;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.monsters.lib.Strings;
@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -20,11 +21,15 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Nuklearwurst
  */
-public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
+public class ItemTDAnalyzer extends ItemTM implements ITechdataCapability {
 
 	private enum Mode {
 		BLOCK, ITEM, PLAYER, CHUNK
@@ -67,7 +72,8 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 					player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerItem, TDValues.getInstance().getTechDataForItem(itemStack)));
 				}
 			} else if (!world.isRemote && getItemMode(stack) == Mode.PLAYER) {
-				player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, player.getName(), TDManager.getPlayerScoutedTechLevel(player)));
+				TDManager.scanPlayer(player);
+				player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, player.getName(), TDManager.getPlayerTechLevel(player)));
 			} else {
 				return new ActionResult<>(EnumActionResult.PASS, stack);
 			}
@@ -80,7 +86,8 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 		if (getItemMode(stack) == Mode.PLAYER) {
 			if (!player.getEntityWorld().isRemote) {
 				if (entity instanceof EntityPlayer) {
-					player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, entity.getName(), TDManager.getPlayerScoutedTechLevel((EntityPlayer) entity)));
+					TDManager.scanPlayer(player);
+					player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayer, entity.getName(), TDManager.getPlayerTechLevel((EntityPlayer) entity)));
 				} else {
 					player.sendMessage(new TextComponentTranslation(Strings.Chat.analyzerPlayerNoPlayer));
 				}
@@ -113,7 +120,28 @@ public class ItemTDAnalyzer extends ItemTM implements ITechdataItem {
 	}
 
 	@Override
-	public int getTechValue(ItemStack stack) {
+	public int getTechData() {
 		return 10;
+	}
+
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new ICapabilityProvider() {
+			@SuppressWarnings("ConstantConditions")
+			@Override
+			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+				return capability == ITechdataCapability.TECHDATA;
+			}
+
+			@SuppressWarnings("ConstantConditions")
+			@Nullable
+			@Override
+			public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+				if(capability == ITechdataCapability.TECHDATA) {
+					return ITechdataCapability.TECHDATA.cast(ItemTDAnalyzer.this);
+				}
+				return null;
+			}
+		};
 	}
 }
