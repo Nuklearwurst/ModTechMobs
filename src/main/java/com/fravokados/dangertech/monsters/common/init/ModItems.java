@@ -14,32 +14,32 @@ public class ModItems {
 	// General Items //
 	///////////////////
 	@GameRegistry.ObjectHolder(Strings.Item.COT)
-	public static final ItemTM item_cot = null;
+	public static ItemTM item_cot = null;
 
 	////////////////////
 	// TechData Items //
 	////////////////////
 	@GameRegistry.ObjectHolder(Strings.Item.MONSTER_DETECTOR)
-	public static final ItemTM monsterDetector = null;
+	public static ItemTM monsterDetector = null;
 	@GameRegistry.ObjectHolder(Strings.Item.TD_ANALYZER)
-	public static final ItemTM tdAnalyzer = null;
+	public static ItemTM tdAnalyzer = null;
 	@GameRegistry.ObjectHolder(Strings.Item.CONSERVATION_UNIT)
-	public static final ItemTM conservationUnit = null;
+	public static ItemTM conservationUnit = null;
 	//Weapons
 	@GameRegistry.ObjectHolder(Strings.Item.QUANTUM_SWORD)
-	public static final ItemNWSword quantumSword = null;
+	public static ItemNWSword quantumSword = null;
 
 	///////////////
 	// Resources //
 	///////////////
 	@GameRegistry.ObjectHolder(Strings.Item.MONSTER_DROP)
-	public static final ItemTM monsterDrop = null;
+	public static ItemTM monsterDrop = null;
 
 	/////////////////
 	// Debug Items //
 	/////////////////
 	@GameRegistry.ObjectHolder(Strings.Item.TD_DEBUGGER)
-	public static final ItemTM tdDebugger = null;
+	public static ItemTM tdDebugger = null;
 
 
 	public static void registerItems() {

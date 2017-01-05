@@ -1,12 +1,12 @@
 package com.fravokados.dangertech.monsters.common.handler;
 
-import com.fravokados.dangertech.api.item.IItemAttackTargetListener;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.monsters.common.SleepingManager;
 import com.fravokados.dangertech.monsters.common.init.ModItems;
 import com.fravokados.dangertech.monsters.configuration.Settings;
 import com.fravokados.dangertech.monsters.entity.EntityConservationUnit;
 import com.fravokados.dangertech.monsters.entity.ai.EntityAIScanArea;
+import com.fravokados.dangertech.monsters.item.ItemMonsterDetector;
 import com.fravokados.dangertech.monsters.lib.util.EntityUtils;
 import com.fravokados.dangertech.monsters.techdata.TDManager;
 import com.fravokados.dangertech.monsters.techdata.effects.TDEffectHandler;
@@ -19,8 +19,8 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -35,6 +35,8 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+
+import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public class TMEventHandler {
@@ -107,12 +109,23 @@ public class TMEventHandler {
 
 	@SubscribeEvent
 	public static void onEntitySetAttackTarget(LivingSetAttackTargetEvent evt) {
-		if (!evt.getEntity().worldObj.isRemote && evt.getTarget() instanceof EntityPlayer && (evt.getEntityLiving() instanceof IMob || evt.getEntityLiving() instanceof EntityTameable)) {
+		if (!evt.getEntity().worldObj.isRemote
+				&& evt.getTarget() instanceof EntityPlayer
+				&& evt.getEntityLiving() instanceof EntityLiving
+				&& (evt.getEntityLiving() instanceof IMob || evt.getEntityLiving() instanceof EntityTameable)) {
+
 			EntityPlayer player = (EntityPlayer) evt.getTarget();
-			for (ItemStack stack : player.inventory.mainInventory) {
-				if (stack != null && stack.stackSize != 0 && stack.getItem() instanceof IItemAttackTargetListener) {
-					((IItemAttackTargetListener) stack.getItem()).onSetAttackTarget(evt, stack);
-					break;
+			EntityLiving entity = (EntityLiving) evt.getEntityLiving();
+			//Ignore attacking the same target
+			UUID uuid = entity.getEntityData().getUniqueId("dtmobs:lastTarget");
+			if(uuid == null || !uuid.equals(player.getUniqueID())) {
+				entity.getEntityData().setUniqueId("dtmobs:lastTarget", player.getUniqueID());
+				//Search inventory
+				for (ItemStack stack : player.inventory.mainInventory) {
+					if (stack != null && stack.stackSize != 0 && stack.getItem() == ModItems.monsterDetector) {
+						((ItemMonsterDetector) stack.getItem()).onSetAttackTarget(player, entity, stack);
+						break;
+					}
 				}
 			}
 		}
