@@ -76,8 +76,30 @@ public class GeneralUtils {
 	 * @return a Randomly chosen Translated String
 	 */
 	public static String getRandomTranslation(String key, Random rand) {
-		int index = rand.nextInt(getIntegerFromTranslatableKey(key + ".count", 1));
-		return translate(key + "." + index);
+		return translate(getRandomTranslationKey(key, rand));
+	}
+
+	/**
+	 * returns a random untranslated key for the specified key<br>
+	 * the amount of translations available has to be defined in the translation of: key + ".count"<br>
+	 * all available translation keys have fit this scheme: key + ".NUMBER"
+	 * @param key base-key of the random translations
+	 * @param rand Random instance
+	 * @return a Randomly chosen untranslated key (following the pattern "key.index" where index is a random number from 0 to the number given by "key.count"
+	 */
+	public static String getRandomTranslationKey(String key, Random rand) {
+		int index = getRandomIndexFromTranslationKey(key, rand);
+		return key + "." + index;
+	}
+
+	/**
+	 * the amount of translations available has to be defined in the translation of: key + ".count"<br>
+	 * @param key base-key of the random translations
+	 * @param rand Random instance
+	 * @return a random number between 0 and "key.count"
+	 */
+	public static int getRandomIndexFromTranslationKey(String key, Random rand) {
+		return rand.nextInt(getIntegerFromTranslatableKey(key + ".count", 1));
 	}
 
 	/**

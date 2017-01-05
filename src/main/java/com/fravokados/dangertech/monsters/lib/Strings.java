@@ -43,6 +43,11 @@ public class Strings {
 	public static final class Chat {
 
 		public static final String mobTargetingWarning_generic = "chat.mobTargetingWarning.generic";
+
+		/**
+		 * Base key for exact warnings
+		 */
+		public static final String mobTargetingWarning_exact_count = "chat.mobTargetingWarning.exact";
 		public static final String mobTargetingWarning_exact_1 = "chat.mobTargetingWarning.exact.1";
 		public static final String mobTargetingWarning_exact_2 = "chat.mobTargetingWarning.exact.2";
 		public static final String mobTargetingWarning_creeper = "chat.mobTargetingWarning.creeper";

@@ -90,22 +90,23 @@ public class ItemMonsterDetector extends ItemTM {
 		return name;
 	}
 
-	public void sendGenericWarningMessage(EntityPlayer player) {
-		player.sendMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_generic).setStyle(new Style().setColor(TextFormatting.RED)));
+	private void sendGenericWarningMessage(EntityPlayer player) {
+		player.sendMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslationKey(Strings.Chat.mobTargetingWarning_generic, GeneralUtils.random)).setStyle(new Style().setColor(TextFormatting.RED)));
 	}
 
-	public void sendExactWarningMessage(EntityPlayer player, @Nullable String name) {
+	private void sendExactWarningMessage(EntityPlayer player, @Nullable String name) {
 		if (name == null) {
 			sendGenericWarningMessage(player);
 		} else if (CREEPER.equals(name)) {
-			player.sendMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_creeper, GeneralUtils.random)));
+			player.sendMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslationKey(Strings.Chat.mobTargetingWarning_creeper, GeneralUtils.random)));
 		} else if (ZOMBIE_BABY.equals(name)) {
-			player.sendMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslation(Strings.Chat.mobTargetingWarning_babyZombie, GeneralUtils.random)));
+			player.sendMessage(new TextComponentTranslation(GeneralUtils.getRandomTranslationKey(Strings.Chat.mobTargetingWarning_babyZombie, GeneralUtils.random)));
 		} else {
-			player.sendMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_1)
+			int index = GeneralUtils.getRandomIndexFromTranslationKey(Strings.Chat.mobTargetingWarning_exact_count, GeneralUtils.random);
+			player.sendMessage(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_1 + "." + index)
 					.appendSibling(new TextComponentString(" " + name + " ")
 							.setStyle(new Style().setColor(TextFormatting.RED)))
-					.appendSibling(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_2)));
+					.appendSibling(new TextComponentTranslation(Strings.Chat.mobTargetingWarning_exact_2 + "." + index)));
 		}
 	}
 }
