@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.command.techdata;
 
-import com.fravokados.dangertech.api.util.ChunkLocation;
+import com.fravokados.dangertech.api.core.util.ChunkLocation;
 import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.monsters.command.CommandHelpers;
 import com.fravokados.dangertech.monsters.command.SubCommand;

@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.item;
 
-import com.fravokados.dangertech.api.block.IFacingSix;
+import com.fravokados.dangertech.api.core.block.IFacingSix;
 import com.fravokados.dangertech.monsters.lib.Strings;
 import com.fravokados.dangertech.monsters.techdata.TDManager;
 import com.fravokados.dangertech.monsters.techdata.values.TDValues;

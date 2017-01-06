@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.monsters.techdata.effects;
 
-import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffect;
-import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.dangertech.api.monsters.techdata.effects.mob.TDMobEffect;
+import com.fravokados.dangertech.api.monsters.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.monsters.configuration.Settings;
 import com.fravokados.dangertech.monsters.techdata.TDManager;

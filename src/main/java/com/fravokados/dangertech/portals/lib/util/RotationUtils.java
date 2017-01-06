@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.portals.lib.util;
 
-import com.fravokados.dangertech.api.block.IFacingSix;
+import com.fravokados.dangertech.api.core.block.IFacingSix;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;

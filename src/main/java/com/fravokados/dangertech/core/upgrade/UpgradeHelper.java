@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.core.upgrade;
 
-import com.fravokados.dangertech.api.upgrade.IUpgrade;
-import com.fravokados.dangertech.api.upgrade.IUpgradeDefinition;
+import com.fravokados.dangertech.api.core.upgrade.IUpgrade;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradeDefinition;
 import com.fravokados.dangertech.core.plugin.ic2.IC2UpgradeIntegration;
 import net.minecraft.item.ItemStack;
 

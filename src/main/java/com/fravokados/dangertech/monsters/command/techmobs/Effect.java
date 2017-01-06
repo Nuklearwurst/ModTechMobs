@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.command.techmobs;
 
-import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.dangertech.api.monsters.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.dangertech.core.lib.util.GeneralUtils;
 import com.fravokados.dangertech.monsters.command.CommandHelpers;
 import com.fravokados.dangertech.monsters.command.SubCommand;

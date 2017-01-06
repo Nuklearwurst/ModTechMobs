@@ -1,12 +1,12 @@
 package com.fravokados.dangertech.portals.block.tileentity;
 
-import com.fravokados.dangertech.api.block.IBlockPlacedListener;
-import com.fravokados.dangertech.api.block.IFacingSix;
-import com.fravokados.dangertech.api.portal.IEntityPortalController;
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
-import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
-import com.fravokados.dangertech.api.upgrade.UpgradeStatCollection;
-import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
+import com.fravokados.dangertech.api.core.block.IBlockPlacedListener;
+import com.fravokados.dangertech.api.core.block.IFacingSix;
+import com.fravokados.dangertech.api.portals.component.IEntityPortalController;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradeInventory;
+import com.fravokados.dangertech.api.core.upgrade.UpgradeStatCollection;
+import com.fravokados.dangertech.api.core.upgrade.UpgradeTypes;
 import com.fravokados.dangertech.core.inventory.InventoryUpgrade;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;

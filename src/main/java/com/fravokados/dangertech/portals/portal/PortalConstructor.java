@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.portals.portal;
 
-import com.fravokados.dangertech.api.portal.IEntityPortalComponent;
-import com.fravokados.dangertech.api.portal.IEntityPortalMandatoryComponent;
+import com.fravokados.dangertech.api.portals.component.IEntityPortalComponent;
+import com.fravokados.dangertech.api.portals.component.IEntityPortalMandatoryComponent;
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.portals.configuration.Settings;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;

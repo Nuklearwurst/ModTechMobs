@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.entity;
 
-import com.fravokados.dangertech.api.DangerousTechnologyAPI;
+import com.fravokados.dangertech.api.monsters.DamageSources;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.monsters.ModTechMobs;
 import com.fravokados.dangertech.monsters.common.EMPExplosion;
@@ -470,7 +470,7 @@ public class EntityConservationUnit extends Entity implements IEmpHandler, IInve
 	@Override
 	public void handleEMP(World world, double x, double y, double z, float strength, int radius, float factor) {
 		this.empCounter = (int) (factor * 20 * strength);
-		this.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, factor * 20 * strength);
+		this.attackEntityFrom(DamageSources.damageSourceEMP, factor * 20 * strength);
 	}
 
 	@Override

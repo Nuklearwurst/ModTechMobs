@@ -1,8 +1,8 @@
 package com.fravokados.dangertech.portals.portal;
 
-import com.fravokados.dangertech.api.block.IFacingSix;
-import com.fravokados.dangertech.api.portal.IEntityPortalComponent;
-import com.fravokados.dangertech.api.portal.IEntityPortalMandatoryComponent;
+import com.fravokados.dangertech.api.core.block.IFacingSix;
+import com.fravokados.dangertech.api.portals.component.IEntityPortalComponent;
+import com.fravokados.dangertech.api.portals.component.IEntityPortalMandatoryComponent;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.portals.block.BlockPortalFrame;
 import com.fravokados.dangertech.portals.block.BlockPortalMinDim;

@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.core.client.gui;
 
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
 import com.fravokados.dangertech.core.inventory.ContainerUpgradeTool;
 import com.fravokados.dangertech.core.lib.Textures;
 import net.minecraft.client.gui.inventory.GuiContainer;

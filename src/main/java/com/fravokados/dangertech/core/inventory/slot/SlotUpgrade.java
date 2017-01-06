@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.core.inventory.slot;
 
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

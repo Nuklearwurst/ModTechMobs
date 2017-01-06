@@ -1,8 +1,8 @@
 package com.fravokados.dangertech.core.plugin.ic2;
 
-import com.fravokados.dangertech.api.upgrade.IUpgradeDefinition;
-import com.fravokados.dangertech.api.upgrade.UpgradeStatCollection;
-import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradeDefinition;
+import com.fravokados.dangertech.api.core.upgrade.UpgradeStatCollection;
+import com.fravokados.dangertech.api.core.upgrade.UpgradeTypes;
 
 /**
  * @author Nuklearwurst

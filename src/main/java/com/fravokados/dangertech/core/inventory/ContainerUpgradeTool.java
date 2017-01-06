@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.core.inventory;
 
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

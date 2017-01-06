@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.item;
 
-import com.fravokados.dangertech.api.techdata.values.ITechdataCapability;
+import com.fravokados.dangertech.api.monsters.techdata.values.ITechdataCapability;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.monsters.lib.Strings;

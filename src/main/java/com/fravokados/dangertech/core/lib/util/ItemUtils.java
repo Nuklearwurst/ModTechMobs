@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.core.lib.util;
 
-import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradeInventory;
 import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;

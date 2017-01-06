@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.techdata.effects.player;
 
-import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.dangertech.api.monsters.techdata.effects.player.TDPlayerEffect;
 import com.fravokados.dangertech.monsters.configuration.Settings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;

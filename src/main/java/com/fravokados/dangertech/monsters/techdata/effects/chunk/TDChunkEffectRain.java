@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.monsters.techdata.effects.chunk;
 
-import com.fravokados.dangertech.api.techdata.effects.chunk.TDChunkEffect;
-import com.fravokados.dangertech.api.util.ChunkLocation;
+import com.fravokados.dangertech.api.monsters.techdata.effects.chunk.TDChunkEffect;
+import com.fravokados.dangertech.api.core.util.ChunkLocation;
 import net.minecraft.world.World;
 
 /**

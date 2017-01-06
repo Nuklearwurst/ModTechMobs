@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.core.lib.util;
 
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
-import com.fravokados.dangertech.api.upgrade.IUpgradeInventory;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradeInventory;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;

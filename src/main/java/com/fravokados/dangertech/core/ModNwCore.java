@@ -2,7 +2,7 @@ package com.fravokados.dangertech.core;
 
 
 import com.fravokados.dangertech.api.DangerousTechnologyAPI;
-import com.fravokados.dangertech.api.techdata.values.ITechdataCapability;
+import com.fravokados.dangertech.api.monsters.techdata.values.ITechdataCapability;
 import com.fravokados.dangertech.core.common.CommonProxy;
 import com.fravokados.dangertech.core.common.handler.GuiHandler;
 import com.fravokados.dangertech.core.common.init.ModItems;
@@ -101,7 +101,7 @@ public class ModNwCore {
 			}
 		};
 		//init API
-		DangerousTechnologyAPI.creativeTab = CREATIVE_TABS;
+		DangerousTechnologyAPI.creativeTabCore = CREATIVE_TABS;
 	}
 
 	@SubscribeEvent

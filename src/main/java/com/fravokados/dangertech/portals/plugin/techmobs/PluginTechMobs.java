@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.portals.plugin.techmobs;
 
-import com.fravokados.dangertech.api.DangerousTechnologyAPI;
+import com.fravokados.dangertech.api.monsters.techdata.TechdataRegistries;
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalControllerEntity;
 import com.fravokados.dangertech.portals.block.tileentity.TileEntityPortalFrame;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;
@@ -18,7 +18,7 @@ public class PluginTechMobs {
 			return;
 		}
 		LogHelperMD.debug("Loading Dangerous Technology Integration");
-		DangerousTechnologyAPI.valueRegistry.registerTileEntityEntry(TileEntityPortalControllerEntity.class, 100);
-		DangerousTechnologyAPI.valueRegistry.registerTileEntityEntry(TileEntityPortalFrame.class, 2);
+		TechdataRegistries.valueRegistry.registerTileEntityEntry(TileEntityPortalControllerEntity.class, 100);
+		TechdataRegistries.valueRegistry.registerTileEntityEntry(TileEntityPortalFrame.class, 2);
 	}
 }

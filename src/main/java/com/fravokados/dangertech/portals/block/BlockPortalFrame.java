@@ -1,8 +1,8 @@
 package com.fravokados.dangertech.portals.block;
 
-import com.fravokados.dangertech.api.block.IBlockPlacedListener;
-import com.fravokados.dangertech.api.block.IFacingSix;
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
+import com.fravokados.dangertech.api.core.block.IBlockPlacedListener;
+import com.fravokados.dangertech.api.core.block.IFacingSix;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.plugin.PluginManager;

@@ -1,8 +1,8 @@
 package com.fravokados.dangertech.core.plugin.ic2;
 
-import com.fravokados.dangertech.api.upgrade.IUpgradeDefinition;
-import com.fravokados.dangertech.api.upgrade.SimpleIntegerUpgrade;
-import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradeDefinition;
+import com.fravokados.dangertech.api.core.upgrade.SimpleIntegerUpgrade;
+import com.fravokados.dangertech.api.core.upgrade.UpgradeTypes;
 import com.fravokados.dangertech.core.plugin.PluginManager;
 import ic2.api.info.Info;
 import ic2.api.item.IC2Items;

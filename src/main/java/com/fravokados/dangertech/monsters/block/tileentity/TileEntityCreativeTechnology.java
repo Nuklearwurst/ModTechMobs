@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.block.tileentity;
 
-import com.fravokados.dangertech.api.techdata.values.ITechdataCapability;
+import com.fravokados.dangertech.api.monsters.techdata.values.ITechdataCapability;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;

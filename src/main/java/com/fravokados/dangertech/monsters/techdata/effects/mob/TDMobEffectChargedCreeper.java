@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.techdata.effects.mob;
 
-import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffect;
+import com.fravokados.dangertech.api.monsters.techdata.effects.mob.TDMobEffect;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
 

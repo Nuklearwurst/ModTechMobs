@@ -1,13 +1,13 @@
 package com.fravokados.dangertech.monsters.techdata.values;
 
-import com.fravokados.dangertech.api.DangerousTechnologyAPI;
-import com.fravokados.dangertech.api.techdata.values.ITechdataCapability;
-import com.fravokados.dangertech.api.techdata.values.TDValueRegistry;
-import com.fravokados.dangertech.api.techdata.values.player.TDEntryItem;
-import com.fravokados.dangertech.api.techdata.values.player.TDEntrySimpleItem;
-import com.fravokados.dangertech.api.techdata.values.player.TDEntrySimpleMultiItem;
-import com.fravokados.dangertech.api.techdata.values.world.TDEntrySimpleTileEntity;
-import com.fravokados.dangertech.api.techdata.values.world.TDEntryTileEntity;
+import com.fravokados.dangertech.api.monsters.techdata.TechdataRegistries;
+import com.fravokados.dangertech.api.monsters.techdata.values.ITechdataCapability;
+import com.fravokados.dangertech.api.monsters.techdata.values.IValueRegistry;
+import com.fravokados.dangertech.api.monsters.techdata.values.player.TDEntryItem;
+import com.fravokados.dangertech.api.monsters.techdata.values.player.TDEntrySimpleItem;
+import com.fravokados.dangertech.api.monsters.techdata.values.player.TDEntrySimpleMultiItem;
+import com.fravokados.dangertech.api.monsters.techdata.values.world.TDEntrySimpleTileEntity;
+import com.fravokados.dangertech.api.monsters.techdata.values.world.TDEntryTileEntity;
 import com.fravokados.dangertech.monsters.configuration.Settings;
 import com.fravokados.dangertech.monsters.lib.util.LogHelperTM;
 import net.minecraft.init.Items;
@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * @author Nuklearwurst
  */
-public class TDValues implements TDValueRegistry {
+public class TDValues implements IValueRegistry {
 
 	/**
 	 * Contains information about Tileentities
@@ -191,7 +191,7 @@ public class TDValues implements TDValueRegistry {
 		}
 	}
 
-	public static TDValueRegistry getInstance() {
-		return DangerousTechnologyAPI.valueRegistry;
+	public static IValueRegistry getInstance() {
+		return TechdataRegistries.valueRegistry;
 	}
 }

@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.world;
 
-import com.fravokados.dangertech.api.util.ChunkLocation;
+import com.fravokados.dangertech.api.core.util.ChunkLocation;
 import com.fravokados.dangertech.monsters.configuration.Settings;
 import com.fravokados.dangertech.monsters.lib.util.LogHelperTM;
 import com.fravokados.dangertech.monsters.lib.util.PlayerUtils;

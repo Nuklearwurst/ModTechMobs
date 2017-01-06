@@ -1,6 +1,8 @@
 package com.fravokados.dangertech.monsters;
 
 import com.fravokados.dangertech.api.DangerousTechnologyAPI;
+import com.fravokados.dangertech.api.monsters.DamageSources;
+import com.fravokados.dangertech.api.monsters.techdata.TechdataRegistries;
 import com.fravokados.dangertech.monsters.command.CommandTechData;
 import com.fravokados.dangertech.monsters.command.CommandTechMobs;
 import com.fravokados.dangertech.monsters.command.CommandTechPlayer;
@@ -67,9 +69,9 @@ public class ModTechMobs {
 		//init keybindings
 
 		//init API
-		DangerousTechnologyAPI.effectRegistry = new TDEffects();
-		DangerousTechnologyAPI.valueRegistry = new TDValues();
-		DangerousTechnologyAPI.damageSourceEMP = new DamageSource(Strings.DAMAGE_SOURCE_EMP).setDamageBypassesArmor();
+		TechdataRegistries.effectRegistry = new TDEffects();
+		TechdataRegistries.valueRegistry = new TDValues();
+		DamageSources.damageSourceEMP = new DamageSource(Strings.DAMAGE_SOURCE_EMP).setDamageBypassesArmor();
 
 		//init rendering
 		proxy.registerRenderer();
@@ -154,6 +156,7 @@ public class ModTechMobs {
 				return ModItems.monsterDetector;
 			}
 		};
+		DangerousTechnologyAPI.creativeTabMonsters = TAB_TM;
 	}
 
 	@Mod.EventHandler

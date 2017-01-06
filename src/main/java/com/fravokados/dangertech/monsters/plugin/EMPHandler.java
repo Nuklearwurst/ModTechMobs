@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.plugin;
 
-import com.fravokados.dangertech.api.DangerousTechnologyAPI;
+import com.fravokados.dangertech.api.monsters.DamageSources;
 import com.fravokados.dangertech.monsters.common.IEmpHandler;
 import com.fravokados.dangertech.monsters.plugin.ic2.IC2EMPIntegration;
 import net.minecraft.entity.Entity;
@@ -43,9 +43,9 @@ public class EMPHandler {
 			for(ItemStack stack : ((EntityPlayer) entity).inventory.mainInventory) {
 				handleItemEMP(stack, entity, x, y, z, strength, radius, factor);
 			}
-			entity.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, factor * strength * 4);
+			entity.attackEntityFrom(DamageSources.damageSourceEMP, factor * strength * 4);
 		} else if (entity instanceof EntityLiving) {
-			entity.attackEntityFrom(DangerousTechnologyAPI.damageSourceEMP, factor * strength * 4);
+			entity.attackEntityFrom(DamageSources.damageSourceEMP, factor * strength * 4);
 		}
 	}
 

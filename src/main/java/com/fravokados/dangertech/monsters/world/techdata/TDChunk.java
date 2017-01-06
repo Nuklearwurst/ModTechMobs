@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.monsters.world.techdata;
 
-import com.fravokados.dangertech.api.util.ChunkLocation;
+import com.fravokados.dangertech.api.core.util.ChunkLocation;
 import com.fravokados.dangertech.monsters.world.TechDataStorage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.ChunkDataEvent;

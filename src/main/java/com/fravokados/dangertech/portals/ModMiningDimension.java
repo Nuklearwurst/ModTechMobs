@@ -1,5 +1,6 @@
 package com.fravokados.dangertech.portals;
 
+import com.fravokados.dangertech.api.DangerousTechnologyAPI;
 import com.fravokados.dangertech.portals.command.CommandEnterDimension;
 import com.fravokados.dangertech.portals.common.ChunkLoaderCallback;
 import com.fravokados.dangertech.portals.common.CommonProxy;
@@ -57,7 +58,6 @@ public class ModMiningDimension {
 		//load config
 		config = new ConfigHandler(evt.getSuggestedConfigurationFile());
 		config.load(true);
-		//register blocks and tileentities
 
 	}
 
@@ -107,6 +107,7 @@ public class ModMiningDimension {
 				return ModItems.itemDestinationCard;
 			}
 		};
+		DangerousTechnologyAPI.creativeTabPortals = TAB_MD;
 	}
 
 	@SubscribeEvent

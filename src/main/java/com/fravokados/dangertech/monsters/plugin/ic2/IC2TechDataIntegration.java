@@ -1,7 +1,7 @@
 package com.fravokados.dangertech.monsters.plugin.ic2;
 
-import com.fravokados.dangertech.api.DangerousTechnologyAPI;
-import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffectEquipment;
+import com.fravokados.dangertech.api.monsters.techdata.TechdataRegistries;
+import com.fravokados.dangertech.api.monsters.techdata.effects.mob.TDMobEffectEquipment;
 import com.fravokados.dangertech.monsters.lib.util.LogHelperTM;
 import com.fravokados.dangertech.monsters.plugin.PluginManager;
 import com.fravokados.dangertech.monsters.techdata.values.TDValues;
@@ -242,7 +242,7 @@ public class IC2TechDataIntegration {
 
 	private static void loadEffects() {
 
-		DangerousTechnologyAPI.effectRegistry.addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
+		TechdataRegistries.effectRegistry.addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
 				IC2Items.getItem("nano_saber"),
 				null,
 				IC2Items.getItem("quantum_helmet"),
@@ -252,7 +252,7 @@ public class IC2TechDataIntegration {
 		}, false, false, new int[]{4000, 0, 1000, 4000, 2000, 2000}).setDoesArmorDrop(false).checkContents());
 
 
-		DangerousTechnologyAPI.effectRegistry.addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
+		TechdataRegistries.effectRegistry.addMobEffect(new TDMobEffectEquipment(new ItemStack[]{
 				IC2Items.getItem("chainsaw"),
 				null,
 				IC2Items.getItem("nano_helmet"),

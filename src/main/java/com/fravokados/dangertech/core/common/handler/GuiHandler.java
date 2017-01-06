@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.core.common.handler;
 
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
 import com.fravokados.dangertech.core.client.gui.GuiUpgradeTool;
 import com.fravokados.dangertech.core.inventory.ContainerUpgradeTool;
 import com.fravokados.dangertech.core.lib.GUIIDs;

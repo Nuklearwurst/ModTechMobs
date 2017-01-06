@@ -1,13 +1,13 @@
 package com.fravokados.dangertech.monsters.techdata.effects;
 
-import com.fravokados.dangertech.api.DangerousTechnologyAPI;
-import com.fravokados.dangertech.api.techdata.effects.TDEffectRegistry;
-import com.fravokados.dangertech.api.techdata.effects.chunk.TDChunkEffect;
-import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffect;
-import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffectEquipment;
-import com.fravokados.dangertech.api.techdata.effects.mob.TDMobEffectPotion;
-import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffect;
-import com.fravokados.dangertech.api.techdata.effects.player.TDPlayerEffectPotion;
+import com.fravokados.dangertech.api.monsters.techdata.TechdataRegistries;
+import com.fravokados.dangertech.api.monsters.techdata.effects.IEffectRegistry;
+import com.fravokados.dangertech.api.monsters.techdata.effects.chunk.TDChunkEffect;
+import com.fravokados.dangertech.api.monsters.techdata.effects.mob.TDMobEffect;
+import com.fravokados.dangertech.api.monsters.techdata.effects.mob.TDMobEffectEquipment;
+import com.fravokados.dangertech.api.monsters.techdata.effects.mob.TDMobEffectPotion;
+import com.fravokados.dangertech.api.monsters.techdata.effects.player.TDPlayerEffect;
+import com.fravokados.dangertech.api.monsters.techdata.effects.player.TDPlayerEffectPotion;
 import com.fravokados.dangertech.core.lib.util.ChatUtils;
 import com.fravokados.dangertech.monsters.lib.Strings;
 import com.fravokados.dangertech.monsters.lib.util.LogHelperTM;
@@ -34,7 +34,7 @@ import java.util.UUID;
  * @author Nuklearwurst
  *
  */
-public class TDEffects implements TDEffectRegistry {
+public class TDEffects implements IEffectRegistry {
 
 	/**
 	 * effects that are applied to mods on spawn
@@ -172,7 +172,7 @@ public class TDEffects implements TDEffectRegistry {
 		getInstance().addChunkEffect(new TDChunkEffectThunder());
 	}
 
-	public static TDEffectRegistry getInstance() {
-		return DangerousTechnologyAPI.effectRegistry;
+	public static IEffectRegistry getInstance() {
+		return TechdataRegistries.effectRegistry;
 	}
 }

@@ -1,6 +1,6 @@
 package com.fravokados.dangertech.core.item;
 
-import com.fravokados.dangertech.api.upgrade.IUpgradable;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
 import com.fravokados.dangertech.core.ModNwCore;
 import com.fravokados.dangertech.core.lib.GUIIDs;
 import com.fravokados.dangertech.core.lib.Strings;

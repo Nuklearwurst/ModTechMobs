@@ -1,9 +1,9 @@
 package com.fravokados.dangertech.portals.item;
 
-import com.fravokados.dangertech.api.upgrade.IUpgrade;
-import com.fravokados.dangertech.api.upgrade.IUpgradeDefinition;
-import com.fravokados.dangertech.api.upgrade.SimpleNonStackingUpgrade;
-import com.fravokados.dangertech.api.upgrade.UpgradeTypes;
+import com.fravokados.dangertech.api.core.upgrade.IUpgrade;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradeDefinition;
+import com.fravokados.dangertech.api.core.upgrade.SimpleNonStackingUpgrade;
+import com.fravokados.dangertech.api.core.upgrade.UpgradeTypes;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.Textures;
 import net.minecraft.creativetab.CreativeTabs;
