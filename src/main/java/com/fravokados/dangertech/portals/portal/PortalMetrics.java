@@ -259,20 +259,21 @@ public class PortalMetrics {
 
 	@SuppressWarnings("ConstantConditions")
 	public boolean isFrameEmpty(World world) {
-		boolean flagX;
-		boolean flagY;
-		boolean flagZ;
+		boolean isFrameX;
+		boolean isFrameY;
+		boolean isFrameZ;
 		for(int x = minX; x <= maxX; x++) {
-			flagX = x == minX || x == maxX;
+			isFrameX = x == minX || x == maxX;
 			for(int y = minY; y <= maxY; y++) {
-				flagY = y == minY || y == maxY;
+				isFrameY = y == minY || y == maxY;
 				for(int z = minZ; z <= maxZ; z++) {
-					flagZ = z == minZ || z == maxZ;
-					if(!(flagX == flagY ? flagX : flagZ)) {
+					isFrameZ = z == minZ || z == maxZ;
+					//check if block is part of frame
+					//to be part of the frame two out of the three flags need to be true
+					if(!(isFrameX == isFrameY ? isFrameX : isFrameZ)) {
 						BlockPos pos = new BlockPos(x, y, z);
 						if(!world.isAirBlock(pos) && world.getBlockState(pos) != ModBlocks.blockPortalBlock) {
 							//skip portal block when searching for empty frame to allow client to update metrics when a portal is already opened
-							//see ClientPortalInfo for more information
 							return false;
 						}
 					}

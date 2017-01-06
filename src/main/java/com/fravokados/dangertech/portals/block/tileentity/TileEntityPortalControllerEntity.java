@@ -2,11 +2,11 @@ package com.fravokados.dangertech.portals.block.tileentity;
 
 import com.fravokados.dangertech.api.core.block.IBlockPlacedListener;
 import com.fravokados.dangertech.api.core.block.IFacingSix;
-import com.fravokados.dangertech.api.portals.component.IEntityPortalController;
 import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
 import com.fravokados.dangertech.api.core.upgrade.IUpgradeInventory;
 import com.fravokados.dangertech.api.core.upgrade.UpgradeStatCollection;
 import com.fravokados.dangertech.api.core.upgrade.UpgradeTypes;
+import com.fravokados.dangertech.api.portals.component.IEntityPortalController;
 import com.fravokados.dangertech.core.inventory.InventoryUpgrade;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
@@ -16,14 +16,12 @@ import com.fravokados.dangertech.core.plugin.energy.TileEntityEnergyReceiver;
 import com.fravokados.dangertech.portals.ModMiningDimension;
 import com.fravokados.dangertech.portals.block.types.IPortalFrameWithState;
 import com.fravokados.dangertech.portals.block.types.PortalFrameState;
-import com.fravokados.dangertech.portals.client.ClientPortalInfo;
 import com.fravokados.dangertech.portals.configuration.Settings;
 import com.fravokados.dangertech.portals.inventory.ContainerEntityPortalController;
 import com.fravokados.dangertech.portals.item.ItemDestinationCard;
 import com.fravokados.dangertech.portals.lib.NBTKeys;
 import com.fravokados.dangertech.portals.lib.Strings;
 import com.fravokados.dangertech.portals.lib.util.LogHelperMD;
-import com.fravokados.dangertech.portals.plugin.lookingglass.PluginLookingGlass;
 import com.fravokados.dangertech.portals.portal.BlockPositionDim;
 import com.fravokados.dangertech.portals.portal.PortalConstructor;
 import com.fravokados.dangertech.portals.portal.PortalManager;
@@ -52,8 +50,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -79,9 +75,6 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 * flag indicating that the controller can reverse the portal direction
 	 */
 	public static final int FLAG_CAN_REVERSE_PORTAL = 2;
-
-	@SideOnly(Side.CLIENT)
-	public ClientPortalInfo renderInfo;
 
 	/**
 	 * Portal id
@@ -265,23 +258,6 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	public void setState(State state) {
-		if (getWorld().isRemote && PluginLookingGlass.isAvailable()) {
-			if (state == State.OUTGOING_PORTAL || state == State.INCOMING_PORTAL) {
-				if (state != this.state) {
-					if (renderInfo != null) {
-						if(metrics != null) {
-							renderInfo.createLookingGlass(metrics, this.getWorld());
-						} else {
-							LogHelperMD.error("Invalid portal state! Portal bounds are not available!");
-						}
-					}
-				}
-			} else if (this.state == State.OUTGOING_PORTAL || this.state == State.INCOMING_PORTAL) {
-				if (renderInfo != null) {
-					renderInfo.destroyLookingGlass();
-				}
-			}
-		}
 		this.state = state;
 		WorldUtils.notifyBlockUpdateAtTile(this);
 		if (metrics != null) {
@@ -799,41 +775,12 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setByte(NBTKeys.TILE_FACING, (byte) facing.getIndex());
 		nbt.setInteger(NBTKeys.CONTROLLER_STATE, state.ordinal());
-		if (PluginLookingGlass.isAvailable() && metrics != null) {
-			nbt.setByte("portalFacing", (byte) metrics.front.ordinal());
-			if (isActive()) {
-				PortalMetrics target = PortalManager.getInstance().getPortalMetricsForId(portalDestination);
-				if (target != null) {
-					BlockPositionDim pos = PortalManager.getInstance().getEntityPortalForId(portalDestination);
-					if (pos != null) {
-						nbt.setInteger("targetDimension", pos.dimension);
-						nbt.setByte("targetFacing", (byte) target.front.ordinal());
-						nbt.setDouble("targetX", target.originX);
-						nbt.setDouble("targetY", target.originY);
-						nbt.setDouble("targetZ", target.originZ);
-					}
-				}
-			}
-		}
 		return new SPacketUpdateTileEntity(getPos(), 0, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.getNbtCompound();
-		if (nbt.hasKey("portalFacing")) {
-			renderInfo = new ClientPortalInfo();
-			renderInfo.originDirection = EnumFacing.getFront(nbt.getByte("portalFacing"));
-			if (nbt.hasKey("targetFacing")) {
-				renderInfo.targetDimension = nbt.getInteger("targetDimension");
-				renderInfo.targetDirection = EnumFacing.getFront(nbt.getByte("targetFacing"));
-				renderInfo.targetX = nbt.getInteger("targetX");
-				renderInfo.targetY = nbt.getInteger("targetY");
-				renderInfo.targetZ = nbt.getInteger("targetZ");
-			}
-		} else {
-			renderInfo = null;
-		}
 
 		if (nbt.hasKey(NBTKeys.TILE_FACING)) {
 			EnumFacing oldFacing = facing;

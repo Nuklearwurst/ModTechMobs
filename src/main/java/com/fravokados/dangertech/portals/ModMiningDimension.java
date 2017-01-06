@@ -74,8 +74,6 @@ public class ModMiningDimension {
 		ModMDNetworkManager.init();
 
 		PluginTechMobs.init();
-		//Disable LookingGlass integration for now
-//        FMLInterModComms.sendMessage("LookingGlass", "API", "com.fravokados.dangertech.mindim.plugin.PluginLookingGlass.register");
 
 		//Chunkloading
 		ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoaderCallback());

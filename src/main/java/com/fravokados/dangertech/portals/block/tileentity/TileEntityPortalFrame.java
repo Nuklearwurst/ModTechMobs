@@ -7,7 +7,6 @@ import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.core.lib.util.WorldUtils;
 import com.fravokados.dangertech.portals.block.types.IPortalFrameWithState;
 import com.fravokados.dangertech.portals.block.types.PortalFrameState;
-import com.fravokados.dangertech.portals.client.ClientPortalInfo;
 import com.fravokados.dangertech.portals.lib.NBTKeys;
 import com.fravokados.dangertech.portals.portal.PortalConstructor;
 import com.fravokados.dangertech.portals.portal.PortalMetrics;
@@ -19,8 +18,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 /**
  * @author Nuklearwurst
@@ -127,17 +124,6 @@ public class TileEntityPortalFrame extends TileEntity implements IBlockPlacedLis
 			}
 		}
 		return TileEntityPortalControllerEntity.State.NO_MULTIBLOCK;
-	}
-
-	@Nullable
-	public ClientPortalInfo getClientRenderInfo() {
-		if(controllerPos != null) {
-			TileEntity te = getWorld().getTileEntity(controllerPos);
-			if(te != null && te instanceof TileEntityPortalControllerEntity) {
-				return ((TileEntityPortalControllerEntity) te).renderInfo;
-			}
-		}
-		return null;
 	}
 
 	@Override
