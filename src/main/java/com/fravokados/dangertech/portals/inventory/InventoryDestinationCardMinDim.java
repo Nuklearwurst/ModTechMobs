@@ -61,19 +61,6 @@ public class InventoryDestinationCardMinDim implements IInventory {
 		return stack;
 	}
 
-	/*
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		if(item != null) {
-			ItemStack stack = item;
-			item = null;
-			return stack;
-		} else {
-			return null;
-		}
-	}
-	*/
-
 	@Override
 	public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
 		item = stack;
