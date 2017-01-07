@@ -51,6 +51,8 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -91,6 +93,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	 * Controller main inventory
 	 */
 	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
+	private SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(this, null);
 
 	/**
 	 * last portal metrics
@@ -949,10 +952,13 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		upgrades = null; //Hack to prevent droping of upgrades when removing using a wrench
 	}
 
-	@SuppressWarnings("ConstantConditions")
+	@SuppressWarnings({"ConstantConditions", "SimplifiableIfStatement"})
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		if (capability == IUpgradable.UPGRADABLE) {
+			return true;
+		}
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -963,6 +969,9 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == IUpgradable.UPGRADABLE) {
 			return IUpgradable.UPGRADABLE.cast(this);
+		}
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
 		}
 		return super.getCapability(capability, facing);
 	}
