@@ -2,6 +2,7 @@ package com.fravokados.dangertech.core;
 
 
 import com.fravokados.dangertech.api.DangerousTechnologyAPI;
+import com.fravokados.dangertech.api.core.upgrade.IUpgradable;
 import com.fravokados.dangertech.api.monsters.techdata.values.ITechdataCapability;
 import com.fravokados.dangertech.core.common.CommonProxy;
 import com.fravokados.dangertech.core.common.handler.GuiHandler;
@@ -66,6 +67,7 @@ public class ModNwCore {
 
 		//init capabilities
 		ITechdataCapability.register();
+		IUpgradable.register();
 	}
 
 	@Mod.EventHandler

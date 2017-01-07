@@ -1,16 +1,11 @@
-package com.fravokados.dangertech.core.inventory;
+package com.fravokados.dangertech.api.core.upgrade;
 
-import com.fravokados.dangertech.api.core.upgrade.IUpgradeDefinition;
-import com.fravokados.dangertech.api.core.upgrade.IUpgradeInventory;
 import com.fravokados.dangertech.core.lib.Strings;
 import com.fravokados.dangertech.core.upgrade.UpgradeHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -148,33 +143,5 @@ public class InventoryUpgrade implements IUpgradeInventory {
 	@Override
 	public List<IUpgradeDefinition> getUpgrades() {
 		return UpgradeHelper.getUpgradesFromItems(inventory);
-	}
-
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < this.inventory.length; ++i) {
-			if (this.inventory[i] != null) {
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setByte("Slot", (byte) i);
-				this.inventory[i].writeToNBT(tag);
-				nbttaglist.appendTag(tag);
-			}
-		}
-		nbt.setTag("ItemsUpgrade", nbttaglist);
-		return nbt;
-	}
-
-	public void readFromNBT(NBTTagCompound nbt) {
-		NBTTagList nbttaglist = nbt.getTagList("ItemsUpgrade", Constants.NBT.TAG_COMPOUND);
-		this.inventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-			NBTTagCompound tag = nbttaglist.getCompoundTagAt(i);
-			byte slot = tag.getByte("Slot");
-			if (slot >= 0 && slot < this.inventory.length) {
-				this.inventory[slot] = ItemStack.loadItemStackFromNBT(tag);
-			}
-		}
 	}
 }

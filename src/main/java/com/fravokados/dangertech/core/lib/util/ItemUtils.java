@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -82,22 +84,51 @@ public class ItemUtils {
 	}
 
 	/**
+	 * reads the content of an inventory from the given NBTTagList
+	 * @param inventory the inventory the items should get added to
+	 * @param nbtTagList the Taglist containing the saved itemstacks
+	 */
+	public static void readInventoryContentsFromNBT(IItemHandlerModifiable inventory, NBTTagList nbtTagList) {
+		for (int i = 0; i < nbtTagList.tagCount(); ++i) {
+			NBTTagCompound tag = nbtTagList.getCompoundTagAt(i);
+			byte slot = tag.getByte("Slot");
+			if (slot >= 0 && slot < inventory.getSlots()) {
+				inventory.setStackInSlot(slot, ItemStack.loadItemStackFromNBT(tag));
+			}
+		}
+	}
+
+	/**
 	 * saves the content of an inventory to the given NBTTagList
 	 * @param inventory the inventory to be saved
 	 * @param nbtTagList the taglist the itemstacks get saved to
 	 */
 	public static void writeInventoryContentsToNBT(IInventory inventory, NBTTagList nbtTagList) {
 		for (int i = 0; i < inventory.getSizeInventory(); ++i) {
-			if (inventory.getStackInSlot(i) != null) {
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setByte("Slot", (byte) i);
-				//noinspection ConstantConditions
-				inventory.getStackInSlot(i).writeToNBT(tag);
-				nbtTagList.appendTag(tag);
-			}
+			writeSlotToNBTList((byte) i, inventory.getStackInSlot(i), nbtTagList);
 		}
 	}
 
+	/**
+	 * saves the content of an inventory to the given NBTTagList
+	 * @param inventory the inventory to be saved
+	 * @param nbtTagList the taglist the itemstacks get saved to
+	 */
+	public static void writeInventoryContentsToNBT(IItemHandler inventory, NBTTagList nbtTagList) {
+		for (int i = 0; i < inventory.getSlots(); ++i) {
+			writeSlotToNBTList((byte) i, inventory.getStackInSlot(i), nbtTagList);
+		}
+	}
+
+	private static void writeSlotToNBTList(byte slot, @Nullable ItemStack stack, NBTTagList nbtTagList) {
+		if(stack != null) {
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setByte("Slot", slot);
+			//noinspection ConstantConditions
+			stack.writeToNBT(tag);
+			nbtTagList.appendTag(tag);
+		}
+	}
 	/**
 	 * a default implementation for decrStackSize of IInventory
 	 */

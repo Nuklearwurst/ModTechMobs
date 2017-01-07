@@ -26,8 +26,8 @@ public class GuiHandler implements IGuiHandler {
 			case GUIIDs.UPGRADE_TOOL:
 			{
 				TileEntity te = world.getTileEntity(pos);
-				if(te instanceof IUpgradable) {
-					return new ContainerUpgradeTool(player.inventory, (IUpgradable) te);
+				if(te != null && te.hasCapability(IUpgradable.UPGRADABLE, null)) {
+					return new ContainerUpgradeTool(player.inventory, te.getCapability(IUpgradable.UPGRADABLE, null));
 				} else {
 					LogHelperCore.error("Tried opening upgrade gui on not upgradable tile!\nPlayer: " + player.toString() + "Tile: [" + world.provider.getDimension() + ": " + x + ", " + y + ", " + z + "]");
 					return null;
@@ -45,8 +45,8 @@ public class GuiHandler implements IGuiHandler {
 			case GUIIDs.UPGRADE_TOOL:
 			{
 				TileEntity te = world.getTileEntity(pos);
-				if(te instanceof IUpgradable) {
-					return new GuiUpgradeTool(player.inventory, (IUpgradable) te);
+				if(te != null && te.hasCapability(IUpgradable.UPGRADABLE, null)) {
+					return new GuiUpgradeTool(player.inventory, te.getCapability(IUpgradable.UPGRADABLE, null));
 				} else {
 					LogHelperCore.error("Tried opening upgrade gui on not upgradable tile!\nPlayer: " + player.toString() + "Tile: [" + world.provider.getDimension() + ": " + x + ", " + y + ", " + z + "]");
 					return null;

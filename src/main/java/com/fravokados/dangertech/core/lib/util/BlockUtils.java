@@ -45,18 +45,15 @@ public class BlockUtils {
 	/**
 	 * drops the upgrade inventory of a machine at the given position in the given world
 	 */
+	@SuppressWarnings("ConstantConditions")
 	public static void dropUpgrades(World world, BlockPos pos) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 
-		if (!(tileEntity instanceof IUpgradable)) {
+		if (!(tileEntity.hasCapability(IUpgradable.UPGRADABLE, null))) {
 			return;
 		}
 
-		IUpgradeInventory inventory = ((IUpgradable) tileEntity).getUpgradeInventory();
-
-		if(inventory == null) {
-			return;
-		}
+		IUpgradeInventory inventory = tileEntity.getCapability(IUpgradable.UPGRADABLE, null).getUpgradeInventory();
 
 		dropInventory(world, inventory, pos);
 	}
@@ -128,8 +125,8 @@ public class BlockUtils {
 			if(te instanceof IInventory) {
 				addInventoryToList(list, (IInventory) te);
 			}
-			if(te instanceof IUpgradable) {
-				addInventoryToList(list, ((IUpgradable) te).getUpgradeInventory());
+			if(te.hasCapability(IUpgradable.UPGRADABLE, null)) {
+				addInventoryToList(list, te.getCapability(IUpgradable.UPGRADABLE, null).getUpgradeInventory());
 			}
 		}
 		return list;

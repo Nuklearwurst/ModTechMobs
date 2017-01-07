@@ -26,7 +26,7 @@ public class ItemUpgradeTool extends ItemNW {
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntity te = worldIn.getTileEntity(pos);
-		if(te != null && te instanceof IUpgradable) {
+		if(te != null && te.hasCapability(IUpgradable.UPGRADABLE, null)) {
 			playerIn.openGui(ModNwCore.instance, GUIIDs.UPGRADE_TOOL, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}
 		return EnumActionResult.PASS;

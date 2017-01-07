@@ -143,8 +143,8 @@ public class BlockPortalFrame extends BlockMD implements ITileEntityProvider, IW
 				((IFacingSix) te).setFacing(RotationUtils.getFacingFromEntity(pos, placer));
 			}
 			if(!world.isRemote) {
-				if(te instanceof IUpgradable) {
-					ItemUtils.readUpgradesFromItemStack(((IUpgradable) te).getUpgradeInventory(), stack);
+				if(te.hasCapability(IUpgradable.UPGRADABLE, null)) {
+					ItemUtils.readUpgradesFromItemStack(te.getCapability(IUpgradable.UPGRADABLE, null).getUpgradeInventory(), stack);
 				}
 				if(te instanceof TileEntityPortalControllerEntity) {
 					NBTTagCompound tag = ItemUtils.getNBTTagCompound(stack);

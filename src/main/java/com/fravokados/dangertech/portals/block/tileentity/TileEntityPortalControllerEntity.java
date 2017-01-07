@@ -7,7 +7,7 @@ import com.fravokados.dangertech.api.core.upgrade.IUpgradeInventory;
 import com.fravokados.dangertech.api.core.upgrade.UpgradeStatCollection;
 import com.fravokados.dangertech.api.core.upgrade.UpgradeTypes;
 import com.fravokados.dangertech.api.portals.component.IEntityPortalController;
-import com.fravokados.dangertech.core.inventory.InventoryUpgrade;
+import com.fravokados.dangertech.api.core.upgrade.InventoryUpgrade;
 import com.fravokados.dangertech.core.lib.util.BlockUtils;
 import com.fravokados.dangertech.core.lib.util.ItemUtils;
 import com.fravokados.dangertech.core.lib.util.WorldUtils;
@@ -48,6 +48,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -251,7 +252,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 	}
 
 	public void onPortalFrameModified() {
-		if(!isActive() && state != State.NO_MULTIBLOCK) {
+		if (!isActive() && state != State.NO_MULTIBLOCK) {
 			closePortal(true);
 			setState(State.NO_MULTIBLOCK);
 		}
@@ -554,7 +555,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 				TileEntity te = world.getTileEntity(pos.getPosition());
 				if (te != null && te instanceof TileEntityPortalControllerEntity) {
 					State remoteState = ((TileEntityPortalControllerEntity) te).getState();
-					if(((TileEntityPortalControllerEntity) te).isActive() || remoteState == State.INCOMING_CONNECTION || remoteState == State.CONNECTING) {
+					if (((TileEntityPortalControllerEntity) te).isActive() || remoteState == State.INCOMING_CONNECTION || remoteState == State.CONNECTING) {
 						resetOnError(Error.CONNECTION_INTERRUPTED);
 					} else {
 						//inform target of our connection
@@ -732,7 +733,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		if (nbt.hasKey("metrics")) {
 			metrics = PortalMetrics.getMetricsFromNBT(nbt.getCompoundTag("metrics"));
 		}
-		upgrades.readFromNBT(nbt.getCompoundTag(NBTKeys.TILE_UPGRADE_INVENTORY));
+		upgrades.deserializeNBT(nbt.getCompoundTag(NBTKeys.TILE_UPGRADE_INVENTORY));
 		updateUpgradeInformation();
 
 		if (nbt.hasKey(NBTKeys.CONTROLLER_STATE)) {
@@ -759,7 +760,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			metrics.writeToNBT(metricsTag);
 			nbt.setTag("metrics", metricsTag);
 		}
-		nbt.setTag(NBTKeys.TILE_UPGRADE_INVENTORY, upgrades.writeToNBT(new NBTTagCompound()));
+		nbt.setTag(NBTKeys.TILE_UPGRADE_INVENTORY, upgrades.serializeNBT());
 		return nbt;
 	}
 
@@ -878,7 +879,7 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 			}
 		}
 		//reset state
-		if(state != State.NO_MULTIBLOCK) {
+		if (state != State.NO_MULTIBLOCK) {
 			setState(State.READY);
 		}
 		//release loaded chunks
@@ -948,6 +949,23 @@ public class TileEntityPortalControllerEntity extends TileEntityEnergyReceiver
 		upgrades = null; //Hack to prevent droping of upgrades when removing using a wrench
 	}
 
+	@SuppressWarnings("ConstantConditions")
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (capability == IUpgradable.UPGRADABLE) {
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == IUpgradable.UPGRADABLE) {
+			return IUpgradable.UPGRADABLE.cast(this);
+		}
+		return super.getCapability(capability, facing);
+	}
 
 	/**
 	 * possible states of the controller
