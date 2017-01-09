@@ -28,6 +28,8 @@ public class ModItems {
 	//Weapons
 	@GameRegistry.ObjectHolder(Strings.Item.QUANTUM_SWORD)
 	public static ItemNWSword quantumSword = null;
+	@GameRegistry.ObjectHolder(Strings.Item.TECHDATA_SWORD)
+	public static ItemNWSword techdataSword = null;
 
 	///////////////
 	// Resources //
@@ -55,6 +57,7 @@ public class ModItems {
 		ModNwCore.proxy.registerItem(new ItemConservationUnit());
 		//Weapons
 		ModNwCore.proxy.registerItem(new ItemQuantumSword());
+		ModNwCore.proxy.registerItem(new ItemTechdataSword());
 
 		///////////////
 		// Resources //

@@ -38,6 +38,7 @@ public class Strings {
 		public static final String[] TD_ANALYZER_MODES = new String[] {"block", "item", "player", "chunk"};
 		public static final String CONSERVATION_UNIT = "conservation_unit";
 		public static final String QUANTUM_SWORD = "quantum_sword";
+		public static final String TECHDATA_SWORD = "techdata_sword";
 	}
 	
 	public static final class Chat {
