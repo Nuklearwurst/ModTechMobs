@@ -50,9 +50,47 @@ public class TDEffectHandler {
 			}
 		}
 	}
-	
+
+	/**
+	 * Applies a random {@link TDEffects} to the given player using a part of his current techlevel
+	 *
+	 * the players new techlevel gets updated afterwards
+	 * @param entity the affected player
+	 * @param uuid the uuid of the player
+	 * @param rand random instance
+	 */
+	public static void applyEasyRandomEffectOnPlayer(EntityPlayer entity, UUID uuid, Random rand) {
+		int level = (int) (TDManager.getPlayerScoutedTechLevel(entity) * Settings.TechData.TD_EASY_PLAYER_EVENT_FACTOR);
+		int otherLevel = TDManager.getPlayerScoutedTechLevel(entity) - level;
+		level = applyRandomEffectOnPlayer(entity, uuid, rand, level);
+		TDManager.setPlayerScoutedTechLevel(entity, otherLevel + level);
+	}
+
+	/**
+	 * Applies a random {@link TDEffects} to the given player using his current techlevel
+	 *
+	 * the players new techlevel gets updated afterwards
+	 * @param entity the affected player
+	 * @param uuid the uuid of the player
+	 * @param rand random instance
+	 */
 	public static void applyRandomEffectOnPlayer(EntityPlayer entity, UUID uuid, Random rand) {
 		int level = TDManager.getPlayerScoutedTechLevel(entity);
+		level = applyRandomEffectOnPlayer(entity, uuid, rand, level);
+		TDManager.setPlayerScoutedTechLevel(entity, level);
+	}
+
+
+	/**
+	 * Applies a random {@link TDEffects} to the given player for the given level
+	 * @param entity the affected player
+	 * @param uuid the uuid of the player
+	 * @param rand random instance
+	 * @param level max level of the effect
+	 * @return unused level
+	 */
+	public static int applyRandomEffectOnPlayer(EntityPlayer entity, UUID uuid, Random rand, int oldLevel) {
+		int level = oldLevel;
 		int i = 0;
 		List<TDPlayerEffect> effects = TDEffects.getInstance().getUsablePlayerEffects(level, uuid, entity);
 		while (!effects.isEmpty() && i < Settings.TechData.MAX_EFFECTS_PLAYER) {
@@ -60,10 +98,8 @@ public class TDEffectHandler {
 			effects = TDEffects.getInstance().getUsablePlayerEffects(level, uuid, entity);
 			i++;
 		}
-		TDManager.setPlayerScoutedTechLevel(entity, level);
+		return level;
 	}
-	
-	
 	
 	
 

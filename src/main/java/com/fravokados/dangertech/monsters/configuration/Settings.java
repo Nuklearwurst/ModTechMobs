@@ -30,20 +30,29 @@ public class Settings {
 		
 		public static int MAX_EFFECTS_MOB =  3;
 		
-		public static int MAX_EFFECTS_PLAYER = 3;
+		public static int MAX_EFFECTS_PLAYER = 1;
 
 		public static int MAX_EFFECTS_CHUNK = 3;
 
 		
 		/**
 		 * 1 out of n<br>
-		 * chance that a td effect is applied to a player (checked every {@link com.fravokados.dangertech.monsters.configuration.Settings.TechData#TD_RANDOM_TICKS} (1200) ticks)
+		 * chance that a td effect is applied to a player (checked every {@link com.fravokados.dangertech.monsters.configuration.Settings.TechData#TD_RANDOM_TICKS})
 		 */
-		public static int TD_RANDOM_PLAYER_EVENT_CHANCE = 10;
-		
+		public static int TD_RANDOM_PLAYER_EVENT_CHANCE = 20;
+
+		/**
+		 * 1 out of n
+		 *
+		 * chance that a td effect that is applied to a player will use its full strength
+		 */
+		public static int TD_RANDOM_PLAYER_EVENT_HIGH_EFFECT_CHANCE = 5;
+
+		public static float TD_EASY_PLAYER_EVENT_FACTOR = 0.5F;
+
 		/**
 		 * 1 out of n<br>
-		 * chance that a td effect is applied to a chunk (checked every {@link com.fravokados.dangertech.monsters.configuration.Settings.TechData#TD_RANDOM_TICKS} (1200) ticks)
+		 * chance that a td effect is applied to a chunk (checked every {@link com.fravokados.dangertech.monsters.configuration.Settings.TechData#TD_RANDOM_TICKS})
 		 */
 		public static int TD_RANDOM_CHUNK_EVENT_CHANCE = 10;
 

@@ -112,7 +112,11 @@ public class TDTickManager {
 			if (uuid != null) {
 				EntityPlayer entity = PlayerUtils.getPlayerFromUUID(uuid);
 				if(entity != null) {
-					TDEffectHandler.applyRandomEffectOnPlayer(entity, uuid, random);
+					if(random.nextInt(Settings.TechData.TD_RANDOM_PLAYER_EVENT_HIGH_EFFECT_CHANCE) == 0) {
+						TDEffectHandler.applyRandomEffectOnPlayer(entity, uuid, random);
+					} else  {
+						TDEffectHandler.applyEasyRandomEffectOnPlayer(entity, uuid, random);
+					}
 				}
 			}
 		}

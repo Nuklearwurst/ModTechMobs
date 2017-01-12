@@ -43,10 +43,10 @@ public class ItemMonsterDetector extends ItemTM {
 				//special effects happen
 				if (data > TechDataStorage.getInstance().getDangerousPlayerLevel()) { //very nasty
 					TDEffectHandler.applyRandomEffectOnPlayer(player, player.getUniqueID(), itemRand);
-					stack.damageItem(20, player);
+					stack.damageItem(10, player);
 					player.getEntityWorld().createExplosion(null, player.posX, player.posY + 1, player.posZ, 0.4F, false);
-				} else if (data > 0.8 * TechDataStorage.getInstance().getDangerousPlayerLevel()) { //normal effects
-					TDEffectHandler.applyRandomEffectOnPlayer(player, player.getUniqueID(), itemRand);
+				} else if (data > 0.8 * TechDataStorage.getInstance().getDangerousPlayerLevel()) { //normal (easy) effects
+					TDEffectHandler.applyEasyRandomEffectOnPlayer(player, player.getUniqueID(), itemRand);
 					stack.damageItem(10, player);
 				} else { //simple effects
 					int i = entity.getEntityWorld().rand.nextInt(4);
