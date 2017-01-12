@@ -18,7 +18,7 @@ public class TDChunkEffectThunder extends TDChunkEffect {
 
 	@Override
 	public int applyEffect(int level, ChunkLocation chunkLocation, World world) {
-		world.setThunderStrength(1);
+		world.getWorldInfo().setThundering(true);
 		return value;
 	}
 }

@@ -18,7 +18,7 @@ public class TDPlayerEffectWeather extends TDPlayerEffect {
 
 	@Override
 	public int applyEffect(int techvalue, UUID uuid, EntityPlayer entity) {
-		entity.getEntityWorld().setRainStrength(1);
+		entity.getEntityWorld().getWorldInfo().setRaining(true);
 		return value;
 	}
 }
